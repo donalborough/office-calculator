@@ -436,11 +436,17 @@ body {
       <input class="field-inp" id="gateCompany" type="text" placeholder="חברה בע״מ" autocomplete="organization">
     </div>
     <div class="gate-err" id="gateErr"></div>
-    <button class="gate-cta" onclick="gateSubmit()">
+    <button class="gate-cta" id="gateCta" onclick="gateSubmit()">
       כניסה לכלי
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
     </button>
     <div class="gate-privacy">הפרטים נשמרים אצל דון אלבורו בלבד ולא מועברים לצד שלישי.</div>
+    <!-- success state -->
+    <div id="gateSuccess" style="display:none;text-align:center;padding:8px 0 4px">
+      <div style="font-size:2rem;margin-bottom:8px">✓</div>
+      <div style="font-size:1rem;font-weight:800;color:#1e293b;margin-bottom:4px">ברוך הבא!</div>
+      <div style="font-size:.78rem;color:#78716c;line-height:1.6">הפרטים נשמרו בהצלחה.<br>עוברים לכלי...</div>
+    </div>
   </div>
 </div>
 
@@ -758,7 +764,20 @@ function gateSubmit(){
   const companyVal=document.getElementById('gateCompany').value.trim();
   const img=new Image();
   img.src='https://script.google.com/macros/s/AKfycbyivyw8rHoib5Rhz-NUsbqYf_7O1bmINHZfhPQR3sFk2P5QTiec4lKuyWQYXnZPhMWJ_A/exec?name='+encodeURIComponent(nameVal)+'&mail='+encodeURIComponent(mailVal)+'&company='+encodeURIComponent(companyVal);
-  document.getElementById('gateOv').style.display='none';
+  // show success screen
+  document.getElementById('gateName').style.display='none';
+  document.getElementById('gateMail').style.display='none';
+  document.getElementById('gateCompany').style.display='none';
+  document.querySelector('.gate-eyebrow').style.display='none';
+  document.querySelector('.gate-title').style.display='none';
+  document.querySelector('.gate-sub').style.display='none';
+  document.querySelectorAll('.gate-card .field').forEach(f=>f.style.display='none');
+  document.getElementById('gateCta').style.display='none';
+  document.querySelector('.gate-privacy').style.display='none';
+  document.getElementById('gateSuccess').style.display='block';
+  setTimeout(()=>{
+    document.getElementById('gateOv').style.display='none';
+  }, 2000);
 }
 window.showLeads=function(){
   try{
