@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>מחשבון עלויות משרד</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f2ee;--card:#fff;--ink:#111827;--ink2:#374151;--ink3:#9ca3af;--rule:#e5e7eb;--gold:#b45309;--gold-l:#fef3c7;--gold-m:#fde68a;--blue:#1d4ed8;--blue-l:#eff6ff;--green:#065f46;--green-l:#ecfdf5;--red:#991b1b;--red-l:#fef2f2;--sh:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);--sh-md:0 4px 16px rgba(0,0,0,.10);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{-webkit-text-size-adjust:100%;}
+body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direction:rtl;min-height:100vh;padding-bottom:max(40px,env(safe-area-inset-bottom));}
+.hdr{background:var(--ink);padding:20px 16px 18px;padding-top:max(20px,env(safe-area-inset-top));}
+.hdr-inner{max-width:500px;margin:0 auto;}
+.hdr h1{font-size:1.25rem;font-weight:800;color:#fff;line-height:1.2;}
+.hdr h1 em{color:#fbbf24;font-style:normal;}
+.hdr p{font-size:.72rem;color:rgba(255,255,255,.4);margin-top:3px;}
+.page{max-width:500px;margin:0 auto;padding:0 12px 32px;}
+.sec{margin-top:20px;}
+.sec-title{font-size:.62rem;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:var(--ink3);padding:0 4px 8px;}
+.card{background:var(--card);border-radius:16px;box-shadow:var(--sh);overflow:hidden;}
+.row{display:flex;align-items:center;padding:13px 16px;gap:12px;border-bottom:1px solid var(--rule);}
+.row:last-child{border-bottom:none;}
+.row-left{flex:1;min-width:0;}
+.row-label{font-size:.88rem;font-weight:600;line-height:1.3;}
+.row-sub{font-size:.68rem;color:var(--ink3);margin-top:2px;}
+.row-right{display:flex;align-items:center;flex-shrink:0;}
+.spin{display:flex;align-items:center;background:var(--bg);border:1.5px solid var(--rule);border-radius:12px;overflow:hidden;height:42px;}
+.spin-btn{width:40px;height:42px;background:transparent;border:none;font-size:1.15rem;cursor:pointer;color:var(--ink2);display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;transition:background .1s;flex-shrink:0;}
+.spin-btn:active{background:var(--rule);}
+.spin-inp{width:60px;text-align:center;border:none;background:transparent;font-size:.9rem;font-weight:700;font-family:'Heebo',sans-serif;color:var(--ink);padding:0;height:100%;-moz-appearance:textfield;}
+.spin-inp::-webkit-outer-spin-button,.spin-inp::-webkit-inner-spin-button{-webkit-appearance:none;}
+.spin-inp:focus{outline:2px solid var(--blue);outline-offset:-2px;border-radius:4px;}
+.spin-unit{font-size:.62rem;color:var(--ink3);padding-left:8px;padding-right:2px;white-space:nowrap;}
+.spin-inp.w52{width:52px;}
+.tog-wrap{display:flex;align-items:center;gap:8px;}
+.tog{width:46px;height:26px;border-radius:13px;background:var(--rule);cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;-webkit-tap-highlight-color:transparent;}
+.tog.on{background:var(--blue);}
+.tog::after{content:'';position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.2);transition:right .2s,left .2s;}
+.tog.on::after{right:auto;left:3px;}
+.tog-lbl{font-size:.8rem;color:var(--ink2);font-weight:500;}
+.chips{display:flex;flex-wrap:wrap;gap:6px;padding:12px 16px 14px;}
+.chip{padding:7px 12px;border-radius:20px;border:1.5px solid var(--rule);background:var(--bg);color:var(--ink2);font-size:.76rem;font-family:'Heebo',sans-serif;cursor:pointer;transition:all .15s;font-weight:500;white-space:nowrap;-webkit-tap-highlight-color:transparent;line-height:1.3;text-align:center;}
+.chip.sel{border-color:var(--gold);background:var(--gold-l);color:var(--gold);font-weight:700;}
+.chip .cs{font-size:.6rem;opacity:.75;display:block;margin-top:1px;}
+.result-hero{background:var(--ink);border-radius:16px;padding:20px 18px 18px;box-shadow:var(--sh-md);position:relative;overflow:hidden;}
+.result-hero::before{content:'';position:absolute;bottom:-40px;left:-40px;width:160px;height:160px;border-radius:50%;background:rgba(251,191,36,.06);pointer-events:none;}
+.rh-label{font-size:.6rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:3px;}
+.rh-main{font-size:2.2rem;font-weight:900;color:#fbbf24;line-height:1;}
+.rh-sub{font-size:.75rem;color:rgba(255,255,255,.4);margin-top:4px;margin-bottom:16px;}
+.rh-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.rh-cell{background:rgba(255,255,255,.07);border-radius:10px;padding:10px 12px;}
+.rh-val{font-size:1rem;font-weight:800;color:#fff;}
+.rh-lbl{font-size:.62rem;color:rgba(255,255,255,.38);margin-top:2px;}
+.notice{display:flex;gap:10px;align-items:flex-start;border-radius:12px;padding:12px 14px;font-size:.78rem;line-height:1.7;margin-top:10px;}
+.notice.ok{background:var(--green-l);color:var(--green);}
+.notice.warn{background:var(--gold-l);color:var(--gold);}
+.notice.bad{background:var(--red-l);color:var(--red);}
+.notice-icon{font-size:1rem;flex-shrink:0;margin-top:1px;}
+.notice-text strong{display:block;margin-bottom:1px;}
+.brow{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;border-bottom:1px solid var(--rule);font-size:.83rem;gap:8px;}
+.brow:last-child{border-bottom:none;}
+.brow-lbl{color:var(--ink2);}
+.brow-val{font-weight:700;text-align:left;flex-shrink:0;}
+.brow.tot{background:#fffbeb;}
+.brow.tot .brow-lbl{font-weight:800;color:var(--gold);}
+.brow.tot .brow-val{color:var(--gold);}
+.ratio-box{background:var(--blue-l);border:1px solid #bfdbfe;border-radius:16px;padding:14px 16px;box-shadow:var(--sh);}
+.ratio-title{font-size:.62rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--blue);margin-bottom:10px;}
+.ratio-row{display:flex;justify-content:space-between;align-items:center;font-size:.83rem;padding:4px 0;}
+.ratio-row span:last-child{font-weight:700;}
+.ratio-note{font-size:.7rem;color:#3b82f6;line-height:1.7;margin-top:10px;}
+.broker-box{background:var(--gold-l);border:1px solid var(--gold-m);border-radius:16px;padding:16px;}
+.broker-name{font-size:.9rem;font-weight:800;color:var(--gold);margin-bottom:6px;}
+.broker-text{font-size:.8rem;color:var(--ink2);line-height:1.8;}
+.btn-primary{width:100%;padding:15px;border-radius:14px;background:var(--ink);color:#fff;border:none;font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;-webkit-tap-highlight-color:transparent;transition:opacity .15s;box-shadow:var(--sh-md);}
+.btn-primary:active{opacity:.85;}
+.btn-secondary{width:100%;padding:13px;border-radius:14px;background:var(--card);color:var(--ink2);border:1.5px solid var(--rule);font-family:'Heebo',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;-webkit-tap-highlight-color:transparent;}
+.btn-secondary:active{background:var(--bg);}
+.hdiv{height:1px;background:var(--rule);margin:4px 0;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.result-hero,.card,.ratio-box,.broker-box{animation:fadeUp .25s ease both;}
+</style>
+</head>
+<body>
+
+<style>
+.gate-ov{position:fixed;inset:0;background:#111827;z-index:999;display:flex;align-items:center;justify-content:center;padding:20px;}
+.gate-card{background:#fff;border-radius:20px;padding:28px 22px 24px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.4);}
+.gate-logo{font-size:1.5rem;font-weight:900;color:#111827;margin-bottom:4px;}
+.gate-logo em{color:#b45309;font-style:normal;}
+.gate-sub{font-size:.78rem;color:#6b7280;margin-bottom:22px;line-height:1.6;}
+.gate-label{font-size:.7rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:#6b7280;margin-bottom:6px;display:block;}
+.gate-inp{width:100%;padding:12px 14px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:.9rem;font-family:'Heebo',sans-serif;color:#111827;margin-bottom:14px;-webkit-appearance:none;transition:border-color .15s;}
+.gate-inp:focus{outline:none;border-color:#b45309;}
+.gate-btn{width:100%;padding:14px;border-radius:12px;background:#111827;color:#fff;border:none;font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:opacity .15s;}
+.gate-btn:active{opacity:.85;}
+.gate-note{font-size:.68rem;color:#9ca3af;text-align:center;margin-top:10px;line-height:1.6;}
+.gate-err{font-size:.74rem;color:#991b1b;background:#fef2f2;border-radius:8px;padding:8px 12px;margin-bottom:12px;display:none;}
+</style>
+<div class="gate-ov" id="gateOv">
+  <div class="gate-card">
+    <div class="gate-logo">מחשבון עלויות <em>משרד</em></div>
+    <div class="gate-sub">כלי מקצועי לחישוב עלויות שכירות, ארנונה וניהול — כולל ניתוח ברוטו/נטו.<br>השאירו פרטים לקבלת גישה מיידית.</div>
+    <span class="gate-label">שם מלא</span>
+    <input class="gate-inp" id="gateName" type="text" placeholder="ישראל ישראלי" autocomplete="name">
+    <span class="gate-label">מייל</span>
+    <input class="gate-inp" id="gateMail" type="email" placeholder="israel@company.com" autocomplete="email" inputmode="email">
+    <div class="gate-err" id="gateErr"></div>
+    <button class="gate-btn" onclick="gateSubmit()">כניסה לכלי ←</button>
+    <div class="gate-note">הפרטים נשמרים אצל דון אבלורו בלבד ולא מועברים לצד שלישי.</div>
+  </div>
+</div>
+
+<div class="hdr">
+  <div class="hdr-inner" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+    <div>
+      <h1>מחשבון עלויות <em>משרד</em></h1>
+      <p>שכירות · ארנונה · ניהול · ברוטו/נטו</p>
+    </div>
+    <button onclick="document.getElementById('gateOv').style.display='flex'" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);border-radius:8px;padding:7px 12px;font-family:'Heebo',sans-serif;font-size:.72rem;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent">↩ התחלה</button>
+  </div>
+</div>
+
+<div class="page">
+
+  <div class="sec">
+    <div class="sec-title">🏢 שלב 1 — סוג הבניין</div>
+    <div class="card">
+      <div class="chips" id="bldgChips">
+        <div class="chip sel" onclick="setBldg(this,1.30)" data-ratio="1.30">מגדל · A Class<span class="cs">+30% שטחים משותפים</span></div>
+        <div class="chip" onclick="setBldg(this,1.18)" data-ratio="1.18">בוטיק · B Class<span class="cs">+18% שטחים משותפים</span></div>
+        <div class="chip" onclick="setBldg(this,1.12)" data-ratio="1.12">קמפוס<span class="cs">+12% שטחים משותפים</span></div>
+      </div>
+      <div style="padding:0 16px 14px;font-size:.74rem;color:var(--ink3);line-height:1.7">
+        ℹ️ <strong>ברוטו</strong> = מה שרשום בחוזה. <strong>נטו</strong> = מה שמשתמשים בפועל. ההפרש הוא מדרגות, מעליות ושטחים משותפים.
+      </div>
+      <div class="row" style="border-top:1px solid var(--rule)" id="customRatioRow">
+        <div class="row-left">
+          <div class="row-label">יחס ידני</div>
+          <div class="row-sub">אם ידוע מהחוזה — הזן במקום הממוצע</div>
+        </div>
+        <div class="row-right" style="gap:8px">
+          <div class="tog" id="customRatioTog" onclick="toggleCustomRatio()"></div>
+          <div class="spin" id="customRatioSpin" style="display:none">
+            <button class="spin-btn" onclick="adj('customPct',-1)">−</button>
+            <input class="spin-inp w52" id="customPctInp" type="number" value="25" min="5" max="50" inputmode="numeric" oninput="onInput('customPct',this)">
+            <span class="spin-unit">%</span>
+            <button class="spin-btn" onclick="adj('customPct',+1)">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">📐 שלב 2 — שטח ועובדים</div>
+    <div class="card">
+      <div class="row">
+        <div class="row-left">
+          <div class="row-label">שטח המשרד (ברוטו)</div>
+          <div class="row-sub" id="netNote">מזינים שטח ברוטו כפי שמופיע בחוזה</div>
+        </div>
+        <div class="row-right">
+          <div class="spin">
+            <button class="spin-btn" onclick="adj('sqm',-50)">−</button>
+            <input class="spin-inp" id="sqmInp" type="number" value="480" min="20" max="9999" inputmode="numeric" oninput="onInput('sqm',this)">
+            <span class="spin-unit">מ"ר</span>
+            <button class="spin-btn" onclick="adj('sqm',+50)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="row-left">
+          <div class="row-label">מספר עובדים</div>
+          <div class="row-sub">לחישוב מ"ר לעובד</div>
+        </div>
+        <div class="row-right">
+          <div class="spin">
+            <button class="spin-btn" onclick="adj('emp',-5)">−</button>
+            <input class="spin-inp" id="empInp" type="number" value="40" min="1" max="2000" inputmode="numeric" oninput="onInput('emp',this)">
+            <span class="spin-unit">עובד</span>
+            <button class="spin-btn" onclick="adj('emp',+5)">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="spaceNotice"></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">📍 שלב 3 — אזור ושכירות</div>
+    <div class="card">
+      <div class="chips" id="cityChips">
+        <div class="chip" onclick="setCity(this,160)">תל אביב מרכז<span class="cs">~160 ₪/מ"ר</span></div>
+        <div class="chip sel" onclick="setCity(this,130)">רמת גן הבורסה<span class="cs">~130 ₪/מ"ר</span></div>
+        <div class="chip" onclick="setCity(this,110)">הרצליה פיתוח<span class="cs">~110 ₪/מ"ר</span></div>
+        <div class="chip" onclick="setCity(this,100)">פתח תקווה<span class="cs">~100 ₪/מ"ר</span></div>
+        <div class="chip" onclick="setCity(this,95)">ראשון / חולון<span class="cs">~95 ₪/מ"ר</span></div>
+        <div class="chip" onclick="setCity(this,70)">באר שבע<span class="cs">~70 ₪/מ"ר</span></div>
+      </div>
+      <div class="row" style="border-top:1px solid var(--rule)">
+        <div class="row-left">
+          <div class="row-label">שכירות בפועל</div>
+          <div class="row-sub">ניתן לשנות ידנית</div>
+        </div>
+        <div class="row-right">
+          <div class="spin">
+            <button class="spin-btn" onclick="adj('rent',-5)">−</button>
+            <input class="spin-inp w52" id="rentInp" type="number" value="130" min="30" max="500" inputmode="numeric" oninput="onInput('rent',this)">
+            <span class="spin-unit">₪/מ"ר</span>
+            <button class="spin-btn" onclick="adj('rent',+5)">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">💡 שלב 4 — עלויות נלוות</div>
+    <div class="card">
+      <div class="row">
+        <div class="row-left">
+          <div class="row-label">ארנונה</div>
+          <div class="row-sub" id="arnSub">34 ₪/מ"ר — ללא הנחה</div>
+        </div>
+        <div class="row-right">
+          <div class="tog-wrap">
+            <div class="tog" id="arnTog" onclick="toggleArn()"></div>
+            <span class="tog-lbl">הנחת תוכנה</span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="row-left">
+          <div class="row-label">דמי ניהול</div>
+          <div class="row-sub">אחזקה + שירותים משותפים</div>
+        </div>
+        <div class="row-right">
+          <div class="spin">
+            <button class="spin-btn" onclick="adj('mgmt',-2)">−</button>
+            <input class="spin-inp" id="mgmtInp" type="number" value="20" min="0" max="100" inputmode="numeric" oninput="onInput('mgmt',this)">
+            <span class="spin-unit">₪/מ"ר</span>
+            <button class="spin-btn" onclick="adj('mgmt',+2)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="row-left">
+          <div class="row-label">ניקיון + שמירה</div>
+        </div>
+        <div class="row-right">
+          <div class="spin">
+            <button class="spin-btn" onclick="adj('clean',-2)">−</button>
+            <input class="spin-inp" id="cleanInp" type="number" value="8" min="0" max="60" inputmode="numeric" oninput="onInput('clean',this)">
+            <span class="spin-unit">₪/מ"ר</span>
+            <button class="spin-btn" onclick="adj('clean',+2)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="row-left">
+          <div class="row-label">חשמל · אינטרנט · מים</div>
+        </div>
+        <div class="row-right">
+          <div class="spin">
+            <button class="spin-btn" onclick="adj('utils',-2)">−</button>
+            <input class="spin-inp" id="utilsInp" type="number" value="12" min="0" max="60" inputmode="numeric" oninput="onInput('utils',this)">
+            <span class="spin-unit">₪/מ"ר</span>
+            <button class="spin-btn" onclick="adj('utils',+2)">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">✨ תוצאה</div>
+    <div class="result-hero">
+      <div class="rh-label">עלות חודשית (ברוטו)</div>
+      <div class="rh-main" id="rMain">—</div>
+      <div class="rh-sub" id="rSub">—</div>
+      <div class="rh-grid">
+        <div class="rh-cell"><div class="rh-val" id="rPerSqm">—</div><div class="rh-lbl">₪ לכל מ"ר</div></div>
+        <div class="rh-cell"><div class="rh-val" id="rPerEmp">—</div><div class="rh-lbl">₪ לעובד/חודש</div></div>
+        <div class="rh-cell"><div class="rh-val" id="rYear">—</div><div class="rh-lbl">₪ לשנה</div></div>
+        <div class="rh-cell"><div class="rh-val" id="rSqmEmp">—</div><div class="rh-lbl">מ"ר ברוטו לעובד</div></div>
+      </div>
+    </div>
+    <div id="adviceNotice"></div>
+
+    <div style="margin-top:10px">
+      <div class="sec-title" style="padding-top:0">פירוט עלויות</div>
+      <div class="card" id="breakdown"></div>
+    </div>
+
+    <div style="margin-top:10px">
+      <div class="ratio-box">
+        <div class="ratio-title">📐 ברוטו / נטו</div>
+        <div class="ratio-row"><span>שטח ברוטו (חוזה)</span><span id="gbBruto">—</span></div>
+        <div class="ratio-row"><span>שטח נטו (בפועל)</span><span id="gbNet">—</span></div>
+        <div class="hdiv" style="margin:8px 0"></div>
+        <div class="ratio-row"><span>עלות חודשית</span><span id="gbMonthly">—</span></div>
+        <div class="ratio-row"><span>עלות שנתית</span><span id="gbYearly">—</span></div>
+        <div class="ratio-note" id="gbNote">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="broker-box">
+      <div class="broker-name">📞 [שם המתווך] · [טלפון]</div>
+      <div class="broker-text">
+        גם בתקופה הזו — ישראל בונה.<br>
+        המשרדים הטובים ביותר נתפסים עכשיו, בדיוק כשכולם "מחכים".<br>
+        שלחו לי את הסימולציה הזו ואמצא לכם את הנכס המדויק.
+      </div>
+    </div>
+  </div>
+
+  <div class="sec" style="display:flex;flex-direction:column;gap:8px">
+    <button class="btn-primary" onclick="shareCalc()">📤 שלח סימולציה ללקוח</button>
+    <button class="btn-secondary" onclick="copyCalc()">📋 העתק לווטסאפ / מייל</button>
+  </div>
+
+</div>
+
+<script>
+const S={sqm:480,emp:40,rent:130,arn:false,mgmt:20,clean:8,utils:12,grossRatio:1.30,useCustomRatio:false,customPct:25};
+const fmt=n=>Math.round(n).toLocaleString('he');
+const clamp=(v,mn,mx)=>Math.max(mn,Math.min(mx,v));
+const IDEAL_MIN=10,IDEAL_MAX=14,IDEAL_WARN=18;
+
+function onInput(key,el){
+  const v=parseInt(el.value);
+  if(!isNaN(v)&&v>0){S[key]=v;calc();}
+}
+function adj(key,d){
+  const lim={sqm:[50,9999],emp:[1,2000],rent:[30,500],mgmt:[0,100],clean:[0,60],utils:[0,60],customPct:[5,50]};
+  S[key]=clamp(S[key]+d,lim[key][0],lim[key][1]);
+  document.getElementById(key+'Inp').value=S[key];
+  calc();
+}
+function setCity(el,rent){
+  document.querySelectorAll('#cityChips .chip').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  S.rent=rent;document.getElementById('rentInp').value=rent;calc();
+}
+function toggleCustomRatio(){
+  S.useCustomRatio=!S.useCustomRatio;
+  document.getElementById('customRatioTog').classList.toggle('on',S.useCustomRatio);
+  document.getElementById('customRatioSpin').style.display=S.useCustomRatio?'flex':'none';
+  // deselect chips if custom
+  document.querySelectorAll('#bldgChips .chip').forEach(c=>c.classList.toggle('sel',!S.useCustomRatio&&parseFloat(c.dataset.ratio)===(S.grossRatio)));
+  calc();
+}
+function setBldg(el,ratio){
+  S.useCustomRatio=false;
+  document.getElementById('customRatioTog').classList.remove('on');
+  document.getElementById('customRatioSpin').style.display='none';
+  document.querySelectorAll('#bldgChips .chip').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');S.grossRatio=ratio;calc();
+}
+function toggleArn(){
+  S.arn=!S.arn;
+  document.getElementById('arnTog').classList.toggle('on',S.arn);
+  document.getElementById('arnSub').textContent=S.arn?'17 ₪/מ"ר — הנחת עסקי תוכנה':'34 ₪/מ"ר — ללא הנחה';
+  calc();
+}
+
+// ── GATE ──
+const LEADS = [];
+function gateSubmit(){
+  const nameVal = document.getElementById('gateName').value.trim();
+  const mailVal = document.getElementById('gateMail').value.trim();
+  const err  = document.getElementById('gateErr');
+  if(!nameVal){ err.textContent='נא להזין שם מלא'; err.style.display='block'; return; }
+  const mailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mailVal);
+  if(!mailOk){ err.textContent='נא להזין כתובת מייל תקינה'; err.style.display='block'; return; }
+  err.style.display='none';
+  // save locally as backup
+  try{
+    const existing = JSON.parse(localStorage.getItem('office_leads')||'[]');
+    existing.push({name:nameVal, mail:mailVal, ts:new Date().toISOString()});
+    localStorage.setItem('office_leads', JSON.stringify(existing));
+  }catch(ex){}
+  // send to Google Sheets via image trick (bypasses CORS)
+  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyLanxp_wUf3dH7k7I7c8JMYQxcoRlMZKeSX20ECrt0PfVl81W742mefTSziOBWJyo6kg/exec';
+  const img = new Image();
+  img.src = SHEET_URL + '?name=' + encodeURIComponent(nameVal) + '&mail=' + encodeURIComponent(mailVal);
+  document.getElementById('gateOv').style.display='none';
+}
+// show leads (for broker — type showLeads() in console)
+window.showLeads=function(){
+  try{
+    const leads=JSON.parse(localStorage.getItem('office_leads')||'[]');
+    if(!leads.length){alert('אין לידים עדיין');return;}
+    const txt=leads.map((l,i)=>`${i+1}. ${l.name} | ${l.mail} | ${l.ts}`).join('\n');
+    prompt('לידים (העתק מכאן):', txt);
+  }catch(e){alert('שגיאה: '+e);}
+};
+
+function calc(){
+  const bruto=S.sqm;
+  const effectiveRatio=S.useCustomRatio?(1+S.customPct/100):S.grossRatio;
+  const net=Math.round(bruto/effectiveRatio);
+  const arn=S.arn?17:34;
+  const rows=[
+    {l:'שכירות',v:S.rent},
+    {l:'ארנונה'+(S.arn?' (הנחת תוכנה)':''),v:arn},
+    {l:'דמי ניהול',v:S.mgmt},
+    {l:'ניקיון + שמירה',v:S.clean},
+    {l:'חשמל, אינטרנט, מים',v:S.utils},
+  ];
+  const perSqm=rows.reduce((s,r)=>s+r.v,0);
+  // all calculations on BRUTO
+  const monthly=perSqm*bruto;
+  const yearly=monthly*12;
+  const perEmp=Math.round(monthly/S.emp);
+  const sqmPerEmp=(bruto/S.emp).toFixed(1);
+  const pct=Math.round((effectiveRatio-1)*100);
+
+  document.getElementById('netNote').textContent='≈ '+net+' מ\"ר נטו בפועל';
+
+  document.getElementById('rMain').textContent=fmt(monthly)+' ₪';
+  document.getElementById('rSub').textContent=fmt(bruto)+' מ\"ר ברוטו · '+S.emp+' עובדים · '+perSqm+' ₪/מ\"ר';
+  document.getElementById('rPerSqm').textContent=fmt(perSqm)+' ₪';
+  document.getElementById('rPerEmp').textContent=fmt(perEmp)+' ₪';
+  document.getElementById('rYear').textContent=fmt(yearly)+' ₪';
+  document.getElementById('rSqmEmp').textContent=sqmPerEmp+' מ\"ר';
+
+  const brutoPerEmp=bruto/S.emp;
+  const idealBruto=Math.ceil(S.emp*IDEAL_MIN/50)*50;
+  const maxBruto=Math.floor(S.emp*IDEAL_MAX/50)*50;
+  let noticeHtml='';
+  if(brutoPerEmp<IDEAL_MIN){
+    noticeHtml=`<div class="notice bad"><span class="notice-icon">⚠️</span><div class="notice-text"><strong>צפוף מדי — ${brutoPerEmp.toFixed(1)} מ"ר/עובד</strong>מינימום מומלץ הוא ${IDEAL_MIN} מ"ר. שקול לשדרג לכ-${idealBruto} מ"ר.</div></div>`;
+  }else if(brutoPerEmp<=IDEAL_MAX){
+    noticeHtml=`<div class="notice ok"><span class="notice-icon">✅</span><div class="notice-text"><strong>שטח אידאלי — ${brutoPerEmp.toFixed(1)} מ"ר/עובד</strong>בדיוק בטווח המומלץ (${IDEAL_MIN}–${IDEAL_MAX} מ"ר לעובד).</div></div>`;
+  }else if(brutoPerEmp<=IDEAL_WARN){
+    noticeHtml=`<div class="notice warn"><span class="notice-icon">💡</span><div class="notice-text"><strong>קצת גדול — ${brutoPerEmp.toFixed(1)} מ"ר/עובד</strong>הטווח האידאלי הוא ${IDEAL_MIN}–${IDEAL_MAX} מ"ר. שווה לבחון שטח של כ-${maxBruto} מ"ר לחיסכון בעלויות.</div></div>`;
+  }else{
+    noticeHtml=`<div class="notice warn"><span class="notice-icon">💡</span><div class="notice-text"><strong>שטח גדול משמעותית — ${brutoPerEmp.toFixed(1)} מ"ר/עובד</strong>הטווח האידאלי הוא ${IDEAL_MIN}–${IDEAL_MAX} מ"ר. יש מרווח לצמיחה משמעותית או לחסוך בעלויות.</div></div>`;
+  }
+  document.getElementById('spaceNotice').innerHTML=noticeHtml;
+  document.getElementById('adviceNotice').innerHTML=noticeHtml;
+
+  document.getElementById('breakdown').innerHTML=
+    rows.map(r=>`<div class="brow"><span class="brow-lbl">${r.l}</span><span class="brow-val">${r.v} ₪/מ"ר · ${fmt(r.v*bruto)} ₪</span></div>`).join('')+
+    `<div class="brow tot"><span class="brow-lbl">סה"כ</span><span class="brow-val">${perSqm} ₪/מ"ר · ${fmt(monthly)} ₪/חודש</span></div>`;
+
+  const bldgName=S.useCustomRatio?'יחס ידני מהחוזה':S.grossRatio>=1.28?'מגדל A Class':S.grossRatio>=1.20?'בניין בוטיק B':'קמפוס';
+  document.getElementById('gbBruto').textContent=fmt(bruto)+' מ\"ר';
+  document.getElementById('gbNet').textContent=fmt(net)+' מ\"ר (−'+pct+'% שטחים משותפים)';
+  document.getElementById('gbMonthly').textContent=fmt(monthly)+' ₪/חודש';
+  document.getElementById('gbYearly').textContent=fmt(yearly)+' ₪/שנה';
+  document.getElementById('gbNote').innerHTML=`<strong>${bldgName}</strong> — ${pct}% משטח הברוטו הם שטחים משותפים. כל החישובים לעיל על הברוטו כפי שמופיע בחוזה.`;
+}
+
+function buildText(){
+  const net=Math.round(S.sqm/S.grossRatio);
+  const arn=S.arn?17:34;
+  const perSqm=S.rent+arn+S.mgmt+S.clean+S.utils;
+  const monthly=perSqm*S.sqm;
+  const pct=Math.round((effectiveRatio-1)*100);
+  return `📊 סימולציית עלויות משרד\n━━━━━━━━━━━━━━━━━━\n📐 שטח ברוטו: ${S.sqm} מ"ר  |  נטו: ${net} מ"ר (-${pct}%)\n👥 עובדים: ${S.emp}  |  ${(S.sqm/S.emp).toFixed(1)} מ"ר/עובד\n🏢 שכירות: ${S.rent} ₪/מ"ר\n💰 עלות כוללת: ${perSqm} ₪/מ"ר\n━━━━━━━━━━━━━━━━━━\n💵 חודשי: ${fmt(monthly)} ₪\n📅 שנתי: ${fmt(monthly*12)} ₪\n━━━━━━━━━━━━━━━━━━\n📞 [שם המתווך] | [טלפון]`;
+}
+function shareCalc(){
+  const txt=buildText();
+  if(navigator.share)navigator.share({title:'סימולציית עלויות משרד',text:txt});
+  else copyToClipboard(txt);
+}
+function copyCalc(){copyToClipboard(buildText());}
+function copyToClipboard(txt){
+  if(navigator.clipboard){navigator.clipboard.writeText(txt).then(()=>showToast('הועתק! ✓'));}
+  else{const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('הועתק! ✓');}
+}
+function showToast(msg){
+  const t=document.createElement('div');t.textContent=msg;
+  Object.assign(t.style,{position:'fixed',bottom:'28px',left:'50%',transform:'translateX(-50%)',background:'#111827',padding:'10px 20px',borderRadius:'20px',color:'#fff',fontFamily:'Heebo,sans-serif',fontSize:'.85rem',fontWeight:'700',zIndex:'9999',boxShadow:'0 4px 16px rgba(0,0,0,.25)',whiteSpace:'nowrap'});
+  document.body.appendChild(t);setTimeout(()=>t.remove(),2200);
+}
+
+calc();
+</script>
+</body>
+</html>
