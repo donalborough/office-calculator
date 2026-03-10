@@ -2,166 +2,503 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>מחשבון עלויות משרד</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>מחשבון עלויות משרד — דון אלבורו</title>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f4f2ee;--card:#fff;--ink:#111827;--ink2:#374151;--ink3:#9ca3af;--rule:#e5e7eb;--gold:#b45309;--gold-l:#fef3c7;--gold-m:#fde68a;--blue:#1d4ed8;--blue-l:#eff6ff;--green:#065f46;--green-l:#ecfdf5;--red:#991b1b;--red-l:#fef2f2;--sh:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);--sh-md:0 4px 16px rgba(0,0,0,.10);}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{-webkit-text-size-adjust:100%;}
-body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direction:rtl;min-height:100vh;padding-bottom:max(40px,env(safe-area-inset-bottom));}
-.hdr{background:var(--ink);padding:20px 16px 18px;padding-top:max(20px,env(safe-area-inset-top));}
-.hdr-inner{max-width:500px;margin:0 auto;}
-.hdr h1{font-size:1.25rem;font-weight:800;color:#fff;line-height:1.2;}
-.hdr h1 em{color:#fbbf24;font-style:normal;}
-.hdr p{font-size:.72rem;color:rgba(255,255,255,.4);margin-top:3px;}
-.page{max-width:500px;margin:0 auto;padding:0 12px 32px;}
-.sec{margin-top:20px;}
-.sec-title{font-size:.62rem;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:var(--ink3);padding:0 4px 8px;}
-.card{background:var(--card);border-radius:16px;box-shadow:var(--sh);overflow:hidden;}
-.row{display:flex;align-items:center;padding:13px 16px;gap:12px;border-bottom:1px solid var(--rule);}
-.row:last-child{border-bottom:none;}
-.row-left{flex:1;min-width:0;}
-.row-label{font-size:.88rem;font-weight:600;line-height:1.3;}
-.row-sub{font-size:.68rem;color:var(--ink3);margin-top:2px;}
-.row-right{display:flex;align-items:center;flex-shrink:0;}
-.spin{display:flex;align-items:center;background:var(--bg);border:1.5px solid var(--rule);border-radius:12px;overflow:hidden;height:42px;}
-.spin-btn{width:40px;height:42px;background:transparent;border:none;font-size:1.15rem;cursor:pointer;color:var(--ink2);display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;transition:background .1s;flex-shrink:0;}
-.spin-btn:active{background:var(--rule);}
-.spin-inp{width:60px;text-align:center;border:none;background:transparent;font-size:.9rem;font-weight:700;font-family:'Heebo',sans-serif;color:var(--ink);padding:0;height:100%;-moz-appearance:textfield;}
-.spin-inp::-webkit-outer-spin-button,.spin-inp::-webkit-inner-spin-button{-webkit-appearance:none;}
-.spin-inp:focus{outline:2px solid var(--blue);outline-offset:-2px;border-radius:4px;}
-.spin-unit{font-size:.62rem;color:var(--ink3);padding-left:8px;padding-right:2px;white-space:nowrap;}
-.spin-inp.w52{width:52px;}
-.tog-wrap{display:flex;align-items:center;gap:8px;}
-.tog{width:46px;height:26px;border-radius:13px;background:var(--rule);cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;-webkit-tap-highlight-color:transparent;}
-.tog.on{background:var(--blue);}
-.tog::after{content:'';position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.2);transition:right .2s,left .2s;}
-.tog.on::after{right:auto;left:3px;}
-.tog-lbl{font-size:.8rem;color:var(--ink2);font-weight:500;}
-.chips{display:flex;flex-wrap:wrap;gap:6px;padding:12px 16px 14px;}
-.chip{padding:7px 12px;border-radius:20px;border:1.5px solid var(--rule);background:var(--bg);color:var(--ink2);font-size:.76rem;font-family:'Heebo',sans-serif;cursor:pointer;transition:all .15s;font-weight:500;white-space:nowrap;-webkit-tap-highlight-color:transparent;line-height:1.3;text-align:center;}
-.chip.sel{border-color:var(--gold);background:var(--gold-l);color:var(--gold);font-weight:700;}
-.chip .cs{font-size:.6rem;opacity:.75;display:block;margin-top:1px;}
-.result-hero{background:var(--ink);border-radius:16px;padding:20px 18px 18px;box-shadow:var(--sh-md);position:relative;overflow:hidden;}
-.result-hero::before{content:'';position:absolute;bottom:-40px;left:-40px;width:160px;height:160px;border-radius:50%;background:rgba(251,191,36,.06);pointer-events:none;}
-.rh-label{font-size:.6rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:3px;}
-.rh-main{font-size:2.2rem;font-weight:900;color:#fbbf24;line-height:1;}
-.rh-sub{font-size:.75rem;color:rgba(255,255,255,.4);margin-top:4px;margin-bottom:16px;}
-.rh-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.rh-cell{background:rgba(255,255,255,.07);border-radius:10px;padding:10px 12px;}
-.rh-val{font-size:1rem;font-weight:800;color:#fff;}
-.rh-lbl{font-size:.62rem;color:rgba(255,255,255,.38);margin-top:2px;}
-.notice{display:flex;gap:10px;align-items:flex-start;border-radius:12px;padding:12px 14px;font-size:.78rem;line-height:1.7;margin-top:10px;}
-.notice.ok{background:var(--green-l);color:var(--green);}
-.notice.warn{background:var(--gold-l);color:var(--gold);}
-.notice.bad{background:var(--red-l);color:var(--red);}
-.notice-icon{font-size:1rem;flex-shrink:0;margin-top:1px;}
-.notice-text strong{display:block;margin-bottom:1px;}
-.brow{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;border-bottom:1px solid var(--rule);font-size:.83rem;gap:8px;}
-.brow:last-child{border-bottom:none;}
-.brow-lbl{color:var(--ink2);}
-.brow-val{font-weight:700;text-align:left;flex-shrink:0;}
-.brow.tot{background:#fffbeb;}
-.brow.tot .brow-lbl{font-weight:800;color:var(--gold);}
-.brow.tot .brow-val{color:var(--gold);}
-.ratio-box{background:var(--blue-l);border:1px solid #bfdbfe;border-radius:16px;padding:14px 16px;box-shadow:var(--sh);}
-.ratio-title{font-size:.62rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--blue);margin-bottom:10px;}
-.ratio-row{display:flex;justify-content:space-between;align-items:center;font-size:.83rem;padding:4px 0;}
-.ratio-row span:last-child{font-weight:700;}
-.ratio-note{font-size:.7rem;color:#3b82f6;line-height:1.7;margin-top:10px;}
-.broker-box{background:var(--gold-l);border:1px solid var(--gold-m);border-radius:16px;padding:16px;}
-.broker-name{font-size:.9rem;font-weight:800;color:var(--gold);margin-bottom:6px;}
-.broker-text{font-size:.8rem;color:var(--ink2);line-height:1.8;}
-.btn-primary{width:100%;padding:15px;border-radius:14px;background:var(--ink);color:#fff;border:none;font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;-webkit-tap-highlight-color:transparent;transition:opacity .15s;box-shadow:var(--sh-md);}
-.btn-primary:active{opacity:.85;}
-.btn-secondary{width:100%;padding:13px;border-radius:14px;background:var(--card);color:var(--ink2);border:1.5px solid var(--rule);font-family:'Heebo',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;-webkit-tap-highlight-color:transparent;}
-.btn-secondary:active{background:var(--bg);}
-.hdiv{height:1px;background:var(--rule);margin:4px 0;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.result-hero,.card,.ratio-box,.broker-box{animation:fadeUp .25s ease both;}
+:root {
+  --bg:       #f0ede8;
+  --surface:  #faf9f7;
+  --card:     #ffffff;
+  --ink:      #1c1917;
+  --ink2:     #44403c;
+  --ink3:     #a8a29e;
+  --border:   #e7e5e4;
+  --border2:  #d6d3d1;
+  --amber:    #92400e;
+  --amber-l:  #fffbeb;
+  --amber-m:  #fde68a;
+  --amber-b:  #d97706;
+  --teal:     #0f766e;
+  --teal-l:   #f0fdfa;
+  --blue:     #1e40af;
+  --blue-l:   #eff6ff;
+  --rose:     #9f1239;
+  --rose-l:   #fff1f2;
+  --shadow-s: 0 1px 2px rgba(0,0,0,.06);
+  --shadow-m: 0 4px 12px rgba(0,0,0,.08), 0 1px 3px rgba(0,0,0,.05);
+  --shadow-l: 0 12px 40px rgba(0,0,0,.12), 0 4px 12px rgba(0,0,0,.06);
+  --r: 14px;
+  --r-sm: 10px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  font-family: 'Heebo', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  direction: rtl;
+  min-height: 100vh;
+  padding-bottom: max(48px, env(safe-area-inset-bottom));
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ══ GATE ══ */
+.gate {
+  position: fixed; inset: 0; z-index: 1000;
+  background: #1e293b;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.gate::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 30% 80%, rgba(217,119,6,.12) 0%, transparent 70%),
+              radial-gradient(ellipse 40% 40% at 80% 20%, rgba(15,118,110,.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+.gate-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 32px 26px 28px;
+  width: 100%; max-width: 400px;
+  box-shadow: 0 32px 80px rgba(0,0,0,.5);
+  position: relative;
+  animation: gateIn .4s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes gateIn {
+  from { opacity:0; transform: translateY(24px) scale(.97); }
+  to   { opacity:1; transform: translateY(0) scale(1); }
+}
+.gate-eyebrow {
+  font-size: .6rem; font-weight: 800; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--amber-b);
+  margin-bottom: 8px;
+}
+.gate-title {
+  font-family: 'Heebo', sans-serif;
+  font-size: 1.6rem; font-weight: 900;
+  color: var(--ink); line-height: 1.2; margin-bottom: 6px;
+}
+.gate-sub {
+  font-size: .78rem; color: #78716c;
+  line-height: 1.7; margin-bottom: 26px;
+}
+.field { margin-bottom: 16px; }
+.field-label {
+  display: block; font-size: .68rem; font-weight: 700;
+  letter-spacing: .8px; text-transform: uppercase;
+  color: #78716c; margin-bottom: 6px;
+}
+.field-inp {
+  width: 100%; padding: 12px 14px;
+  border: 1.5px solid var(--border2);
+  border-radius: var(--r-sm);
+  font-size: .92rem; font-family: 'Heebo', sans-serif;
+  color: var(--ink); background: var(--surface);
+  transition: border-color .15s, box-shadow .15s;
+  -webkit-appearance: none;
+}
+.field-inp:focus {
+  outline: none;
+  border-color: var(--amber-b);
+  box-shadow: 0 0 0 3px rgba(217,119,6,.12);
+}
+.gate-err {
+  font-size: .74rem; color: var(--rose);
+  background: var(--rose-l); border-radius: 8px;
+  padding: 8px 12px; margin-bottom: 14px; display: none;
+}
+.gate-cta {
+  width: 100%; padding: 14px;
+  background: #1e293b; color: #fff; border: none;
+  border-radius: var(--r-sm);
+  font-family: 'Heebo', sans-serif; font-size: .95rem; font-weight: 700;
+  cursor: pointer; transition: background .15s, transform .1s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  letter-spacing: .2px;
+}
+.gate-cta:active { transform: scale(.98); background: #292524; }
+.gate-privacy {
+  font-size: .67rem; color: #a8a29e;
+  text-align: center; margin-top: 12px; line-height: 1.6;
+}
+
+/* ══ HEADER ══ */
+.hdr {
+  background: var(--ink);
+  padding: 18px 16px 16px;
+  padding-top: max(18px, env(safe-area-inset-top));
+  position: sticky; top: 0; z-index: 100;
+}
+.hdr-inner {
+  max-width: 520px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.hdr-brand { display: flex; flex-direction: column; }
+.hdr-title {
+  font-family: 'Heebo', sans-serif;
+  font-size: 1.05rem; font-weight: 900; color: #fff; line-height: 1;
+}
+.hdr-title em { color: #fbbf24; font-style: normal; }
+.hdr-sub { font-size: .62rem; color: rgba(255,255,255,.35); margin-top: 3px; }
+.hdr-back {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.12);
+  color: rgba(255,255,255,.6);
+  border-radius: 8px; padding: 6px 12px;
+  font-family: 'Heebo', sans-serif; font-size: .7rem; font-weight: 600;
+  cursor: pointer; white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .15s;
+}
+.hdr-back:active { background: rgba(255,255,255,.14); }
+
+/* ══ PAGE ══ */
+.page { max-width: 520px; margin: 0 auto; padding: 20px 14px 40px; }
+
+/* ══ SECTION ══ */
+.sec { margin-bottom: 20px; }
+.sec-hd {
+  display: flex; align-items: center; gap: 8px;
+  padding: 0 2px 10px;
+}
+.sec-num {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--ink); color: #fff;
+  font-size: .6rem; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.sec-title {
+  font-size: .68rem; font-weight: 800;
+  letter-spacing: 1px; text-transform: uppercase; color: var(--ink3);
+}
+
+/* ══ CARD ══ */
+.card {
+  background: var(--card);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-m);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.card-note {
+  padding: 10px 16px 12px;
+  font-size: .72rem; color: var(--ink3);
+  line-height: 1.7; border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+.card-note strong { color: var(--ink2); }
+
+/* ══ ROW ══ */
+.row {
+  display: flex; align-items: center;
+  padding: 12px 16px; gap: 12px;
+  border-bottom: 1px solid var(--border);
+  min-height: 58px;
+}
+.row:last-child { border-bottom: none; }
+.row-l { flex: 1; min-width: 0; }
+.row-label { font-size: .86rem; font-weight: 600; line-height: 1.3; }
+.row-sub { font-size: .67rem; color: var(--ink3); margin-top: 2px; line-height: 1.4; }
+.row-r { display: flex; align-items: center; flex-shrink: 0; }
+
+/* ══ SPINNER ══ */
+.spin {
+  display: flex; align-items: center;
+  background: var(--surface);
+  border: 1.5px solid var(--border2);
+  border-radius: 10px; overflow: hidden; height: 40px;
+}
+.spin-btn {
+  width: 38px; height: 40px;
+  background: transparent; border: none;
+  font-size: 1.1rem; cursor: pointer; color: var(--ink2);
+  display: flex; align-items: center; justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .1s; flex-shrink: 0;
+  font-weight: 400;
+}
+.spin-btn:active { background: var(--border); }
+.spin-inp {
+  width: 56px; text-align: center; border: none; background: transparent;
+  font-size: .88rem; font-weight: 700; font-family: 'Heebo', sans-serif;
+  color: var(--ink); padding: 0; height: 100%;
+  -moz-appearance: textfield;
+}
+.spin-inp.w48 { width: 48px; }
+.spin-inp::-webkit-outer-spin-button,
+.spin-inp::-webkit-inner-spin-button { -webkit-appearance: none; }
+.spin-inp:focus { outline: none; }
+.spin-unit {
+  font-size: .58rem; color: var(--ink3);
+  padding-left: 8px; padding-right: 2px; white-space: nowrap; line-height: 1;
+}
+
+/* ══ CHIPS ══ */
+.chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px 16px; }
+.chip {
+  padding: 7px 13px; border-radius: 8px;
+  border: 1.5px solid var(--border2);
+  background: var(--surface); color: var(--ink2);
+  font-size: .75rem; font-family: 'Heebo', sans-serif;
+  cursor: pointer; transition: all .15s; font-weight: 500;
+  -webkit-tap-highlight-color: transparent;
+  line-height: 1.3; text-align: center;
+}
+.chip .cs {
+  font-size: .58rem; opacity: .65;
+  display: block; margin-top: 2px;
+}
+.chip.sel {
+  border-color: var(--amber-b);
+  background: var(--amber-l); color: var(--amber);
+  font-weight: 700;
+  box-shadow: 0 0 0 1px rgba(217,119,6,.2);
+}
+
+/* ══ TOGGLE ══ */
+.tog-wrap { display: flex; align-items: center; gap: 9px; }
+.tog {
+  width: 44px; height: 25px; border-radius: 999px;
+  background: var(--border2); cursor: pointer;
+  position: relative; transition: background .2s; flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.tog.on { background: var(--teal); }
+.tog::after {
+  content: ''; position: absolute; top: 3px; right: 3px;
+  width: 19px; height: 19px; border-radius: 50%;
+  background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.2);
+  transition: right .2s, left .2s;
+}
+.tog.on::after { right: auto; left: 3px; }
+.tog-lbl { font-size: .78rem; color: var(--ink2); font-weight: 500; }
+
+/* ══ RESULT HERO ══ */
+.hero {
+  background: #1e293b;
+  border-radius: var(--r);
+  padding: 22px 20px 20px;
+  box-shadow: var(--shadow-l);
+  position: relative; overflow: hidden;
+  margin-bottom: 12px;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 20% 110%, rgba(22,163,74,.1) 0%, transparent 65%),
+              radial-gradient(ellipse 50% 50% at 90% 0%, rgba(15,118,110,.1) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero-eyebrow {
+  font-size: .57rem; font-weight: 800; letter-spacing: 1.2px;
+  text-transform: uppercase; color: rgba(255,255,255,.3);
+  margin-bottom: 4px;
+}
+.hero-amount {
+  font-family: 'Heebo', sans-serif;
+  font-size: 2.6rem; font-weight: 900;
+  color: #16a34a; line-height: 1;
+}
+.hero-meta {
+  font-size: .72rem; color: rgba(255,255,255,.35);
+  margin-top: 5px; margin-bottom: 18px;
+}
+.hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.hero-cell {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 10px; padding: 10px 13px;
+}
+.hero-val { font-size: .95rem; font-weight: 800; color: #fff; }
+.hero-lbl { font-size: .6rem; color: rgba(255,255,255,.33); margin-top: 2px; }
+
+/* ══ NOTICE ══ */
+.notice {
+  display: flex; gap: 10px; align-items: flex-start;
+  border-radius: 10px; padding: 11px 14px;
+  font-size: .76rem; line-height: 1.7; margin-bottom: 12px;
+  border: 1px solid transparent;
+}
+.notice.ok  { background: var(--teal-l);  color: var(--teal); border-color: #99f6e4; }
+.notice.warn{ background: var(--amber-l); color: var(--amber); border-color: var(--amber-m); }
+.notice.bad { background: var(--rose-l);  color: var(--rose);  border-color: #fecdd3; }
+.notice-icon { font-size: .95rem; flex-shrink: 0; margin-top: 1px; }
+.notice-text strong { display: block; margin-bottom: 1px; font-weight: 700; }
+
+/* ══ BREAKDOWN ══ */
+.brow {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 11px 16px; border-bottom: 1px solid var(--border);
+  font-size: .82rem; gap: 8px;
+}
+.brow:last-child { border-bottom: none; }
+.brow-lbl { color: var(--ink2); }
+.brow-val { font-weight: 700; flex-shrink: 0; color: var(--ink); }
+.brow.tot { background: #fffbeb; }
+.brow.tot .brow-lbl { font-weight: 800; color: var(--amber); }
+.brow.tot .brow-val { color: var(--amber); }
+
+/* ══ RATIO BOX ══ */
+.ratio-box {
+  background: var(--blue-l);
+  border: 1px solid #bfdbfe;
+  border-radius: var(--r);
+  padding: 16px 18px;
+  box-shadow: var(--shadow-s);
+}
+.ratio-hd {
+  font-size: .6rem; font-weight: 800; letter-spacing: 1px;
+  text-transform: uppercase; color: var(--blue); margin-bottom: 12px;
+}
+.ratio-row {
+  display: flex; justify-content: space-between;
+  align-items: center; font-size: .82rem; padding: 4px 0;
+}
+.ratio-row span:last-child { font-weight: 700; }
+.ratio-div { height: 1px; background: #bfdbfe; margin: 8px 0; }
+.ratio-note { font-size: .68rem; color: #3b82f6; line-height: 1.7; margin-top: 10px; }
+
+/* ══ BROKER ══ */
+.broker {
+  background: #1e293b;
+  border-radius: var(--r);
+  padding: 20px 18px;
+  box-shadow: var(--shadow-l);
+  position: relative; overflow: hidden;
+}
+.broker::before {
+  content: '';
+  position: absolute; bottom: -30px; left: -30px;
+  width: 140px; height: 140px; border-radius: 50%;
+  background: rgba(217,119,6,.07); pointer-events: none;
+}
+.broker-name {
+  font-family: 'Heebo', sans-serif;
+  font-size: 1.1rem; font-weight: 900; color: #fff;
+  margin-bottom: 2px;
+}
+.broker-title { font-size: .7rem; color: rgba(255,255,255,.35); margin-bottom: 14px; }
+.broker-text {
+  font-size: .8rem; color: rgba(255,255,255,.6);
+  line-height: 1.9; margin-bottom: 18px;
+}
+.broker-text em { color: #fbbf24; font-style: normal; font-weight: 600; }
+.broker-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.broker-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 10px 16px; border-radius: 9px;
+  font-size: .78rem; font-weight: 700;
+  text-decoration: none; font-family: 'Heebo', sans-serif;
+  transition: opacity .15s; flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.broker-btn:active { opacity: .85; }
+.broker-btn.wa  { background: #25d366; color: #fff; }
+.broker-btn.li  { background: #0077b5; color: #fff; }
+.broker-btn.tel { background: rgba(255,255,255,.1); color: #fff; border: 1px solid rgba(255,255,255,.15); }
+
+/* ══ ANIMATIONS ══ */
+@keyframes up {
+  from { opacity:0; transform:translateY(8px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.card  { animation: up .22s ease both; }
+.hero  { animation: up .22s ease .04s both; }
+.ratio-box { animation: up .22s ease .08s both; }
+.broker { animation: up .22s ease .1s both; }
+
+/* ══ DIVIDER ══ */
+.hdiv { height: 1px; background: var(--border); margin: 8px 0; }
 </style>
 </head>
 <body>
 
-<style>
-.gate-ov{position:fixed;inset:0;background:#111827;z-index:999;display:flex;align-items:center;justify-content:center;padding:20px;}
-.gate-card{background:#fff;border-radius:20px;padding:28px 22px 24px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.4);}
-.gate-logo{font-size:1.5rem;font-weight:900;color:#111827;margin-bottom:4px;}
-.gate-logo em{color:#b45309;font-style:normal;}
-.gate-sub{font-size:.78rem;color:#6b7280;margin-bottom:22px;line-height:1.6;}
-.gate-label{font-size:.7rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:#6b7280;margin-bottom:6px;display:block;}
-.gate-inp{width:100%;padding:12px 14px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:.9rem;font-family:'Heebo',sans-serif;color:#111827;margin-bottom:14px;-webkit-appearance:none;transition:border-color .15s;}
-.gate-inp:focus{outline:none;border-color:#b45309;}
-.gate-btn{width:100%;padding:14px;border-radius:12px;background:#111827;color:#fff;border:none;font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:opacity .15s;}
-.gate-btn:active{opacity:.85;}
-.gate-note{font-size:.68rem;color:#9ca3af;text-align:center;margin-top:10px;line-height:1.6;}
-.gate-err{font-size:.74rem;color:#991b1b;background:#fef2f2;border-radius:8px;padding:8px 12px;margin-bottom:12px;display:none;}
-</style>
-<div class="gate-ov" id="gateOv">
+<!-- ══ GATE ══ -->
+<div class="gate" id="gateOv">
   <div class="gate-card">
-    <div class="gate-logo">מחשבון עלויות <em>משרד</em></div>
-    <div class="gate-sub">כלי מקצועי לחישוב עלויות שכירות, ארנונה וניהול — כולל ניתוח ברוטו/נטו.<br>השאירו פרטים לקבלת גישה מיידית.</div>
-    <span class="gate-label">שם מלא</span>
-    <input class="gate-inp" id="gateName" type="text" placeholder="ישראל ישראלי" autocomplete="name">
-    <span class="gate-label">מייל</span>
-    <input class="gate-inp" id="gateMail" type="email" placeholder="israel@company.com" autocomplete="email" inputmode="email">
+    <div class="gate-eyebrow">כלי מקצועי · בחינם</div>
+    <div class="gate-title">מחשבון עלויות משרד</div>
+    <div class="gate-sub">חישוב מלא של שכירות, ארנונה, ניהול וניתוח ברוטו/נטו — בשניות. השאירו פרטים לקבלת גישה מיידית.</div>
+    <div class="field">
+      <label class="field-label">שם מלא</label>
+      <input class="field-inp" id="gateName" type="text" placeholder="ישראל ישראלי" autocomplete="name">
+    </div>
+    <div class="field">
+      <label class="field-label">כתובת מייל</label>
+      <input class="field-inp" id="gateMail" type="email" placeholder="israel@company.com" autocomplete="email" inputmode="email">
+    </div>
     <div class="gate-err" id="gateErr"></div>
-    <button class="gate-btn" onclick="gateSubmit()">כניסה לכלי ←</button>
-    <div class="gate-note">הפרטים נשמרים אצל דון אלבורו בלבד ולא מועברים לצד שלישי.</div>
+    <button class="gate-cta" onclick="gateSubmit()">
+      כניסה לכלי
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+    <div class="gate-privacy">הפרטים נשמרים אצל דון אלבורו בלבד ולא מועברים לצד שלישי.</div>
   </div>
 </div>
 
+<!-- ══ HEADER ══ -->
 <div class="hdr">
-  <div class="hdr-inner" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
-    <div>
-      <h1>מחשבון עלויות <em>משרד</em></h1>
-      <p>שכירות · ארנונה · ניהול · ברוטו/נטו</p>
+  <div class="hdr-inner">
+    <div class="hdr-brand">
+      <div class="hdr-title">מחשבון עלויות <em>משרד</em></div>
+      <div class="hdr-sub">שכירות · ארנונה · ניהול · ברוטו/נטו</div>
     </div>
-    <button onclick="document.getElementById('gateOv').style.display='flex'" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);border-radius:8px;padding:7px 12px;font-family:'Heebo',sans-serif;font-size:.72rem;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent">↩ התחלה</button>
+    <button class="hdr-back" onclick="document.getElementById('gateOv').style.display='flex'">↩ התחלה</button>
   </div>
 </div>
 
 <div class="page">
 
+  <!-- ══ STEP 1: BUILDING ══ -->
   <div class="sec">
-    <div class="sec-title">🏢 שלב 1 — סוג הבניין</div>
+    <div class="sec-hd">
+      <div class="sec-num">1</div>
+      <div class="sec-title">סוג הבניין</div>
+    </div>
     <div class="card">
       <div class="chips" id="bldgChips">
         <div class="chip sel" onclick="setBldg(this,1.30)" data-ratio="1.30">מגדל · A Class<span class="cs">30% שטחים משותפים</span></div>
         <div class="chip" onclick="setBldg(this,1.18)" data-ratio="1.18">בוטיק · B Class<span class="cs">18% שטחים משותפים</span></div>
         <div class="chip" onclick="setBldg(this,1.12)" data-ratio="1.12">בניין עצמאי<span class="cs">12% שטחים משותפים</span></div>
       </div>
-      <div style="padding:0 16px 14px;font-size:.74rem;color:var(--ink3);line-height:1.7">
-        ℹ️ <strong>ברוטו</strong> = מה שרשום בחוזה. <strong>נטו</strong> = מה שמשתמשים בפועל. ההפרש הוא מדרגות, מעליות ושטחים משותפים.
-      </div>
-      <div class="row" style="border-top:1px solid var(--rule)" id="customRatioRow">
-        <div class="row-left">
-          <div class="row-label">יחס ידני</div>
-          <div class="row-sub">אם ידוע מהחוזה — הזן במקום הממוצע</div>
+      <div class="row" id="customRatioRow" style="border-top:1px solid var(--border)">
+        <div class="row-l">
+          <div class="row-label">יחס ברוטו/נטו ידני</div>
+          <div class="row-sub">הזן אם ידוע במקום הממוצע</div>
         </div>
-        <div class="row-right" style="gap:8px">
+        <div class="row-r" style="gap:10px">
           <div class="tog" id="customRatioTog" onclick="toggleCustomRatio()"></div>
           <div class="spin" id="customRatioSpin" style="display:none">
             <button class="spin-btn" onclick="adj('customPct',-1)">−</button>
-            <input class="spin-inp w52" id="customPctInp" type="number" value="25" min="5" max="50" inputmode="numeric" oninput="onInput('customPct',this)">
+            <input class="spin-inp w48" id="customPctInp" type="number" value="25" min="5" max="50" inputmode="numeric" oninput="onInput('customPct',this)">
             <span class="spin-unit">%</span>
             <button class="spin-btn" onclick="adj('customPct',+1)">+</button>
           </div>
         </div>
       </div>
+      <div class="card-note">
+        <strong>ברוטו</strong> = מה שרשום בחוזה &nbsp;·&nbsp; <strong>נטו</strong> = מה שמשתמשים בפועל. ההפרש הוא מדרגות, מעליות ושטחים משותפים.
+      </div>
     </div>
   </div>
 
+  <!-- ══ STEP 2: AREA + EMPLOYEES ══ -->
   <div class="sec">
-    <div class="sec-title">📐 שלב 2 — שטח ועובדים</div>
+    <div class="sec-hd">
+      <div class="sec-num">2</div>
+      <div class="sec-title">שטח ועובדים</div>
+    </div>
     <div class="card">
       <div class="row">
-        <div class="row-left">
+        <div class="row-l">
           <div class="row-label">שטח המשרד (ברוטו)</div>
           <div class="row-sub" id="netNote">מזינים שטח ברוטו כפי שמופיע בחוזה</div>
         </div>
-        <div class="row-right">
+        <div class="row-r">
           <div class="spin">
             <button class="spin-btn" onclick="adj('sqm',-50)">−</button>
             <input class="spin-inp" id="sqmInp" type="number" value="480" min="20" max="9999" inputmode="numeric" oninput="onInput('sqm',this)">
@@ -171,11 +508,11 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
         </div>
       </div>
       <div class="row">
-        <div class="row-left">
+        <div class="row-l">
           <div class="row-label">מספר עובדים</div>
           <div class="row-sub">לחישוב מ"ר לעובד</div>
         </div>
-        <div class="row-right">
+        <div class="row-r">
           <div class="spin">
             <button class="spin-btn" onclick="adj('emp',-5)">−</button>
             <input class="spin-inp" id="empInp" type="number" value="40" min="1" max="2000" inputmode="numeric" oninput="onInput('emp',this)">
@@ -188,23 +525,27 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
     <div id="spaceNotice"></div>
   </div>
 
+  <!-- ══ STEP 3: LOCATION ══ -->
   <div class="sec">
-    <div class="sec-title">📍 שלב 3 — אזור ושכירות</div>
+    <div class="sec-hd">
+      <div class="sec-num">3</div>
+      <div class="sec-title">אזור ושכירות</div>
+    </div>
     <div class="card">
       <div class="chips" id="cityChips">
         <div class="chip" onclick="setCity(this,160)">תל אביב מרכז<span class="cs">~160 ₪/מ"ר</span></div>
         <div class="chip sel" onclick="setCity(this,130)">רמת גן הבורסה<span class="cs">~130 ₪/מ"ר</span></div>
         <div class="chip" onclick="setCity(this,110)">הרצליה פיתוח<span class="cs">~110 ₪/מ"ר</span></div>
       </div>
-      <div class="row" style="border-top:1px solid var(--rule)">
-        <div class="row-left">
+      <div class="row" style="border-top:1px solid var(--border)">
+        <div class="row-l">
           <div class="row-label">שכירות בפועל</div>
           <div class="row-sub">ניתן לשנות ידנית</div>
         </div>
-        <div class="row-right">
+        <div class="row-r">
           <div class="spin">
             <button class="spin-btn" onclick="adj('rent',-5)">−</button>
-            <input class="spin-inp w52" id="rentInp" type="number" value="130" min="30" max="500" inputmode="numeric" oninput="onInput('rent',this)">
+            <input class="spin-inp w48" id="rentInp" type="number" value="130" min="30" max="500" inputmode="numeric" oninput="onInput('rent',this)">
             <span class="spin-unit">₪/מ"ר</span>
             <button class="spin-btn" onclick="adj('rent',+5)">+</button>
           </div>
@@ -213,15 +554,19 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
     </div>
   </div>
 
+  <!-- ══ STEP 4: EXTRAS ══ -->
   <div class="sec">
-    <div class="sec-title">💡 שלב 4 — עלויות נלוות</div>
+    <div class="sec-hd">
+      <div class="sec-num">4</div>
+      <div class="sec-title">עלויות נלוות</div>
+    </div>
     <div class="card">
       <div class="row">
-        <div class="row-left">
+        <div class="row-l">
           <div class="row-label">ארנונה</div>
           <div class="row-sub" id="arnSub">34 ₪/מ"ר — ללא הנחה</div>
         </div>
-        <div class="row-right">
+        <div class="row-r">
           <div class="tog-wrap">
             <div class="tog" id="arnTog" onclick="toggleArn()"></div>
             <span class="tog-lbl">הנחת תוכנה</span>
@@ -229,11 +574,11 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
         </div>
       </div>
       <div class="row">
-        <div class="row-left">
+        <div class="row-l">
           <div class="row-label">דמי ניהול</div>
           <div class="row-sub">אחזקה + שירותים משותפים</div>
         </div>
-        <div class="row-right">
+        <div class="row-r">
           <div class="spin">
             <button class="spin-btn" onclick="adj('mgmt',-2)">−</button>
             <input class="spin-inp" id="mgmtInp" type="number" value="20" min="0" max="100" inputmode="numeric" oninput="onInput('mgmt',this)">
@@ -243,10 +588,10 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
         </div>
       </div>
       <div class="row">
-        <div class="row-left">
-          <div class="row-label">ניקיון + שמירה</div>
+        <div class="row-l">
+          <div class="row-label">שירותי ניקיון</div>
         </div>
-        <div class="row-right">
+        <div class="row-r">
           <div class="spin">
             <button class="spin-btn" onclick="adj('clean',-2)">−</button>
             <input class="spin-inp" id="cleanInp" type="number" value="8" min="0" max="60" inputmode="numeric" oninput="onInput('clean',this)">
@@ -256,10 +601,10 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
         </div>
       </div>
       <div class="row">
-        <div class="row-left">
+        <div class="row-l">
           <div class="row-label">חשמל · אינטרנט · מים</div>
         </div>
-        <div class="row-right">
+        <div class="row-r">
           <div class="spin">
             <button class="spin-btn" onclick="adj('utils',-2)">−</button>
             <input class="spin-inp" id="utilsInp" type="number" value="12" min="0" max="60" inputmode="numeric" oninput="onInput('utils',this)">
@@ -268,72 +613,91 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
           </div>
         </div>
       </div>
+      <div class="row" style="flex-wrap:wrap;gap:8px;padding-bottom:14px">
+        <div class="row-l">
+          <div class="row-label">עלויות נוספות</div>
+          <div class="row-sub">ביטוח, חנייה, ציוד משרדי וכו׳</div>
+        </div>
+        <div class="row-r" style="gap:8px">
+          <div style="display:flex;border:1.5px solid var(--border2);border-radius:8px;overflow:hidden;font-size:.7rem;font-weight:700">
+            <button id="extraModePerSqm" onclick="setExtraMode('sqm')" style="padding:6px 10px;border:none;cursor:pointer;font-family:Heebo,sans-serif;font-size:.7rem;font-weight:700;background:var(--ink);color:#fff;transition:all .15s">₪/מ"ר</button>
+            <button id="extraModeTotal" onclick="setExtraMode('total')" style="padding:6px 10px;border:none;cursor:pointer;font-family:Heebo,sans-serif;font-size:.7rem;font-weight:600;background:var(--surface);color:var(--ink3);transition:all .15s">סה"כ</button>
+          </div>
+          <div class="spin">
+            <button class="spin-btn" onclick="adjExtra(-1)">−</button>
+            <input class="spin-inp" id="extraInp" type="number" value="0" min="0" max="99999" inputmode="numeric" oninput="onInputExtra(this)">
+            <span class="spin-unit" id="extraUnit">₪/מ"ר</span>
+            <button class="spin-btn" onclick="adjExtra(+1)">+</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
+  <!-- ══ RESULTS ══ -->
   <div class="sec">
-    <div class="sec-title">✨ תוצאה</div>
-    <div class="result-hero">
-      <div class="rh-label">עלות חודשית (ברוטו)</div>
-      <div class="rh-main" id="rMain">—</div>
-      <div class="rh-sub" id="rSub">—</div>
-      <div class="rh-grid">
-        <div class="rh-cell"><div class="rh-val" id="rPerSqm">—</div><div class="rh-lbl">₪ לכל מ"ר</div></div>
-        <div class="rh-cell"><div class="rh-val" id="rPerEmp">—</div><div class="rh-lbl">₪ לעובד/חודש</div></div>
-        <div class="rh-cell"><div class="rh-val" id="rYear">—</div><div class="rh-lbl">₪ לשנה</div></div>
-        <div class="rh-cell"><div class="rh-val" id="rSqmEmp">—</div><div class="rh-lbl">מ"ר ברוטו לעובד</div></div>
+    <div class="sec-hd">
+      <div class="sec-num">✓</div>
+      <div class="sec-title">תוצאה</div>
+    </div>
+
+    <div class="hero">
+      <div class="hero-eyebrow">עלות חודשית כוללת</div>
+      <div class="hero-amount" id="rMain">—</div>
+      <div class="hero-meta" id="rSub">—</div>
+      <div class="hero-grid">
+        <div class="hero-cell"><div class="hero-val" id="rPerSqm">—</div><div class="hero-lbl">₪ לכל מ"ר</div></div>
+        <div class="hero-cell"><div class="hero-val" id="rPerEmp">—</div><div class="hero-lbl">₪ לעובד / חודש</div></div>
+        <div class="hero-cell"><div class="hero-val" id="rYear">—</div><div class="hero-lbl">₪ לשנה</div></div>
+        <div class="hero-cell"><div class="hero-val" id="rSqmEmp">—</div><div class="hero-lbl">מ"ר ברוטו לעובד</div></div>
       </div>
     </div>
+
     <div id="adviceNotice"></div>
 
-    <div style="margin-top:10px">
-      <div class="sec-title" style="padding-top:0">פירוט עלויות</div>
-      <div class="card" id="breakdown"></div>
-    </div>
+    <div class="card" style="margin-bottom:12px" id="breakdown"></div>
 
-    <div style="margin-top:10px">
-      <div class="ratio-box">
-        <div class="ratio-title">📐 ברוטו / נטו</div>
-        <div class="ratio-row"><span>שטח ברוטו (חוזה)</span><span id="gbBruto">—</span></div>
-        <div class="ratio-row"><span>שטח נטו (בפועל)</span><span id="gbNet">—</span></div>
-        <div class="hdiv" style="margin:8px 0"></div>
-        <div class="ratio-row"><span>עלות חודשית</span><span id="gbMonthly">—</span></div>
-        <div class="ratio-row"><span>עלות שנתית</span><span id="gbYearly">—</span></div>
-        <div class="ratio-note" id="gbNote">—</div>
-      </div>
+    <div class="ratio-box">
+      <div class="ratio-hd">📐 ברוטו / נטו</div>
+      <div class="ratio-row"><span>שטח ברוטו (חוזה)</span><span id="gbBruto">—</span></div>
+      <div class="ratio-row"><span>שטח נטו (בפועל)</span><span id="gbNet">—</span></div>
+      <div class="ratio-div"></div>
+      <div class="ratio-row"><span>עלות חודשית</span><span id="gbMonthly">—</span></div>
+      <div class="ratio-row"><span>עלות שנתית</span><span id="gbYearly">—</span></div>
+      <div class="ratio-note" id="gbNote">—</div>
     </div>
   </div>
 
+  <!-- ══ BROKER ══ -->
   <div class="sec">
-    <div class="broker-box">
-      <div class="broker-name">דון אלבורו — מתווך משרדים</div>
+    <div class="broker">
+      <div class="broker-name">דון אלבורו</div>
+      <div class="broker-title">מתווך משרדים מורשה</div>
       <div class="broker-text">
         מחפשים שטח ספציפי?<br>
-        רוצים לשמוע על המלצות ומשרדים "אוף מרקט"?<br>
+        רוצים לשמוע על המלצות ומשרדים <em>"אוף מרקט"</em>?<br>
         צרו קשר ואעזור.
       </div>
-      <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
-        <a href="https://wa.me/9720507202874" target="_blank" style="display:flex;align-items:center;gap:6px;padding:9px 16px;background:#25d366;color:#fff;border-radius:10px;font-size:.82rem;font-weight:700;text-decoration:none;font-family:Heebo,sans-serif">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      <div class="broker-btns">
+        <a class="broker-btn wa" href="https://wa.me/9720507202874" target="_blank">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           וואטסאפ
         </a>
-        <a href="https://www.linkedin.com/in/don-alborough/" target="_blank" style="display:flex;align-items:center;gap:6px;padding:9px 16px;background:#0077b5;color:#fff;border-radius:10px;font-size:.82rem;font-weight:700;text-decoration:none;font-family:Heebo,sans-serif">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        <a class="broker-btn li" href="https://www.linkedin.com/in/don-alborough/" target="_blank">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
           לינקדין
         </a>
-        <a href="tel:0507202874" style="display:flex;align-items:center;gap:6px;padding:9px 16px;background:#111827;color:#fff;border-radius:10px;font-size:.82rem;font-weight:700;text-decoration:none;font-family:Heebo,sans-serif">
+        <a class="broker-btn tel" href="tel:0507202874">
           📞 050-720-2874
         </a>
       </div>
     </div>
   </div>
 
-
-
 </div>
 
 <script>
-const S={sqm:480,emp:40,rent:130,arn:false,mgmt:20,clean:8,utils:12,grossRatio:1.30,useCustomRatio:false,customPct:25};
+const S={sqm:480,emp:40,rent:130,arn:false,mgmt:20,clean:8,utils:12,extra:0,extraMode:"sqm",grossRatio:1.30,useCustomRatio:false,customPct:25};
 const fmt=n=>Math.round(n).toLocaleString('he');
 const clamp=(v,mn,mx)=>Math.max(mn,Math.min(mx,v));
 const IDEAL_MIN=10,IDEAL_MAX=14,IDEAL_WARN=18;
@@ -343,7 +707,7 @@ function onInput(key,el){
   if(!isNaN(v)&&v>0){S[key]=v;calc();}
 }
 function adj(key,d){
-  const lim={sqm:[50,9999],emp:[1,2000],rent:[30,500],mgmt:[0,100],clean:[0,60],utils:[0,60],customPct:[5,50]};
+  const lim={sqm:[50,9999],emp:[1,2000],rent:[30,500],mgmt:[0,100],clean:[0,60],utils:[0,60],extra:[0,200],customPct:[5,50]};
   S[key]=clamp(S[key]+d,lim[key][0],lim[key][1]);
   document.getElementById(key+'Inp').value=S[key];
   calc();
@@ -357,8 +721,7 @@ function toggleCustomRatio(){
   S.useCustomRatio=!S.useCustomRatio;
   document.getElementById('customRatioTog').classList.toggle('on',S.useCustomRatio);
   document.getElementById('customRatioSpin').style.display=S.useCustomRatio?'flex':'none';
-  // deselect chips if custom
-  document.querySelectorAll('#bldgChips .chip').forEach(c=>c.classList.toggle('sel',!S.useCustomRatio&&parseFloat(c.dataset.ratio)===(S.grossRatio)));
+  document.querySelectorAll('#bldgChips .chip').forEach(c=>c.classList.toggle('sel',!S.useCustomRatio&&parseFloat(c.dataset.ratio)===S.grossRatio));
   calc();
 }
 function setBldg(el,ratio){
@@ -376,37 +739,52 @@ function toggleArn(){
 }
 
 // ── GATE ──
-const LEADS = [];
 function gateSubmit(){
-  const nameVal = document.getElementById('gateName').value.trim();
-  const mailVal = document.getElementById('gateMail').value.trim();
-  const err  = document.getElementById('gateErr');
-  if(!nameVal){ err.textContent='נא להזין שם מלא'; err.style.display='block'; return; }
-  const mailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mailVal);
-  if(!mailOk){ err.textContent='נא להזין כתובת מייל תקינה'; err.style.display='block'; return; }
+  const nameVal=document.getElementById('gateName').value.trim();
+  const mailVal=document.getElementById('gateMail').value.trim();
+  const err=document.getElementById('gateErr');
+  if(!nameVal){err.textContent='נא להזין שם מלא';err.style.display='block';return;}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mailVal)){err.textContent='נא להזין כתובת מייל תקינה';err.style.display='block';return;}
   err.style.display='none';
-  // save locally as backup
   try{
-    const existing = JSON.parse(localStorage.getItem('office_leads')||'[]');
-    existing.push({name:nameVal, mail:mailVal, ts:new Date().toISOString()});
-    localStorage.setItem('office_leads', JSON.stringify(existing));
-  }catch(ex){}
-  // send to Google Sheets via image trick (bypasses CORS)
-  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyLanxp_wUf3dH7k7I7c8JMYQxcoRlMZKeSX20ECrt0PfVl81W742mefTSziOBWJyo6kg/exec';
-  const img = new Image();
-  img.src = SHEET_URL + '?name=' + encodeURIComponent(nameVal) + '&mail=' + encodeURIComponent(mailVal);
+    const ex=JSON.parse(localStorage.getItem('office_leads')||'[]');
+    ex.push({name:nameVal,mail:mailVal,ts:new Date().toISOString()});
+    localStorage.setItem('office_leads',JSON.stringify(ex));
+  }catch(e){}
+  const img=new Image();
+  img.src='https://script.google.com/macros/s/AKfycbyLanxp_wUf3dH7k7I7c8JMYQxcoRlMZKeSX20ECrt0PfVl81W742mefTSziOBWJyo6kg/exec?name='+encodeURIComponent(nameVal)+'&mail='+encodeURIComponent(mailVal);
   document.getElementById('gateOv').style.display='none';
 }
-// show leads (for broker — type showLeads() in console)
 window.showLeads=function(){
   try{
-    const leads=JSON.parse(localStorage.getItem('office_leads')||'[]');
-    if(!leads.length){alert('אין לידים עדיין');return;}
-    const txt=leads.map((l,i)=>`${i+1}. ${l.name} | ${l.mail} | ${l.ts}`).join('\n');
-    prompt('לידים (העתק מכאן):', txt);
-  }catch(e){alert('שגיאה: '+e);}
+    const l=JSON.parse(localStorage.getItem('office_leads')||'[]');
+    if(!l.length){alert('אין לידים עדיין');return;}
+    prompt('לידים:',l.map((x,i)=>`${i+1}. ${x.name} | ${x.mail} | ${x.ts}`).join('\n'));
+  }catch(e){alert('שגיאה')}
 };
 
+// ── CALC ──
+function setExtraMode(mode){
+  S.extraMode=mode;
+  S.extra=0;
+  document.getElementById('extraInp').value=0;
+  document.getElementById('extraUnit').textContent=mode==='sqm'?'₪/מ"ר':'₪/חודש';
+  document.getElementById('extraModePerSqm').style.background=mode==='sqm'?'var(--ink)':'var(--surface)';
+  document.getElementById('extraModePerSqm').style.color=mode==='sqm'?'#fff':'var(--ink3)';
+  document.getElementById('extraModeTotal').style.background=mode==='total'?'var(--ink)':'var(--surface)';
+  document.getElementById('extraModeTotal').style.color=mode==='total'?'#fff':'var(--ink3)';
+  calc();
+}
+function adjExtra(d){
+  const step=S.extraMode==='sqm'?1:50;
+  S.extra=Math.max(0,S.extra+d*step);
+  document.getElementById('extraInp').value=S.extra;
+  calc();
+}
+function onInputExtra(el){
+  const v=parseInt(el.value);
+  if(!isNaN(v)&&v>=0){S.extra=v;calc();}
+}
 function calc(){
   const bruto=S.sqm;
   const effectiveRatio=S.useCustomRatio?(1+S.customPct/100):S.grossRatio;
@@ -416,76 +794,51 @@ function calc(){
     {l:'שכירות',v:S.rent},
     {l:'ארנונה'+(S.arn?' (הנחת תוכנה)':''),v:arn},
     {l:'דמי ניהול',v:S.mgmt},
-    {l:'ניקיון + שמירה',v:S.clean},
+    {l:'שירותי ניקיון',v:S.clean},
     {l:'חשמל, אינטרנט, מים',v:S.utils},
+    ...(S.extra>0?[{l:'עלויות נוספות',v:S.extraMode==='sqm'?S.extra:Math.round(S.extra/S.sqm)}]:[]),
   ];
   const perSqm=rows.reduce((s,r)=>s+r.v,0);
-  // all calculations on BRUTO
   const monthly=perSqm*bruto;
   const yearly=monthly*12;
   const perEmp=Math.round(monthly/S.emp);
   const sqmPerEmp=(bruto/S.emp).toFixed(1);
   const pct=Math.round((effectiveRatio-1)*100);
 
-  document.getElementById('netNote').textContent='≈ '+net+' מ\"ר נטו בפועל';
-
+  document.getElementById('netNote').textContent='≈ '+net+' מ"ר נטו בפועל';
   document.getElementById('rMain').textContent=fmt(monthly)+' ₪';
-  document.getElementById('rSub').textContent=fmt(bruto)+' מ\"ר ברוטו · '+S.emp+' עובדים · '+perSqm+' ₪/מ\"ר';
+  document.getElementById('rSub').textContent=fmt(bruto)+' מ"ר ברוטו · '+S.emp+' עובדים · '+perSqm+' ₪/מ"ר';
   document.getElementById('rPerSqm').textContent=fmt(perSqm)+' ₪';
   document.getElementById('rPerEmp').textContent=fmt(perEmp)+' ₪';
   document.getElementById('rYear').textContent=fmt(yearly)+' ₪';
-  document.getElementById('rSqmEmp').textContent=sqmPerEmp+' מ\"ר';
+  document.getElementById('rSqmEmp').textContent=sqmPerEmp+' מ"ר';
 
-  const brutoPerEmp=bruto/S.emp;
+  const bpe=bruto/S.emp;
   const idealBruto=Math.ceil(S.emp*IDEAL_MIN/50)*50;
   const maxBruto=Math.floor(S.emp*IDEAL_MAX/50)*50;
-  let noticeHtml='';
-  if(brutoPerEmp<IDEAL_MIN){
-    noticeHtml=`<div class="notice bad"><span class="notice-icon">⚠️</span><div class="notice-text"><strong>צפוף מדי — ${brutoPerEmp.toFixed(1)} מ"ר/עובד</strong>מינימום מומלץ הוא ${IDEAL_MIN} מ"ר. שקול לשדרג לכ-${idealBruto} מ"ר.</div></div>`;
-  }else if(brutoPerEmp<=IDEAL_MAX){
-    noticeHtml=`<div class="notice ok"><span class="notice-icon">✅</span><div class="notice-text"><strong>שטח אידאלי — ${brutoPerEmp.toFixed(1)} מ"ר/עובד</strong>בדיוק בטווח המומלץ (${IDEAL_MIN}–${IDEAL_MAX} מ"ר לעובד).</div></div>`;
-  }else if(brutoPerEmp<=IDEAL_WARN){
-    noticeHtml=`<div class="notice warn"><span class="notice-icon">💡</span><div class="notice-text"><strong>קצת גדול — ${brutoPerEmp.toFixed(1)} מ"ר/עובד</strong>הטווח האידאלי הוא ${IDEAL_MIN}–${IDEAL_MAX} מ"ר. שווה לבחון שטח של כ-${maxBruto} מ"ר לחיסכון בעלויות.</div></div>`;
+  let nh='';
+  if(bpe<IDEAL_MIN){
+    nh=`<div class="notice bad"><span class="notice-icon">⚠️</span><div class="notice-text"><strong>צפוף מדי — ${bpe.toFixed(1)} מ"ר/עובד</strong>מינימום מומלץ ${IDEAL_MIN} מ"ר. שקול לשדרג לכ-${idealBruto} מ"ר.</div></div>`;
+  }else if(bpe<=IDEAL_MAX){
+    nh=`<div class="notice ok"><span class="notice-icon">✅</span><div class="notice-text"><strong>שטח אידאלי — ${bpe.toFixed(1)} מ"ר/עובד</strong>בדיוק בטווח המומלץ (${IDEAL_MIN}–${IDEAL_MAX} מ"ר לעובד).</div></div>`;
+  }else if(bpe<=IDEAL_WARN){
+    nh=`<div class="notice warn"><span class="notice-icon">💡</span><div class="notice-text"><strong>קצת גדול — ${bpe.toFixed(1)} מ"ר/עובד</strong>הטווח האידאלי ${IDEAL_MIN}–${IDEAL_MAX} מ"ר. שווה לבחון שטח של כ-${maxBruto} מ"ר.</div></div>`;
   }else{
-    noticeHtml=`<div class="notice warn"><span class="notice-icon">💡</span><div class="notice-text"><strong>שטח גדול משמעותית — ${brutoPerEmp.toFixed(1)} מ"ר/עובד</strong>הטווח האידאלי הוא ${IDEAL_MIN}–${IDEAL_MAX} מ"ר. יש מרווח לצמיחה משמעותית או לחסוך בעלויות.</div></div>`;
+    nh=`<div class="notice warn"><span class="notice-icon">💡</span><div class="notice-text"><strong>שטח גדול משמעותית — ${bpe.toFixed(1)} מ"ר/עובד</strong>הטווח האידאלי ${IDEAL_MIN}–${IDEAL_MAX} מ"ר. יש מרווח לצמיחה משמעותית.</div></div>`;
   }
-  document.getElementById('spaceNotice').innerHTML=noticeHtml;
-  document.getElementById('adviceNotice').innerHTML=noticeHtml;
+  document.getElementById('spaceNotice').innerHTML=nh;
+  document.getElementById('adviceNotice').innerHTML=nh;
 
   document.getElementById('breakdown').innerHTML=
     rows.map(r=>`<div class="brow"><span class="brow-lbl">${r.l}</span><span class="brow-val">${r.v} ₪/מ"ר · ${fmt(r.v*bruto)} ₪</span></div>`).join('')+
     `<div class="brow tot"><span class="brow-lbl">סה"כ</span><span class="brow-val">${perSqm} ₪/מ"ר · ${fmt(monthly)} ₪/חודש</span></div>`;
 
-  const bldgName=S.useCustomRatio?'יחס ידני מהחוזה':S.grossRatio>=1.28?'מגדל A Class':S.grossRatio>=1.20?'בניין בוטיק B':'בניין עצמאי';
-  document.getElementById('gbBruto').textContent=fmt(bruto)+' מ\"ר';
-  document.getElementById('gbNet').textContent=fmt(net)+' מ\"ר (−'+pct+'% שטחים משותפים)';
+  const bn=S.useCustomRatio?'יחס ידני':S.grossRatio>=1.28?'מגדל A Class':S.grossRatio>=1.20?'בניין בוטיק B':'בניין עצמאי';
+  document.getElementById('gbBruto').textContent=fmt(bruto)+' מ"ר';
+  document.getElementById('gbNet').textContent=fmt(net)+' מ"ר (−'+pct+'% שטחים משותפים)';
   document.getElementById('gbMonthly').textContent=fmt(monthly)+' ₪/חודש';
   document.getElementById('gbYearly').textContent=fmt(yearly)+' ₪/שנה';
-  document.getElementById('gbNote').innerHTML=`<strong>${bldgName}</strong> — ${pct}% משטח הברוטו הם שטחים משותפים. כל החישובים לעיל על הברוטו כפי שמופיע בחוזה.`;
-}
 
-function buildText(){
-  const net=Math.round(S.sqm/S.grossRatio);
-  const arn=S.arn?17:34;
-  const perSqm=S.rent+arn+S.mgmt+S.clean+S.utils;
-  const monthly=perSqm*S.sqm;
-  const pct=Math.round((effectiveRatio-1)*100);
-  return `📊 סימולציית עלויות משרד\n━━━━━━━━━━━━━━━━━━\n📐 שטח ברוטו: ${S.sqm} מ"ר  |  נטו: ${net} מ"ר (-${pct}%)\n👥 עובדים: ${S.emp}  |  ${(S.sqm/S.emp).toFixed(1)} מ"ר/עובד\n🏢 שכירות: ${S.rent} ₪/מ"ר\n💰 עלות כוללת: ${perSqm} ₪/מ"ר\n━━━━━━━━━━━━━━━━━━\n💵 חודשי: ${fmt(monthly)} ₪\n📅 שנתי: ${fmt(monthly*12)} ₪\n━━━━━━━━━━━━━━━━━━\n📞 דון אלבורו | 050-720-2874`;
-}
-function shareCalc(){
-  const txt=buildText();
-  if(navigator.share)navigator.share({title:'סימולציית עלויות משרד',text:txt});
-  else copyToClipboard(txt);
-}
-function copyCalc(){copyToClipboard(buildText());}
-function copyToClipboard(txt){
-  if(navigator.clipboard){navigator.clipboard.writeText(txt).then(()=>showToast('הועתק! ✓'));}
-  else{const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('הועתק! ✓');}
-}
-function showToast(msg){
-  const t=document.createElement('div');t.textContent=msg;
-  Object.assign(t.style,{position:'fixed',bottom:'28px',left:'50%',transform:'translateX(-50%)',background:'#111827',padding:'10px 20px',borderRadius:'20px',color:'#fff',fontFamily:'Heebo,sans-serif',fontSize:'.85rem',fontWeight:'700',zIndex:'9999',boxShadow:'0 4px 16px rgba(0,0,0,.25)',whiteSpace:'nowrap'});
-  document.body.appendChild(t);setTimeout(()=>t.remove(),2200);
 }
 
 calc();
