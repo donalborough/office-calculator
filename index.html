@@ -749,6 +749,18 @@ function toggleArn(){
 }
 
 // ── GATE ──
+function checkSession(){
+  try{
+    const session=JSON.parse(localStorage.getItem('office_session')||'null');
+    if(session && (Date.now()-session.ts) < 24*60*60*1000){
+      // פחות מ-24 שעות — עבור ישר לכלי
+      document.getElementById('gateOv').style.display='none';
+      return true;
+    }
+  }catch(e){}
+  return false;
+}
+
 function gateSubmit(){
   const nameVal=document.getElementById('gateName').value.trim();
   const mailVal=document.getElementById('gateMail').value.trim();
@@ -760,6 +772,8 @@ function gateSubmit(){
     const ex=JSON.parse(localStorage.getItem('office_leads')||'[]');
     ex.push({name:nameVal,mail:mailVal,ts:new Date().toISOString()});
     localStorage.setItem('office_leads',JSON.stringify(ex));
+    // שמירת session ל-24 שעות
+    localStorage.setItem('office_session',JSON.stringify({name:nameVal,mail:mailVal,ts:Date.now()}));
   }catch(e){}
   const companyVal=document.getElementById('gateCompany').value.trim();
   const img=new Image();
@@ -865,6 +879,7 @@ function calc(){
 
 }
 
+checkSession();
 calc();
 </script>
 </body>
