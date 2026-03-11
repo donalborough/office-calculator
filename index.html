@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>מחשבון עלויות משרד — דון אלבורו</title>
+<title>מחשבון משרדים מקצועי | דון אלבורו</title>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -543,8 +543,8 @@ body {
     </div>
     <div class="card">
       <div class="chips" id="cityChips">
-        <div class="chip" onclick="setCity(this,160)">תל אביב מרכז<span class="cs">~160 ₪/מ"ר</span></div>
-        <div class="chip sel" onclick="setCity(this,130)">רמת גן הבורסה<span class="cs">~130 ₪/מ"ר</span></div>
+        <div class="chip sel" onclick="setCity(this,160)">תל אביב מרכז<span class="cs">~160 ₪/מ"ר</span></div>
+        <div class="chip" onclick="setCity(this,130)">רמת גן הבורסה<span class="cs">~130 ₪/מ"ר</span></div>
         <div class="chip" onclick="setCity(this,110)">הרצליה פיתוח<span class="cs">~110 ₪/מ"ר</span></div>
       </div>
       <div class="row" style="border-top:1px solid var(--border)">
@@ -555,7 +555,7 @@ body {
         <div class="row-r">
           <div class="spin">
             <button class="spin-btn" onclick="adj('rent',-5)">−</button>
-            <input class="spin-inp w48" id="rentInp" type="number" value="130" min="30" max="500" inputmode="numeric" oninput="onInput('rent',this)">
+            <input class="spin-inp w48" id="rentInp" type="number" value="160" min="30" max="500" inputmode="numeric" oninput="onInput('rent',this)">
             <span class="spin-unit">₪/מ"ר</span>
             <button class="spin-btn" onclick="adj('rent',+5)">+</button>
           </div>
@@ -571,16 +571,28 @@ body {
       <div class="sec-title">עלויות נלוות</div>
     </div>
     <div class="card">
-      <div class="row">
-        <div class="row-l">
-          <div class="row-label">ארנונה</div>
-          <div class="row-sub" id="arnSub">34 ₪/מ"ר — ללא הנחה</div>
-        </div>
-        <div class="row-r">
-          <div class="tog-wrap">
-            <div class="tog" id="arnTog" onclick="toggleArn()"></div>
-            <span class="tog-lbl">הנחת תוכנה</span>
+      <div class="row" style="flex-direction:column;align-items:stretch;gap:10px;padding:14px 16px">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+          <div>
+            <div class="row-label">ארנונה</div>
+            <div class="row-sub" id="arnSub">34 ₪/מ"ר — ללא הנחה</div>
           </div>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <div class="tog-wrap">
+              <div class="tog" id="arnTog" onclick="toggleArn()"></div>
+              <span class="tog-lbl">הנחת תוכנה</span>
+            </div>
+            <div style="display:flex;border:1.5px solid var(--border2);border-radius:8px;overflow:hidden">
+              <button id="arnModeAuto" onclick="setArnMode('auto')" style="padding:7px 11px;border:none;cursor:pointer;font-family:Heebo,sans-serif;font-size:.7rem;font-weight:700;background:#1e293b;color:#fff;transition:all .15s">אוטו</button>
+              <button id="arnModeManual" onclick="setArnMode('manual')" style="padding:7px 11px;border:none;cursor:pointer;font-family:Heebo,sans-serif;font-size:.7rem;font-weight:600;background:var(--surface);color:var(--ink3);transition:all .15s">ידני</button>
+            </div>
+          </div>
+        </div>
+        <div class="spin" id="arnManualSpin" style="display:none;width:100%">
+          <button class="spin-btn" onclick="adjArn(-1)">−</button>
+          <input class="spin-inp" id="arnManualInp" type="number" value="34" min="0" max="500" inputmode="numeric" oninput="onInputArn(this)" style="flex:1;width:auto">
+          <span class="spin-unit">₪/מ"ר</span>
+          <button class="spin-btn" onclick="adjArn(+1)">+</button>
         </div>
       </div>
       <div class="row">
@@ -623,16 +635,18 @@ body {
           </div>
         </div>
       </div>
-      <div class="row" style="flex-wrap:wrap;gap:8px;padding-bottom:14px">
-        <div class="row-l">
-          <div class="row-label">עלויות נוספות</div>
-          <div class="row-sub">ביטוח, חנייה, ציוד משרדי וכו׳</div>
-        </div>
-        <div class="row-r" style="gap:8px">
-          <div style="display:flex;border:1.5px solid var(--border2);border-radius:8px;overflow:hidden;font-size:.7rem;font-weight:700">
-            <button id="extraModePerSqm" onclick="setExtraMode('sqm')" style="padding:6px 10px;border:none;cursor:pointer;font-family:Heebo,sans-serif;font-size:.7rem;font-weight:700;background:var(--ink);color:#fff;transition:all .15s">₪/מ"ר</button>
-            <button id="extraModeTotal" onclick="setExtraMode('total')" style="padding:6px 10px;border:none;cursor:pointer;font-family:Heebo,sans-serif;font-size:.7rem;font-weight:600;background:var(--surface);color:var(--ink3);transition:all .15s">סה"כ</button>
+      <div class="row" style="flex-direction:column;align-items:stretch;gap:10px;padding:14px 16px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div class="row-label">עלויות נוספות</div>
+            <div class="row-sub">ביטוח, חנייה, ציוד משרדי וכו׳</div>
           </div>
+          <div style="display:flex;border:1.5px solid var(--border2);border-radius:8px;overflow:hidden">
+            <button id="extraModePerSqm" onclick="setExtraMode('sqm')" style="padding:7px 13px;border:none;cursor:pointer;font-family:Heebo,sans-serif;font-size:.72rem;font-weight:700;background:#1e293b;color:#fff;transition:all .15s">₪/מ"ר</button>
+            <button id="extraModeTotal" onclick="setExtraMode('total')" style="padding:7px 13px;border:none;cursor:pointer;font-family:Heebo,sans-serif;font-size:.72rem;font-weight:600;background:var(--surface);color:var(--ink3);transition:all .15s">סה"כ</button>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end">
           <div class="spin">
             <button class="spin-btn" onclick="adjExtra(-1)">−</button>
             <input class="spin-inp" id="extraInp" type="number" value="0" min="0" max="99999" inputmode="numeric" oninput="onInputExtra(this)">
@@ -704,10 +718,16 @@ body {
     </div>
   </div>
 
+  <div style="padding:0 4px;margin-top:4px">
+    <p style="font-size:.62rem;color:var(--ink3);line-height:1.7;text-align:center">
+      * המספרים המוצגים הם הערכות מקובלות בענף המשרדים ומשמשים לצורך אינדיקציה בלבד. העלויות בפועל עשויות להשתנות בהתאם לעסקה הספציפית, מיקום הנכס, תנאי החוזה ופרמטרים נוספים. אין לראות בנתונים אלו ייעוץ מקצועי מחייב.
+    </p>
+  </div>
+
 </div>
 
 <script>
-const S={sqm:480,emp:40,rent:130,arn:false,mgmt:20,clean:8,utils:12,extra:0,extraMode:"sqm",grossRatio:1.30,useCustomRatio:false,customPct:25};
+const S={sqm:480,emp:40,rent:160,arn:false,arnMode:"auto",arnManual:34,mgmt:20,clean:8,utils:12,extra:0,extraMode:"sqm",grossRatio:1.30,useCustomRatio:false,customPct:25};
 const fmt=n=>Math.round(n).toLocaleString('he');
 const clamp=(v,mn,mx)=>Math.max(mn,Math.min(mx,v));
 const IDEAL_MIN=10,IDEAL_MAX=14,IDEAL_WARN=18;
@@ -744,7 +764,7 @@ function setBldg(el,ratio){
 function toggleArn(){
   S.arn=!S.arn;
   document.getElementById('arnTog').classList.toggle('on',S.arn);
-  document.getElementById('arnSub').textContent=S.arn?'17 ₪/מ"ר — הנחת עסקי תוכנה':'34 ₪/מ"ר — ללא הנחה';
+  updateArnSub();
   calc();
 }
 
@@ -802,6 +822,32 @@ window.showLeads=function(){
 };
 
 // ── CALC ──
+function setArnMode(mode){
+  S.arnMode=mode;
+  document.getElementById('arnModeAuto').style.background=mode==='auto'?'#1e293b':'var(--surface)';
+  document.getElementById('arnModeAuto').style.color=mode==='auto'?'#fff':'var(--ink3)';
+  document.getElementById('arnModeManual').style.background=mode==='manual'?'#1e293b':'var(--surface)';
+  document.getElementById('arnModeManual').style.color=mode==='manual'?'#fff':'var(--ink3)';
+  document.getElementById('arnManualSpin').style.display=mode==='manual'?'flex':'none';
+  updateArnSub();
+  calc();
+}
+function adjArn(d){
+  S.arnManual=Math.max(0,S.arnManual+d);
+  document.getElementById('arnManualInp').value=S.arnManual;
+  calc();
+}
+function onInputArn(el){
+  const v=parseInt(el.value);
+  if(!isNaN(v)&&v>=0){S.arnManual=v;calc();}
+}
+function updateArnSub(){
+  if(S.arnMode==='manual'){
+    document.getElementById('arnSub').textContent=S.arnManual+' ₪/מ"ר — הזנה ידנית';
+  } else {
+    document.getElementById('arnSub').textContent=S.arn?'17 ₪/מ"ר — הנחת עסקי תוכנה':'34 ₪/מ"ר — ללא הנחה';
+  }
+}
 function setExtraMode(mode){
   S.extraMode=mode;
   S.extra=0;
@@ -827,7 +873,7 @@ function calc(){
   const bruto=S.sqm;
   const effectiveRatio=S.useCustomRatio?(1+S.customPct/100):S.grossRatio;
   const net=Math.round(bruto/effectiveRatio);
-  const arn=S.arn?17:34;
+  const arn=S.arnMode==='manual'?S.arnManual:(S.arn?17:34);
   const rows=[
     {l:'שכירות',v:S.rent},
     {l:'ארנונה'+(S.arn?' (הנחת תוכנה)':''),v:arn},
