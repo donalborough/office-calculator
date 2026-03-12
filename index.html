@@ -699,6 +699,7 @@ const fmt = n => Math.round(n).toLocaleString('he');
 const clamp = (v,mn,mx) => Math.max(mn,Math.min(mx,v));
 const IDEAL_MIN=10, IDEAL_MAX=14, IDEAL_WARN=18;
 const S = () => props[curProp];
+const _sentProps = new Set(); // מניע שליחה כפולה של אותו נכס
 
 // ══ TABS ══
 function renderTabs(){
@@ -1013,7 +1014,6 @@ function calc(){
 
 
 // ══ PROP TRACKING ══
-const _sentProps = new Set(); // מניע שליחה כפולה של אותו נכס
 
 function sendPropToSheets(p, r) {
   // שלח רק אם יש שם נכס — המפתח הוא השם בלבד
