@@ -294,7 +294,7 @@ button[onclick*="savePDF"]:hover,button[onclick*="savePNG"]:hover,button[onclick
   <!-- Property name -->
   <div class="prop-name-row">
     <span class="prop-name-label">🏢 שם הנכס:</span>
-    <input class="prop-name-inp" id="propNameInp" type="text" placeholder='לדוגמה: "מגדל אלון" / "רוטשילד 22"' oninput="updatePropName(this.value)">
+    <input class="prop-name-inp" id="propNameInp" type="text" placeholder='למשל: רוטשילד 22, קומה 3, תל אביב' oninput="updatePropName(this.value)">
   </div>
 
   <!-- STEP 1 -->
@@ -999,6 +999,48 @@ function calc(){
 
 
   updateArnSub();
+
+  // שלח נתוני נכס ל-Sheets בפעם הראשונה שהסיכום תקין
+  const _p = S(), _r = calcProp(_p);
+  if(_p.name && _p.sqm && _p.rent) sendPropToSheets(_p, _r);
+}
+
+
+// ══ PROP TRACKING ══
+const _sentProps = new Set(); // מניע שליחה כפולה של אותו נכס
+
+function sendPropToSheets(p, r) {
+  // שלח רק אם יש שם נכס + שטח + שכירות
+  if(!p.name || !p.sqm || !p.rent) return;
+  const key = p.name + '_' + p.sqm + '_' + p.rent;
+  if(_sentProps.has(key)) return; // כבר נשלח
+  _sentProps.add(key);
+
+  // קבל נתוני session
+  let userName='', userMail='', userCompany='';
+  try {
+    const s = JSON.parse(localStorage.getItem('office_session')||'null');
+    if(s) { userName=s.name||''; userMail=s.mail||''; }
+    const leads = JSON.parse(localStorage.getItem('office_leads')||'[]');
+    if(leads.length) userCompany = leads[leads.length-1].company||'';
+  } catch(e) {}
+
+  const params = new URLSearchParams({
+    sheet: 'נכסים',
+    name: userName,
+    mail: userMail,
+    company: userCompany,
+    propName: p.name,
+    rent: p.rent,
+    sqm: p.sqm,
+    totalMonthly: r.totalMonthly,
+    months: p.months,
+    grace: p.grace||0
+  });
+  try {
+    const img = new Image();
+    img.src = 'https://script.google.com/macros/s/AKfycbyivyw8rHoib5Rhz-NUsbqYf_7O1bmINHZfhPQR3sFk2P5QTiec4lKuyWQYXnZPhMWJ_A/exec?' + params.toString();
+  } catch(e) {}
 }
 
 // ══ COMPARE ══
