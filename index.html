@@ -1016,9 +1016,9 @@ function calc(){
 const _sentProps = new Set(); // מניע שליחה כפולה של אותו נכס
 
 function sendPropToSheets(p, r) {
-  // שלח רק אם יש שם נכס + שטח + שכירות
-  if(!p.name || !p.sqm || !p.rent) return;
-  const key = p.name + '_' + p.sqm + '_' + p.rent;
+  // שלח רק אם יש שם נכס — המפתח הוא השם בלבד
+  if(!p.name) return;
+  const key = p.name.trim().toLowerCase();
   if(_sentProps.has(key)) return; // כבר נשלח
   _sentProps.add(key);
 
