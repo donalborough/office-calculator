@@ -91,7 +91,9 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 
 /* SPINNER */
 .spin{display:flex;align-items:center;background:var(--surface);border:1.5px solid var(--border2);border-radius:10px;overflow:hidden;height:40px;}
-.spin-btn{width:38px;height:40px;background:transparent;border:none;font-size:1.1rem;cursor:pointer;color:var(--ink2);display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;transition:background .1s;flex-shrink:0;}
+.spin-btn{width:38px;height:40px;background:transparent;border:none;font-size:1.1rem;cursor:pointer;color:var(--ink2);display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;transition:background .15s,color .15s;flex-shrink:0;border-radius:8px;}
+.spin-btn:hover{background:var(--border);color:var(--ink);}
+.spin-btn:active{background:var(--border2);transform:scale(.94);}
 .spin-btn:active{background:var(--border);}
 .spin-inp{width:56px;text-align:center;border:none;background:transparent;font-size:.88rem;font-weight:700;font-family:'Heebo',sans-serif;color:var(--ink);padding:0;height:100%;-moz-appearance:textfield;}
 .spin-inp.w48{width:48px;}
@@ -164,7 +166,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .compare-modal{position:fixed;inset:0;z-index:500;display:none;flex-direction:column;}
 .compare-modal.open{display:flex;}
 .compare-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.5);}
-.compare-sheet{position:absolute;bottom:0;left:0;right:0;background:#fff;border-radius:20px 20px 0 0;max-height:90vh;overflow-y:auto;padding:0 0 max(24px,env(safe-area-inset-bottom));animation:slideUp .3s cubic-bezier(.22,1,.36,1) both;}
+.compare-sheet{position:absolute;bottom:0;left:0;right:0;background:#fff;border-radius:20px 20px 0 0;max-height:90vh;overflow-y:auto;padding:0 0 max(24px,env(safe-area-inset-bottom));animation:slideUp .3s cubic-bezier(.22,1,.36,1) both;-webkit-overflow-scrolling:touch;}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .compare-hd{padding:16px 18px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:1;}
 .compare-hd-title{font-size:.95rem;font-weight:800;}
@@ -197,6 +199,31 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 @keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .card,.hero,.ratio-box,.broker{animation:up .22s ease both;}
 .hdiv{height:1px;background:var(--border);margin:8px 0;}
+
+/* ── Hover & Active States ── */
+.prop-tab:hover:not(.active){background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);}
+.btype-btn:hover:not(.active){border-color:#94a3b8;background:#f1f5f9;transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.mode-btn:hover:not(.active){background:var(--border);color:var(--ink);}
+.spin-btn:hover{background:var(--border);color:var(--ink);}
+.spin-btn:active{transform:scale(.92);background:var(--border2);}
+.arn-toggle button:hover:not(.active),.extra-toggle button:hover:not(.active){background:var(--border);}
+.compare-btn:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.2);}
+.compare-btn:active{transform:translateY(0);box-shadow:none;}
+.gate-btn:hover{opacity:.92;transform:translateY(-1px);}
+.gate-btn:active{transform:translateY(0);}
+button[onclick*="savePDF"]:hover,button[onclick*="savePNG"]:hover,button[onclick*="saveCmp"]:hover{opacity:.88;transform:translateY(-1px);}
+
+/* ── Smooth spin input ── */
+.spin-inp{transition:border-color .15s;}
+.spin-inp:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(30,41,59,.08);}
+
+/* ── Card active feedback ── */
+.card input:focus-within,.card select:focus-within{border-color:var(--navy);}
+
+/* ── Transitions ── */
+.btype-btn{transition:all .18s cubic-bezier(.4,0,.2,1);}
+.mode-btn{transition:all .15s;}
+.prop-tab{transition:all .18s;}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
@@ -380,15 +407,16 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
               <button class="mode-btn active" id="arnModeAuto" onclick="setArnMode('auto')">אוטו</button>
               <button class="mode-btn" id="arnModeManual" onclick="setArnMode('manual')">ידני</button>
             </div>
+            <div class="spin" id="arnManualSpin" style="display:none;margin-top:10px">
+              <button class="spin-btn" onclick="adjArn(-1)">−</button>
+              <input class="spin-inp w48" id="arnManualInp" type="number" value="34" min="0" max="500" inputmode="numeric" oninput="onInputArn(this)">
+              <span class="spin-unit">₪/מ"ר</span>
+              <button class="spin-btn" onclick="adjArn(+1)">+</button>
+            </div>
           </div>
         </div>
-        <div class="spin" id="arnManualSpin" style="display:none;width:100%">
-          <button class="spin-btn" onclick="adjArn(-1)">−</button>
-          <input class="spin-inp" id="arnManualInp" type="number" value="34" min="0" max="500" inputmode="numeric" oninput="onInputArn(this)" style="flex:1;width:auto">
-          <span class="spin-unit">₪/מ"ר</span>
-          <button class="spin-btn" onclick="adjArn(+1)">+</button>
-        </div>
       </div>
+
       <div class="row" style="border-top:1px solid var(--border)">
         <div class="row-l"><div class="row-label">דמי ניהול</div><div class="row-sub">אחזקה + שירותים משותפים</div></div>
         <div class="row-r"><div class="spin">
@@ -527,7 +555,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
           </div>
         </div>
       </div>
-      <div class="card-note">חודשי גרייס = חודשים ללא תשלום שכירות בתחילת ההסכם. משפיע על העלות האפקטיבית בסיכום.</div>
+      <div class="card-note">חודשים ללא שכירות בתחילת ההסכם — מוצג כעלות אפקטיבית בסיכום.</div>
     </div>
   </div>
 
@@ -556,7 +584,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
       <div id="breakdown"></div>
 
       <!-- סיכום סופי -->
-      <div style="background:#1e293b;padding:18px 16px;margin-top:0">
+      <div style="background:#1e293b;padding:18px 16px;margin-top:0;border-radius:0 0 var(--r) var(--r)">
         <div style="font-size:.58rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:6px">סה"כ עלויות חודשיות</div>
         <div style="font-size:2.2rem;font-weight:900;color:#16a34a;line-height:1" id="rMain">—</div>
         <div style="font-size:.7rem;color:rgba(255,255,255,.35);margin-top:4px;margin-bottom:12px" id="rSub">—</div>
@@ -594,14 +622,14 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
   <!-- SAVE BUTTONS -->
   <div class="sec" id="saveBtns">
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button onclick="savePDF()" style="flex:1;min-width:140px;padding:13px 16px;background:#1e293b;color:#fff;border:none;border-radius:var(--r-sm);font-family:'Heebo',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+      <button onclick="savePDF()" style="flex:1;min-width:140px;padding:13px 16px;background:#1e293b;color:#fff;border:none;border-radius:var(--r-sm);font-family:'Heebo',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .18s">
         📄 שמור PDF
       </button>
       <button onclick="savePNG()" style="flex:1;min-width:140px;padding:13px 16px;background:#fff;color:#1e293b;border:1.5px solid #e7e5e4;border-radius:var(--r-sm);font-family:'Heebo',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
         🖼️ שמור תמונה
       </button>
     </div>
-    <div id="pngStatus" style="display:none;font-size:.75rem;color:#78716c;text-align:center;margin-top:8px;padding:8px;background:#f8fafc;border-radius:8px"></div>
+    <div id="pngStatus" style="display:none;font-size:.75rem;color:#1e293b;text-align:center;margin-top:8px;padding:10px 12px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;font-weight:600;transition:all .2s"></div>
   </div>
 
   <!-- BROKER -->
@@ -798,7 +826,7 @@ function toggleArn(){
 function setArnModeUI(mode){
   document.getElementById('arnModeAuto').classList.toggle('active', mode==='auto');
   document.getElementById('arnModeManual').classList.toggle('active', mode==='manual');
-  document.getElementById('arnManualSpin').style.display = mode==='manual'?'flex':'none';
+  const amr=document.getElementById('arnManualSpin'); if(amr) amr.style.display=mode==='manual'?'flex':'none';
 }
 function setArnMode(mode){
   S().arnMode=mode;
@@ -864,14 +892,9 @@ function updateGrace(p, r){
     return;
   }
   graceRow.style.display='block';
-  // עלות חודשית אפקטיבית = (עלות כוללת לתקופה פחות חודשי גרייס) / תקופה מלאה
-  const totalForPeriod = r.totalMonthly * (p.months - p.grace);
-  const effectiveMonthly = Math.round(totalForPeriod / p.months);
-  const gracePct = (p.grace / p.months * 100).toFixed(1);
-  const saving = r.totalMonthly - effectiveMonthly;
-  document.getElementById('rEffective').textContent = fmt(effectiveMonthly) + ' ₪';
+  document.getElementById('rEffective').textContent = fmt(r.effectiveMonthly) + ' ₪';
   document.getElementById('rEffectiveSub').textContent =
-    'חיסכון של ' + fmt(saving) + ' ₪/חודש · הנחה אפקטיבית ' + gracePct + '% · חיסכון לתקופה: ' + fmt(saving * p.months) + ' ₪';
+    'חיסכון ' + fmt(r.graceSaving) + ' ₪/חודש · הנחה ' + r.gracePct + '% · חיסכון לתקופה: ' + fmt(r.graceSaving * p.months) + ' ₪';
 }
 function updateParkingSub(){
   const p = S();
@@ -912,24 +935,42 @@ function calcProp(p){
   const furniturePerSqmMonth = p.furniture > 0 ? p.furniture / bruto / p.months : 0;
   const furnitureMonthly = p.furniture > 0 ? Math.round(p.furniture / p.months) : 0;
   const totalMonthly=monthly+furnitureMonthly+parkingMonthly;
-  return {bruto,net,effectiveRatio,rows,perSqm,monthly,yearly:monthly*12,perEmp:Math.round(monthly/p.emp),sqmPerEmp:bruto/p.emp,pct:Math.round((effectiveRatio-1)*100),furniturePerSqmMonth,furnitureMonthly,parkingMonthly,parkingPerSqm,totalMonthly};
+  const effectiveMonthly = p.grace>0 ? Math.round(totalMonthly*(p.months-p.grace)/p.months) : totalMonthly;
+  const gracePct = p.grace>0 ? (p.grace/p.months*100).toFixed(1) : 0;
+  const graceSaving = totalMonthly - effectiveMonthly;
+  return {bruto,net,effectiveRatio,rows,perSqm,monthly,yearly:monthly*12,perEmp:Math.round(monthly/p.emp),sqmPerEmp:bruto/p.emp,pct:Math.round((effectiveRatio-1)*100),furniturePerSqmMonth,furnitureMonthly,parkingMonthly,parkingPerSqm,totalMonthly,effectiveMonthly,gracePct,graceSaving};
 }
 
 function calc(){
   const p=S();
   const r=calcProp(p);
   document.getElementById('netNote').textContent='≈ '+r.net+' מ"ר נטו בפועל';
+  const empSubEl=document.getElementById('sqmPerEmpInline'); if(empSubEl) empSubEl.textContent=r.sqmPerEmp.toFixed(1)+' מ"ר לעובד';
   updateFurnitureSub();
   updateParkingSub();
   updateGrace(p, r);
   const totalPerSqm = (r.totalMonthly / r.bruto).toFixed(1);
-  document.getElementById('rMain').textContent=fmt(r.totalMonthly)+' ₪';
+  const rMainEl = document.getElementById('rMain');
+  if(rMainEl.textContent !== fmt(r.totalMonthly)+' ₪'){
+    rMainEl.style.transition='none';
+    rMainEl.style.opacity='0';
+    rMainEl.style.transform='translateY(4px)';
+    requestAnimationFrame(()=>{
+      rMainEl.textContent=fmt(r.totalMonthly)+' ₪';
+      rMainEl.style.transition='opacity .25s,transform .25s';
+      rMainEl.style.opacity='1';
+      rMainEl.style.transform='translateY(0)';
+    });
+  } else {
+    rMainEl.textContent=fmt(r.totalMonthly)+' ₪';
+  }
   document.getElementById('rSub').textContent=fmt(r.bruto)+' מ"ר ברוטו · '+p.emp+' עובדים';
   document.getElementById('rPerSqm').textContent=totalPerSqm+' ₪';
   document.getElementById('rPerEmp').textContent=fmt(Math.round(r.totalMonthly/p.emp))+' ₪';
   document.getElementById('rYear').textContent=fmt(r.totalMonthly*12)+' ₪';
-  document.getElementById('rPeriod').textContent=fmt(r.totalMonthly*p.months)+' ₪';
-  document.getElementById('rPeriodLbl').textContent='₪ ל-'+p.months+' חודשים';
+  const periodDisplay = p.grace>0 ? r.effectiveMonthly*p.months : r.totalMonthly*p.months;
+  document.getElementById('rPeriod').textContent=fmt(periodDisplay)+' ₪';
+  document.getElementById('rPeriodLbl').textContent=(p.grace>0?'₪ אפקטיבי ל-':'₪ ל-')+p.months+' חודשים';
   document.getElementById('gbBruto').textContent=fmt(r.bruto)+' מ"ר';
   document.getElementById('sqmPerEmpInline').textContent=r.sqmPerEmp.toFixed(1)+' מ"ר ברוטו לעובד';
   document.getElementById('gbNet').textContent='הערכת נטו: '+fmt(r.net)+' מ"ר (−'+r.pct+'% שטחים משותפים)';
@@ -964,98 +1005,118 @@ function calc(){
 function openCompare(){
   if(props.length < 2) return;
   const results = props.map(p => ({p, r:calcProp(p)}));
-  const minMonthly = Math.min(...results.map(x=>x.r.totalMonthly));
-  const minPerEmp = Math.min(...results.map(x=>x.r.perEmp));
-  const maxSqmEmp = Math.max(...results.map(x=>x.r.sqmPerEmp));
+  const hasGrace = results.some(x=>x.p.grace>0);
+  const hasParking = results.some(x=>x.p.parkingSpots>0);
+  const hasFurniture = results.some(x=>x.p.furniture>0);
+  const n = results.length;
 
-  const cols = results.length;
-  const gridStyle = `grid-template-columns: repeat(${cols}, 1fr)`;
-
-  const minRent = Math.min(...results.map(x=>x.p.rent));
-  const minPerSqm = Math.min(...results.map(x=>x.r.perSqm));
-
-  let html = '';
-
-  // כותרת ראשית — שמות הנכסים כעמודות — sticky
-  html += `<div style="display:grid;${gridStyle};gap:8px;margin-bottom:16px;position:sticky;top:0;background:#fff;z-index:10;padding:12px 0 8px;margin-right:-16px;margin-left:-16px;padding-right:16px;padding-left:16px;">`;
-  results.forEach(({p},i) => {
-    html += `<div style="text-align:center;padding:10px 8px;background:#1e293b;border-radius:10px;">
-      <span style="font-size:.58rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.45);display:block;margin-bottom:3px">נכס ${String.fromCharCode(0x05D0+i)}</span>
-      <span style="font-size:.82rem;font-weight:800;color:#fff">${p.name||'ללא שם'}</span>
+  // כותרות עמודות — sticky
+  let html = `<div style="display:grid;grid-template-columns:120px repeat(${n},1fr);gap:0;margin-bottom:0;position:sticky;top:0;z-index:20;border-radius:10px 10px 0 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.12)">`;
+  // header row
+  html += `<div style="padding:10px 12px;background:#1e293b;font-size:.6rem;color:rgba(255,255,255,.4)"></div>`;
+  results.forEach(({p},i)=>{
+    html += `<div style="padding:10px 12px;background:#1e293b;text-align:center;">
+      <div style="font-size:.58rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.45)">${['נכס א׳','נכס ב׳','נכס ג׳'][i]}</div>
+      <div style="font-size:.82rem;font-weight:800;color:#fff;margin-top:2px">${p.name||'ללא שם'}</div>
     </div>`;
   });
   html += '</div>';
 
-  // 1. שטח + שכירות בולטת + עלות משוקללת
-  html += `<div class="cmp-row" style="${gridStyle};margin-bottom:0"><div class="cmp-label">שטח · שכירות ועלות למ"ר</div></div>`;
-  html += `<div class="cmp-row" style="${gridStyle};margin-bottom:16px">`;
-  results.forEach(({p,r}) => {
-    html += `<div class="cmp-cell">
-      <div class="cmp-cell-val">${fmt(p.sqm)} מ"ר</div>
-      <div style="font-size:1rem;font-weight:900;color:#1c1917;margin:4px 0 1px">${p.rent} ₪/מ"ר</div>
-      <div style="font-size:.68rem;color:#a8a29e;margin-bottom:4px">שכירות בלבד</div>
-      <div style="font-size:.78rem;font-weight:600;color:#44403c;">${r.perSqm} ₪/מ"ר כולל הכל</div>
+  // פונקציה לשורת טבלה
+  // בדוק אם כל הערכים זהים
+  const allSame = vals => vals.every(v=>v===vals[0]);
+
+  const row = (label, vals, opts={}) => {
+    const {bold, arrow, separator, subLabel, icon} = opts;
+    const same = allSame(vals);
+    const sepStyle = separator ? 'border-top:2px solid #e2e8f0;' : 'border-top:1px solid #f1f0ee;';
+    const labelBg = separator ? 'background:#f1f5f9;' : 'background:#fafaf9;';
+    // שורות זהות — טקסט מעומעם; שורות שונות — טקסט כהה ובולט
+    const valColor = same ? '#b0aaa4' : '#1c1917';
+    const valWeight = bold ? '800' : (same ? '400' : '600');
+    let r = `<div style="display:grid;grid-template-columns:130px repeat(${n},1fr);gap:0;${sepStyle}">`;
+    r += `<div style="padding:9px 12px;${labelBg}border-left:1px solid #f1f0ee;display:flex;align-items:flex-start;gap:6px">
+      ${icon?`<span style="font-size:.75rem;margin-top:1px;opacity:.5">${icon}</span>`:''}
+      <div>
+        <div style="font-size:.7rem;font-weight:${separator?'700':'600'};color:${separator?'#475569':(same?'#c4bdb6':'#78716c')}">${label}</div>
+        ${subLabel?`<div style="font-size:.58rem;color:#a8a29e;margin-top:1px">${subLabel}</div>`:''}
+      </div>
     </div>`;
-  });
-  html += '</div>';
-
-  // minTotal = minMonthly (already defined above)
-  const hasFurniture = results.some(x=>x.r.furnitureMonthly>0);
-  const hasParking = results.some(x=>x.r.parkingMonthly>0);
-
-  // 3. סה"כ לחודש ולשנה
-  html += `<div class="cmp-row" style="${gridStyle};margin-bottom:0"><div class="cmp-label">סה"כ עלויות לחודש${hasFurniture?' (כולל ריהוט)':''}</div></div>`;
-  html += `<div class="cmp-row" style="${gridStyle};margin-bottom:${hasFurniture?8:16}px">`;
-  results.forEach(({p,r}) => {
-    const win = r.totalMonthly===minMonthly && results.filter(x=>x.r.totalMonthly===minMonthly).length===1;
-    html += `<div class="cmp-cell${win?' winner':''}">
-      <div class="cmp-cell-val">${fmt(r.totalMonthly)} ₪</div>
-      <div class="cmp-cell-sub">${fmt(r.totalMonthly*p.months)} ₪ / ${p.months} חודש</div>
-      ${win?'<div class="cmp-winner-badge">✓ הכי זול</div>':''}
-    </div>`;
-  });
-  html += '</div>';
-
-  // ריהוט — שורה נפרדת אם יש
-  if(hasFurniture){
-    html += `<div class="cmp-row" style="${gridStyle};margin-bottom:0"><div class="cmp-label">ריהוט משרדי</div></div>`;
-    html += `<div class="cmp-row" style="${gridStyle};margin-bottom:16px">`;
-    results.forEach(({p,r}) => {
-      html += `<div class="cmp-cell">
-        <div class="cmp-cell-val">${r.furnitureMonthly>0?fmt(p.furniture)+' ₪':'—'}</div>
-        <div class="cmp-cell-sub">${r.furnitureMonthly>0?r.furniturePerSqmMonth.toFixed(1)+' ₪/מ"ר/חודש':'לא הוזן'}</div>
+    vals.forEach((v,i)=>{
+      const hasArrow = arrow && arrow[i];
+      const cellBg = separator ? 'background:#f8fafc;' : '';
+      r += `<div style="padding:9px 10px;text-align:center;border-left:1px solid #f1f0ee;${cellBg}">
+        <div style="font-size:${bold?'.85':'0.78'}rem;font-weight:${valWeight};color:${bold?'#1c1917':valColor};display:inline-flex;align-items:center;gap:3px;justify-content:center">
+          ${v}${hasArrow?'<span style="font-size:.7rem;color:#16a34a;line-height:1">↓</span>':''}
+        </div>
       </div>`;
     });
-    html += '</div>';
-  }
+    r += '</div>';
+    return r;
+  };
+
+  // גוף הטבלה
+  html += `<div id="cmpTableBody" style="border:1px solid #e7e5e4;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;margin-bottom:16px">`;
+
+  // שטח
+  html += row('שטח ברוטו', results.map(({p})=>fmt(p.sqm)+' מ"ר'), {bold:true, icon:'📐'});
+
+  // מחירים
+  html += row('שכירות', results.map(({p})=>p.rent+' ₪/מ"ר'), {separator:true, icon:'💰'});
+  html += row('ארנונה', results.map(({p})=>{
+    if(p.arnMode==='manual') return p.arnManual+' ₪/מ"ר';
+    return (p.arn?17:34)+' ₪/מ"ר';
+  }), {icon:'🏛'});
+  html += row('דמי ניהול', results.map(({p})=>p.mgmt+' ₪/מ"ר'), {icon:'🔧'});
+  html += row('ניקיון', results.map(({p})=>p.clean+' ₪/מ"ר'), {icon:'🧹'});
+  html += row('חשמל+אינטרנט', results.map(({p})=>p.utils+' ₪/מ"ר'), {icon:'⚡'});
+  html += row('עלות למ"ר', results.map(({p,r})=>r.perSqm+' ₪/מ"ר'), {bold:true, icon:'Σ'});
 
   // חניה
   if(hasParking){
-    html += `<div class="cmp-row" style="${gridStyle};margin-bottom:0"><div class="cmp-label">חניות</div></div>`;
-    html += `<div class="cmp-row" style="${gridStyle};margin-bottom:16px">`;
-    results.forEach(({p,r}) => {
-      html += `<div class="cmp-cell">
-        <div class="cmp-cell-val">${r.parkingMonthly>0?fmt(r.parkingMonthly)+' ₪':'—'}</div>
-        <div class="cmp-cell-sub">${r.parkingMonthly>0?p.parkingSpots+' חניות × '+p.parkingPrice+' ₪':'ללא חניה'}</div>
-      </div>`;
-    });
-    html += '</div>';
+    html += row('חניות', results.map(({p})=>p.parkingSpots>0?p.parkingSpots+' חניות':'—'), {separator:true, icon:'🅿'});
+    html += row('מחיר חניה', results.map(({p})=>p.parkingSpots>0?fmt(p.parkingPrice)+' ₪':'—'), {icon:'🅿'});
+    html += row('עלות חניות', results.map(({p,r})=>r.parkingMonthly>0?fmt(r.parkingMonthly)+' ₪/חודש':'—'), {icon:'🅿'});
   }
 
-  // 4. מ"ר ברוטו לעובד
-  html += `<div class="cmp-row" style="${gridStyle};margin-bottom:0"><div class="cmp-label">מ"ר ברוטו לעובד</div></div>`;
-  html += `<div class="cmp-row" style="${gridStyle};margin-bottom:8px">`;
-  results.forEach(({p,r}) => {
-    html += `<div class="cmp-cell">
-      <div class="cmp-cell-val">${r.sqmPerEmp.toFixed(1)} מ"ר</div>
-      <div class="cmp-cell-sub">${p.emp} עובדים</div>
-    </div>`;
+  // ריהוט
+  if(hasFurniture){
+    html += row('ריהוט', results.map(({p,r})=>r.furnitureMonthly>0?fmt(r.furnitureMonthly)+' ₪/חודש':'—'), {separator:true, subLabel:'פרוס לתקופה', icon:'🪑'});
+  }
+
+  // תקופה
+  html += row('תקופת הסכם', results.map(({p})=>p.months+' חודשים'), {separator:true, icon:'📅'});
+
+  // סה"כ
+  const minTotal = Math.min(...results.map(x=>x.r.totalMonthly));
+  const minEff = Math.min(...results.map(x=>x.r.effectiveMonthly));
+
+  if(hasGrace){
+    html += row('גרייס', results.map(({p})=>p.grace>0?p.grace+' חודשים':'ללא'), {separator:true, icon:'🎁'});
+  }
+
+  html += row('סה"כ לחודש', results.map(({p,r})=>fmt(r.totalMonthly)+' ₪'), {bold:true, separator:true, icon:'∑'});
+
+  if(hasGrace){
+    html += row('עלות אפקטיבית', results.map(({p,r})=>fmt(r.effectiveMonthly)+' ₪'), {
+      bold:true, subLabel:'לחודש אחרי גרייס', icon:'∑',
+      arrow: results.map(({p})=>p.grace>0)
+    });
+  }
+
+  html += row('סה"כ לתקופה', results.map(({p,r})=>fmt(r.effectiveMonthly*p.months)+' ₪'), {
+    subLabel: hasGrace ? 'כולל חיסכון מגרייס' : null, icon:'∑',
+    arrow: hasGrace ? results.map(({p})=>p.grace>0) : null
   });
+
   html += '</div>';
+
+
 
   document.getElementById('cmpTable').innerHTML = html;
   document.getElementById('compareModal').classList.add('open');
 }
+
 function closeCompare(){
   document.getElementById('compareModal').classList.remove('open');
 }
@@ -1141,7 +1202,11 @@ function buildSummaryHTML(p, r){
       .hero-lbl{font-size:.58rem;color:rgba(255,255,255,.35);margin-top:2px}
       .footer{text-align:center;font-size:.68rem;color:#a8a29e;margin-top:20px;padding-top:14px;border-top:1px solid #e7e5e4}
       .print-btn{display:block;width:100%;padding:13px;background:#1e293b;color:#fff;border:none;border-radius:10px;font-family:'Heebo',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;margin-bottom:16px;text-align:center}
-      @media print{.print-btn{display:none}}
+      @media print{
+      .print-btn{display:none}
+      div{page-break-inside:avoid}
+      body{padding:12px}
+    }
     </style>
   </head><body>
     <button class="print-btn" onclick="window.print()">📄 הדפס / שמור PDF</button>
@@ -1206,7 +1271,7 @@ function buildCmpHTML(){
     <button class="print-btn" onclick="window.print()">📄 הדפס / שמור PDF</button>
     <h1>⚖️ השוואת נכסים</h1>
     <div class="sub">${new Date().toLocaleDateString('he-IL')} · דון אלבורו — מתווך משרדים מורשה</div>
-    ${document.getElementById('cmpTable').innerHTML}
+    <div style='position:relative'>${document.getElementById('cmpTable').innerHTML}</div>
     <div class="footer">הופק על ידי דון אלבורו — מתווך משרדים מורשה<br>050-720-2874 · linkedin.com/in/don-alborough</div>
   </body></html>`;
 }
@@ -1227,9 +1292,7 @@ function openSummaryWindow(htmlContent){
 function savePDF(){
   const p = S();
   const r = calcProp(p);
-  r.effectiveMonthly = p.grace>0 ? Math.round(r.totalMonthly*(p.months-p.grace)/p.months) : r.totalMonthly;
-  r.gracePct = (p.grace/p.months*100).toFixed(1);
-  r.saving = r.totalMonthly - r.effectiveMonthly;
+  r.saving = r.graceSaving; // alias לתאימות buildSummaryHTML
   openSummaryWindow(buildSummaryHTML(p, r));
 }
 
