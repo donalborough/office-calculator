@@ -739,8 +739,17 @@ function addProperty(){
 }
 
 function updatePropName(val){
-  S().name = val;
+  const p = S();
+  const prevName = p.name || '';
+  p.name = val;
   renderTabs();
+  // שלח ל-Sheets רק כשיש שם חדש שלא נשלח עדיין
+  const trimmed = val.trim();
+  if(trimmed && trimmed !== prevName.trim() && !_sentProps.has(trimmed)) {
+    _sentProps.add(trimmed);
+    const r = calcProp(p);
+    sendPropToSheets(p, r);
+  }
 }
 
 // ══ LOAD PROP TO UI ══
@@ -1000,9 +1009,6 @@ function calc(){
 
   updateArnSub();
 
-  // שלח נתוני נכס ל-Sheets בפעם הראשונה שהסיכום תקין
-  const _p = S(), _r = calcProp(_p);
-  if(_p.name && _p.sqm && _p.rent) sendPropToSheets(_p, _r);
 }
 
 
