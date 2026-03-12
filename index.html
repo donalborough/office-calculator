@@ -294,7 +294,7 @@ button[onclick*="savePDF"]:hover,button[onclick*="savePNG"]:hover,button[onclick
   <!-- Property name -->
   <div class="prop-name-row">
     <span class="prop-name-label">🏢 שם הנכס:</span>
-    <input class="prop-name-inp" id="propNameInp" type="text" placeholder='למשל: רוטשילד 22, קומה 3, תל אביב' oninput="updatePropName(this.value)">
+    <input class="prop-name-inp" id="propNameInp" type="text" placeholder='למשל: רוטשילד 22, קומה 3, תל אביב' oninput="updatePropName(this.value)" onblur="onPropNameBlur(this.value)">
   </div>
 
   <!-- STEP 1 -->
@@ -741,16 +741,18 @@ function addProperty(){
 
 function updatePropName(val){
   const p = S();
-  const prevName = p.name || '';
   p.name = val;
   renderTabs();
-  // שלח ל-Sheets רק כשיש שם חדש שלא נשלח עדיין
+}
+
+function onPropNameBlur(val){
   const trimmed = val.trim();
-  if(trimmed && trimmed !== prevName.trim() && !_sentProps.has(trimmed)) {
-    _sentProps.add(trimmed);
-    const r = calcProp(p);
-    sendPropToSheets(p, r);
-  }
+  if(!trimmed) return;
+  if(_sentProps.has(trimmed)) return;
+  _sentProps.add(trimmed);
+  const p = S();
+  const r = calcProp(p);
+  sendPropToSheets(p, r);
 }
 
 // ══ LOAD PROP TO UI ══
