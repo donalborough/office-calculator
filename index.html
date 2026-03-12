@@ -699,7 +699,8 @@ const fmt = n => Math.round(n).toLocaleString('he');
 const clamp = (v,mn,mx) => Math.max(mn,Math.min(mx,v));
 const IDEAL_MIN=10, IDEAL_MAX=14, IDEAL_WARN=18;
 const S = () => props[curProp];
-const _sentProps = new Set(); // מניע שליחה כפולה של אותו נכס
+const _sentProps = new Set(); // נכסים שנשלחו (שליחה ראשונה)
+const _sentPropsFinal = new Map(); // {name: {sqm, rent}} — נתונים שנשלחו בשליחה הסופית
 
 // ══ TABS ══
 function renderTabs(){
@@ -803,18 +804,24 @@ function loadPropToUI(){
 // ══ INPUTS ══
 function onInput(key,el){
   const v=parseInt(el.value);
-  if(!isNaN(v)&&v>0){S()[key]=v;calc();}
+  if(!isNaN(v)&&v>0){
+    S()[key]=v;
+    calc();
+    if(key==='sqm'||key==='rent') maybeSendPropUpdate();
+  }
 }
 function adj(key,d){
   const lim={sqm:[50,9999],emp:[1,2000],rent:[30,500],mgmt:[0,100],clean:[0,60],utils:[0,60],extra:[0,200],customPct:[5,50],parkingSpots:[0,200],parkingPrice:[0,2000],grace:[0,24]};
   S()[key]=clamp(S()[key]+d,lim[key][0],lim[key][1]);
   document.getElementById(key+'Inp').value=S()[key];
   calc();
+  if(key==='sqm'||key==='rent') maybeSendPropUpdate();
 }
 function setCity(el,rent){
   document.querySelectorAll('#cityChips .chip').forEach(c=>c.classList.remove('sel'));
   el.classList.add('sel');
   S().rent=rent; document.getElementById('rentInp').value=rent; calc();
+  maybeSendPropUpdate();
 }
 function toggleCustomRatio(){
   S().useCustomRatio=!S().useCustomRatio;
@@ -1045,6 +1052,23 @@ function sendPropToSheets(p, r) {
     const img = new Image();
     img.src = 'https://script.google.com/macros/s/AKfycbyivyw8rHoib5Rhz-NUsbqYf_7O1bmINHZfhPQR3sFk2P5QTiec4lKuyWQYXnZPhMWJ_A/exec?' + params.toString();
   } catch(e) {}
+}
+
+// ══ PROP FINAL SEND ══
+// נקרא בכל שינוי sqm/rent — שולח שורה שנייה אם השם כבר נשלח ונתונים השתנו
+function maybeSendPropUpdate(){
+  const p = S();
+  const trimmed = (p.name||'').trim();
+  if(!trimmed) return; // אין שם — לא רלוונטי
+  if(!_sentProps.has(trimmed)) return; // עדיין לא נשלחה שורה ראשונה
+
+  const prev = _sentPropsFinal.get(trimmed);
+  if(prev && prev.sqm === p.sqm && prev.rent === p.rent) return; // לא השתנה
+
+  // עדכן ושלח שורה שנייה
+  _sentPropsFinal.set(trimmed, {sqm: p.sqm, rent: p.rent});
+  const r = calcProp(p);
+  sendPropToSheets(p, r);
 }
 
 // ══ COMPARE ══
