@@ -2,11 +2,13 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
+<meta name="color-scheme" content="light only">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>מחשבון משרדים מקצועי | דון אלבורו</title>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
+  color-scheme: light only;
   --bg:#f0ede8; --surface:#faf9f7; --card:#fff;
   --ink:#1c1917; --ink2:#44403c; --ink3:#a8a29e;
   --border:#e7e5e4; --border2:#d6d3d1;
@@ -28,7 +30,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 /* GATE */
 .gate{position:fixed;inset:0;z-index:1000;background:var(--navy);display:flex;align-items:center;justify-content:center;padding:20px;}
 .gate::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 30% 80%,rgba(217,119,6,.12) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 80% 20%,rgba(15,118,110,.08) 0%,transparent 60%);pointer-events:none;}
-.gate-card{background:#fff;border-radius:20px;padding:32px 26px 28px;width:100%;max-width:400px;box-shadow:0 32px 80px rgba(0,0,0,.5);position:relative;animation:gateIn .4s cubic-bezier(.22,1,.36,1) both;}
+.gate-card{background:#fff;border-radius:20px;padding:32px 26px 28px;width:100%;max-width:400px;box-shadow:0 32px 80px rgba(0,0,0,.5);position:relative;animation:gateIn .4s cubic-bezier(.22,1,.36,1) both;;position:relative;z-index:1}
 @keyframes gateIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 .gate-eyebrow{font-size:.6rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--amber-b);margin-bottom:8px;}
 .gate-title{font-size:1.5rem;font-weight:900;color:var(--ink);line-height:1.2;margin-bottom:6px;}
@@ -226,44 +228,35 @@ button[onclick*="savePDF"]:hover,button[onclick*="savePNG"]:hover,button[onclick
 .prop-tab{transition:all .18s;}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<style>
-/* PRINT STYLES */
-@media print {
-  .hdr, .prop-tabs-wrap, .compare-bar, #graceEffectiveRow .compare-modal,
-  .broker, .sec-hd, .hdr-back, .prop-name-row { }
-  body { background: #fff !important; }
-  .print-hide { display: none !important; }
-  .print-show { display: block !important; }
-  .page { padding-bottom: 20px !important; }
-}
 </style>
 </head>
 <body>
 
 <!-- GATE -->
 <div class="gate" id="gateOv">
+  
   <div class="gate-card">
-    <div class="gate-eyebrow">כלי מקצועי · בחינם</div>
-    <div class="gate-title">מחשבון עלויות משרד</div>
-    <div class="gate-sub">חישוב מלא של שכירות, ארנונה, ניהול וניתוח ברוטו/נטו — בשניות. השאירו פרטים לקבלת גישה מיידית.</div>
+    <div class="gate-eyebrow" id="gate-eyebrow">כלי מקצועי · בחינם</div>
+    <div class="gate-title" id="gate-title-txt">מחשבון עלויות משרד</div>
+    <div class="gate-sub" id="gate-sub-txt">כמה באמת עולה המשרד?<br>הזינו נתונים, קבלו תמונה פיננסית מלאה — בשניות.</div>
     <div class="field">
-      <label class="field-label">שם מלא</label>
+      <label class="field-label" id="gate-label-name">שם מלא</label>
       <input class="field-inp" id="gateName" type="text" placeholder="ישראל ישראלי" autocomplete="name">
     </div>
     <div class="field">
-      <label class="field-label">כתובת מייל</label>
+      <label class="field-label" id="gate-label-mail">כתובת מייל</label>
       <input class="field-inp" id="gateMail" type="email" placeholder="israel@company.com" autocomplete="email" inputmode="email">
     </div>
     <div class="field">
-      <label class="field-label">שם חברה <span style="font-weight:400;text-transform:none;letter-spacing:0;color:#a8a29e;font-size:.65rem">(אופציונלי)</span></label>
+      <label class="field-label" id="gate-label-company">שם חברה</label>
       <input class="field-inp" id="gateCompany" type="text" placeholder="חברה בע״מ" autocomplete="organization">
     </div>
     <div class="gate-err" id="gateErr"></div>
     <button class="gate-cta" id="gateCta" onclick="gateSubmit()">
-      כניסה לכלי
+      <span id="gate-cta-txt">כניסה לכלי</span>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
     </button>
-    <div class="gate-privacy">הפרטים נשמרים אצל דון אלבורו בלבד ולא מועברים לצד שלישי.</div>
+    <div class="gate-privacy" id="gate-privacy-txt">הפרטים נשמרים במערכת ולא מועברים לצד שלישי.<br>© דון אלבורו</div>
     <div id="gateSuccess" style="display:none;text-align:center;padding:8px 0 4px">
       <div style="font-size:2rem;margin-bottom:8px">✓</div>
       <div style="font-size:1rem;font-weight:800;color:#1e293b;margin-bottom:4px">ברוך הבא!</div>
@@ -276,10 +269,11 @@ button[onclick*="savePDF"]:hover,button[onclick*="savePNG"]:hover,button[onclick
 <div class="hdr">
   <div class="hdr-inner">
     <div>
-      <div class="hdr-title">מחשבון עלויות <em>משרד</em></div>
-      <div class="hdr-sub">השוואת נכסים · ברוטו/נטו · כל העלויות</div>
+      <div class="hdr-title" id="hdr-title-txt">מחשבון עלויות <em>משרד</em></div>
+      <div class="hdr-sub" id="hdr-sub-txt">השוואת נכסים · ברוטו/נטו · כל העלויות</div>
     </div>
-    <button class="hdr-back" onclick="document.getElementById('gateOv').style.display='flex'">↩ התחלה</button>
+    <button class="hdr-back" onclick="document.getElementById('gateOv').style.display='flex'"><span id="hdr-back-txt">↩ התחלה</span></button>
+    
   </div>
 </div>
 
@@ -293,23 +287,23 @@ button[onclick*="savePDF"]:hover,button[onclick*="savePNG"]:hover,button[onclick
 
   <!-- Property name -->
   <div class="prop-name-row">
-    <span class="prop-name-label">🏢 שם הנכס:</span>
+    <span class="prop-name-label" id="prop-name-label">🏢 <span id="prop-name-lbl-txt">שם הנכס</span>:</span>
     <input class="prop-name-inp" id="propNameInp" type="text" placeholder='למשל: רוטשילד 22, קומה 3, תל אביב' oninput="updatePropName(this.value)" onblur="onPropNameBlur(this.value)">
   </div>
 
   <!-- STEP 1 -->
   <div class="sec">
-    <div class="sec-hd"><div class="sec-num">1</div><div class="sec-title">סוג הבניין</div></div>
+    <div class="sec-hd"><div class="sec-num">1</div><div class="sec-title" id="step1-title">סוג הבניין</div></div>
     <div class="card">
       <div class="chips" id="bldgChips">
-        <div class="chip sel" onclick="setBldg(this,1.30)" data-ratio="1.30">מגדל · A Class<span class="cs">30% שטחים משותפים</span></div>
-        <div class="chip" onclick="setBldg(this,1.18)" data-ratio="1.18">בוטיק · B Class<span class="cs">18% שטחים משותפים</span></div>
-        <div class="chip" onclick="setBldg(this,1.12)" data-ratio="1.12">בניין עצמאי<span class="cs">12% שטחים משותפים</span></div>
+        <div class="chip sel" onclick="setBldg(this,1.30)" data-ratio="1.30" id="bld-a">מגדל · A Class<span class="cs">30% שטחים משותפים</span></div>
+        <div class="chip" onclick="setBldg(this,1.18)" data-ratio="1.18" id="bld-b">בוטיק · B Class<span class="cs">18% שטחים משותפים</span></div>
+        <div class="chip" onclick="setBldg(this,1.12)" data-ratio="1.12" id="bld-c">בניין עצמאי<span class="cs">12% שטחים משותפים</span></div>
       </div>
       <div class="row" style="border-top:1px solid var(--border)">
         <div class="row-l">
-          <div class="row-label">יחס ברוטו/נטו ידני</div>
-          <div class="row-sub">הזן אם ידוע מהחוזה</div>
+          <div class="row-label" id="bld-custom">יחס ברוטו/נטו ידני</div>
+          <div class="row-sub" id="sub-custom-ratio">הזן אם ידוע מהחוזה</div>
         </div>
         <div class="row-r" style="gap:10px">
           <div class="tog" id="customRatioTog" onclick="toggleCustomRatio()"></div>
@@ -321,38 +315,38 @@ button[onclick*="savePDF"]:hover,button[onclick*="savePNG"]:hover,button[onclick
           </div>
         </div>
       </div>
-      <div class="card-note"><strong>ברוטו</strong> = מה שרשום בחוזה &nbsp;·&nbsp; <strong>נטו</strong> = מה שמשתמשים בפועל.</div>
+      <div class="card-note" id="bruto-explain"><strong>ברוטו</strong> = מה שרשום בחוזה &nbsp;·&nbsp; <strong>נטו</strong> = מה שמשתמשים בפועל.</div>
     </div>
   </div>
 
   <!-- STEP 2 -->
   <div class="sec">
-    <div class="sec-hd"><div class="sec-num">2</div><div class="sec-title">שטח ועובדים</div></div>
+    <div class="sec-hd"><div class="sec-num">2</div><div class="sec-title" id="step2-title">שטח ועובדים</div></div>
     <div class="card">
       <div class="row">
         <div class="row-l">
-          <div class="row-label">שטח המשרד (ברוטו)</div>
-          <div class="row-sub" id="netNote">שטח כפי שמופיע בחוזה</div>
+          <div class="row-label" id="lbl-sqm">שטח המשרד (ברוטו)</div>
+          <div class="row-sub" id="netNote" id="sub-sqm">שטח כפי שמופיע בחוזה</div>
         </div>
         <div class="row-r">
           <div class="spin">
             <button class="spin-btn" onclick="adj('sqm',-50)">−</button>
             <input class="spin-inp" id="sqmInp" type="number" value="480" min="20" max="9999" inputmode="numeric" oninput="onInput('sqm',this)">
-            <span class="spin-unit">מ"ר</span>
+            <span class="spin-unit" id="unit-sqm">מ"ר</span>
             <button class="spin-btn" onclick="adj('sqm',+50)">+</button>
           </div>
         </div>
       </div>
       <div class="row">
         <div class="row-l">
-          <div class="row-label">מספר עובדים</div>
+          <div class="row-label" id="lbl-emp">מספר עובדים</div>
           <div class="row-sub" id="sqmPerEmpInline">—</div>
         </div>
         <div class="row-r">
           <div class="spin">
             <button class="spin-btn" onclick="adj('emp',-5)">−</button>
             <input class="spin-inp" id="empInp" type="number" value="40" min="1" max="2000" inputmode="numeric" oninput="onInput('emp',this)">
-            <span class="spin-unit">עובד</span>
+            <span class="spin-unit" id="unit-emp">עובד</span>
             <button class="spin-btn" onclick="adj('emp',+5)">+</button>
           </div>
         </div>
@@ -363,23 +357,23 @@ button[onclick*="savePDF"]:hover,button[onclick*="savePNG"]:hover,button[onclick
 
   <!-- STEP 3 -->
   <div class="sec">
-    <div class="sec-hd"><div class="sec-num">3</div><div class="sec-title">אזור ושכירות</div></div>
+    <div class="sec-hd"><div class="sec-num">3</div><div class="sec-title" id="step3-title">אזור ושכירות</div></div>
     <div class="card">
       <div class="chips" id="cityChips">
-        <div class="chip sel" onclick="setCity(this,160)">תל אביב מרכז<span class="cs">~160 ₪/מ"ר</span></div>
-        <div class="chip" onclick="setCity(this,130)">רמת גן הבורסה<span class="cs">~130 ₪/מ"ר</span></div>
-        <div class="chip" onclick="setCity(this,110)">הרצליה פיתוח<span class="cs">~110 ₪/מ"ר</span></div>
+        <div class="chip sel" onclick="setCity(this,160)" id="city-ta">תל אביב מרכז<span class="cs">~160 ₪/מ"ר</span></div>
+        <div class="chip" onclick="setCity(this,130)" id="city-rg">רמת גן הבורסה<span class="cs">~130 ₪/מ"ר</span></div>
+        <div class="chip" onclick="setCity(this,110)" id="city-hz">הרצליה פיתוח<span class="cs">~110 ₪/מ"ר</span></div>
       </div>
       <div class="row" style="border-top:1px solid var(--border)">
         <div class="row-l">
-          <div class="row-label">שכירות בפועל</div>
-          <div class="row-sub">לפי הצעת המחיר</div>
+          <div class="row-label" id="lbl-rent">שכירות בפועל</div>
+          <div class="row-sub" id="sub-rent">לפי הצעת המחיר</div>
         </div>
         <div class="row-r">
           <div class="spin">
             <button class="spin-btn" onclick="adj('rent',-5)">−</button>
             <input class="spin-inp w48" id="rentInp" type="number" value="160" min="30" max="500" inputmode="numeric" oninput="onInput('rent',this)">
-            <span class="spin-unit">₪/מ"ר</span>
+            <span class="spin-unit" id="unit-rent">₪/מ"ר</span>
             <button class="spin-btn" onclick="adj('rent',+5)">+</button>
           </div>
         </div>
@@ -389,28 +383,28 @@ button[onclick*="savePDF"]:hover,button[onclick*="savePNG"]:hover,button[onclick
 
   <!-- STEP 4 -->
   <div class="sec">
-    <div class="sec-hd"><div class="sec-num">4</div><div class="sec-title">עלויות נלוות</div></div>
+    <div class="sec-hd"><div class="sec-num">4</div><div class="sec-title" id="step4-title">עלויות נלוות</div></div>
     <div class="card">
       <!-- ארנונה -->
       <div class="row" style="flex-direction:column;align-items:stretch;gap:10px;padding:14px 16px">
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
           <div>
-            <div class="row-label">ארנונה</div>
-            <div class="row-sub" id="arnSub">34 ₪/מ"ר — ללא הנחה</div>
+            <div class="row-label" id="lbl-arn">ארנונה</div>
+            <div class="row-sub" id="arnSub" >34 ₪/מ"ר — ללא הנחה</div>
           </div>
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
             <div class="tog-wrap">
               <div class="tog" id="arnTog" onclick="toggleArn()"></div>
-              <span class="tog-lbl">הנחת תוכנה</span>
+              <span class="tog-lbl" id="arn-software-lbl">הנחת תוכנה</span>
             </div>
             <div class="mode-btns">
-              <button class="mode-btn active" id="arnModeAuto" onclick="setArnMode('auto')">אוטו</button>
-              <button class="mode-btn" id="arnModeManual" onclick="setArnMode('manual')">ידני</button>
+              <button class="mode-btn active" id="arnModeAuto" onclick="setArnMode('auto')" id="arn-auto-btn">אוטו</button>
+              <button class="mode-btn" id="arnModeManual" onclick="setArnMode('manual')" id="arnManualBtn">ידני</button>
             </div>
             <div class="spin" id="arnManualSpin" style="display:none;margin-top:10px">
               <button class="spin-btn" onclick="adjArn(-1)">−</button>
               <input class="spin-inp w48" id="arnManualInp" type="number" value="34" min="0" max="500" inputmode="numeric" oninput="onInputArn(this)">
-              <span class="spin-unit">₪/מ"ר</span>
+              <span class="spin-unit" id="unit-arn">₪/מ"ר</span>
               <button class="spin-btn" onclick="adjArn(+1)">+</button>
             </div>
           </div>
@@ -418,57 +412,57 @@ button[onclick*="savePDF"]:hover,button[onclick*="savePNG"]:hover,button[onclick
       </div>
 
       <div class="row" style="border-top:1px solid var(--border)">
-        <div class="row-l"><div class="row-label">דמי ניהול</div><div class="row-sub">אחזקה + שירותים משותפים</div></div>
+        <div class="row-l"><div class="row-label" id="lbl-mgmt">דמי ניהול</div><div class="row-sub" id="sub-mgmt">אחזקה + שירותים משותפים</div></div>
         <div class="row-r"><div class="spin">
           <button class="spin-btn" onclick="adj('mgmt',-2)">−</button>
           <input class="spin-inp" id="mgmtInp" type="number" value="20" min="0" max="100" inputmode="numeric" oninput="onInput('mgmt',this)">
-          <span class="spin-unit">₪/מ"ר</span>
+          <span class="spin-unit" id="unit-mgmt">₪/מ"ר</span>
           <button class="spin-btn" onclick="adj('mgmt',+2)">+</button>
         </div></div>
       </div>
       <div class="row">
-        <div class="row-l"><div class="row-label">שירותי ניקיון</div></div>
+        <div class="row-l"><div class="row-label" id="lbl-clean">שירותי ניקיון</div></div>
         <div class="row-r"><div class="spin">
           <button class="spin-btn" onclick="adj('clean',-2)">−</button>
           <input class="spin-inp" id="cleanInp" type="number" value="8" min="0" max="60" inputmode="numeric" oninput="onInput('clean',this)">
-          <span class="spin-unit">₪/מ"ר</span>
+          <span class="spin-unit" id="unit-clean">₪/מ"ר</span>
           <button class="spin-btn" onclick="adj('clean',+2)">+</button>
         </div></div>
       </div>
       <div class="row">
-        <div class="row-l"><div class="row-label">חשמל · אינטרנט · מים</div></div>
+        <div class="row-l"><div class="row-label" id="lbl-utils">חשמל · אינטרנט · מים</div></div>
         <div class="row-r"><div class="spin">
           <button class="spin-btn" onclick="adj('utils',-2)">−</button>
           <input class="spin-inp" id="utilsInp" type="number" value="12" min="0" max="60" inputmode="numeric" oninput="onInput('utils',this)">
-          <span class="spin-unit">₪/מ"ר</span>
+          <span class="spin-unit" id="unit-utils">₪/מ"ר</span>
           <button class="spin-btn" onclick="adj('utils',+2)">+</button>
         </div></div>
       </div>
       <!-- חניה -->
       <div class="row" style="border-top:1px solid var(--border)">
         <div class="row-l">
-          <div class="row-label">מספר חניות</div>
-          <div class="row-sub">חניות חודשיות קבועות</div>
+          <div class="row-label" id="lbl-parking" id="lbl-parking-spots">מספר חניות</div>
+          <div class="row-sub" id="sub-parking">חניות חודשיות קבועות</div>
         </div>
         <div class="row-r">
           <div class="spin">
             <button class="spin-btn" onclick="adj('parkingSpots',-1)">−</button>
             <input class="spin-inp w48" id="parkingSpotsInp" type="number" value="0" min="0" max="200" inputmode="numeric" oninput="onInput('parkingSpots',this)">
-            <span class="spin-unit">חניה</span>
+            <span class="spin-unit" id="unit-parking-spots">חניה</span>
             <button class="spin-btn" onclick="adj('parkingSpots',+1)">+</button>
           </div>
         </div>
       </div>
       <div class="row">
         <div class="row-l">
-          <div class="row-label">מחיר חניה</div>
+          <div class="row-label" id="lbl-parking-price">מחיר חניה</div>
           <div class="row-sub" id="parkingSub"></div>
         </div>
         <div class="row-r">
           <div class="spin">
             <button class="spin-btn" onclick="adj('parkingPrice',-50)">−</button>
             <input class="spin-inp w48" id="parkingPriceInp" type="number" value="1000" min="0" max="2000" inputmode="numeric" oninput="onInput('parkingPrice',this)">
-            <span class="spin-unit">₪/חניה</span>
+            <span class="spin-unit" id="unit-parking-price">₪/חניה</span>
             <button class="spin-btn" onclick="adj('parkingPrice',+50)">+</button>
           </div>
         </div>
@@ -477,7 +471,7 @@ button[onclick*="savePDF"]:hover,button[onclick*="savePNG"]:hover,button[onclick
       <!-- ריהוט -->
       <div class="row" style="border-top:1px solid var(--border)">
         <div class="row-l">
-          <div class="row-label">עלות רכישת ריהוט</div>
+          <div class="row-label" id="lbl-furniture">עלות רכישת ריהוט</div>
           <div class="row-sub" id="furnitureSub"></div>
         </div>
         <div class="row-r">
@@ -494,12 +488,12 @@ button[onclick*="savePDF"]:hover,button[onclick*="savePNG"]:hover,button[onclick
       <div class="row" style="flex-direction:column;align-items:stretch;gap:10px;padding:14px 16px;border-top:1px solid var(--border)">
         <div style="display:flex;justify-content:space-between;align-items:center">
           <div>
-            <div class="row-label">עלויות נוספות</div>
-            <div class="row-sub">ביטוח, ציוד משרדי, שונות</div>
+            <div class="row-label" id="lbl-extra">עלויות נוספות</div>
+            <div class="row-sub" id="sub-extra">ביטוח, ציוד משרדי, שונות</div>
           </div>
           <div class="mode-btns">
-            <button class="mode-btn active" id="extraModePerSqm" onclick="setExtraMode('sqm')">₪/מ"ר</button>
-            <button class="mode-btn" id="extraModeTotal" onclick="setExtraMode('total')">סה"כ</button>
+            <button class="mode-btn active" id="extraModePerSqm" onclick="setExtraMode('sqm')" id="extra-sqm-btn">₪/מ"ר</button>
+            <button class="mode-btn" id="extraModeTotal" onclick="setExtraMode('total')" id="extra-total-btn">סה"כ</button>
           </div>
         </div>
         <div style="display:flex;justify-content:flex-end">
@@ -518,18 +512,18 @@ button[onclick*="savePDF"]:hover,button[onclick*="savePNG"]:hover,button[onclick
 
   <!-- STEP 5 — תקופת ההסכם -->
   <div class="sec">
-    <div class="sec-hd"><div class="sec-num">5</div><div class="sec-title">תקופת ההסכם</div></div>
+    <div class="sec-hd"><div class="sec-num">5</div><div class="sec-title" id="step5-title">תקופת ההסכם</div></div>
     <div class="card">
       <div class="row">
         <div class="row-l">
-          <div class="row-label">משך ההסכם</div>
-          <div class="row-sub">תקופה בטוחה בלבד, ללא אופציה</div>
+          <div class="row-label" id="lbl-months">משך ההסכם</div>
+          <div class="row-sub" id="sub-months">תקופה בטוחה בלבד, ללא אופציה</div>
         </div>
         <div class="row-r">
           <div class="spin">
             <button class="spin-btn" onclick="adjMonths(-3)">−</button>
             <input class="spin-inp" id="monthsInp" type="number" value="24" min="6" max="120" inputmode="numeric" oninput="onInputMonths(this)">
-            <span class="spin-unit">חודש</span>
+            <span class="spin-unit" id="unit-months">חודש</span>
             <button class="spin-btn" onclick="adjMonths(+3)">+</button>
           </div>
         </div>
@@ -539,38 +533,38 @@ button[onclick*="savePDF"]:hover,button[onclick*="savePNG"]:hover,button[onclick
 
   <!-- STEP 6 — גרייס -->
   <div class="sec">
-    <div class="sec-hd"><div class="sec-num">6</div><div class="sec-title">💡 גרייס</div></div>
+    <div class="sec-hd"><div class="sec-num">6</div><div class="sec-title" id="step6-title">💡 גרייס</div></div>
     <div class="card">
       <div class="row">
         <div class="row-l">
-          <div class="row-label">חודשי גרייס</div>
-          <div class="row-sub">הזן רק אם סוכם במו"מ</div>
+          <div class="row-label" id="lbl-grace">חודשי גרייס</div>
+          <div class="row-sub" id="sub-grace">הזן רק אם סוכם במו"מ</div>
         </div>
         <div class="row-r">
           <div class="spin">
             <button class="spin-btn" onclick="adj('grace',-1)">−</button>
             <input class="spin-inp w48" id="graceInp" type="number" value="0" min="0" max="24" inputmode="numeric" oninput="onInput('grace',this)">
-            <span class="spin-unit">חודש</span>
+            <span class="spin-unit" id="unit-grace">חודש</span>
             <button class="spin-btn" onclick="adj('grace',+1)">+</button>
           </div>
         </div>
       </div>
-      <div class="card-note">חודשים ללא שכירות בתחילת ההסכם — מוצג כעלות אפקטיבית בסיכום.</div>
+      <div class="card-note" id="grace-note-txt">חודשים ללא שכירות בתחילת ההסכם — מוצג כעלות אפקטיבית בסיכום.</div>
     </div>
   </div>
 
   <!-- RESULTS -->
   <div class="sec">
-    <div class="sec-hd"><div class="sec-num" style="background:#16a34a">✓</div><div class="sec-title">סיכום פרטים</div></div>
+    <div class="sec-hd"><div class="sec-num" style="background:#16a34a">✓</div><div class="sec-title" id="summary-title-txt">סיכום פרטים</div></div>
     <!-- כרטיס סיכום פרטים -->
     <div class="card" style="margin-bottom:10px">
 
       <!-- שטח -->
       <div class="brow" style="background:#f8fafc;border-bottom:1px solid var(--border)">
-        <span class="brow-lbl" style="font-weight:800;font-size:.7rem;letter-spacing:.8px;text-transform:uppercase;color:var(--ink3)">שטח</span>
+        <span class="brow-lbl" id="lbl-area-hdr" style="font-weight:800;font-size:.7rem;letter-spacing:.8px;text-transform:uppercase;color:var(--ink3)">שטח</span>
       </div>
       <div class="brow">
-        <span class="brow-lbl">שטח ברוטו
+        <span class="brow-lbl" id="lbl-area-brow">שטח ברוטו
           <span style="display:block;font-size:.67rem;color:var(--ink3);font-weight:400;margin-top:2px" id="gbNet">—</span>
         </span>
         <span class="brow-val" id="gbBruto">—</span>
@@ -579,19 +573,19 @@ button[onclick*="savePDF"]:hover,button[onclick*="savePNG"]:hover,button[onclick
 
       <!-- פירוט עלויות -->
       <div class="brow" style="background:#f8fafc;border-bottom:1px solid var(--border);border-top:1px solid var(--border)">
-        <span class="brow-lbl" style="font-weight:800;font-size:.7rem;letter-spacing:.8px;text-transform:uppercase;color:var(--ink3)">פירוט עלויות חודשיות</span>
+        <span class="brow-lbl" style="font-weight:800;font-size:.7rem;letter-spacing:.8px;text-transform:uppercase;color:var(--ink3)" id="lbl-breakdown-hdr">פירוט עלויות חודשיות</span>
       </div>
       <div id="breakdown"></div>
 
       <!-- סיכום סופי -->
       <div style="background:#1e293b;padding:18px 16px;margin-top:0;border-radius:0 0 var(--r) var(--r)">
-        <div style="font-size:.58rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:6px">סה"כ עלויות חודשיות</div>
+        <div style="font-size:.58rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:6px" id="lbl-total-monthly">סה"כ עלויות חודשיות</div>
         <div style="font-size:2.2rem;font-weight:900;color:#16a34a;line-height:1" id="rMain">—</div>
         <div style="font-size:.7rem;color:rgba(255,255,255,.35);margin-top:4px;margin-bottom:12px" id="rSub">—</div>
 
         <!-- גרייס — מוצג רק אם רלוונטי -->
         <div id="graceEffectiveRow" style="display:none;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:10px;padding:10px 14px;margin-bottom:14px">
-          <div style="font-size:.6rem;color:#fbbf24;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:4px">💡 אחרי גרייס — עלות אפקטיבית</div>
+          <div style="font-size:.6rem;color:#fbbf24;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:4px">💡 <span id='grace-effective-lbl'>אחרי גרייס — עלות אפקטיבית</span></div>
           <div style="font-size:1.6rem;font-weight:900;color:#fbbf24;line-height:1" id="rEffective">—</div>
           <div style="font-size:.68rem;color:rgba(255,255,255,.35);margin-top:3px" id="rEffectiveSub">—</div>
         </div>
@@ -599,15 +593,15 @@ button[onclick*="savePDF"]:hover,button[onclick*="savePNG"]:hover,button[onclick
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
           <div style="background:rgba(255,255,255,.06);border-radius:10px;padding:10px 12px">
             <div style="font-size:.9rem;font-weight:800;color:#fff" id="rPerSqm">—</div>
-            <div style="font-size:.6rem;color:rgba(255,255,255,.33);margin-top:2px">₪ לכל מ"ר</div>
+            <div style="font-size:.6rem;color:rgba(255,255,255,.33);margin-top:2px" id="lbl-cell-monthly">שכ"ד חודשי</div>
           </div>
           <div style="background:rgba(255,255,255,.06);border-radius:10px;padding:10px 12px">
-            <div style="font-size:.9rem;font-weight:800;color:#fff" id="rPerEmp">—</div>
-            <div style="font-size:.6rem;color:rgba(255,255,255,.33);margin-top:2px">₪ לעובד / חודש</div>
+            <div style="font-size:.9rem;font-weight:800;color:#fff" id="rPerSqmVal">—</div>
+            <div style="font-size:.6rem;color:rgba(255,255,255,.33);margin-top:2px" id="lbl-cell-sqm">₪ למ"ר</div>
           </div>
           <div style="background:rgba(255,255,255,.06);border-radius:10px;padding:10px 12px">
             <div style="font-size:.9rem;font-weight:800;color:#fff" id="rYear">—</div>
-            <div style="font-size:.6rem;color:rgba(255,255,255,.33);margin-top:2px">₪ לשנה</div>
+            <div style="font-size:.6rem;color:rgba(255,255,255,.33);margin-top:2px" id="lbl-cell-yearly">שכ"ד שנתי</div>
           </div>
           <div style="background:rgba(255,255,255,.06);border-radius:10px;padding:10px 12px">
             <div style="font-size:.9rem;font-weight:800;color:#fff" id="rPeriod">—</div>
@@ -623,12 +617,16 @@ button[onclick*="savePDF"]:hover,button[onclick*="savePNG"]:hover,button[onclick
   <div class="sec" id="saveBtns">
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button onclick="savePDF()" style="flex:1;min-width:140px;padding:13px 16px;background:#1e293b;color:#fff;border:none;border-radius:var(--r-sm);font-family:'Heebo',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .18s">
-        📄 שמור PDF
+        <span id="save-btn-txt">📄 שמור PDF</span>
       </button>
       <button onclick="savePNG()" style="flex:1;min-width:140px;padding:13px 16px;background:#fff;color:#1e293b;border:1.5px solid #e7e5e4;border-radius:var(--r-sm);font-family:'Heebo',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
-        🖼️ שמור תמונה
+        <span id="save-png-btn-txt">🖼️ שמור תמונה</span>
       </button>
     </div>
+    <button onclick="shareWhatsApp()" style="width:100%;margin-top:8px;padding:13px 16px;background:#25d366;color:#fff;border:none;border-radius:var(--r-sm);font-family:'Heebo',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .18s">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      <span id="wa-btn-txt">שתף תקציר ב<span id="broker-wa-txt">וואטסאפ</span></span>
+    </button>
     <div id="pngStatus" style="display:none;font-size:.75rem;color:#1e293b;text-align:center;margin-top:8px;padding:10px 12px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;font-weight:600;transition:all .2s"></div>
   </div>
 
@@ -636,8 +634,8 @@ button[onclick*="savePDF"]:hover,button[onclick*="savePNG"]:hover,button[onclick
   <div class="sec">
     <div class="broker">
       <div class="broker-name">דון אלבורו</div>
-      <div class="broker-title">מתווך משרדים מורשה</div>
-      <div class="broker-text">מחפשים שטח ספציפי?<br>רוצים לשמוע על המלצות ומשרדים <em>"אוף מרקט"</em>?<br>צרו קשר ואעזור.</div>
+      <div class="broker-title" id="broker-title-txt">מתווך משרדים מורשה</div>
+      <div class="broker-text" id="broker-body-txt">מחפשים שטח ספציפי?<br>רוצים לשמוע על המלצות ומשרדים <em>"אוף מרקט"</em>?<br>צרו קשר ואעזור.</div>
       <div class="broker-btns">
         <a class="broker-btn wa" href="https://wa.me/9720507202874" target="_blank">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
@@ -645,7 +643,7 @@ button[onclick*="savePDF"]:hover,button[onclick*="savePNG"]:hover,button[onclick
         </a>
         <a class="broker-btn li" href="https://www.linkedin.com/in/don-alborough/" target="_blank">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-          לינקדין
+          <span id="broker-li-txt">לינקדין</span>
         </a>
         <a class="broker-btn tel" href="tel:0507202874">📞 050-720-2874</a>
       </div>
@@ -653,15 +651,15 @@ button[onclick*="savePDF"]:hover,button[onclick*="savePNG"]:hover,button[onclick
   </div>
 
   <div style="padding:0 4px;margin-top:4px">
-    <p style="font-size:.62rem;color:var(--ink3);line-height:1.7;text-align:center">* המספרים המוצגים הם הערכות מקובלות בענף המשרדים ומשמשים לצורך אינדיקציה בלבד. העלויות בפועל עשויות להשתנות בהתאם לעסקה הספציפית, מיקום הנכס, תנאי החוזה ופרמטרים נוספים. אין לראות בנתונים אלו ייעוץ מקצועי מחייב.</p>
+    <p style="font-size:.62rem;color:var(--ink3);line-height:1.7;text-align:center" id="disclaimer-txt">* המספרים המוצגים הם הערכות מקובלות בענף המשרדים ומשמשים לצורך אינדיקציה בלבד. העלויות בפועל עשויות להשתנות בהתאם לעסקה הספציפית, מיקום הנכס, תנאי החוזה ופרמטרים נוספים. אין לראות בנתונים אלו ייעוץ מקצועי מחייב.</p>
   </div>
 </div>
 
 <!-- COMPARE BOTTOM BAR -->
 <div class="compare-bar">
   <div class="compare-bar-inner">
-    <button class="compare-btn secondary" onclick="addProperty()" id="addPropBtn">+ הוסף נכס להשוואה</button>
-    <button class="compare-btn" onclick="openCompare()" id="compareBtn" style="display:none">⚖️ השווה נכסים</button>
+    <button class="compare-btn secondary" onclick="addProperty()" id="addPropBtn" id="addPropBtn-txt">+ הוסף נכס להשוואה</button>
+    <button class="compare-btn" onclick="openCompare()" id="compareBtn" style="display:none"><span id="compare-btn-txt">⚖️ השווה נכסים</span></button>
   </div>
 </div>
 
@@ -681,7 +679,27 @@ button[onclick*="savePDF"]:hover,button[onclick*="savePNG"]:hover,button[onclick
   </div>
 </div>
 
+<!-- SUMMARY MODAL -->
+<div id="summaryModal" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.55);overflow-y:auto;-webkit-overflow-scrolling:touch">
+  <div style="min-height:100%;display:flex;flex-direction:column;align-items:center;padding:16px 0 40px">
+    <div style="width:100%;max-width:580px;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.3);position:relative">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #e7e5e4;background:#fff;position:sticky;top:0;z-index:1">
+        <div style="font-size:.9rem;font-weight:800;color:#1c1917" id="summaryModalTitle">סיכום נכס</div>
+        <button onclick="closeSummaryModal()" style="width:32px;height:32px;border-radius:50%;background:#f1f0ee;border:none;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">✕</button>
+      </div>
+      <div id="summaryModalBody" style="padding:0"></div>
+    </div>
+  </div>
+</div>
+
 <script>
+
+
+
+
+
+
+
 // ══ MULTI-PROPERTY STATE ══
 const defaultProp = () => ({
   name:'',sqm:480,emp:40,rent:160,arn:false,arnMode:'auto',arnManual:34,
@@ -811,7 +829,7 @@ function onInput(key,el){
   }
 }
 function adj(key,d){
-  const lim={sqm:[50,9999],emp:[1,2000],rent:[30,500],mgmt:[0,100],clean:[0,60],utils:[0,60],extra:[0,200],customPct:[5,50],parkingSpots:[0,200],parkingPrice:[0,2000],grace:[0,24]};
+  const lim={sqm:[50,9999],emp:[1,2000],rent:[30,500],mgmt:[0,100],clean:[0,60],utils:[0,60],extra:[0,200],customPct:[5,50],parkingSpots:[0,200],parkingPrice:[0,2000],grace:[0,S().months]};
   S()[key]=clamp(S()[key]+d,lim[key][0],lim[key][1]);
   document.getElementById(key+'Inp').value=S()[key];
   calc();
@@ -864,12 +882,12 @@ function onInputArn(el){
 function updateArnSub(){
   const p=S();
   if(p.arnMode==='manual') document.getElementById('arnSub').textContent=p.arnManual+' ₪/מ"ר — הזנה ידנית';
-  else document.getElementById('arnSub').textContent=p.arn?'17 ₪/מ"ר — הנחת עסקי תוכנה':'34 ₪/מ"ר — ללא הנחה';
+  else document.getElementById('arnSub').textContent=p.arn?'17 ₪/מ"ר — הנחת תוכנה':'34 ₪/מ"ר — ללא הנחה';
 }
 function setExtraModeUI(mode){
   document.getElementById('extraModePerSqm').classList.toggle('active', mode==='sqm');
   document.getElementById('extraModeTotal').classList.toggle('active', mode==='total');
-  document.getElementById('extraUnit').textContent = mode==='sqm'?'₪/מ"ר':'₪/חודש';
+  document.getElementById('extraUnit').textContent = mode==='sqm'?('₪/מ"ר'):('₪/חודש');
 }
 function setExtraMode(mode){
   S().extraMode=mode; S().extra=0;
@@ -938,10 +956,10 @@ function calcProp(p){
   const effectiveRatio=p.useCustomRatio?(1+p.customPct/100):p.grossRatio;
   const net=Math.round(bruto/effectiveRatio);
   const arn=p.arnMode==='manual'?p.arnManual:(p.arn?17:34);
-  const extraPerSqm=p.extraMode==='sqm'?p.extra:(p.extra>0?Math.round(p.extra/bruto):0);
-  const rows=[
+  const extraPerSqm=p.extraMode==='sqm'?p.extra:(p.extra>0&&bruto>0?Math.round(p.extra/bruto):0);
+    const rows=[
     {l:'שכירות',v:p.rent},
-    {l:'ארנונה'+(p.arn&&p.arnMode!=='manual'?' (הנחת תוכנה)':''),v:arn},
+    {l:('ארנונה')+(p.arn&&p.arnMode!=='manual'?(' (הנחת תוכנה)'):''),v:arn},
     {l:'דמי ניהול',v:p.mgmt},
     {l:'שירותי ניקיון',v:p.clean},
     {l:'חשמל, אינטרנט, מים',v:p.utils},
@@ -952,18 +970,19 @@ function calcProp(p){
   const parkingMonthly = p.parkingSpots * p.parkingPrice;
   const parkingPerSqm = parkingMonthly > 0 ? parkingMonthly / bruto : 0;
   const furniturePerSqmMonth = p.furniture > 0 ? p.furniture / bruto / p.months : 0;
-  const furnitureMonthly = p.furniture > 0 ? Math.round(p.furniture / p.months) : 0;
+  const furnitureMonthly = p.furniture > 0 && p.months > 0 ? Math.round(p.furniture / p.months) : 0;
   const totalMonthly=monthly+furnitureMonthly+parkingMonthly;
-  const effectiveMonthly = p.grace>0 ? Math.round(totalMonthly*(p.months-p.grace)/p.months) : totalMonthly;
+  const safeGrace=Math.min(p.grace,p.months);
+  const effectiveMonthly = safeGrace>0 ? Math.round(totalMonthly*(p.months-safeGrace)/p.months) : totalMonthly;
   const gracePct = p.grace>0 ? (p.grace/p.months*100).toFixed(1) : 0;
   const graceSaving = totalMonthly - effectiveMonthly;
-  return {bruto,net,effectiveRatio,rows,perSqm,monthly,yearly:monthly*12,perEmp:Math.round(monthly/p.emp),sqmPerEmp:bruto/p.emp,pct:Math.round((effectiveRatio-1)*100),furniturePerSqmMonth,furnitureMonthly,parkingMonthly,parkingPerSqm,totalMonthly,effectiveMonthly,gracePct,graceSaving};
+  return {bruto,net,effectiveRatio,rows,perSqm,monthly,yearly:monthly*12,perEmp:p.emp>0?Math.round(monthly/p.emp):0,sqmPerEmp:p.emp>0?bruto/p.emp:0,pct:Math.round((effectiveRatio-1)*100),furniturePerSqmMonth,furnitureMonthly,parkingMonthly,parkingPerSqm,totalMonthly,effectiveMonthly,gracePct,graceSaving};
 }
 
 function calc(){
-  const p=S();
+    const p=S();
   const r=calcProp(p);
-  document.getElementById('netNote').textContent='≈ '+r.net+' מ"ר נטו בפועל';
+  document.getElementById('netNote').textContent='≈ '+r.net+(' מ"ר נטו בפועל');
   const empSubEl=document.getElementById('sqmPerEmpInline'); if(empSubEl) empSubEl.textContent=r.sqmPerEmp.toFixed(1)+' מ"ר לעובד';
   updateFurnitureSub();
   updateParkingSub();
@@ -983,23 +1002,23 @@ function calc(){
   } else {
     rMainEl.textContent=fmt(r.totalMonthly)+' ₪';
   }
-  document.getElementById('rSub').textContent=fmt(r.bruto)+' מ"ר ברוטו · '+p.emp+' עובדים';
-  document.getElementById('rPerSqm').textContent=totalPerSqm+' ₪';
-  document.getElementById('rPerEmp').textContent=fmt(Math.round(r.totalMonthly/p.emp))+' ₪';
+  document.getElementById('rSub').textContent=fmt(r.bruto)+' '+('מ"ר ברוטו');
+  document.getElementById('rPerSqm').textContent=fmt(r.totalMonthly)+' ₪';
+  document.getElementById('rPerSqmVal').textContent = totalPerSqm + ' ₪';
   document.getElementById('rYear').textContent=fmt(r.totalMonthly*12)+' ₪';
   const periodDisplay = p.grace>0 ? r.effectiveMonthly*p.months : r.totalMonthly*p.months;
   document.getElementById('rPeriod').textContent=fmt(periodDisplay)+' ₪';
-  document.getElementById('rPeriodLbl').textContent=(p.grace>0?'₪ אפקטיבי ל-':'₪ ל-')+p.months+' חודשים';
-  document.getElementById('gbBruto').textContent=fmt(r.bruto)+' מ"ר';
-  document.getElementById('sqmPerEmpInline').textContent=r.sqmPerEmp.toFixed(1)+' מ"ר ברוטו לעובד';
-  document.getElementById('gbNet').textContent='הערכת נטו: '+fmt(r.net)+' מ"ר (−'+r.pct+'% שטחים משותפים)';
+  document.getElementById('rPeriodLbl').textContent=(p.grace>0?('₪ אפקטיבי ל-'):('₪ ל-'))+p.months+' '+'חודשים'+('');
+  document.getElementById('gbBruto').textContent=fmt(r.bruto)+(' מ"ר');
+  document.getElementById('sqmPerEmpInline').textContent=r.sqmPerEmp.toFixed(1)+(' מ"ר ברוטו לעובד');
+  document.getElementById('gbNet').textContent=('הערכת נטו: ')+fmt(r.net)+(' מ"ר (−')+r.pct+('% שטחים משותפים)');
 
   const bpe=r.sqmPerEmp;
   const idealBruto=Math.ceil(p.emp*IDEAL_MIN/50)*50;
   const maxBruto=Math.floor(p.emp*IDEAL_MAX/50)*50;
   let nh='';
   if(bpe<IDEAL_MIN) nh=`<div class="notice bad"><span class="notice-icon">⚠️</span><div class="notice-text"><strong>צפוף מדי — ${bpe.toFixed(1)} מ"ר/עובד</strong>מינימום מומלץ ${IDEAL_MIN} מ"ר. שקול לשדרג לכ-${idealBruto} מ"ר.</div></div>`;
-  else if(bpe<=IDEAL_MAX) nh=`<div class="notice ok"><span class="notice-icon">✅</span><div class="notice-text"><strong>שטח אידאלי — ${bpe.toFixed(1)} מ"ר/עובד</strong>בדיוק בטווח המומלץ (${IDEAL_MIN}–${IDEAL_MAX} מ"ר לעובד).</div></div>`;
+  else if(bpe<=IDEAL_MAX) nh=`<div class="notice ok"><span class="notice-icon">✅</span><div class="notice-text"><strong>${'שטח אידאלי'} — ${bpe.toFixed(1)} ${'מ"ר/עובד'}</strong>${'בדיוק בטווח המומלץ('}${IDEAL_MIN}–${IDEAL_MAX} ${'מ"ר לעובד).'}</div></div>`;
   else if(bpe<=IDEAL_WARN) nh=`<div class="notice warn"><span class="notice-icon">💡</span><div class="notice-text"><strong>קצת גדול — ${bpe.toFixed(1)} מ"ר/עובד</strong>הטווח האידאלי ${IDEAL_MIN}–${IDEAL_MAX} מ"ר. שווה לבחון כ-${maxBruto} מ"ר.</div></div>`;
   else nh=`<div class="notice warn"><span class="notice-icon">💡</span><div class="notice-text"><strong>שטח גדול משמעותית — ${bpe.toFixed(1)} מ"ר/עובד</strong>יש מרווח לצמיחה משמעותית.</div></div>`;
   document.getElementById('spaceNotice').innerHTML=nh;
@@ -1011,7 +1030,7 @@ function calc(){
     ? `<div class="brow"><span class="brow-lbl">ריהוט משרדי (פרוס ל-${p.months} חודשים)</span><span class="brow-val">${r.furniturePerSqmMonth.toFixed(1)} ₪/מ"ר · ${fmt(r.furnitureMonthly)} ₪</span></div>`
     : '';
   document.getElementById('breakdown').innerHTML=
-    r.rows.map(row=>`<div class="brow"><span class="brow-lbl">${row.l}</span><span class="brow-val">${row.v} ₪/מ"ר · ${fmt(row.v*r.bruto)} ₪</span></div>`).join('')+
+    r.rows.map(row=>`<div class="brow"><span class="brow-lbl">${row.l}</span><span class="brow-val">${row.v} ₪/${'מ"ר'} · ${fmt(row.v*r.bruto)} ₪</span></div>`).join('')+
     parkingRow+
     furnitureRow+
     "";
@@ -1086,7 +1105,7 @@ function openCompare(){
   html += `<div style="padding:10px 12px;background:#1e293b;font-size:.6rem;color:rgba(255,255,255,.4)"></div>`;
   results.forEach(({p},i)=>{
     html += `<div style="padding:10px 12px;background:#1e293b;text-align:center;">
-      <div style="font-size:.58rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.45)">${['נכס א׳','נכס ב׳','נכס ג׳'][i]}</div>
+      <div style="font-size:.58rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.45)">${(isEn?['Property A','Property B','Property C']:['נכס א׳','נכס ב׳','נכס ג׳'])[i]}</div>
       <div style="font-size:.82rem;font-weight:800;color:#fff;margin-top:2px">${p.name||'ללא שם'}</div>
     </div>`;
   });
@@ -1140,13 +1159,13 @@ function openCompare(){
   html += row('דמי ניהול', results.map(({p})=>p.mgmt+' ₪/מ"ר'), {icon:'🔧'});
   html += row('ניקיון', results.map(({p})=>p.clean+' ₪/מ"ר'), {icon:'🧹'});
   html += row('חשמל+אינטרנט', results.map(({p})=>p.utils+' ₪/מ"ר'), {icon:'⚡'});
-  html += row('עלות למ"ר', results.map(({p,r})=>r.perSqm+' ₪/מ"ר'), {bold:true, icon:'Σ'});
+  html += row('עלות/מ"ר', results.map(({p,r})=>r.perSqm+' ₪/מ"ר'), {bold:true, icon:'Σ'});
 
   // חניה
   if(hasParking){
     html += row('חניות', results.map(({p})=>p.parkingSpots>0?p.parkingSpots+' חניות':'—'), {separator:true, icon:'🅿'});
     html += row('מחיר חניה', results.map(({p})=>p.parkingSpots>0?fmt(p.parkingPrice)+' ₪':'—'), {icon:'🅿'});
-    html += row('עלות חניות', results.map(({p,r})=>r.parkingMonthly>0?fmt(r.parkingMonthly)+' ₪/חודש':'—'), {icon:'🅿'});
+    html += row('סה"כ חניה', results.map(({p,r})=>r.parkingMonthly>0?fmt(r.parkingMonthly)+' ₪/חודש':'—'), {icon:'🅿'});
   }
 
   // ריהוט
@@ -1155,17 +1174,17 @@ function openCompare(){
   }
 
   // תקופה
-  html += row('תקופת הסכם', results.map(({p})=>p.months+' חודשים'), {separator:true, icon:'📅'});
+  html += row('תקופה', results.map(({p})=>p.months+' '+'חודשים'), {separator:true, icon:'📅'});
 
   // סה"כ
   const minTotal = Math.min(...results.map(x=>x.r.totalMonthly));
   const minEff = Math.min(...results.map(x=>x.r.effectiveMonthly));
 
   if(hasGrace){
-    html += row('גרייס', results.map(({p})=>p.grace>0?p.grace+' חודשים':'ללא'), {separator:true, icon:'🎁'});
+    html += row('גרייס', results.map(({p})=>p.grace>0?p.grace+' '+'חודשים':'ללא'), {separator:true, icon:'🎁'});
   }
 
-  html += row('סה"כ לחודש', results.map(({p,r})=>fmt(r.totalMonthly)+' ₪'), {bold:true, separator:true, icon:'∑'});
+  html += row('סה"כ/חודש', results.map(({p,r})=>fmt(r.totalMonthly)+' ₪'), {bold:true, separator:true, icon:'∑'});
 
   if(hasGrace){
     html += row('עלות אפקטיבית', results.map(({p,r})=>fmt(r.effectiveMonthly)+' ₪'), {
@@ -1218,7 +1237,7 @@ function gateSubmit(){
   // show success
   document.querySelectorAll('.gate-card > *:not(#gateSuccess)').forEach(el=>el.style.display='none');
   document.getElementById('gateSuccess').style.display='block';
-  setTimeout(()=>document.getElementById('gateOv').style.display='none', 2000);
+  setTimeout(()=>{document.getElementById('gateOv').style.display='none';}, 2000);
 }
 window.showLeads=function(){
   try{const l=JSON.parse(localStorage.getItem('office_leads')||'[]');if(!l.length){alert('אין לידים');return;}prompt('לידים:',l.map((x,i)=>`${i+1}. ${x.name}|${x.mail}|${x.company||''}|${x.ts}`).join('\n'));}catch(e){alert('שגיאה');}
@@ -1226,10 +1245,10 @@ window.showLeads=function(){
 
 // ══ SAVE ══
 function buildSummaryHTML(p, r){
-  const arn = p.arnMode==='manual'?p.arnManual:(p.arn?17:34);
+    const arn = p.arnMode==='manual'?p.arnManual:(p.arn?17:34);
   const rows = [
     {l:'שכירות', v:p.rent},
-    {l:'ארנונה'+(p.arn&&p.arnMode!=='manual'?' (הנחת תוכנה)':''), v:arn},
+    {l:('ארנונה')+(p.arn&&p.arnMode!=='manual'?(' (הנחת תוכנה)'):''), v:arn},
     {l:'דמי ניהול', v:p.mgmt},
     {l:'שירותי ניקיון', v:p.clean},
     {l:'חשמל, אינטרנט, מים', v:p.utils},
@@ -1249,7 +1268,7 @@ function buildSummaryHTML(p, r){
     </div>`:'';
   const effectiveRatio = p.useCustomRatio?(1+p.customPct/100):p.grossRatio;
   const pct = Math.round((effectiveRatio-1)*100);
-  return `<!DOCTYPE html><html dir="rtl"><head>
+  return `<!DOCTYPE html><html dir="${'rtl'}"><head>
     <meta charset="UTF-8">
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
@@ -1288,7 +1307,6 @@ function buildSummaryHTML(p, r){
         <tr><td>שטח ברוטו (חוזה)</td><td style="text-align:left;font-weight:700">${fmt(p.sqm)} מ"ר</td></tr>
         <tr><td>הערכת נטו</td><td style="text-align:left">${fmt(r.net)} מ"ר (−${pct}%)</td></tr>
         <tr><td>תקופת הסכם</td><td style="text-align:left;font-weight:700">${p.months} חודשים</td></tr>
-        <tr><td>מ"ר ברוטו לעובד (${p.emp} עובדים)</td><td style="text-align:left;font-weight:700">${r.sqmPerEmp.toFixed(1)} מ"ר</td></tr>
       </table>
     </div>
     <div class="section">
@@ -1306,7 +1324,7 @@ function buildSummaryHTML(p, r){
       <div class="hero-amount">${fmt(r.totalMonthly)} ₪</div>
       <div class="hero-grid">
         <div class="hero-cell"><div class="hero-val">${(r.totalMonthly/p.sqm).toFixed(1)} ₪</div><div class="hero-lbl">₪ לכל מ"ר</div></div>
-        <div class="hero-cell"><div class="hero-val">${fmt(Math.round(r.totalMonthly/p.emp))} ₪</div><div class="hero-lbl">₪ לעובד / חודש</div></div>
+        <div class="hero-cell"><div class="hero-val">${fmt(r.totalMonthly)} ₪</div><div class="hero-lbl">₪ לחודש</div></div>
         <div class="hero-cell"><div class="hero-val">${fmt(r.totalMonthly*12)} ₪</div><div class="hero-lbl">₪ לשנה</div></div>
         <div class="hero-cell"><div class="hero-val">${fmt(r.totalMonthly*p.months)} ₪</div><div class="hero-lbl">₪ ל-${p.months} חודשים</div></div>
       </div>
@@ -1317,8 +1335,8 @@ function buildSummaryHTML(p, r){
 }
 
 function buildCmpHTML(){
-  const results = props.map(p => ({p, r:calcProp(p)}));
-  return `<!DOCTYPE html><html dir="rtl"><head>
+    const results = props.map(p => ({p, r:calcProp(p)}));
+  return `<!DOCTYPE html><html dir="${'rtl'}"><head>
     <meta charset="UTF-8">
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
@@ -1347,16 +1365,102 @@ function buildCmpHTML(){
 }
 
 function openSummaryWindow(htmlContent){
-  const blob = new Blob([htmlContent], {type:'text/html;charset=utf-8'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.target = '_blank';
-  a.rel = 'noopener';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  setTimeout(()=>URL.revokeObjectURL(url), 5000);
+  // חלץ את התוכן מה-HTML ל-modal
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(htmlContent, 'text/html');
+  // הסר כפתור הדפסה (יש כפתור משלנו)
+  doc.querySelectorAll('.print-btn').forEach(el=>el.remove());
+  const body = doc.body ? doc.body.innerHTML : htmlContent;
+  // הוסף styles מה-document
+  const styles = [...doc.querySelectorAll('style')].map(s=>s.outerHTML).join('');
+
+  document.getElementById('summaryModalBody').innerHTML = `<div style="padding:16px 16px 24px;direction:rtl;font-family:'Heebo',sans-serif">${styles}${body}</div>`;
+  document.getElementById('summaryModal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSummaryModal(){
+  document.getElementById('summaryModal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function shareWhatsApp(){
+  const p = S();
+  const r = calcProp(p);
+  const arn = p.arnMode==='manual' ? p.arnManual : (p.arn ? 17 : 34);
+  const totalPerSqm = (r.totalMonthly / p.sqm).toFixed(0);
+  
+  let msg = '';
+  msg += p.name ? `🏢 *${p.name}*
+` : '';
+  msg += `
+`;
+  msg += (isEn ? `Area: ${fmt(p.sqm)} sqm Gross` : `שטח: ${fmt(p.sqm)} מ"ר ברוטו`) + `
+`;
+  msg += (isEn ? `Lease: ${p.months} months` : `תקופה: ${p.months} חודשים`);
+  msg += p.grace > 0 ? (isEn ? ` · Grace ${p.grace} months` : ` · גרייס ${p.grace} חודשים`) : '';
+  msg += `
+
+`;
+
+  msg += isEn ? `💰 *Cost Breakdown (per sqm):*
+` : `💰 *פירוט עלויות למ"ר:*
+`;
+  msg += (isEn ? `• Rent: ${p.rent} ₪` : `• שכירות: ${p.rent} ₪`) + `
+`;
+  msg += (isEn ? `• Municipal Tax: ${arn} ₪` : `• ארנונה: ${arn} ₪`);
+  msg += (p.arn && p.arnMode!=='manual') ? (' (הנחת תוכנה)') : '';
+  msg += `
+`;
+  msg += (isEn ? `• Management: ${p.mgmt} ₪` : `• ניהול: ${p.mgmt} ₪`) + `
+`;
+  msg += (isEn ? `• Cleaning: ${p.clean} ₪` : `• ניקיון: ${p.clean} ₪`) + `
+`;
+  msg += (isEn ? `• Electric+Internet: ${p.utils} ₪` : `• חשמל+אינטרנט: ${p.utils} ₪`) + `
+`;
+  if(p.extra > 0){
+    const ep = p.extraMode==='sqm' ? p.extra : Math.round(p.extra/p.sqm);
+    msg += (isEn ? `• Additional: ${ep} ₪` : `• עלויות נוספות: ${ep} ₪`) + `
+`;
+  }
+  if(r.parkingMonthly > 0) msg += (isEn ? `• Parking (${p.parkingSpots}): ${fmt(r.parkingMonthly)} ₪` : `• חניות (${p.parkingSpots}): ${fmt(r.parkingMonthly)} ₪`) + `
+`;
+  if(r.furnitureMonthly > 0) msg += (isEn ? `• Furniture (spread): ${fmt(r.furnitureMonthly)} ₪` : `• ריהוט (פרוס): ${fmt(r.furnitureMonthly)} ₪`) + `
+`;
+  msg += isEn ? `*Total/sqm: ${totalPerSqm} ₪*
+
+` : `*סה"כ למ"ר: ${totalPerSqm} ₪*
+
+`;
+
+  msg += isEn ? `📊 *Costs:*
+` : `📊 *עלויות:*
+`;
+  msg += (isEn ? `• Monthly: *${fmt(r.totalMonthly)} ₪*` : `• חודשי: *${fmt(r.totalMonthly)} ₪*`) + `
+`;
+  msg += (isEn ? `• Annual: *${fmt(r.totalMonthly*12)} ₪*` : `• שנתי: *${fmt(r.totalMonthly*12)} ₪*`) + `
+`;
+  msg += (isEn ? `• ${p.months} months: *${fmt(r.totalMonthly*p.months)} ₪*` : `• ${p.months} חודשים: *${fmt(r.totalMonthly*p.months)} ₪*`) + `
+`;
+
+  if(p.grace > 0){
+    msg += isEn ? `
+💡 *After Grace Period:*
+` : `
+💡 *אחרי גרייס:*
+`;
+    msg += (isEn ? `• Effective cost: ${fmt(r.effectiveMonthly)} ₪/month` : `• עלות אפקטיבית: ${fmt(r.effectiveMonthly)} ₪/חודש`) + `
+`;
+    msg += (isEn ? `• Total savings: ${fmt(r.graceSaving*p.months)} ₪` : `• חיסכון לתקופה: ${fmt(r.graceSaving*p.months)} ₪`) + `
+`;
+  }
+
+  msg += isEn ? `
+_Generated by Don Alborough — Office Cost Calculator_` : `
+_הופק באמצעות מחשבון המשרדים של דון אלבורו_`;
+
+  const url = 'https://wa.me/?text=' + encodeURIComponent(msg);
+  window.open(url, '_blank');
 }
 
 function savePDF(){
@@ -1386,6 +1490,22 @@ function saveCmpPNG(){
 renderTabs();
 checkSession();
 calc();
+
+
+
+
+
 </script>
+<style>
+/* PRINT STYLES */
+@media print {
+  .hdr, .prop-tabs-wrap, .compare-bar, #graceEffectiveRow .compare-modal,
+  .broker, .sec-hd, .hdr-back, .prop-name-row { }
+  body { background: #fff !important; }
+  .print-hide { display: none !important; }
+  .print-show { display: block !important; }
+  .page { padding-bottom: 20px !important; }
+}
+</style>
 </body>
 </html>
