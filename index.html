@@ -192,8 +192,8 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .broker-title{font-size:.7rem;color:rgba(255,255,255,.35);margin-bottom:12px;}
 .broker-text{font-size:.8rem;color:rgba(255,255,255,.6);line-height:1.9;margin-bottom:16px;}
 .broker-text em{color:#fbbf24;font-style:normal;font-weight:600;}
-.broker-btns{display:flex;gap:8px;flex-wrap:wrap;}
-.broker-btn{display:inline-flex;align-items:center;gap:7px;padding:10px 16px;border-radius:9px;font-size:.78rem;font-weight:700;text-decoration:none;font-family:'Heebo',sans-serif;transition:opacity .15s;flex-shrink:0;}
+.broker-btns{display:flex;gap:8px;flex-wrap:nowrap;justify-content:center;}
+.broker-btn{display:inline-flex;align-items:center;gap:7px;padding:10px 16px;border-radius:9px;font-size:.78rem;font-weight:700;text-decoration:none;font-family:'Heebo',sans-serif;transition:opacity .15s;flex-shrink:0;;flex:1;justify-content:center;}
 .broker-btn:active{opacity:.85;}
 .broker-btn.wa{background:#25d366;color:#fff;}
 .broker-btn.li{background:#0077b5;color:#fff;}
@@ -701,7 +701,7 @@ button[onclick*="savePDF"]:hover,button[onclick*="savePNG"]:hover,button[onclick
   </div>
 
   <div style="padding:0 4px;margin-top:4px">
-    <p style="font-size:.62rem;color:var(--ink3);line-height:1.7;text-align:center" id="disclaimer-txt">* המספרים המוצגים הם הערכות מקובלות בענף המשרדים ומשמשים לצורך אינדיקציה בלבד. העלויות בפועל עשויות להשתנות בהתאם לעסקה הספציפית, מיקום הנכס, תנאי החוזה ופרמטרים נוספים. אין לראות בנתונים אלו ייעוץ מקצועי מחייב. כל המחירים לפני מע"מ.</p>
+    <p style="font-size:.62rem;color:var(--ink3);line-height:1.7;text-align:center" id="disclaimer-txt">* המספרים המוצגים הם הערכות מקובלות בענף המשרדים ומשמשים לצורך אינדיקציה בלבד. העלויות בפועל עשויות להשתנות בהתאם לעסקה הספציפית, מיקום הנכס, תנאי החוזה ופרמטרים נוספים. אין לראות בנתונים אלו ייעוץ מקצועי מחייב. <br>כל המחירים לפני מע"מ.</p>
   </div>
 </div>
 
@@ -723,8 +723,11 @@ button[onclick*="savePDF"]:hover,button[onclick*="savePNG"]:hover,button[onclick
       <button class="compare-close" onclick="closeCompare()">✕</button>
     </div>
     <div class="cmp-table" id="cmpTable"></div>
-    <div style="padding:0 16px 8px;display:flex;gap:8px">
-      <button onclick="saveCmpPDF()" style="flex:1;padding:12px;background:#1e293b;color:#fff;border:none;border-radius:var(--r-sm);font-family:'Heebo',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer">📄 שמור השוואה PDF</button>
+    <div class="landscape-hint" style="margin:8px 16px 4px;padding:8px 12px;background:#fff7ed;border-radius:8px;font-size:.72rem;color:#c2410c;font-weight:600;font-family:'Heebo',sans-serif;text-align:center;direction:rtl;">
+      💡 לחוויית צפייה מיטבית, מומלץ לסובב את המכשיר לתצוגה אופקית
+    </div>
+    <div style="padding:8px 16px 8px;display:flex;gap:8px">
+      <button class="cmp-save-btn" onclick="saveCmpPDF()" style="flex:1;padding:12px;background:#1e293b;color:#fff;border:none;border-radius:var(--r-sm);font-family:'Heebo',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer">📄 שמור השוואה PDF</button>
       <button onclick="saveCmpPNG()" style="flex:1;padding:12px;background:#fff;color:#1e293b;border:1.5px solid #e7e5e4;border-radius:var(--r-sm);font-family:'Heebo',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer">🖼️ שמור תמונה</button>
     </div>
   </div>
@@ -1797,7 +1800,11 @@ function savePNG(){
 }
 
 function saveCmpPDF(){
-  openSummaryWindow(buildCmpHTML());
+  // Add class for print CSS to target compare modal only
+  document.body.classList.add('printing-compare');
+  window.print();
+  // Remove class after print dialog closes
+  setTimeout(()=>document.body.classList.remove('printing-compare'), 1500);
 }
 
 function saveCmpPNG(){
@@ -1878,12 +1885,52 @@ document.addEventListener('DOMContentLoaded',function(){
 <style>
 /* PRINT STYLES */
 @media print {
-  .hdr, .prop-tabs-wrap, .compare-bar, #graceEffectiveRow .compare-modal,
-  .broker, .sec-hd, .hdr-back, .prop-name-row { }
+  /* ── DEFAULT: print main page ── */
   body { background: #fff !important; }
-  .print-hide { display: none !important; }
+  .print-hide, .hdr-back, .prop-tabs-wrap, .compare-bar, .compare-modal, .compare-backdrop { display: none !important; }
   .print-show { display: block !important; }
   .page { padding-bottom: 20px !important; }
+
+  /* ── COMPARE PRINT MODE ──
+     Add class 'printing-compare' to body before print, remove after */
+  body.printing-compare .page,
+  body.printing-compare .hdr,
+  body.printing-compare .compare-bar,
+  body.printing-compare .compare-backdrop { display: none !important; }
+
+  body.printing-compare .compare-modal {
+    display: block !important;
+    position: static !important;
+    background: transparent !important;
+    overflow: visible !important;
+  }
+  body.printing-compare .compare-sheet {
+    position: static !important;
+    max-height: none !important;
+    overflow: visible !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    animation: none !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+  body.printing-compare .compare-hd,
+  body.printing-compare .landscape-hint,
+  body.printing-compare .cmp-save-btn { display: none !important; }
+
+  body.printing-compare .compare-content { overflow: visible !important; }
+  body.printing-compare .cmp-scroll-wrap {
+    overflow: visible !important;
+    max-height: none !important;
+    max-width: none !important;
+    width: 100% !important;
+    border: none !important;
+  }
+  body.printing-compare #cmpTable { overflow: visible !important; }
+  body.printing-compare .cmp-table {
+    width: 100% !important;
+    table-layout: fixed !important;
+  }
 }
 </style>
 </body>
