@@ -30,16 +30,14 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 /* GATE */
 .gate{position:fixed;inset:0;z-index:1000;background:var(--navy);display:flex;align-items:center;justify-content:center;padding:20px;}
 .gate::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 30% 80%,rgba(217,119,6,.12) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 80% 20%,rgba(15,118,110,.08) 0%,transparent 60%);pointer-events:none;}
-.gate-card{background:#fff;border-radius:20px;padding:32px 26px 28px;width:100%;max-width:400px;box-shadow:0 32px 80px rgba(0,0,0,.5);position:relative;animation:gateIn .4s cubic-bezier(.22,1,.36,1) both;z-index:1;}
+.gate-card{background:#fff;border-radius:20px;padding:32px 26px 28px;width:100%;max-width:400px;box-shadow:0 32px 80px rgba(0,0,0,.5);position:relative;animation:gateIn .4s cubic-bezier(.22,1,.36,1) both;;position:relative;z-index:1}
 @keyframes gateIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 .gate-eyebrow{font-size:.6rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--amber-b);margin-bottom:8px;}
-.gate-title{font-size:2rem;font-weight:900;color:#1e293b;margin:8px 0 6px;text-align:right;}
+.gate-title{font-size:1.5rem;font-weight:900;color:var(--ink);line-height:1.2;margin-bottom:6px;}
 .gate-sub{font-size:.78rem;color:#78716c;line-height:1.7;margin-bottom:26px;}
 .field{margin-bottom:16px;}
 .field-label{display:block;font-size:.68rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:#78716c;margin-bottom:6px;}
 .field-inp{width:100%;padding:12px 14px;border:1.5px solid var(--border2);border-radius:var(--r-sm);font-size:.92rem;font-family:'Heebo',sans-serif;color:var(--ink);background:var(--surface);transition:border-color .15s,box-shadow .15s;-webkit-appearance:none;}
-.field-inp.invalid{border-color:#ef4444 !important;background:#fef2f2;}
-.field-inp.valid{border-color:#16a34a !important;}
 .field-inp:focus{outline:none;border-color:var(--amber-b);box-shadow:0 0 0 3px rgba(217,119,6,.12);}
 .gate-err{font-size:.74rem;color:var(--rose);background:var(--rose-l);border-radius:8px;padding:8px 12px;margin-bottom:14px;display:none;}
 .gate-cta{width:100%;padding:14px;background:var(--navy);color:#fff;border:none;border-radius:var(--r-sm);font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:opacity .15s;display:flex;align-items:center;justify-content:center;gap:8px;}
@@ -54,12 +52,6 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .hdr-sub{font-weight:600;font-size:.6rem;color:rgba(255,255,255,.92);margin-top:2px;}
 .hdr-back{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.6);border-radius:8px;padding:6px 12px;font-family:'Heebo',sans-serif;font-size:.7rem;font-weight:600;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent;}
 
-/* LOGO */
-.logo-wrap{display:inline-flex;flex-direction:column;align-items:flex-start;line-height:1.15;}
-.logo-top{font-size:.85rem;font-weight:700;color:#ffffff !important;letter-spacing:.5px;}
-.logo-bottom{font-size:1rem;font-weight:900;color:#FFD700 !important;letter-spacing:.5px;border-top:3px double #FFD700;padding-top:3px;display:inline-block;}
-@media(max-width:480px){.logo-top{font-size:.78rem;}.logo-bottom{font-size:.92rem;}}
-
 /* PROPERTY TABS */
 .prop-tabs-wrap{background:var(--bg);padding:8px 14px 4px;margin-bottom:12px;}
 .prop-tabs{max-width:560px;margin:0 auto;display:flex;gap:6px;align-items:center;}
@@ -67,27 +59,32 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .prop-tab.active{background:#fff;color:var(--navy);border-color:var(--navy);font-weight:800;opacity:1;box-shadow:0 1px 4px rgba(0,0,0,.08);}
 .prop-tab .tab-name{display:block;font-size:.65rem;font-weight:500;opacity:.7;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .prop-tab.active .tab-name{opacity:.6;}
-.prop-tab-add{width:36px;height:36px;border-radius:10px;border:2px dashed #94a3b8;background:transparent;color:#64748b;font-size:1.3rem;font-weight:400;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;-webkit-tap-highlight-color:transparent;line-height:1;}
 .prop-tab-add:hover{border-color:#475569;color:#475569;background:#f1f5f9;}
+.prop-tab-add{width:36px;height:36px;border-radius:10px;border:2px dashed #94a3b8;background:transparent;color:#64748b;font-size:1.3rem;font-weight:400;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;-webkit-tap-highlight-color:transparent;line-height:1;}
 .prop-tab-add:active{background:rgba(255,255,255,.08);}
 
 /* PAGE */
 .page{max-width:560px;margin:0 auto;padding:16px 14px 120px;}
+
+/* SECTION */
 .sec{margin-bottom:18px;}
 .sec-hd{display:flex;align-items:center;gap:8px;padding:0 2px 10px;}
 .sec-num{width:22px;height:22px;border-radius:50%;background:var(--navy);color:#fff;font-size:.6rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .sec-title{font-size:.68rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--ink3);}
 
-/* CARD & ROW */
+/* PROPERTY NAME INPUT */
 .prop-name-row{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow-m);border:1px solid var(--border);padding:12px 16px;margin-bottom:18px;display:flex;align-items:center;gap:10px;}
 .prop-name-label{font-size:.72rem;font-weight:700;color:var(--ink3);white-space:nowrap;}
 .prop-name-inp{flex:1;border:none;background:transparent;font-family:'Heebo',sans-serif;font-size:.92rem;font-weight:700;color:var(--ink);padding:0;}
 .prop-name-inp:focus{outline:none;}
 .prop-name-inp::placeholder{color:var(--ink3);font-weight:400;}
 
+/* CARD */
 .card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow-m);overflow:hidden;border:1px solid var(--border);}
 .card-note{padding:10px 16px 12px;font-size:.72rem;color:var(--ink3);line-height:1.7;border-top:1px solid var(--border);background:var(--surface);}
 .card-note strong{color:var(--ink2);}
+
+/* ROW */
 .row{display:flex;align-items:center;padding:12px 16px;gap:12px;border-bottom:1px solid var(--border);min-height:56px;}
 .row:last-child{border-bottom:none;}
 .row-l{flex:1;min-width:0;}
@@ -95,22 +92,25 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .row-sub{font-size:.67rem;color:var(--ink3);margin-top:2px;line-height:1.4;}
 .row-r{display:flex;align-items:center;flex-shrink:0;}
 
-/* SPINNER & CHIPS & TOGGLE */
+/* SPINNER */
 .spin{display:flex;align-items:center;background:var(--surface);border:1.5px solid var(--border2);border-radius:10px;overflow:hidden;height:40px;}
 .spin-btn{width:38px;height:40px;background:transparent;border:none;font-size:1.1rem;cursor:pointer;color:var(--ink2);display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;transition:background .15s,color .15s;flex-shrink:0;border-radius:8px;}
 .spin-btn:hover{background:var(--border);color:var(--ink);}
-.spin-btn:active{background:var(--border);transform:scale(.94);}
-.spin-inp{width:56px;text-align:center;border:none;background:transparent;font-size:.88rem;font-weight:700;font-family:'Heebo',sans-serif;color:var(--ink);padding:0;height:100%;-moz-appearance:textfield;transition:border-color .15s;}
+.spin-btn:active{background:var(--border2);transform:scale(.94);}
+.spin-btn:active{background:var(--border);}
+.spin-inp{width:56px;text-align:center;border:none;background:transparent;font-size:.88rem;font-weight:700;font-family:'Heebo',sans-serif;color:var(--ink);padding:0;height:100%;-moz-appearance:textfield;}
 .spin-inp.w48{width:48px;}
 .spin-inp::-webkit-outer-spin-button,.spin-inp::-webkit-inner-spin-button{-webkit-appearance:none;}
-.spin-inp:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(30,41,59,.08);}
+.spin-inp:focus{outline:none;}
 .spin-unit{font-size:.58rem;color:var(--ink3);padding-left:8px;padding-right:2px;white-space:nowrap;}
 
+/* CHIPS */
 .chips{display:flex;flex-wrap:wrap;gap:6px;padding:14px 16px;}
 .chip{padding:7px 13px;border-radius:8px;border:1.5px solid var(--border2);background:var(--surface);color:var(--ink2);font-size:.75rem;font-family:'Heebo',sans-serif;cursor:pointer;transition:all .15s;font-weight:500;-webkit-tap-highlight-color:transparent;line-height:1.3;text-align:center;}
 .chip .cs{font-size:.58rem;opacity:.65;display:block;margin-top:2px;}
 .chip.sel{border-color:var(--amber-b);background:var(--amber-l);color:var(--amber);font-weight:700;box-shadow:0 0 0 1px rgba(217,119,6,.2);}
 
+/* TOGGLE */
 .tog-wrap{display:flex;align-items:center;gap:9px;}
 .tog{width:44px;height:25px;border-radius:999px;background:var(--border2);cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;-webkit-tap-highlight-color:transparent;}
 .tog.on{background:var(--teal);}
@@ -118,11 +118,23 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .tog.on::after{right:auto;left:3px;}
 .tog-lbl{font-size:.78rem;color:var(--ink2);font-weight:500;}
 
+/* MODE TOGGLE BUTTONS */
 .mode-btns{display:flex;border:1.5px solid var(--border2);border-radius:8px;overflow:hidden;}
 .mode-btn{padding:7px 12px;border:none;cursor:pointer;font-family:'Heebo',sans-serif;font-size:.7rem;font-weight:700;background:var(--surface);color:var(--ink3);transition:all .15s;}
 .mode-btn.active{background:var(--navy);color:#fff;}
 
-/* NOTICES & RESULTS */
+/* HERO RESULT */
+.hero{background:var(--navy);border-radius:var(--r);padding:20px 18px 18px;box-shadow:var(--shadow-l);position:relative;overflow:hidden;margin-bottom:10px;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 20% 110%,rgba(22,163,74,.12) 0%,transparent 65%);pointer-events:none;}
+.hero-eyebrow{font-size:.57rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:4px;}
+.hero-amount{font-size:2.4rem;font-weight:900;color:var(--green);line-height:1;}
+.hero-meta{font-size:.72rem;color:rgba(255,255,255,.35);margin-top:5px;margin-bottom:16px;}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.hero-cell{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:10px 12px;}
+.hero-val{font-size:.95rem;font-weight:800;color:#fff;}
+.hero-lbl{font-size:.6rem;color:rgba(255,255,255,.33);margin-top:2px;}
+
+/* NOTICE */
 .notice{display:flex;gap:10px;align-items:flex-start;border-radius:10px;padding:11px 14px;font-size:.76rem;line-height:1.7;margin-bottom:10px;border:1px solid transparent;}
 .notice.ok{background:var(--teal-l);color:var(--teal);border-color:#99f6e4;}
 .notice.warn{background:var(--amber-l);color:var(--amber);border-color:var(--amber-m);}
@@ -130,20 +142,28 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .notice-icon{font-size:.95rem;flex-shrink:0;margin-top:1px;}
 .notice-text strong{display:block;margin-bottom:1px;font-weight:700;}
 
+/* BREAKDOWN */
 .brow{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;border-bottom:1px solid var(--border);font-size:.82rem;gap:8px;}
 .brow:last-child{border-bottom:none;}
 .brow-lbl{color:var(--ink2);}
 .brow-val{font-weight:700;flex-shrink:0;color:var(--ink);}
+.brow.tot{background:#f0fdf4;}
+.brow.tot .brow-lbl{font-weight:800;color:var(--green);}
+.brow.tot .brow-val{color:var(--green);}
 
-/* ACTION BAR (BOTTOM) */
+/* RATIO BOX */
+.ratio-box{background:var(--blue-l);border:1px solid #bfdbfe;border-radius:var(--r);padding:16px 18px;box-shadow:var(--shadow-s);}
+.ratio-hd{font-size:.6rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--blue);margin-bottom:12px;}
+.ratio-row{display:flex;justify-content:space-between;align-items:center;font-size:.82rem;padding:4px 0;}
+.ratio-row span:last-child{font-weight:700;}
+.ratio-div{height:1px;background:#bfdbfe;margin:8px 0;}
+
+/* COMPARE BOTTOM BAR */
 .compare-bar{position:fixed;bottom:0;left:0;right:0;z-index:200;padding:12px 16px;padding-bottom:max(16px,env(safe-area-inset-bottom));background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-top:1px solid var(--border);box-shadow:0 -4px 20px rgba(0,0,0,.08);}
 .compare-bar-inner{max-width:560px;margin:0 auto;display:flex;gap:8px;align-items:center;}
-.action-btn{flex:1;padding:11px 8px;border-radius:var(--r-sm);border:none;font-family:'Heebo',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;-webkit-tap-highlight-color:transparent;transition:opacity .15s;white-space:nowrap;}
-.action-btn:disabled{opacity:.35;cursor:not-allowed;}
-.action-compare{background:var(--navy);color:#fff;flex:1.4;}
-.action-clear{background:#f1f5f9;color:#475569;flex:1;}
-.action-delete{background:#fef2f2;color:#dc2626;border:1.5px solid #fecaca;flex:1;}
-@media(max-width:360px){.action-btn{font-size:.72rem;padding:10px 5px;}}
+.compare-btn{flex:1;padding:13px;border-radius:var(--r-sm);background:var(--navy);color:#fff;border:none;font-family:'Heebo',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;-webkit-tap-highlight-color:transparent;}
+.compare-btn:active{opacity:.85;}
+.compare-btn.secondary{background:var(--surface);color:var(--ink2);border:1.5px solid var(--border2);}
 
 /* COMPARE MODAL */
 .compare-modal{position:fixed;inset:0;z-index:500;display:none;flex-direction:column;}
@@ -151,89 +171,124 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .compare-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.5);}
 .compare-sheet{position:absolute;bottom:0;left:0;right:0;background:#fff;border-radius:20px 20px 0 0;max-height:90vh;overflow-y:auto;padding:0 0 max(24px,env(safe-area-inset-bottom));animation:slideUp .3s cubic-bezier(.22,1,.36,1) both;-webkit-overflow-scrolling:touch;}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.compare-hd{padding:16px 18px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:30;}
+.compare-hd{padding:16px 18px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:1;}
 .compare-hd-title{font-size:.95rem;font-weight:800;}
 .compare-close{width:32px;height:32px;border-radius:50%;background:var(--bg);border:none;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .cmp-table{width:100%;padding:16px;}
-.landscape-hint {margin:8px 16px 4px;padding:8px 12px;background:#fff7ed;border-radius:8px;font-size:.72rem;color:#c2410c;font-weight:600;text-align:center;direction:rtl;}
+.cmp-row{display:grid;gap:8px;margin-bottom:8px;align-items:center;}
+.cmp-label{font-size:.72rem;color:var(--ink3);font-weight:600;padding:8px 0 4px;border-bottom:1px solid var(--border);grid-column:1/-1;}
+.cmp-cell{background:var(--surface);border-radius:10px;padding:12px 14px;border:1px solid var(--border);text-align:center;}
+.cmp-cell.winner{background:var(--teal-l);border-color:#99f6e4;}
+.cmp-cell-name{font-size:.65rem;color:var(--ink3);margin-bottom:4px;font-weight:600;}
+.cmp-cell-val{font-size:.95rem;font-weight:800;color:var(--ink);}
+.cmp-cell-sub{font-size:.62rem;color:var(--ink3);margin-top:2px;}
+.cmp-cell.winner .cmp-cell-val{color:var(--teal);}
+.cmp-winner-badge{font-size:.58rem;background:var(--teal);color:#fff;border-radius:4px;padding:2px 6px;font-weight:800;margin-top:4px;display:inline-block;}
 
-/* BROKER CONTACT CARD */
-.broker{background:var(--navy);border-radius:var(--r);padding:20px 18px;box-shadow:var(--shadow-l);position:relative;overflow:hidden;margin-bottom:20px;}
+/* BROKER */
+.broker{background:var(--navy);border-radius:var(--r);padding:20px 18px;box-shadow:var(--shadow-l);position:relative;overflow:hidden;}
 .broker::before{content:'';position:absolute;bottom:-30px;left:-30px;width:140px;height:140px;border-radius:50%;background:rgba(217,119,6,.07);pointer-events:none;}
 .broker-name{font-size:1.05rem;font-weight:900;color:#fff;margin-bottom:2px;}
 .broker-title{font-size:.7rem;color:rgba(255,255,255,.35);margin-bottom:12px;}
 .broker-text{font-size:.8rem;color:rgba(255,255,255,.6);line-height:1.9;margin-bottom:16px;}
 .broker-text em{color:#fbbf24;font-style:normal;font-weight:600;}
-
-/* UPDATED: PERFECT MOBILE FIT FOR CONTACT BUTTONS */
-.broker-btns{display:flex;gap:6px;flex-wrap:nowrap;justify-content:center;width:100%;}
-.broker-btn{display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:10px 4px;border-radius:9px;font-size:clamp(0.6rem, 2.8vw, 0.78rem);font-weight:700;text-decoration:none;font-family:'Heebo',sans-serif;flex:1;white-space:nowrap;}
-.broker-btn svg {width:14px; height:14px;}
+.broker-btns{display:flex;gap:8px;flex-wrap:nowrap;justify-content:center;}
+.broker-btn{display:inline-flex;align-items:center;gap:7px;padding:10px 16px;border-radius:9px;font-size:.78rem;font-weight:700;text-decoration:none;font-family:'Heebo',sans-serif;transition:opacity .15s;flex-shrink:0;;flex:1;justify-content:center;}
+.broker-btn:active{opacity:.85;}
 .broker-btn.wa{background:#25d366;color:#fff;}
 .broker-btn.li{background:#0077b5;color:#fff;}
 .broker-btn.tel{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.15);}
 
 @keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.card,.broker{animation:up .22s ease both;}
+.card,.hero,.ratio-box,.broker{animation:up .22s ease both;}
+.hdiv{height:1px;background:var(--border);margin:8px 0;}
 
-/* RESPONSIVE DESKTOP OVERRIDES */
-@media(min-width: 768px) {
-  .landscape-hint { display: none !important; }
-}
+/* ── Hover & Active States ── */
+.prop-tab:hover:not(.active){background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);}
+.btype-btn:hover:not(.active){border-color:#94a3b8;background:#f1f5f9;transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.mode-btn:hover:not(.active){background:var(--border);color:var(--ink);}
+.spin-btn:hover{background:var(--border);color:var(--ink);}
+.spin-btn:active{transform:scale(.92);background:var(--border2);}
+.arn-toggle button:hover:not(.active),.extra-toggle button:hover:not(.active){background:var(--border);}
+.compare-btn:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.2);}
+.compare-btn:active{transform:translateY(0);box-shadow:none;}
+.gate-btn:hover{opacity:.92;transform:translateY(-1px);}
+.gate-btn:active{transform:translateY(0);}
+button[onclick*="savePDF"]:hover,button[onclick*="savePNG"]:hover,button[onclick*="saveCmp"]:hover{opacity:.88;transform:translateY(-1px);}
 
-/* PRINT ONLY CLASSES */
-.print-only { display: none !important; }
+/* ── Smooth spin input ── */
+.spin-inp{transition:border-color .15s;}
+.spin-inp:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(30,41,59,.08);}
 
-/* PRINT STYLES */
-@media print {
-  body { background: #fff !important; }
-  .print-hide, .hdr-back, .prop-tabs-wrap, .compare-bar, .compare-modal, .compare-backdrop { display: none !important; }
-  .page { padding-bottom: 20px !important; }
+/* ── Card active feedback ── */
+.card input:focus-within,.card select:focus-within{border-color:var(--navy);}
 
-  /* ── COMPARE PRINT MODE ── */
-  body.printing-compare .page,
-  body.printing-compare .hdr,
-  body.printing-compare .compare-bar,
-  body.printing-compare .compare-backdrop { display: none !important; }
+/* ── Transitions ── */
+.btype-btn{transition:all .18s cubic-bezier(.4,0,.2,1);}
+.mode-btn{transition:all .15s;}
+.prop-tab{transition:all .18s;}
 
-  body.printing-compare .compare-modal {
-    display: block !important;
-    position: static !important;
-    background: transparent !important;
-    overflow: visible !important;
-  }
-  body.printing-compare .compare-sheet {
-    position: static !important;
-    max-height: none !important;
-    overflow: visible !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    animation: none !important;
-    padding: 0 !important;
-    width: 100% !important;
-  }
-  
-  /* HIDE BUTTONS & UNNECESSARY UI IN PRINT */
-  body.printing-compare .compare-hd,
-  body.printing-compare .landscape-hint,
-  body.printing-compare .cmp-save-btn,
-  .print-hide,
-  button[onclick^="save"],
-  .action-btn,
-  .broker-btns { display: none !important; }
+/* ══ LOGO ══ */
+.logo-wrap{display:inline-flex;flex-direction:column;align-items:flex-start;line-height:1.15;}
+.logo-top{font-size:.85rem;font-weight:700;color:#ffffff !important;letter-spacing:.5px;}
+.logo-bottom{font-size:1rem;font-weight:900;color:#FFD700 !important;letter-spacing:.5px;border-top:3px double #FFD700;padding-top:3px;display:inline-block;}
+@media(max-width:480px){.logo-top{font-size:.78rem;}.logo-bottom{font-size:.92rem;}}
 
-  /* SHOW PRINT BRANDING */
-  body.printing-compare .print-only { display: block !important; }
+/* ══ GATE TITLE ══ */
+.gate-title{font-size:2rem;font-weight:900;color:#1e293b;margin:8px 0 6px;text-align:right;}
 
-  body.printing-compare .compare-content { overflow: visible !important; }
-  body.printing-compare #cmpTable { overflow: visible !important; }
-}
+/* ══ FIELD VALIDATION ══ */
+.field-inp.invalid{border-color:#ef4444 !important;background:#fef2f2;}
+.field-inp.valid{border-color:#16a34a !important;}
+
+/* ══ RESET BUTTON ══ */
+.compare-bar-reset{height:40px;padding:0 12px;border-radius:10px;border:1.5px solid rgba(255,255,255,.2);background:rgba(220,38,38,.15);color:rgba(255,255,255,.7);font-size:.75rem;font-weight:700;font-family:'Heebo',sans-serif;cursor:pointer;display:flex;align-items:center;gap:5px;flex-shrink:0;transition:all .15s;white-space:nowrap;}
+.compare-bar-reset:hover{background:rgba(220,38,38,.35);color:#fff;}
+
+/* ══ SUMMARY MODAL ══ */
+.sum-wrap{font-family:'Heebo',sans-serif;direction:rtl;color:#1c1917;padding:16px 0 24px;}
+.sum-print-btn{display:block;width:100%;padding:12px;background:#1e293b;color:#fff;border:none;border-radius:10px;font-family:'Heebo',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;margin-bottom:16px;text-align:center;}
+@media print{.sum-print-btn{display:none;}}
+.sum-title{font-size:1.2rem;font-weight:900;margin-bottom:3px;}
+.sum-date{font-size:.7rem;color:#a8a29e;margin-bottom:16px;}
+.sum-section{background:#fff;border-radius:12px;padding:14px;margin-bottom:12px;border:1px solid #e7e5e4;}
+.sum-sec-title{font-size:.58rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#a8a29e;margin-bottom:9px;}
+.sum-table{width:100%;border-collapse:collapse;font-size:.8rem;}
+.sum-table td{padding:6px 4px;border-bottom:1px solid #f1f0ee;}
+.sum-table tbody tr:last-child td,.sum-table tfoot tr td{border-bottom:none;}
+.sum-total{background:#f0fdf4;font-weight:800;color:#16a34a;}
+.sum-total td{padding:9px 4px;border-top:2px solid #bbf7d0;}
+.sum-hero{background:#1e293b;border-radius:12px;padding:16px;color:#fff;margin-bottom:12px;}
+.sum-hero-label{font-size:.55rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:4px;}
+.sum-hero-amount{font-size:1.9rem;font-weight:900;color:#16a34a;margin-bottom:10px;}
+.sum-hero-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+.sum-hero-cell{background:rgba(255,255,255,.06);border-radius:8px;padding:8px 10px;}
+.sum-hero-val{font-size:.82rem;font-weight:800;}
+.sum-hero-lbl{font-size:.55rem;color:rgba(255,255,255,.35);margin-top:2px;}
+.sum-grace{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:11px 13px;margin-bottom:12px;font-size:.78rem;color:#78716c;}
+.sum-grace-title{font-size:.62rem;font-weight:800;color:#92400e;margin-bottom:5px;}
+.sum-footer{text-align:center;font-size:.65rem;color:#a8a29e;padding-top:12px;border-top:1px solid #e7e5e4;}
+
+
+/* ══ ACTION BAR BUTTONS ══ */
+.action-btn{flex:1;padding:11px 8px;border-radius:var(--r-sm);border:none;font-family:'Heebo',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;-webkit-tap-highlight-color:transparent;transition:opacity .15s;white-space:nowrap;}
+.action-btn:disabled{opacity:.35;cursor:not-allowed;}
+.action-compare{background:var(--navy);color:#fff;flex:1.4;}
+.action-clear{background:#f1f5f9;color:#475569;flex:1;}
+.action-delete{background:#fef2f2;color:#dc2626;border:1.5px solid #fecaca;flex:1;}
+.action-delete:not(:disabled):hover{background:#fee2e2;}
+.action-clear:hover{background:#e2e8f0;}
+.action-compare:not(:disabled):hover{opacity:.9;}
+@media(max-width:360px){.action-btn{font-size:.72rem;padding:10px 5px;}}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</style>
 </head>
 <body>
 
+<!-- GATE -->
 <div class="gate" id="gateOv">
+  
   <div class="gate-card">
     <div class="gate-eyebrow" id="gate-eyebrow">כלי לניתוח עסקאות שכירות</div>
     <div class="gate-title" id="gate-title-txt">השורה התחתונה</div>
@@ -259,6 +314,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
   </div>
 </div>
 
+<!-- HEADER -->
 <div class="hdr">
   <div class="hdr-inner">
     <div style="text-align:right">
@@ -266,19 +322,26 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
       <div class="hdr-sub" id="hdr-sub-txt">מחשבון מקצועי לניתוח עסקאות שכירות</div>
     </div>
     <button class="hdr-back" onclick="document.getElementById('gateOv').style.display='flex'"><span id="hdr-back-txt">↩ התחלה</span></button>
+    
   </div>
 </div>
 
+</div>
+
+<!-- MAIN PAGE -->
 <div class="page" id="mainPage">
+<!-- PROPERTY TABS -->
 <div class="prop-tabs-wrap">
   <div class="prop-tabs" id="propTabs"></div>
 </div>
 
+  <!-- Property name -->
   <div class="prop-name-row">
     <span class="prop-name-label" id="prop-name-label">🏢 <span id="prop-name-lbl-txt">שם הנכס</span>:</span>
     <input class="prop-name-inp" id="propNameInp" type="text" placeholder='למשל: רוטשילד 22, קומה 3, תל אביב' oninput="updatePropName(this.value)" onblur="onPropNameBlur(this.value)">
   </div>
 
+  <!-- STEP 1 -->
   <div class="sec">
     <div class="sec-hd"><div class="sec-num">1</div><div class="sec-title" id="step1-title">סוג הבניין</div></div>
     <div class="card">
@@ -306,13 +369,14 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
     </div>
   </div>
 
+  <!-- STEP 2 -->
   <div class="sec">
     <div class="sec-hd"><div class="sec-num">2</div><div class="sec-title" id="step2-title">שטח ועובדים</div></div>
     <div class="card">
       <div class="row">
         <div class="row-l">
           <div class="row-label" id="lbl-sqm">שטח המשרד (ברוטו)</div>
-          <div class="row-sub" id="sub-sqm">שטח כפי שמופיע בחוזה</div>
+          <div class="row-sub" id="netNote" id="sub-sqm">שטח כפי שמופיע בחוזה</div>
         </div>
         <div class="row-r">
           <div class="spin">
@@ -341,6 +405,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
     <div id="spaceNotice"></div>
   </div>
 
+  <!-- STEP 3 -->
   <div class="sec">
     <div class="sec-hd"><div class="sec-num">3</div><div class="sec-title" id="step3-title">אזור ושכירות</div></div>
     <div class="card">
@@ -366,14 +431,16 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
     </div>
   </div>
 
+  <!-- STEP 4 -->
   <div class="sec">
     <div class="sec-hd"><div class="sec-num">4</div><div class="sec-title" id="step4-title">עלויות נלוות</div></div>
     <div class="card">
+      <!-- ארנונה -->
       <div class="row" style="flex-direction:column;align-items:stretch;gap:10px;padding:14px 16px">
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
           <div>
             <div class="row-label" id="lbl-arn">ארנונה</div>
-            <div class="row-sub" id="sub-arn">34 ₪/מ"ר — ללא הנחה</div>
+            <div class="row-sub" id="arnSub" id="sub-arn" id="sub-arn">34 ₪/מ"ר — ללא הנחה</div>
           </div>
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
             <div class="tog-wrap">
@@ -381,8 +448,8 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
               <span class="tog-lbl" id="arn-software-lbl">הנחת תוכנה</span>
             </div>
             <div class="mode-btns">
-              <button class="mode-btn active" id="arnModeAuto" onclick="setArnMode('auto')">אוטו</button>
-              <button class="mode-btn" id="arnModeManual" onclick="setArnMode('manual')">ידני</button>
+              <button class="mode-btn active" id="arnModeAuto" onclick="setArnMode('auto')" id="arn-auto-btn">אוטו</button>
+              <button class="mode-btn" id="arnModeManual" onclick="setArnMode('manual')" id="arnManualBtn">ידני</button>
             </div>
             <div class="spin" id="arnManualSpin" style="display:none;margin-top:10px">
               <button class="spin-btn" onclick="adjArn(-1)">−</button>
@@ -421,9 +488,10 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
           <button class="spin-btn" onclick="adj('utils',+2)">+</button>
         </div></div>
       </div>
+      <!-- חניה -->
       <div class="row" style="border-top:1px solid var(--border)">
         <div class="row-l">
-          <div class="row-label" id="lbl-parking">מספר חניות</div>
+          <div class="row-label" id="lbl-parking" id="lbl-parking-spots">מספר חניות</div>
           <div class="row-sub" id="sub-parking">חניות חודשיות קבועות</div>
         </div>
         <div class="row-r">
@@ -450,6 +518,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
         </div>
       </div>
 
+      <!-- ריהוט -->
       <div class="row" style="border-top:1px solid var(--border)">
         <div class="row-l">
           <div class="row-label" id="lbl-furniture">עלות רכישת ריהוט</div>
@@ -465,6 +534,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
         </div>
       </div>
 
+      <!-- עלויות נוספות -->
       <div class="row" style="flex-direction:column;align-items:stretch;gap:10px;padding:14px 16px;border-top:1px solid var(--border)">
         <div style="display:flex;justify-content:space-between;align-items:center">
           <div>
@@ -472,8 +542,8 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
             <div class="row-sub" id="sub-extra">ביטוח, ציוד משרדי, שונות</div>
           </div>
           <div class="mode-btns">
-            <button class="mode-btn active" id="extraModePerSqm" onclick="setExtraMode('sqm')">₪/מ"ר</button>
-            <button class="mode-btn" id="extraModeTotal" onclick="setExtraMode('total')">סה"כ</button>
+            <button class="mode-btn active" id="extraModePerSqm" onclick="setExtraMode('sqm')" id="extra-sqm-btn">₪/מ"ר</button>
+            <button class="mode-btn" id="extraModeTotal" onclick="setExtraMode('total')" id="extra-total-btn">סה"כ</button>
           </div>
         </div>
         <div style="display:flex;justify-content:flex-end">
@@ -488,6 +558,9 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
     </div>
   </div>
 
+  <!-- STEP 4 המשך — חניה וריהוט מועברים לכאן -->
+
+  <!-- STEP 5 — תקופת ההסכם -->
   <div class="sec">
     <div class="sec-hd"><div class="sec-num">5</div><div class="sec-title" id="step5-title">תקופת ההסכם</div></div>
     <div class="card">
@@ -508,6 +581,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
     </div>
   </div>
 
+  <!-- STEP 6 — גרייס -->
   <div class="sec">
     <div class="sec-hd"><div class="sec-num">6</div><div class="sec-title" id="step6-title">💡 גרייס</div></div>
     <div class="card">
@@ -529,9 +603,13 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
     </div>
   </div>
 
+  <!-- RESULTS -->
   <div class="sec">
     <div class="sec-hd"><div class="sec-num" style="background:#16a34a">✓</div><div class="sec-title" id="summary-title-txt">סיכום פרטים</div></div>
+    <!-- כרטיס סיכום פרטים -->
     <div class="card" style="margin-bottom:10px">
+
+      <!-- שטח -->
       <div class="brow" style="background:#f8fafc;border-bottom:1px solid var(--border)">
         <span class="brow-lbl" id="lbl-area-hdr" style="font-weight:800;font-size:.7rem;letter-spacing:.8px;text-transform:uppercase;color:var(--ink3)">שטח</span>
       </div>
@@ -542,16 +620,20 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
         <span class="brow-val" id="gbBruto">—</span>
       </div>
 
+
+      <!-- פירוט עלויות -->
       <div class="brow" style="background:#f8fafc;border-bottom:1px solid var(--border);border-top:1px solid var(--border)">
         <span class="brow-lbl" style="font-weight:800;font-size:.7rem;letter-spacing:.8px;text-transform:uppercase;color:var(--ink3)" id="lbl-breakdown-hdr">פירוט עלויות חודשיות</span>
       </div>
       <div id="breakdown"></div>
 
+      <!-- סיכום סופי -->
       <div style="background:#1e293b;padding:18px 16px;margin-top:0;border-radius:0 0 var(--r) var(--r)">
         <div style="font-size:.58rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:6px" id="lbl-total-monthly">סה"כ עלויות חודשיות</div>
         <div style="font-size:2.2rem;font-weight:900;color:#16a34a;line-height:1" id="rMain">—</div>
         <div style="font-size:.7rem;color:rgba(255,255,255,.35);margin-top:4px;margin-bottom:12px" id="rSub">—</div>
 
+        <!-- גרייס — מוצג רק אם רלוונטי -->
         <div id="graceEffectiveRow" style="display:none;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:10px;padding:10px 14px;margin-bottom:14px">
           <div style="font-size:.6rem;color:#fbbf24;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:4px">💡 <span id='grace-effective-lbl'>אחרי גרייס — עלות אפקטיבית</span></div>
           <div style="font-size:1.6rem;font-weight:900;color:#fbbf24;line-height:1" id="rEffective">—</div>
@@ -581,7 +663,8 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
   </div>
 
 
-  <div class="sec print-hide" id="saveBtns">
+  <!-- SAVE BUTTONS -->
+  <div class="sec" id="saveBtns">
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button onclick="savePDF()" style="flex:1;min-width:140px;padding:13px 16px;background:#1e293b;color:#fff;border:none;border-radius:var(--r-sm);font-family:'Heebo',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .18s">
         <span id="save-btn-txt">📄 שמור PDF</span>
@@ -594,20 +677,22 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
       <span id="wa-btn-txt">שתף תקציר ב<span id="broker-wa-txt">וואטסאפ</span></span>
     </button>
+    <div id="pngStatus" style="display:none;font-size:.75rem;color:#1e293b;text-align:center;margin-top:8px;padding:10px 12px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;font-weight:600;transition:all .2s"></div>
   </div>
 
-  <div class="sec print-hide">
+  <!-- BROKER -->
+  <div class="sec">
     <div class="broker">
       <div class="broker-name">דון אלבורו</div>
       <div class="broker-title" id="broker-title-txt">מתווך משרדים מורשה</div>
       <div class="broker-text" id="broker-body-txt">מחפשים שטח ספציפי?<br>רוצים לשמוע על המלצות ומשרדים <em>"אוף מרקט"</em>?<br>צרו קשר ואעזור.</div>
       <div class="broker-btns">
         <a class="broker-btn wa" href="https://wa.me/9720507202874" target="_blank">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           וואטסאפ
         </a>
         <a class="broker-btn li" href="https://www.linkedin.com/in/don-alborough/" target="_blank">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
           <span id="broker-li-txt">לינקדין</span>
         </a>
         <a class="broker-btn tel" href="tel:0507202874">📞 050-720-2874</a>
@@ -615,12 +700,13 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
     </div>
   </div>
 
-  <div style="padding:0 4px;margin-top:4px" class="print-hide">
+  <div style="padding:0 4px;margin-top:4px">
     <p style="font-size:.62rem;color:var(--ink3);line-height:1.7;text-align:center" id="disclaimer-txt">* המספרים המוצגים הם הערכות מקובלות בענף המשרדים ומשמשים לצורך אינדיקציה בלבד. העלויות בפועל עשויות להשתנות בהתאם לעסקה הספציפית, מיקום הנכס, תנאי החוזה ופרמטרים נוספים. אין לראות בנתונים אלו ייעוץ מקצועי מחייב. <br>כל המחירים לפני מע"מ.</p>
   </div>
 </div>
 
-<div class="compare-bar print-hide">
+<!-- COMPARE BOTTOM BAR -->
+<div class="compare-bar">
   <div class="compare-bar-inner">
     <button class="action-btn action-delete" id="deletePropBtn" onclick="deleteCurrentProp()">🗑️ מחק נכס</button>
     <button class="action-btn action-clear" onclick="resetCurrentProp()">🧹 נקה שדות</button>
@@ -628,47 +714,33 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
   </div>
 </div>
 
+<!-- COMPARE MODAL -->
 <div class="compare-modal" id="compareModal">
-  <div class="compare-backdrop print-hide" onclick="closeCompare()"></div>
+  <div class="compare-backdrop" onclick="closeCompare()"></div>
   <div class="compare-sheet">
-    
-    <div class="print-only" style="text-align:center; margin-bottom:20px; padding-top:10px;">
-      <div class="logo-wrap" style="transform: scale(1.2);">
-        <span class="logo-top" style="color:#1e293b!important; font-size:1.1rem;">השורה</span>
-        <span class="logo-bottom" style="font-size:1.4rem;">התחתונה</span>
-      </div>
-      <div style="font-size:0.8rem; color:#64748b; margin-top:8px;">מחשבון מקצועי לניתוח עסקאות שכירות</div>
-    </div>
-
-    <div class="compare-hd print-hide">
+    <div class="compare-hd">
       <div class="compare-hd-title">⚖️ השוואת נכסים</div>
       <button class="compare-close" onclick="closeCompare()">✕</button>
     </div>
-    
     <div class="cmp-table" id="cmpTable"></div>
-    
-    <div class="landscape-hint print-hide">
+    <div class="landscape-hint" style="margin:8px 16px 4px;padding:8px 12px;background:#fff7ed;border-radius:8px;font-size:.72rem;color:#c2410c;font-weight:600;font-family:'Heebo',sans-serif;text-align:center;direction:rtl;">
       💡 לחוויית צפייה מיטבית, מומלץ לסובב את המכשיר לתצוגה אופקית
     </div>
-    
-    <div class="print-hide" style="padding:8px 16px 8px;display:flex;gap:8px">
+    <div style="padding:8px 16px 8px;display:flex;gap:8px">
       <button class="cmp-save-btn" onclick="saveCmpPDF()" style="flex:1;padding:12px;background:#1e293b;color:#fff;border:none;border-radius:var(--r-sm);font-family:'Heebo',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer">📄 שמור השוואה PDF</button>
       <button onclick="saveCmpPNG()" style="flex:1;padding:12px;background:#fff;color:#1e293b;border:1.5px solid #e7e5e4;border-radius:var(--r-sm);font-family:'Heebo',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer">🖼️ שמור תמונה</button>
     </div>
-
-    <div class="print-only" style="text-align:center; margin-top:30px; padding-top:15px; border-top:1px solid #e2e8f0; font-size:0.75rem; color:#64748b;">
-      הופק ע"י דון אלבורו - מתווך משרדים מורשה <br>
-      050-7202874 | linkedin.com/in/don-alborough
-    </div>
-
   </div>
 </div>
 
+<!-- SUMMARY MODAL -->
 <div id="summaryModal" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.55);overflow-y:auto;-webkit-overflow-scrolling:touch">
   <div style="min-height:100%;display:flex;flex-direction:column;align-items:center;padding:16px 0 40px">
     <div style="width:100%;max-width:580px;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.3);position:relative">
       <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid #e7e5e4;background:#fff;position:sticky;top:0;z-index:1;gap:8px">
         <div style="font-size:.88rem;font-weight:800;color:#1c1917;flex:1" id="summaryModalTitle">סיכום נכס</div>
+        <button onclick="savePDF()" style="padding:6px 12px;border-radius:8px;background:#1e293b;color:#fff;border:none;font-size:.72rem;font-weight:700;cursor:pointer;font-family:'Heebo',sans-serif;white-space:nowrap">📄 PDF</button>
+        <button onclick="savePNG()" style="padding:6px 12px;border-radius:8px;background:#f1f5f9;color:#475569;border:none;font-size:.72rem;font-weight:700;cursor:pointer;font-family:'Heebo',sans-serif;white-space:nowrap">🖼️ תמונה</button>
         <button onclick="closeSummaryModal()" style="width:30px;height:30px;border-radius:50%;background:#f1f0ee;border:none;font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">✕</button>
       </div>
       <div id="summaryModalBody" style="padding:0"></div>
@@ -677,16 +749,311 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 </div>
 
 <script>
-// ══ LANGUAGE TOGGLE (Remains intact) ══
+
+// ══ LANGUAGE TOGGLE ══
 let currentLang = 'he';
-// ... [כל המילון T נשאר ללא שינוי כדי לחסוך מקום בתשובה, לא מחקתי כלום!]
+
 const T = {
   he: {
-    gateEyebrow: 'כלי לניתוח עסקאות שכירות', gateTitle: 'השורה התחתונה', gateSub: 'הזינו נתונים, קבלו תמונה פיננסית מלאה – בשניות.'
-    // ... assumed present ...
+    // gate
+    gateEyebrow: 'כלי מקצועי · בחינם',
+    gateTitle: 'מחשבון עלויות משרד',
+    gateSub: 'כמה באמת עולה המשרד?<br>הזינו נתונים, קבלו תמונה פיננסית מלאה — בשניות.',
+    gateName: 'שם מלא', gateMail: 'כתובת מייל', gateCompany: 'שם חברה',
+    gateNamePh: 'ישראל ישראלי', gateMailPh: 'israel@company.com', gateCompanyPh: 'חברה בע״מ',
+    gateCta: 'כניסה לכלי',
+    gatePrivacy: 'הפרטים נשמרים במערכת ולא מועברים לצד שלישי.<br>© דון אלבורו',
+    // header
+    hdrTitle: 'מחשבון עלויות <em>משרד</em>',
+    hdrSub: 'השוואת נכסים · ברוטו/נטו · כל העלויות',
+    hdrBack: '↩ התחלה',
+    // prop name
+    propNamePh: 'למשל: רוטשילד 22, קומה 3, תל אביב',
+    // steps
+    step1: 'סוג הבניין', step2: 'שטח ועובדים', step3: 'אזור ושכירות',
+    step4: 'עלויות נלוות', step5: 'תקופת ההסכם', step6: '💡 גרייס',
+    // building types
+    bldA: 'מגדל · A Class', bldB: 'בוטיק · B Class', bldC: 'בניין עצמאי', bldCustom: 'יחס ידני',
+    // cities
+    cityTA: 'תל אביב מרכז', cityRG: 'רמת גן הבורסה', cityHZ: 'הרצליה פיתוח',
+    // labels
+    arnLabel: 'ארנונה', arnAuto: 'אוטו', arnManual: 'ידני', arnSoftware: 'הנחת תוכנה',
+    mgmtLabel: 'דמי ניהול', cleanLabel: 'ניקיון', utilsLabel: 'חשמל + אינטרנט',
+    extraLabel: 'עלויות נוספות', extraSqm: '₪/מ"ר', extraTotal: '₪ סה"כ',
+    parkingLabel: 'חניות', parkingSpotsLabel: 'מספר חניות', parkingPriceLabel: '₪ לחניה/חודש',
+    furnitureLabel: 'ריהוט משרדי', furnitureHint: '₪ עלות כוללת לרכישה',
+    monthsLabel: 'תקופת ההסכם', monthsUnit: 'חודשים',
+    graceLabel: 'חודשי גרייס', graceSub: 'חודשים ללא תשלום שכירות',
+    // summary
+    summaryTitle: 'סיכום פרטים',
+    saveBtn: '📄 שמור PDF', savePngBtn: '🖼️ שמור תמונה', waBtn: 'שתף תקציר בוואטסאפ',
+    compareBtn: '⚖️ השווה נכסים',
+    // broker
+    brokerTitle: 'דון אלבורו — מתווך משרדים מורשה',
+    // dynamic UI
+    noName: 'ללא שם', addProp: '+ הוסף נכס להשוואה',
+    sqmHdr: 'שטח', breakdownHdr: 'פירוט עלויות חודשיות',
+    totalMonthlyLbl: 'סה"כ עלויות חודשיות',
+    graceNote: 'חודשים ללא שכירות בתחילת ההסכם — מוצג כעלות אפקטיבית בסיכום.',
+    summaryModalTitle: 'סיכום נכס',
+    sqmBruto: 'שטח ברוטו', netEst: 'הערכת נטו',
+    monthlyBreakdown: 'פירוט עלויות חודשיות',
+    totalPeriod: 'סה"כ לתקופה', effectiveMonthly: 'עלות אפקטיבית לחודש',
+    graceSaving: 'חיסכון מגרייס',
+    // compare table
+    cmpSqmBruto: 'שטח ברוטו', cmpRent: 'שכירות', cmpArn: 'ארנונה',
+    cmpMgmt: 'דמי ניהול', cmpClean: 'ניקיון', cmpUtils: 'חשמל+אינטרנט',
+    cmpPerSqm: 'עלות למ"ר', cmpParkingSpots: 'חניות', cmpParkingPrice: 'מחיר/חניה',
+    cmpParkingTotal: 'עלות חניות', cmpFurniture: 'ריהוט פרוס',
+    cmpPeriod: 'תקופת הסכם', cmpGrace: 'גרייס', cmpMonthly: 'סה"כ לחודש',
+    cmpEffective: 'עלות אפקטיבית', cmpTotal: 'סה"כ לתקופה',
+    months: 'חודשים', noGrace: '—',
+    // row labels
+    lblSqm: 'שטח המשרד (ברוטו)', lblEmp: 'מספר עובדים',
+    lblRent: 'דמי שכירות', lblArn: 'ארנונה', lblMgmt: 'דמי ניהול',
+    lblClean: 'שירותי ניקיון', lblUtils: 'חשמל · אינטרנט · מים',
+    lblParkingSpots: 'מספר חניות', lblParkingPrice: 'מחיר חניה',
+    lblFurniture: 'עלות רכישת ריהוט', lblExtra: 'עלויות נוספות',
+    lblMonths: 'משך ההסכם', lblGrace: 'חודשי גרייס',
+    // row subs
+    subCustomRatio: 'הזן אם ידוע מהחוזה', subSqm: 'שטח כפי שמופיע בחוזה',
+    subRent: 'לפי הצעת המחיר', subArn: '34 ₪/מ"ר — ללא הנחה',
+    subMgmt: 'אחזקה + שירותים משותפים', subParking: 'חניות חודשיות קבועות',
+    subExtra: 'ביטוח, ציוד משרדי, שונות', subMonths: 'תקופה בטוחה בלבד, ללא אופציה',
+    subGrace: 'הזן רק אם סוכם במו"מ',
+    // bruto/neto explanation
+    brutoExplain: 'ברוטו = מה שרשום בחוזה · נטו = מה שמשתמשים בפועל.',
+    // units
+    unitSqm: 'מ"ר', unitEmp: 'עובד', unitMonths: 'חודשים',
+    // arn chips
+    arnSoftwareChip: 'הנחת תוכנה (17 ₪)',
+  },
+  en: {
+    // gate
+    gateEyebrow: 'Professional Tool · Free',
+    gateTitle: 'Office Cost Calculator',
+    gateSub: 'What does the office really cost?<br>Enter your data, get a full financial picture — in seconds.',
+    gateName: 'Full Name', gateMail: 'Email Address', gateCompany: 'Company Name',
+    gateNamePh: 'John Smith', gateMailPh: 'john@company.com', gateCompanyPh: 'Company Ltd',
+    gateCta: 'Enter Tool',
+    gatePrivacy: 'Details are stored securely and never shared with third parties.<br>© Don Alborough',
+    // header
+    hdrTitle: 'Office Cost <em>Calculator</em>',
+    hdrSub: 'Compare Properties · Gross/Net · All Costs',
+    hdrBack: '↩ Start Over',
+    // prop name
+    propNamePh: 'e.g. 22 Rothschild Blvd, Floor 3, Tel Aviv',
+    // steps
+    step1: 'Building Type', step2: 'Area & Employees', step3: 'Location & Rent',
+    step4: 'Additional Costs', step5: 'Lease Period', step6: '💡 Grace Period',
+    // building types
+    bldA: 'Tower · A Class', bldB: 'Boutique · B Class', bldC: 'Standalone', bldCustom: 'Custom Ratio',
+    // cities
+    cityTA: 'Tel Aviv Center', cityRG: 'Ramat Gan Exchange', cityHZ: 'Herzliya Pituach',
+    // labels
+    arnLabel: 'Municipal Tax', arnAuto: 'Auto', arnManual: 'Manual', arnSoftware: 'Software Discount',
+    mgmtLabel: 'Management Fees', cleanLabel: 'Cleaning', utilsLabel: 'Electric + Internet',
+    extraLabel: 'Additional Costs', extraSqm: '₪/sqm', extraTotal: '₪ Total',
+    parkingLabel: 'Parking', parkingSpotsLabel: 'No. of Spots', parkingPriceLabel: '₪ per Spot/Month',
+    furnitureLabel: 'Office Furniture', furnitureHint: '₪ Total Purchase Cost',
+    monthsLabel: 'Lease Period', monthsUnit: 'months',
+    graceLabel: 'Grace Months', graceSub: 'Rent-free months',
+    // summary
+    summaryTitle: 'Summary',
+    saveBtn: '📄 Save PDF', savePngBtn: '🖼️ Save Image', waBtn: 'Share Summary on WhatsApp',
+    compareBtn: '⚖️ Compare Properties',
+    // broker
+    brokerTitle: 'Don Alborough — Licensed Office Broker',
+    // dynamic UI
+    noName: 'No Name', addProp: '+ Add Property to Compare',
+    sqmHdr: 'Area', breakdownHdr: 'Monthly Cost Breakdown',
+    totalMonthlyLbl: 'Total Monthly Costs',
+    graceNote: 'Rent-free months at the start of the lease — shown as effective cost in summary.',
+    summaryModalTitle: 'Property Summary',
+    sqmBruto: 'Gross Area', netEst: 'Net Estimate',
+    monthlyBreakdown: 'Monthly Cost Breakdown',
+    totalPeriod: 'Total for Period', effectiveMonthly: 'Effective Monthly Cost',
+    graceSaving: 'Grace Savings',
+    // compare table
+    cmpSqmBruto: 'Gross Area', cmpRent: 'Rent', cmpArn: 'Municipal Tax',
+    cmpMgmt: 'Management', cmpClean: 'Cleaning', cmpUtils: 'Electric+Internet',
+    cmpPerSqm: 'Cost/sqm', cmpParkingSpots: 'Parking Spots', cmpParkingPrice: 'Price/Spot',
+    cmpParkingTotal: 'Parking Cost', cmpFurniture: 'Furniture (spread)',
+    cmpPeriod: 'Lease Period', cmpGrace: 'Grace', cmpMonthly: 'Total/Month',
+    cmpEffective: 'Effective Cost', cmpTotal: 'Total for Period',
+    months: 'months', noGrace: '—',
+    // row labels
+    lblSqm: 'Office Area (Gross)', lblEmp: 'No. of Employees',
+    lblRent: 'Monthly Rent', lblArn: 'Municipal Tax', lblMgmt: 'Management Fees',
+    lblClean: 'Cleaning Services', lblUtils: 'Electric · Internet · Water',
+    lblParkingSpots: 'No. of Parking Spots', lblParkingPrice: 'Price per Spot',
+    lblFurniture: 'Furniture Purchase Cost', lblExtra: 'Additional Costs',
+    lblMonths: 'Lease Duration', lblGrace: 'Grace Months',
+    // row subs
+    subCustomRatio: 'Enter if known from lease', subSqm: 'Area as stated in lease',
+    subRent: 'Per proposal', subArn: '34 ₪/sqm — no discount',
+    subMgmt: 'Maintenance + shared services', subParking: 'Fixed monthly parking',
+    subExtra: 'Insurance, office supplies, misc.', subMonths: 'Firm period only, no option',
+    subGrace: 'Enter only if agreed in negotiation',
+    // bruto/neto explanation
+    brutoExplain: 'Gross = area in lease · Net = actual usable space.',
+    // units
+    unitSqm: 'sqm', unitEmp: 'emp', unitMonths: 'months',
+    // arn chips
+    arnSoftwareChip: 'Software Discount (17 ₪)',
   }
 };
 
+function toggleLang(){
+  currentLang = currentLang === 'he' ? 'en' : 'he';
+  applyLang();
+}
+
+function applyLang(){
+  const t = T[currentLang];
+
+  // dir + lang
+  document.documentElement.setAttribute('dir', 'rtl');
+  document.documentElement.setAttribute('lang', 'he');
+  // force all text alignment
+  document.querySelectorAll('.card,.sec,.brow,.row,.gate-card,.broker,.hdr-inner').forEach(el=>{
+    el.style.direction = 'rtl';
+    el.style.textAlign = 'right';
+  });
+  document.querySelectorAll('.brow-val,.row-r').forEach(el=>{
+    el.style.textAlign = 'left';
+  });
+
+  // lang button
+  document.getElementById('langBtn').textContent = 'EN';
+  const lb2 = document.getElementById('langBtnGate');
+  if(lb2) lb2.textContent = 'EN';
+
+  // gate
+  _setText('gate-eyebrow', t.gateEyebrow);
+  _setHTML('gate-title-txt', t.gateTitle);
+  _setHTML('gate-sub-txt', t.gateSub);
+  _setText('gate-label-name', t.gateName);
+  _setText('gate-label-mail', t.gateMail);
+  _setText('gate-label-company', t.gateCompany);
+  _setAttr('gateName', 'placeholder', t.gateNamePh);
+  _setAttr('gateMail', 'placeholder', t.gateMailPh);
+  _setAttr('gateCompany', 'placeholder', t.gateCompanyPh);
+  _setHTML('gate-cta-txt', t.gateCta);
+  _setHTML('gate-privacy-txt', t.gatePrivacy);
+
+  // header
+  _setHTML('hdr-title-txt', t.hdrTitle);
+  _setText('hdr-sub-txt', t.hdrSub);
+  _setText('hdr-back-txt', t.hdrBack);
+
+  // prop name placeholder
+  _setAttr('propNameInp', 'placeholder', t.propNamePh);
+
+  // steps
+  _setText('step1-title', t.step1); _setText('step2-title', t.step2);
+  _setText('step3-title', t.step3); _setText('step4-title', t.step4);
+  _setText('step5-title', t.step5); _setText('step6-title', t.step6);
+
+  // building chips
+  _setText('bld-a', t.bldA); _setText('bld-b', t.bldB);
+  _setText('bld-c', t.bldC); _setText('bld-custom', t.bldCustom);
+
+  // city chips
+  _setText('city-ta', t.cityTA); _setText('city-rg', t.cityRG); _setText('city-hz', t.cityHZ);
+
+  // section labels
+  _setText('lbl-arn', t.arnLabel); _setText('arn-auto-btn', t.arnAuto); _setText('arnManualBtn', t.arnManual);
+  _setText('lbl-mgmt', t.mgmtLabel); _setText('lbl-clean', t.cleanLabel); _setText('lbl-utils', t.utilsLabel);
+  _setText('lbl-extra', t.extraLabel); _setText('extra-sqm-btn', t.extraSqm); _setText('extra-total-btn', t.extraTotal);
+  _setText('lbl-parking', t.parkingLabel); _setText('lbl-parking-spots', t.parkingSpotsLabel); _setText('lbl-parking-price', t.parkingPriceLabel);
+  _setText('lbl-furniture', t.furnitureLabel); // lbl-furniture-hint removed - covered by lbl-furniture
+  _setText('lbl-months', t.monthsLabel); _setText('lbl-grace', t.graceLabel); _setText('sub-grace', t.graceSub);
+
+  // row labels
+  _setText('lbl-sqm', t.lblSqm); _setText('lbl-emp', t.lblEmp);
+  _setText('lbl-rent', t.lblRent); _setText('lbl-arn', t.lblArn);
+  _setText('lbl-mgmt', t.lblMgmt); _setText('lbl-clean', t.lblClean);
+  _setText('lbl-utils', t.lblUtils); _setText('lbl-parking-spots', t.lblParkingSpots);
+  _setText('lbl-parking-price', t.lblParkingPrice); _setText('lbl-furniture', t.lblFurniture);
+  _setText('lbl-extra', t.lblExtra); _setText('lbl-months', t.lblMonths);
+  _setText('lbl-grace', t.lblGrace);
+
+  // row subs
+  _setText('sub-custom-ratio', t.subCustomRatio); _setText('sub-sqm', t.subSqm);
+  _setText('sub-rent', t.subRent); _setText('sub-arn', t.subArn);
+  _setText('sub-mgmt', t.subMgmt); _setText('sub-parking', t.subParking);
+  _setText('sub-extra', t.subExtra); _setText('sub-months', t.subMonths);
+  _setText('sub-grace', t.subGrace);
+
+  // bruto/neto explanation
+  _setHTML('bruto-explain', `<strong>${'ברוטו'}</strong> ${'= מה שרשום בחוזה'} &nbsp;·&nbsp; <strong>${'נטו'}</strong> ${'= מה שמשתמשים בפועל.'}`);
+
+  // summary + buttons
+  _setText('summary-title-txt', t.summaryTitle);
+  _setText('lbl-cell-monthly', 'שכ"ד חודשי');
+  _setText('lbl-cell-yearly', 'שכ"ד שנתי');
+  _setText('lbl-cell-sqm', '₪ למ"ר');
+  _setHTML('save-btn-txt', t.saveBtn); _setHTML('save-png-btn-txt', t.savePngBtn);
+  _setHTML('wa-btn-txt', t.waBtn); _setText('compare-btn-txt', t.compareBtn);
+  _setText('broker-title-txt', t.brokerTitle);
+  _setText('lbl-breakdown-hdr', t.breakdownHdr);
+  _setText('lbl-total-monthly', t.totalMonthlyLbl);
+  _setText('lbl-area-hdr', t.sqmHdr);
+  _setText('lbl-area-brow', 'שטח ברוטו');
+  _setText('prop-name-lbl-txt', 'שם הנכס');
+  _setHTML('grace-note-txt', t.graceNote);
+  _setText('grace-effective-lbl', 'אחרי גרייס — עלות אפקטיבית');
+  // force recalc to refresh dynamic rows
+  calc();
+  updateArnSub();
+  // spin units
+  _setText('unit-sqm', 'מ"ר');
+  _setText('unit-emp', 'עובד');
+  _setText('unit-rent', '₪/מ"ר');
+  _setText('unit-arn', '₪/מ"ר');
+  _setText('unit-mgmt', '₪/מ"ר');
+  _setText('unit-clean', '₪/מ"ר');
+  _setText('unit-utils', '₪/מ"ר');
+  _setText('unit-parking-spots', 'חניה');
+  _setText('unit-parking-price', '₪/חניה');
+  _setText('unit-months', 'חודש');
+  _setText('unit-grace', 'חודש');
+  // extra mode buttons
+  const extSqmBtn = document.getElementById('extra-sqm-btn');
+  if(extSqmBtn) extSqmBtn.textContent = '₪/מ"ר';
+  const extTotBtn = document.getElementById('extra-total-btn');
+  if(extTotBtn) extTotBtn.textContent = 'סה"כ';
+  // arn toggle
+  _setText('arn-auto-btn', 'אוטו');
+  const arnManualBtn = document.getElementById('arnManualBtn');
+  if(arnManualBtn) arnManualBtn.textContent = 'ידני';
+  _setText('arn-software-lbl', 'הנחת תוכנה');
+  // broker card
+  _setHTML('broker-body-txt', 'מחפשים שטח ספציפי?<br>רוצים לשמוע על המלצות ומשרדים <em>"אוף מרקט"</em>?<br>צרו קשר ואעזור.');
+  _setText('broker-wa-txt', 'וואטסאפ');
+  _setText('broker-li-txt', 'לינקדין');
+  // disclaimer
+  _setText('disclaimer-txt', '* המספרים המוצגים הם הערכות מקובלות בענף המשרדים ומשמשים לצורך אינדיקציה בלבד. העלויות בפועל עשויות להשתנות בהתאם לעסקה הספציפית, מיקום הנכס, תנאי החוזה ופרמטרים נוספים. אין לראות בנתונים אלו ייעוץ מקצועי מחייב.');
+  _setText('summaryModalTitle', t.summaryModalTitle);
+  // add property button
+  const apb = document.getElementById('addPropBtn');
+  if(apb) apb.textContent = t.addProp;
+  // tab "no name" — re-render tabs
+  renderTabs();
+
+  // recalc to refresh dynamic text
+  calc();
+}
+
+function _setText(id, val){ const el=document.getElementById(id); if(el) el.textContent=val; }
+
+// helper לטקסט דינמי לפי שפה נוכחית
+function txt(key){ return (T[currentLang]||T.he)[key] || T.he[key] || key; }
+function _setHTML(id, val){ const el=document.getElementById(id); if(el) el.innerHTML=val; }
+function _setAttr(id, attr, val){ const el=document.getElementById(id); if(el) el.setAttribute(attr, val); }
+
+// ══ MULTI-PROPERTY STATE ══
 const defaultProp = () => ({
   name:'',sqm:480,emp:40,rent:160,arn:false,arnMode:'auto',arnManual:34,
   mgmt:20,clean:8,utils:12,extra:0,extraMode:'sqm',
@@ -703,8 +1070,8 @@ const fmt = n => Math.round(n).toLocaleString('he');
 const clamp = (v,mn,mx) => Math.max(mn,Math.min(mx,v));
 const IDEAL_MIN=10, IDEAL_MAX=14, IDEAL_WARN=18;
 const S = () => props[curProp];
-const _sentProps = new Set();
-const _sentPropsFinal = new Map();
+const _sentProps = new Set(); // נכסים שנשלחו (שליחה ראשונה)
+const _sentPropsFinal = new Map(); // {name: {sqm, rent}} — נתונים שנשלחו בשליחה הסופית
 
 // ══ TABS ══
 function renderTabs(){
@@ -724,22 +1091,38 @@ function renderTabs(){
     add.onclick = addProperty;
     wrap.appendChild(add);
   }
+  // show/hide action buttons based on props count
   const multi = props.length > 1;
   const cmpBtn = document.getElementById('compareBtn');
   const delBtn = document.getElementById('deletePropBtn');
   if(cmpBtn){ cmpBtn.disabled = !multi; cmpBtn.style.opacity = multi ? '1' : '.4'; }
   if(delBtn){ delBtn.disabled = !multi; }
+  // legacy addPropBtn in case it exists
+  const addBtn = document.getElementById('addPropBtn');
+  if(addBtn) addBtn.style.display = props.length >= 3 ? 'none' : 'flex';
 }
 
-function switchProp(i){ curProp = i; loadPropToUI(); renderTabs(); }
+function switchProp(i){
+  curProp = i;
+  loadPropToUI();
+  renderTabs();
+}
+
 function addProperty(){
   if(props.length >= 3) return;
   props.push(defaultProp());
   curProp = props.length - 1;
-  renderTabs(); loadPropToUI();
+  renderTabs();
+  loadPropToUI();
   window.scrollTo({top:0, behavior:'smooth'}); saveState();
 }
-function updatePropName(val){ S().name = val; renderTabs(); saveState(); }
+
+function updatePropName(val){
+  const p = S();
+  p.name = val;
+  renderTabs(); saveState();
+}
+
 function onPropNameBlur(val){
   const trimmed=val.trim();
   if(!trimmed) return;
@@ -760,72 +1143,185 @@ function loadPropToUI(){
   document.getElementById('extraInp').value = p.extra;
   document.getElementById('customPctInp').value = p.customPct;
   document.getElementById('arnManualInp').value = p.arnManual;
+
+  // building chips
   document.querySelectorAll('#bldgChips .chip').forEach(c => {
     c.classList.toggle('sel', !p.useCustomRatio && parseFloat(c.dataset.ratio)===p.grossRatio);
   });
   document.getElementById('customRatioTog').classList.toggle('on', p.useCustomRatio);
   document.getElementById('customRatioSpin').style.display = p.useCustomRatio ? 'flex' : 'none';
+
+  // city chips
+  const cityMap = {160:'תל אביב מרכז',130:'רמת גן הבורסה',110:'הרצליה פיתוח'};
   document.querySelectorAll('#cityChips .chip').forEach(c => {
     const rent = parseInt(c.getAttribute('onclick').match(/\d+/)[0]);
     c.classList.toggle('sel', rent===p.rent);
   });
+
   document.getElementById('monthsInp').value = p.months;
   document.getElementById('graceInp').value = p.grace;
   document.getElementById('furnitureInp').value = p.furniture;
   document.getElementById('parkingSpotsInp').value = p.parkingSpots;
   document.getElementById('parkingPriceInp').value = p.parkingPrice;
+
+  // arn
   document.getElementById('arnTog').classList.toggle('on', p.arn);
   setArnModeUI(p.arnMode);
   document.getElementById('arnManualSpin').style.display = p.arnMode==='manual' ? 'flex' : 'none';
+
+  // extra
   setExtraModeUI(p.extraMode);
+
   calc();
 }
 
-function onInput(key,el){ const v=parseInt(el.value); if(!isNaN(v)&&v>0){ S()[key]=v; calc(); if(key==='sqm'||key==='rent') maybeSendPropUpdate(); } }
-function adj(key,d){ const lim={sqm:[50,9999],emp:[1,2000],rent:[30,500],mgmt:[0,100],clean:[0,60],utils:[0,60],extra:[0,200],customPct:[5,50],parkingSpots:[0,200],parkingPrice:[0,2000],grace:[0,24]}; S()[key]=clamp(S()[key]+d,lim[key][0],lim[key][1]); document.getElementById(key+'Inp').value=S()[key]; calc(); if(key==='sqm'||key==='rent') maybeSendPropUpdate(); saveState(); }
-function setCity(el,rent){ document.querySelectorAll('#cityChips .chip').forEach(c=>c.classList.remove('sel')); el.classList.add('sel'); S().rent=rent; document.getElementById('rentInp').value=rent; calc(); maybeSendPropUpdate(); saveState(); }
-function toggleCustomRatio(){ S().useCustomRatio=!S().useCustomRatio; document.getElementById('customRatioTog').classList.toggle('on',S().useCustomRatio); document.getElementById('customRatioSpin').style.display=S().useCustomRatio?'flex':'none'; document.querySelectorAll('#bldgChips .chip').forEach(c=>c.classList.toggle('sel',!S().useCustomRatio&&parseFloat(c.dataset.ratio)===S().grossRatio)); calc(); }
-function setBldg(el,ratio){ S().useCustomRatio=false; document.getElementById('customRatioTog').classList.remove('on'); document.getElementById('customRatioSpin').style.display='none'; document.querySelectorAll('#bldgChips .chip').forEach(c=>c.classList.remove('sel')); el.classList.add('sel'); S().grossRatio=ratio; calc(); saveState(); }
-function toggleArn(){ S().arn=!S().arn; document.getElementById('arnTog').classList.toggle('on',S().arn); updateArnSub(); calc(); saveState(); }
-function setArnModeUI(mode){ document.getElementById('arnModeAuto').classList.toggle('active', mode==='auto'); document.getElementById('arnModeManual').classList.toggle('active', mode==='manual'); const amr=document.getElementById('arnManualSpin'); if(amr) amr.style.display=mode==='manual'?'flex':'none'; }
-function setArnMode(mode){ S().arnMode=mode; setArnModeUI(mode); updateArnSub(); calc(); saveState(); }
-function adjArn(d){ S().arnManual=Math.max(0,S().arnManual+d); document.getElementById('arnManualInp').value=S().arnManual; calc(); }
-function onInputArn(el){ const v=parseInt(el.value); if(!isNaN(v)&&v>=0){S().arnManual=v;calc();} }
-function updateArnSub(){ const p=S(); if(p.arnMode==='manual') document.getElementById('sub-arn').textContent=p.arnManual+' ₪/מ"ר — הזנה ידנית'; else document.getElementById('sub-arn').textContent=p.arn?'17 ₪/מ"ר — הנחת עסקי תוכנה':'34 ₪/מ"ר — ללא הנחה'; }
-function setExtraModeUI(mode){ document.getElementById('extraModePerSqm').classList.toggle('active', mode==='sqm'); document.getElementById('extraModeTotal').classList.toggle('active', mode==='total'); document.getElementById('extraUnit').textContent = mode==='sqm'?'₪/מ"ר':'₪/חודש'; }
-function setExtraMode(mode){ S().extraMode=mode; S().extra=0; document.getElementById('extraInp').value=0; setExtraModeUI(mode); calc(); }
-function adjExtra(d){ const step=S().extraMode==='sqm'?1:50; S().extra=Math.max(0,S().extra+d*step); document.getElementById('extraInp').value=S().extra; calc(); }
-function onInputExtra(el){ const v=parseInt(el.value); if(!isNaN(v)&&v>=0){S().extra=v;calc();} }
-function adjMonths(d){ S().months = Math.max(6, Math.min(120, S().months + d)); document.getElementById('monthsInp').value = S().months; calc(); }
-function onInputMonths(el){ const v = parseInt(el.value); if(!isNaN(v) && v >= 6) { S().months = v; calc(); } }
-function adjFurniture(d){ S().furniture = Math.max(0, S().furniture + d); document.getElementById('furnitureInp').value = S().furniture; calc(); }
-function onInputFurniture(el){ const v = parseInt(el.value); if(!isNaN(v) && v >= 0) { S().furniture = v; calc(); } }
+// ══ INPUTS ══
+function onInput(key,el){
+  const v=parseInt(el.value);
+  if(!isNaN(v)&&v>0){
+    S()[key]=v;
+    calc();
+    if(key==='sqm'||key==='rent') maybeSendPropUpdate();
+  }
+}
+function adj(key,d){
+  const lim={sqm:[50,9999],emp:[1,2000],rent:[30,500],mgmt:[0,100],clean:[0,60],utils:[0,60],extra:[0,200],customPct:[5,50],parkingSpots:[0,200],parkingPrice:[0,2000],grace:[0,24]};
+  S()[key]=clamp(S()[key]+d,lim[key][0],lim[key][1]);
+  document.getElementById(key+'Inp').value=S()[key];
+  calc();
+  if(key==='sqm'||key==='rent') maybeSendPropUpdate();
+  saveState();
+}
+function setCity(el,rent){
+  document.querySelectorAll('#cityChips .chip').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  S().rent=rent; document.getElementById('rentInp').value=rent; calc();
+  maybeSendPropUpdate(); saveState();
+}
+function toggleCustomRatio(){
+  S().useCustomRatio=!S().useCustomRatio;
+  document.getElementById('customRatioTog').classList.toggle('on',S().useCustomRatio);
+  document.getElementById('customRatioSpin').style.display=S().useCustomRatio?'flex':'none';
+  document.querySelectorAll('#bldgChips .chip').forEach(c=>c.classList.toggle('sel',!S().useCustomRatio&&parseFloat(c.dataset.ratio)===S().grossRatio));
+  calc();
+}
+function setBldg(el,ratio){
+  S().useCustomRatio=false;
+  document.getElementById('customRatioTog').classList.remove('on');
+  document.getElementById('customRatioSpin').style.display='none';
+  document.querySelectorAll('#bldgChips .chip').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel'); S().grossRatio=ratio; calc(); saveState();
+}
+function toggleArn(){
+  S().arn=!S().arn;
+  document.getElementById('arnTog').classList.toggle('on',S().arn);
+  updateArnSub(); calc(); saveState();
+}
+function setArnModeUI(mode){
+  document.getElementById('arnModeAuto').classList.toggle('active', mode==='auto');
+  document.getElementById('arnModeManual').classList.toggle('active', mode==='manual');
+  const amr=document.getElementById('arnManualSpin'); if(amr) amr.style.display=mode==='manual'?'flex':'none';
+}
+function setArnMode(mode){
+  S().arnMode=mode;
+  setArnModeUI(mode);
+  updateArnSub(); calc(); saveState();
+}
+function adjArn(d){
+  S().arnManual=Math.max(0,S().arnManual+d);
+  document.getElementById('arnManualInp').value=S().arnManual;
+  calc();
+}
+function onInputArn(el){
+  const v=parseInt(el.value);
+  if(!isNaN(v)&&v>=0){S().arnManual=v;calc();}
+}
+function updateArnSub(){
+  const p=S(); const ie=currentLang==='en';
+  if(p.arnMode==='manual') document.getElementById('arnSub').textContent=p.arnManual+(ie?' ₪/sqm — manual entry':' ₪/מ"ר — הזנה ידנית');
+  else document.getElementById('arnSub').textContent=p.arn?(ie?'17 ₪/sqm — software business discount':'17 ₪/מ"ר — הנחת עסקי תוכנה'):(ie?'34 ₪/sqm — no discount':'34 ₪/מ"ר — ללא הנחה');
+}
+function setExtraModeUI(mode){
+  document.getElementById('extraModePerSqm').classList.toggle('active', mode==='sqm');
+  document.getElementById('extraModeTotal').classList.toggle('active', mode==='total');
+  document.getElementById('extraUnit').textContent = mode==='sqm'?(currentLang==='en'?'₪/sqm':'₪/מ"ר'):(currentLang==='en'?'₪/mo':'₪/חודש');
+}
+function setExtraMode(mode){
+  S().extraMode=mode; S().extra=0;
+  document.getElementById('extraInp').value=0;
+  setExtraModeUI(mode); calc();
+}
+function adjExtra(d){
+  const step=S().extraMode==='sqm'?1:50;
+  S().extra=Math.max(0,S().extra+d*step);
+  document.getElementById('extraInp').value=S().extra; calc();
+}
+function onInputExtra(el){
+  const v=parseInt(el.value);
+  if(!isNaN(v)&&v>=0){S().extra=v;calc();}
+}
+
+function adjMonths(d){
+  S().months = Math.max(6, Math.min(120, S().months + d));
+  document.getElementById('monthsInp').value = S().months;
+  calc();
+}
+function onInputMonths(el){
+  const v = parseInt(el.value);
+  if(!isNaN(v) && v >= 6) { S().months = v; calc(); }
+}
+function adjFurniture(d){
+  S().furniture = Math.max(0, S().furniture + d);
+  document.getElementById('furnitureInp').value = S().furniture;
+  calc();
+}
+function onInputFurniture(el){
+  const v = parseInt(el.value);
+  if(!isNaN(v) && v >= 0) { S().furniture = v; calc(); }
+}
 function updateGrace(p, r){
   const graceRow = document.getElementById('graceEffectiveRow');
-  if(!p.grace || p.grace <= 0){ graceRow.style.display='none'; return; }
+  if(!p.grace || p.grace <= 0){
+    graceRow.style.display='none';
+    return;
+  }
   graceRow.style.display='block';
   document.getElementById('rEffective').textContent = fmt(r.effectiveMonthly) + ' ₪';
-  document.getElementById('rEffectiveSub').textContent = 'חיסכון ' + fmt(r.graceSaving) + ' ₪/חודש · הנחה ' + r.gracePct + '% · חיסכון לתקופה: ' + fmt(r.graceSaving * p.months) + ' ₪';
+  document.getElementById('rEffectiveSub').textContent =
+    'חיסכון ' + fmt(r.graceSaving) + ' ₪/חודש · הנחה ' + r.gracePct + '% · חיסכון לתקופה: ' + fmt(r.graceSaving * p.months) + ' ₪';
 }
 function updateParkingSub(){
-  const p = S(); const total = p.parkingSpots * p.parkingPrice;
-  document.getElementById('parkingSub').textContent = total > 0 ? fmt(total) + ' ₪/חודש סה"כ' : '';
+  const p = S();
+  const total = p.parkingSpots * p.parkingPrice;
+  document.getElementById('parkingSub').textContent =
+    total > 0 ? fmt(total) + ' ₪/חודש סה"כ' : '';
 }
 function updateFurnitureSub(){
   const p = S();
   if(p.furniture > 0){
     const perSqmPerMonth = (p.furniture / p.sqm / p.months).toFixed(1);
-    document.getElementById('furnitureSub').textContent = fmt(p.furniture) + ' ₪ → ' + perSqmPerMonth + ' ₪/מ"ר/חודש לאורך ' + p.months + ' חודשים';
-  } else { document.getElementById('furnitureSub').textContent = ''; }
+    document.getElementById('furnitureSub').textContent =
+      fmt(p.furniture) + ' ₪ → ' + perSqmPerMonth + ' ₪/מ"ר/חודש לאורך ' + p.months + ' חודשים';
+  } else {
+    document.getElementById('furnitureSub').textContent = '';
+  }
 }
 
+// ══ CALC ══
 function calcProp(p){
   const bruto=p.sqm;
   const effectiveRatio=p.useCustomRatio?(1+p.customPct/100):p.grossRatio;
   const net=Math.round(bruto/effectiveRatio);
   const arn=p.arnMode==='manual'?p.arnManual:(p.arn?17:34);
   const extraPerSqm=p.extraMode==='sqm'?p.extra:(p.extra>0?Math.round(p.extra/bruto):0);
-  const rows=[ {l:'שכירות',v:p.rent}, {l:('ארנונה')+(p.arn&&p.arnMode!=='manual'?(' (הנחת תוכנה)'):''),v:arn}, {l:'דמי ניהול',v:p.mgmt}, {l:'שירותי ניקיון',v:p.clean}, {l:'חשמל, אינטרנט, מים',v:p.utils}, ...(p.extra>0?[{l:'עלויות נוספות',v:extraPerSqm}]:[]), ];
+  const rows=[
+    {l:'שכירות',v:p.rent},
+    {l:('ארנונה')+(p.arn&&p.arnMode!=='manual'?(' (הנחת תוכנה)'):''),v:arn},
+    {l:'דמי ניהול',v:p.mgmt},
+    {l:'שירותי ניקיון',v:p.clean},
+    {l:'חשמל, אינטרנט, מים',v:p.utils},
+    ...(p.extra>0?[{l:'עלויות נוספות',v:extraPerSqm}]:[]),
+  ];
   const perSqm=rows.reduce((s,r)=>s+r.v,0);
   const monthly=perSqm*bruto;
   const parkingMonthly = p.parkingSpots * p.parkingPrice;
@@ -840,42 +1336,90 @@ function calcProp(p){
 }
 
 function calc(){
-  const p=S(); const r=calcProp(p);
-  document.getElementById('sub-sqm').textContent='≈ '+r.net+' מ"ר נטו בפועל';
-  document.getElementById('sqmPerEmpInline').textContent=r.sqmPerEmp.toFixed(1)+' מ"ר לעובד';
-  updateFurnitureSub(); updateParkingSub(); updateGrace(p, r);
+  const p=S();
+  const r=calcProp(p);
+  document.getElementById('netNote').textContent='≈ '+r.net+(' מ"ר נטו בפועל');
+  const empSubEl=document.getElementById('sqmPerEmpInline'); if(empSubEl) empSubEl.textContent=r.sqmPerEmp.toFixed(1)+' מ"ר לעובד';
+  updateFurnitureSub();
+  updateParkingSub();
+  updateGrace(p, r);
   const totalPerSqm = (r.totalMonthly / r.bruto).toFixed(1);
   const rMainEl = document.getElementById('rMain');
   if(rMainEl.textContent !== fmt(r.totalMonthly)+' ₪'){
-    rMainEl.style.transition='none'; rMainEl.style.opacity='0'; rMainEl.style.transform='translateY(4px)';
-    requestAnimationFrame(()=>{ rMainEl.textContent=fmt(r.totalMonthly)+' ₪'; rMainEl.style.transition='opacity .25s,transform .25s'; rMainEl.style.opacity='1'; rMainEl.style.transform='translateY(0)'; });
-  } else { rMainEl.textContent=fmt(r.totalMonthly)+' ₪'; }
-  document.getElementById('rSub').textContent=fmt(r.bruto)+' מ"ר ברוטו';
+    rMainEl.style.transition='none';
+    rMainEl.style.opacity='0';
+    rMainEl.style.transform='translateY(4px)';
+    requestAnimationFrame(()=>{
+      rMainEl.textContent=fmt(r.totalMonthly)+' ₪';
+      rMainEl.style.transition='opacity .25s,transform .25s';
+      rMainEl.style.opacity='1';
+      rMainEl.style.transform='translateY(0)';
+    });
+  } else {
+    rMainEl.textContent=fmt(r.totalMonthly)+' ₪';
+  }
+  document.getElementById('rSub').textContent=fmt(r.bruto)+' '+(currentLang==='en'?'sqm Gross':'מ"ר ברוטו');
   document.getElementById('rPerSqm').textContent=fmt(r.totalMonthly)+' ₪';
   document.getElementById('rPerSqmVal').textContent = totalPerSqm + ' ₪';
   document.getElementById('rYear').textContent=fmt(r.totalMonthly*12)+' ₪';
   const periodDisplay = p.grace>0 ? r.effectiveMonthly*p.months : r.totalMonthly*p.months;
   document.getElementById('rPeriod').textContent=fmt(periodDisplay)+' ₪';
-  document.getElementById('rPeriodLbl').textContent=(p.grace>0?'₪ אפקטיבי ל-':'₪ ל-')+p.months+' חודשים';
-  document.getElementById('gbBruto').textContent=fmt(r.bruto)+' מ"ר';
-  document.getElementById('gbNet').textContent='הערכת נטו: '+fmt(r.net)+' מ"ר (−'+r.pct+'% שטחים משותפים)';
+  document.getElementById('rPeriodLbl').textContent=(p.grace>0?('₪ אפקטיבי ל-'):('₪ ל-'))+p.months+' '+txt('months')+('');
+  document.getElementById('gbBruto').textContent=fmt(r.bruto)+(' מ"ר');
+  document.getElementById('sqmPerEmpInline').textContent=r.sqmPerEmp.toFixed(1)+(' מ"ר ברוטו לעובד');
+  document.getElementById('gbNet').textContent=('הערכת נטו: ')+fmt(r.net)+(' מ"ר (−')+r.pct+('% שטחים משותפים)');
 
-  const bpe=r.sqmPerEmp; const idealBruto=Math.ceil(p.emp*IDEAL_MIN/50)*50; const maxBruto=Math.floor(p.emp*IDEAL_MAX/50)*50;
+  const bpe=r.sqmPerEmp;
+  const idealBruto=Math.ceil(p.emp*IDEAL_MIN/50)*50;
+  const maxBruto=Math.floor(p.emp*IDEAL_MAX/50)*50;
   let nh='';
   if(bpe<IDEAL_MIN) nh=`<div class="notice bad"><span class="notice-icon">⚠️</span><div class="notice-text"><strong>צפוף מדי — ${bpe.toFixed(1)} מ"ר/עובד</strong>מינימום מומלץ ${IDEAL_MIN} מ"ר. שקול לשדרג לכ-${idealBruto} מ"ר.</div></div>`;
-  else if(bpe<=IDEAL_MAX) nh=`<div class="notice ok"><span class="notice-icon">✅</span><div class="notice-text"><strong>שטח אידאלי — ${bpe.toFixed(1)} מ"ר/עובד</strong>בדיוק בטווח המומלץ (${IDEAL_MIN}–${IDEAL_MAX} מ"ר לעובד).</div></div>`;
+  else if(bpe<=IDEAL_MAX) nh=`<div class="notice ok"><span class="notice-icon">✅</span><div class="notice-text"><strong>${'שטח אידאלי'} — ${bpe.toFixed(1)} ${'מ"ר/עובד'}</strong>${'בדיוק בטווח המומלץ('}${IDEAL_MIN}–${IDEAL_MAX} ${'מ"ר לעובד).'}</div></div>`;
   else if(bpe<=IDEAL_WARN) nh=`<div class="notice warn"><span class="notice-icon">💡</span><div class="notice-text"><strong>קצת גדול — ${bpe.toFixed(1)} מ"ר/עובד</strong>הטווח האידאלי ${IDEAL_MIN}–${IDEAL_MAX} מ"ר. שווה לבחון כ-${maxBruto} מ"ר.</div></div>`;
   else nh=`<div class="notice warn"><span class="notice-icon">💡</span><div class="notice-text"><strong>שטח גדול משמעותית — ${bpe.toFixed(1)} מ"ר/עובד</strong>יש מרווח לצמיחה משמעותית.</div></div>`;
   document.getElementById('spaceNotice').innerHTML=nh;
 
-  const parkingRow = r.parkingMonthly > 0 ? `<div class="brow"><span class="brow-lbl">חניות (${p.parkingSpots} × ${p.parkingPrice} ₪)</span><span class="brow-val">${r.parkingPerSqm.toFixed(1)} ₪/מ"ר · ${fmt(r.parkingMonthly)} ₪</span></div>` : '';
-  const furnitureRow = r.furnitureMonthly > 0 ? `<div class="brow"><span class="brow-lbl">ריהוט משרדי (פרוס ל-${p.months} חודשים)</span><span class="brow-val">${r.furniturePerSqmMonth.toFixed(1)} ₪/מ"ר · ${fmt(r.furnitureMonthly)} ₪</span></div>` : '';
-  document.getElementById('breakdown').innerHTML= r.rows.map(row=>`<div class="brow"><span class="brow-lbl">${row.l}</span><span class="brow-val">${row.v} ₪/מ"ר · ${fmt(row.v*r.bruto)} ₪</span></div>`).join('')+parkingRow+furnitureRow;
+  const parkingRow = r.parkingMonthly > 0
+    ? `<div class="brow"><span class="brow-lbl">חניות (${p.parkingSpots} × ${p.parkingPrice} ₪)</span><span class="brow-val">${r.parkingPerSqm.toFixed(1)} ₪/מ"ר · ${fmt(r.parkingMonthly)} ₪</span></div>`
+    : '';
+  const furnitureRow = r.furnitureMonthly > 0
+    ? `<div class="brow"><span class="brow-lbl">ריהוט משרדי (פרוס ל-${p.months} חודשים)</span><span class="brow-val">${r.furniturePerSqmMonth.toFixed(1)} ₪/מ"ר · ${fmt(r.furnitureMonthly)} ₪</span></div>`
+    : '';
+  document.getElementById('breakdown').innerHTML=
+    r.rows.map(row=>`<div class="brow"><span class="brow-lbl">${row.l}</span><span class="brow-val">${row.v} ₪/${'מ"ר'} · ${fmt(row.v*r.bruto)} ₪</span></div>`).join('')+
+    parkingRow+
+    furnitureRow+
+    "";
+
+
   updateArnSub();
+
 }
 
-function sendPropToSheets(p,r){} // mock for save
-function maybeSendPropUpdate(){} // mock
+
+// ══ PROP TRACKING ══
+
+function sendPropToSheets(p,r){
+  if(!p.name) return;
+  let userName='',userMail='';
+  try{const s=JSON.parse(localStorage.getItem('office_session')||'null');if(s){userName=s.name||'';userMail=s.mail||'';}}catch(e){}
+  const params=new URLSearchParams({sheet:'נכסים',name:userName,mail:userMail,
+    propName:p.name,sqm:p.sqm||'',rent:p.rent||'',totalMonthly:r.totalMonthly||'',months:p.months||'',grace:p.grace||''});
+  try{const img=new Image();img.onerror=()=>{};img.src='https://script.google.com/macros/s/AKfycbyivyw8rHoib5Rhz-NUsbqYf_7O1bmINHZfhPQR3sFk2P5QTiec4lKuyWQYXnZPhMWJ_A/exec?'+params.toString();}catch(e){}
+}
+
+function maybeSendPropUpdate(){
+  const p=S();
+  const trimmed=(p.name||'').trim();
+  if(!trimmed) return;
+  if(!_sentProps.has(trimmed)) return;
+  if(p.sqm===480 || p.rent===160) return; // המתן שגם sqm וגם rent הוזנו
+  const prev=_sentPropsFinal.get(trimmed);
+  if(prev&&prev.sqm===p.sqm&&prev.rent===p.rent) return;
+  _sentPropsFinal.set(trimmed,{sqm:p.sqm,rent:p.rent});
+  const r=calcProp(p);
+  sendPropToSheets(p,r);
+}
 
 function openCompare(){
   if(props.length < 2) return;
@@ -885,7 +1429,9 @@ function openCompare(){
   const hasFurniture = results.some(x=>x.p.furniture>0);
   const n = results.length;
 
+  // כותרות עמודות — sticky
   let html = `<div style="display:grid;grid-template-columns:120px repeat(${n},1fr);gap:0;margin-bottom:0;position:sticky;top:0;z-index:20;border-radius:10px 10px 0 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.12)">`;
+  // header row
   html += `<div style="padding:10px 12px;background:#1e293b;font-size:.6rem;color:rgba(255,255,255,.4)"></div>`;
   results.forEach(({p},i)=>{
     html += `<div style="padding:10px 12px;background:#1e293b;text-align:center;">
@@ -895,12 +1441,16 @@ function openCompare(){
   });
   html += '</div>';
 
+  // פונקציה לשורת טבלה
+  // בדוק אם כל הערכים זהים
   const allSame = vals => vals.every(v=>v===vals[0]);
+
   const row = (label, vals, opts={}) => {
     const {bold, arrow, separator, subLabel, icon} = opts;
     const same = allSame(vals);
     const sepStyle = separator ? 'border-top:2px solid #e2e8f0;' : 'border-top:1px solid #f1f0ee;';
     const labelBg = separator ? 'background:#f1f5f9;' : 'background:#fafaf9;';
+    // שורות זהות — טקסט מעומעם; שורות שונות — טקסט כהה ובולט
     const valColor = same ? '#b0aaa4' : '#1c1917';
     const valWeight = bold ? '800' : (same ? '400' : '600');
     let r = `<div style="display:grid;grid-template-columns:130px repeat(${n},1fr);gap:0;${sepStyle}">`;
@@ -924,42 +1474,73 @@ function openCompare(){
     return r;
   };
 
+  // גוף הטבלה
   html += `<div id="cmpTableBody" style="border:1px solid #e7e5e4;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;margin-bottom:16px">`;
-  html += row('שטח ברוטו', results.map(({p})=>fmt(p.sqm)+' מ"ר'), {bold:true, icon:'📐'});
-  html += row('שכירות', results.map(({p})=>p.rent+' ₪/מ"ר'), {separator:true, icon:'💰'});
-  html += row('ארנונה', results.map(({p})=>{ return (p.arnMode==='manual'?p.arnManual:(p.arn?17:34))+' ₪/מ"ר'; }), {icon:'🏛'});
-  html += row('דמי ניהול', results.map(({p})=>p.mgmt+' ₪/מ"ר'), {icon:'🔧'});
-  html += row('ניקיון', results.map(({p})=>p.clean+' ₪/מ"ר'), {icon:'🧹'});
-  html += row('חשמל+אינטרנט', results.map(({p})=>p.utils+' ₪/מ"ר'), {icon:'⚡'});
-  html += row('עלות למ"ר', results.map(({p,r})=>r.perSqm+' ₪/מ"ר'), {bold:true, icon:'Σ'});
 
+  // שטח
+  html += row(txt('cmpSqmBruto'), results.map(({p})=>fmt(p.sqm)+' מ"ר'), {bold:true, icon:'📐'});
+
+  // מחירים
+  html += row(txt('cmpRent'), results.map(({p})=>p.rent+' ₪/מ"ר'), {separator:true, icon:'💰'});
+  html += row(txt('cmpArn'), results.map(({p})=>{
+    if(p.arnMode==='manual') return p.arnManual+' ₪/מ"ר';
+    return (p.arn?17:34)+' ₪/מ"ר';
+  }), {icon:'🏛'});
+  html += row(txt('cmpMgmt'), results.map(({p})=>p.mgmt+' ₪/מ"ר'), {icon:'🔧'});
+  html += row(txt('cmpClean'), results.map(({p})=>p.clean+' ₪/מ"ר'), {icon:'🧹'});
+  html += row(txt('cmpUtils'), results.map(({p})=>p.utils+' ₪/מ"ר'), {icon:'⚡'});
+  html += row(txt('cmpPerSqm'), results.map(({p,r})=>r.perSqm+' ₪/מ"ר'), {bold:true, icon:'Σ'});
+
+  // חניה
   if(hasParking){
-    html += row('חניות', results.map(({p})=>p.parkingSpots>0?p.parkingSpots+' חניות':'—'), {separator:true, icon:'🅿'});
-    html += row('מחיר/חניה', results.map(({p})=>p.parkingSpots>0?fmt(p.parkingPrice)+' ₪':'—'), {icon:'🅿'});
-    html += row('עלות חניות', results.map(({p,r})=>r.parkingMonthly>0?fmt(r.parkingMonthly)+' ₪/חודש':'—'), {icon:'🅿'});
+    html += row(txt('cmpParkingSpots'), results.map(({p})=>p.parkingSpots>0?p.parkingSpots+' חניות':'—'), {separator:true, icon:'🅿'});
+    html += row(txt('cmpParkingPrice'), results.map(({p})=>p.parkingSpots>0?fmt(p.parkingPrice)+' ₪':'—'), {icon:'🅿'});
+    html += row(txt('cmpParkingTotal'), results.map(({p,r})=>r.parkingMonthly>0?fmt(r.parkingMonthly)+' ₪/חודש':'—'), {icon:'🅿'});
   }
+
+  // ריהוט
   if(hasFurniture){
-    html += row('ריהוט פרוס', results.map(({p,r})=>r.furnitureMonthly>0?fmt(r.furnitureMonthly)+' ₪/חודש':'—'), {separator:true, subLabel:'פרוס לתקופה', icon:'🪑'});
+    html += row(txt('cmpFurniture'), results.map(({p,r})=>r.furnitureMonthly>0?fmt(r.furnitureMonthly)+' ₪/חודש':'—'), {separator:true, subLabel:'פרוס לתקופה', icon:'🪑'});
   }
 
-  html += row('תקופת הסכם', results.map(({p})=>p.months+' חודשים'), {separator:true, icon:'📅'});
-  if(hasGrace){
-    html += row('גרייס', results.map(({p})=>p.grace>0?p.grace+' חודשים':'ללא'), {separator:true, icon:'🎁'});
-  }
-  html += row('סה"כ לחודש', results.map(({p,r})=>fmt(r.totalMonthly)+' ₪'), {bold:true, separator:true, icon:'∑'});
+  // תקופה
+  html += row(txt('cmpPeriod'), results.map(({p})=>p.months+' '+txt('months')), {separator:true, icon:'📅'});
+
+  // סה"כ
+  const minTotal = Math.min(...results.map(x=>x.r.totalMonthly));
+  const minEff = Math.min(...results.map(x=>x.r.effectiveMonthly));
 
   if(hasGrace){
-    html += row('עלות אפקטיבית', results.map(({p,r})=>fmt(r.effectiveMonthly)+' ₪'), { bold:true, subLabel:'לחודש אחרי גרייס', icon:'∑', arrow: results.map(({p})=>p.grace>0) });
+    html += row(txt('cmpGrace'), results.map(({p})=>p.grace>0?p.grace+' '+txt('months'):'ללא'), {separator:true, icon:'🎁'});
   }
-  html += row('סה"כ לתקופה', results.map(({p,r})=>fmt(r.effectiveMonthly*p.months)+' ₪'), { subLabel: hasGrace ? 'כולל חיסכון מגרייס' : null, icon:'∑', arrow: hasGrace ? results.map(({p})=>p.grace>0) : null });
+
+  html += row(txt('cmpMonthly'), results.map(({p,r})=>fmt(r.totalMonthly)+' ₪'), {bold:true, separator:true, icon:'∑'});
+
+  if(hasGrace){
+    html += row(txt('cmpEffective'), results.map(({p,r})=>fmt(r.effectiveMonthly)+' ₪'), {
+      bold:true, subLabel:'לחודש אחרי גרייס', icon:'∑',
+      arrow: results.map(({p})=>p.grace>0)
+    });
+  }
+
+  html += row(txt('cmpTotal'), results.map(({p,r})=>fmt(r.effectiveMonthly*p.months)+' ₪'), {
+    subLabel: hasGrace ? 'כולל חיסכון מגרייס' : null, icon:'∑',
+    arrow: hasGrace ? results.map(({p})=>p.grace>0) : null
+  });
 
   html += '</div>';
+
+
+
   document.getElementById('cmpTable').innerHTML = html;
   document.getElementById('compareModal').classList.add('open');
 }
 
-function closeCompare(){ document.getElementById('compareModal').classList.remove('open'); }
+function closeCompare(){
+  document.getElementById('compareModal').classList.remove('open');
+}
 
+// ══ GATE ══
 function checkSession(){
   try{
     const s=JSON.parse(localStorage.getItem('office_session')||'null');
@@ -980,34 +1561,51 @@ function gateSubmit(){
     localStorage.setItem('office_leads',JSON.stringify(ex));
     localStorage.setItem('office_session',JSON.stringify({name:nameVal,mail:mailVal,ts:Date.now()}));
   }catch(e){}
+  try{
+    const img=new Image();
+    img.onerror=()=>{};
+    img.src='https://script.google.com/macros/s/AKfycbyivyw8rHoib5Rhz-NUsbqYf_7O1bmINHZfhPQR3sFk2P5QTiec4lKuyWQYXnZPhMWJ_A/exec?name='+encodeURIComponent(nameVal)+'&mail='+encodeURIComponent(mailVal);
+  }catch(e){}
   document.querySelectorAll('.gate-card > *:not(#gateSuccess)').forEach(el=>el.style.display='none');
   document.getElementById('gateSuccess').style.display='block';
   setTimeout(()=>{document.getElementById('gateOv').style.display='none';}, 2000);
 }
+window.showLeads=function(){
+  try{const l=JSON.parse(localStorage.getItem('office_leads')||'[]');if(!l.length){alert('אין לידים');return;}prompt('לידים:',l.map((x,i)=>`${i+1}. ${x.name}|${x.mail}|${x.ts}`).join('\n'));}catch(e){alert('שגיאה');}
+};
 
-/* ── PDF BRANDING FOR SINGLE PROPERTY ── */
 function buildSummaryHTML(p, r){
   const arn = p.arnMode==='manual'?p.arnManual:(p.arn?17:34);
-  const rows = [ {l:'שכירות', v:p.rent}, {l:('ארנונה')+(p.arn&&p.arnMode!=='manual'?(' (הנחת תוכנה)'):''), v:arn}, {l:'דמי ניהול', v:p.mgmt}, {l:'שירותי ניקיון', v:p.clean}, {l:'חשמל, אינטרנט, מים', v:p.utils} ];
-  if(p.extra>0){ const ep = p.extraMode==='sqm'?p.extra:Math.round(p.extra/p.sqm); rows.push({l:'עלויות נוספות', v:ep}); }
-  const rowsHTML = rows.map(row=>`<tr><td>${row.l}</td><td style="text-align:left;font-weight:700">${row.v} ₪/מ"ר</td><td style="text-align:left;font-weight:700">${fmt(row.v*p.sqm)} ₪</td></tr>`).join('');
+  const rows = [
+    {l:'שכירות', v:p.rent},
+    {l:('ארנונה')+(p.arn&&p.arnMode!=='manual'?(' (הנחת תוכנה)'):''), v:arn},
+    {l:'דמי ניהול', v:p.mgmt},
+    {l:'שירותי ניקיון', v:p.clean},
+    {l:'חשמל, אינטרנט, מים', v:p.utils},
+  ];
+  if(p.extra>0){
+    const ep = p.extraMode==='sqm'?p.extra:Math.round(p.extra/p.sqm);
+    rows.push({l:'עלויות נוספות', v:ep});
+  }
+  const rowsHTML = rows.map(row=>`
+    <tr><td>${row.l}</td><td style="text-align:left;font-weight:700">${row.v} ₪/מ"ר</td><td style="text-align:left;font-weight:700">${fmt(row.v*p.sqm)} ₪</td></tr>`).join('');
   const parkingHTML = r.parkingMonthly>0?`<tr><td>חניות (${p.parkingSpots} × ${p.parkingPrice} ₪)</td><td></td><td style="text-align:left;font-weight:700">${fmt(r.parkingMonthly)} ₪</td></tr>`:'';
   const furnitureHTML = r.furnitureMonthly>0?`<tr><td>ריהוט (פרוס ל-${p.months} חודשים)</td><td style="text-align:left">${r.furniturePerSqmMonth.toFixed(1)} ₪/מ"ר</td><td style="text-align:left;font-weight:700">${fmt(r.furnitureMonthly)} ₪</td></tr>`:'';
-  const graceHTML = p.grace>0?`<div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 14px;margin-top:16px"><div style="font-size:.65rem;font-weight:800;color:#92400e;margin-bottom:6px">💡 גרייס ${p.grace} חודשים</div><div style="font-size:.8rem;color:#78716c">עלות אפקטיבית: <strong style="color:#92400e">${fmt(r.effectiveMonthly)} ₪/חודש</strong> | הנחה: <strong>${r.gracePct}%</strong> | חיסכון לתקופה: <strong>${fmt(r.graceSaving*p.months)} ₪</strong></div></div>`:'';
+  const graceHTML = p.grace>0?`
+    <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 14px;margin-top:16px">
+      <div style="font-size:.65rem;font-weight:800;color:#92400e;margin-bottom:6px">💡 גרייס ${p.grace} חודשים</div>
+      <div style="font-size:.8rem;color:#78716c">עלות אפקטיבית: <strong style="color:#92400e">${fmt(r.effectiveMonthly)} ₪/חודש</strong> | הנחה: <strong>${r.gracePct}%</strong> | חיסכון לתקופה: <strong>${fmt(r.saving*p.months)} ₪</strong></div>
+    </div>`:'';
   const effectiveRatio = p.useCustomRatio?(1+p.customPct/100):p.grossRatio;
   const pct = Math.round((effectiveRatio-1)*100);
-  
-  return `<!DOCTYPE html><html dir="rtl"><head>
+  return `<!DOCTYPE html><html dir="${'rtl'}"><head>
     <meta charset="UTF-8">
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
       *{box-sizing:border-box;margin:0;padding:0}
       body{font-family:'Heebo',sans-serif;direction:rtl;background:#f8fafc;color:#1c1917;padding:24px;max-width:600px;margin:0 auto}
-      .brand-hdr {text-align:center; margin-bottom:15px;}
-      .logo-top {font-size:1.1rem;font-weight:700;color:#1e293b;letter-spacing:.5px;}
-      .logo-bottom {font-size:1.4rem;font-weight:900;color:#d97706;letter-spacing:.5px;border-top:3px double #d97706;padding-top:3px;display:inline-block;}
-      h1{font-size:1.3rem;font-weight:900;margin-bottom:4px;text-align:center;}
-      .sub{font-size:.75rem;color:#a8a29e;margin-bottom:20px;text-align:center;}
+      h1{font-size:1.3rem;font-weight:900;margin-bottom:4px}
+      .sub{font-size:.75rem;color:#a8a29e;margin-bottom:20px}
       .section{background:#fff;border-radius:12px;padding:16px;margin-bottom:14px;border:1px solid #e7e5e4}
       .sec-title{font-size:.6rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#a8a29e;margin-bottom:10px}
       table{width:100%;border-collapse:collapse;font-size:.82rem}
@@ -1023,17 +1621,16 @@ function buildSummaryHTML(p, r){
       .hero-lbl{font-size:.58rem;color:rgba(255,255,255,.35);margin-top:2px}
       .footer{text-align:center;font-size:.68rem;color:#a8a29e;margin-top:20px;padding-top:14px;border-top:1px solid #e7e5e4}
       .print-btn{display:block;width:100%;padding:13px;background:#1e293b;color:#fff;border:none;border-radius:10px;font-family:'Heebo',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;margin-bottom:16px;text-align:center}
-      @media print{ .print-btn{display:none} div{page-break-inside:avoid} body{padding:12px} }
+      @media print{
+      .print-btn{display:none}
+      div{page-break-inside:avoid}
+      body{padding:12px}
+    }
     </style>
   </head><body>
     <button class="print-btn" onclick="window.print()">📄 הדפס / שמור PDF</button>
-    
-    <div class="brand-hdr">
-      <span class="logo-top">השורה</span><br><span class="logo-bottom">התחתונה</span>
-    </div>
-    
     <h1>${p.name||'סיכום נכס'}</h1>
-    <div class="sub">${new Date().toLocaleDateString('he-IL')} · מחשבון עסקאות שכירות</div>
+    <div class="sub">${new Date().toLocaleDateString('he-IL')} · דון אלבורו — מתווך משרדים מורשה</div>
     <div class="section">
       <div class="sec-title">שטח</div>
       <table>
@@ -1063,22 +1660,59 @@ function buildSummaryHTML(p, r){
       </div>
     </div>
     ${graceHTML}
-    <div class="footer">הופק ע"י דון אלבורו - מתווך משרדים מורשה <br> 050-7202874 | linkedin.com/in/don-alborough</div>
+    <div class="footer">הופק על ידי דון אלבורו — מתווך משרדים מורשה<br>050-720-2874 · linkedin.com/in/don-alborough</div>
+  </body></html>`;
+}
+
+function buildCmpHTML(){
+  const results = props.map(p => ({p, r:calcProp(p)}));
+  return `<!DOCTYPE html><html dir="${'rtl'}"><head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+      *{box-sizing:border-box;margin:0;padding:0}
+      body{font-family:'Heebo',sans-serif;direction:rtl;background:#f8fafc;color:#1c1917;padding:24px;max-width:680px;margin:0 auto}
+      h1{font-size:1.2rem;font-weight:900;margin-bottom:4px}
+      .sub{font-size:.75rem;color:#a8a29e;margin-bottom:20px}
+      .print-btn{display:block;width:100%;padding:13px;background:#1e293b;color:#fff;border:none;border-radius:10px;font-family:'Heebo',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;margin-bottom:16px}
+      @media print{.print-btn{display:none}}
+      ${document.getElementById('cmpTable').innerHTML.includes('winner')?'.winner{background:#f0fdfa;border-color:#99f6e4!important;}.winner .cmp-cell-val{color:#0f766e}':''}
+      .cmp-label{font-size:.68rem;color:#a8a29e;font-weight:700;padding:8px 0 4px;border-bottom:1px solid #e7e5e4;grid-column:1/-1;text-transform:uppercase;letter-spacing:.8px}
+      .cmp-cell{background:#fff;border-radius:8px;padding:10px 12px;border:1px solid #e7e5e4;text-align:center}
+      .cmp-cell-val{font-size:.9rem;font-weight:800;color:#1c1917}
+      .cmp-cell-sub{font-size:.6rem;color:#a8a29e;margin-top:2px}
+      .cmp-winner-badge{font-size:.56rem;background:#0f766e;color:#fff;border-radius:4px;padding:2px 5px;font-weight:800;margin-top:3px;display:inline-block}
+      .cmp-row{display:grid;gap:8px;margin-bottom:8px}
+      .footer{text-align:center;font-size:.68rem;color:#a8a29e;margin-top:20px;padding-top:14px;border-top:1px solid #e7e5e4}
+    </style>
+  </head><body>
+    <button class="print-btn" onclick="window.print()">📄 הדפס / שמור PDF</button>
+    <h1>⚖️ השוואת נכסים</h1>
+    <div class="sub">${new Date().toLocaleDateString('he-IL')} · דון אלבורו — מתווך משרדים מורשה</div>
+    <div style='position:relative'>${document.getElementById('cmpTable').innerHTML}</div>
+    <div class="footer">הופק על ידי דון אלבורו — מתווך משרדים מורשה<br>050-720-2874 · linkedin.com/in/don-alborough</div>
   </body></html>`;
 }
 
 function openSummaryWindow(htmlContent){
+  // חלץ את התוכן מה-HTML ל-modal
   const parser = new DOMParser();
   const doc = parser.parseFromString(htmlContent, 'text/html');
+  // הסר כפתור הדפסה (יש כפתור משלנו)
   doc.querySelectorAll('.print-btn').forEach(el=>el.remove());
   const body = doc.body ? doc.body.innerHTML : htmlContent;
+  // הוסף styles מה-document
   const styles = [...doc.querySelectorAll('style')].map(s=>s.outerHTML).join('');
+
   document.getElementById('summaryModalBody').innerHTML = `<div style="padding:16px 16px 24px;direction:rtl;font-family:'Heebo',sans-serif">${styles}${body}</div>`;
   document.getElementById('summaryModal').style.display = 'block';
   document.body.style.overflow = 'hidden';
 }
 
-function closeSummaryModal(){ document.getElementById('summaryModal').style.display = 'none'; document.body.style.overflow = ''; }
+function closeSummaryModal(){
+  document.getElementById('summaryModal').style.display = 'none';
+  document.body.style.overflow = '';
+}
 
 function shareWhatsApp(){
   const p=S(), r=calcProp(p);
@@ -1086,40 +1720,99 @@ function shareWhatsApp(){
   const totalPerSqm=(r.totalMonthly/p.sqm).toFixed(0);
   let msg='';
   msg+=p.name?`🏢 *${p.name}*\n`:'';
-  msg+=`\nשטח: ${fmt(p.sqm)} מ"ר ברוטו\nתקופה: ${p.months} חודשים`;
+  msg+=`\nשטח: ${fmt(p.sqm)} מ"ר ברוטו\n`;
+  msg+=`תקופה: ${p.months} חודשים`;
   msg+=p.grace>0?` · גרייס ${p.grace} חודשים`:'';
-  msg+=`\n\n💰 *פירוט עלויות למ"ר:*\n• שכירות: ${p.rent} ₪\n• ארנונה: ${arn} ₪${(p.arn&&p.arnMode!=='manual')?' (הנחת תוכנה)':''}\n• ניהול: ${p.mgmt} ₪\n• ניקיון: ${p.clean} ₪\n• חשמל+אינטרנט: ${p.utils} ₪\n`;
+  msg+=`\n\n💰 *פירוט עלויות למ"ר:*\n`;
+  msg+=`• שכירות: ${p.rent} ₪\n`;
+  msg+=`• ארנונה: ${arn} ₪${(p.arn&&p.arnMode!=='manual')?' (הנחת תוכנה)':''}\n`;
+  msg+=`• ניהול: ${p.mgmt} ₪\n• ניקיון: ${p.clean} ₪\n• חשמל+אינטרנט: ${p.utils} ₪\n`;
   if(p.extra>0){const ep=p.extraMode==='sqm'?p.extra:Math.round(p.extra/p.sqm);msg+=`• עלויות נוספות: ${ep} ₪\n`;}
   if(r.parkingMonthly>0) msg+=`• חניות (${p.parkingSpots}): ${fmt(r.parkingMonthly)} ₪\n`;
   if(r.furnitureMonthly>0) msg+=`• ריהוט (פרוס): ${fmt(r.furnitureMonthly)} ₪\n`;
-  msg+=`*סה"כ למ"ר: ${totalPerSqm} ₪*\n\n📊 *עלויות:*\n• חודשי: *${fmt(r.totalMonthly)} ₪*\n• שנתי: *${fmt(r.totalMonthly*12)} ₪*\n• ${p.months} חודשים: *${fmt(r.totalMonthly*p.months)} ₪*\n`;
-  if(p.grace>0){ msg+=`\n💡 *אחרי גרייס:*\n• עלות אפקטיבית: ${fmt(r.effectiveMonthly)} ₪/חודש\n• חיסכון לתקופה: ${fmt(r.graceSaving*p.months)} ₪\n`; }
+  msg+=`*סה"כ למ"ר: ${totalPerSqm} ₪*\n\n`;
+  msg+=`📊 *עלויות:*\n• חודשי: *${fmt(r.totalMonthly)} ₪*\n`;
+  msg+=`• שנתי: *${fmt(r.totalMonthly*12)} ₪*\n`;
+  msg+=`• ${p.months} חודשים: *${fmt(r.totalMonthly*p.months)} ₪*\n`;
+  if(p.grace>0){
+    msg+=`\n💡 *אחרי גרייס:*\n`;
+    msg+=`• עלות אפקטיבית: ${fmt(r.effectiveMonthly)} ₪/חודש\n`;
+    msg+=`• חיסכון לתקופה: ${fmt(r.graceSaving*p.months)} ₪\n`;
+  }
   msg+=`\n_הופק באמצעות השורה התחתונה — דון אלבורו_`;
   window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
 }
 
+
+function sendFinalIfNeeded(){
+  try{
+    const p=S();
+    const trimmed=(p.name||'').trim();
+    if(!trimmed) return;
+    if(!_sentProps||!_sentProps.has(trimmed)) return;
+    const r=calcProp(p);
+    sendPropToSheets&&sendPropToSheets(p,r);
+  }catch(e){}
+}
+
 function savePDF(){
+  sendFinalIfNeeded && sendFinalIfNeeded();
   const p=S(), r=calcProp(p);
   r.saving=r.graceSaving;
   const content=buildSummaryHTML(p,r);
+  // פתח חלון חדש — המשתמש ישתמש ב-Print → Save as PDF
   const win=window.open('','_blank','width=650,height=900');
-  if(!win){ openSummaryWindow(content); return; }
-  win.document.write(content); win.document.close(); win.focus();
+  if(!win){
+    // Popup blocked — fallback למודל עם הדפסה
+    openSummaryWindow(content);
+    return;
+  }
+  win.document.write(content);
+  win.document.close();
+  win.focus();
   setTimeout(()=>win.print(), 600);
 }
 
 function savePNG(){
+  sendFinalIfNeeded && sendFinalIfNeeded();
   const p=S(), r=calcProp(p);
+  r.saving=r.graceSaving;
+  // פתח modal עם תוכן לצילום
   openSummaryWindow(buildSummaryHTML(p,r));
+  // צלם אחרי render
+  setTimeout(()=>{
+    const target=document.getElementById('summaryModalBody');
+    if(!target||typeof html2canvas==='undefined'){return;}
+    html2canvas(target,{scale:2,useCORS:true,backgroundColor:'#f8fafc',logging:false}).then(canvas=>{
+      // הצג תמונה עם הוראת שמירה
+      const img=document.createElement('img');
+      img.src=canvas.toDataURL('image/png');
+      img.style.cssText='width:100%;border-radius:8px;display:block;';
+      const hint=document.createElement('div');
+      hint.style.cssText='text-align:center;font-size:.8rem;color:#64748b;padding:10px 0 4px;font-family:Heebo,sans-serif;';
+      hint.textContent='לחיצה ארוכה על התמונה לשמירה';
+      const body=document.getElementById('summaryModalBody');
+      body.innerHTML='';
+      body.appendChild(hint);
+      body.appendChild(img);
+    });
+  }, 400);
 }
 
 function saveCmpPDF(){
+  // Add class for print CSS to target compare modal only
   document.body.classList.add('printing-compare');
   window.print();
+  // Remove class after print dialog closes
   setTimeout(()=>document.body.classList.remove('printing-compare'), 1500);
 }
-function saveCmpPNG(){ saveCmpPDF(); }
 
+function saveCmpPNG(){
+  saveCmpPDF();
+}
+
+
+// ══ STATE PERSISTENCE ══
 const STATE_KEY='office_props_v2';
 function saveState(){try{localStorage.setItem(STATE_KEY,JSON.stringify({props,curProp}));}catch(e){}}
 function loadState(){
@@ -1136,18 +1829,32 @@ function loadState(){
   return false;
 }
 
+// ══ DELETE PROPERTY ══
 function deleteCurrentProp(){
-  if(props.length <= 1) return; 
+  if(props.length <= 1) return; // לא ניתן למחוק נכס אחד
   if(!confirm('האם למחוק נכס זה לחלוטין?')) return;
+  const oldName=(props[curProp].name||'').trim();
+  if(oldName){ _sentProps.delete(oldName); _sentPropsFinal.delete(oldName); }
   props.splice(curProp, 1);
   curProp = Math.max(0, curProp - 1);
-  saveState(); renderTabs(); loadPropToUI(); calc();
+  saveState();
+  renderTabs();
+  loadPropToUI();
+  calc();
 }
+
 function resetCurrentProp(){
   if(!confirm('למחוק את נתוני הנכס הנוכחי ולהתחיל מחדש?')) return;
+  const oldName=(props[curProp].name||'').trim();
+  if(oldName) _sentProps.delete(oldName);
   props[curProp]=defaultProp();
-  saveState(); loadPropToUI(); renderTabs();
+  saveState();
+  loadPropToUI();
+  renderTabs();
 }
+
+
+// ══ VALIDATION ══
 function validateMailInput(el){
   const v=el.value.trim();
   const ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
@@ -1156,13 +1863,75 @@ function validateMailInput(el){
   if(ok) document.getElementById('gateErr').style.display='none';
 }
 
+
+// ══ GLOBAL EXPOSURE ══ (ensure onclick works from HTML)
 window.deleteCurrentProp = deleteCurrentProp;
 window.resetCurrentProp = resetCurrentProp;
 window.openCompare = openCompare;
-
+// ══ INIT ══
 document.addEventListener('DOMContentLoaded',function(){
-  loadState(); renderTabs(); loadPropToUI(); checkSession(); calc();
+  loadState();
+  renderTabs();
+  loadPropToUI();
+  checkSession();
+  calc();
 });
+
+
+
+
+
 </script>
+<style>
+/* PRINT STYLES */
+@media print {
+  /* ── DEFAULT: print main page ── */
+  body { background: #fff !important; }
+  .print-hide, .hdr-back, .prop-tabs-wrap, .compare-bar, .compare-modal, .compare-backdrop { display: none !important; }
+  .print-show { display: block !important; }
+  .page { padding-bottom: 20px !important; }
+
+  /* ── COMPARE PRINT MODE ──
+     Add class 'printing-compare' to body before print, remove after */
+  body.printing-compare .page,
+  body.printing-compare .hdr,
+  body.printing-compare .compare-bar,
+  body.printing-compare .compare-backdrop { display: none !important; }
+
+  body.printing-compare .compare-modal {
+    display: block !important;
+    position: static !important;
+    background: transparent !important;
+    overflow: visible !important;
+  }
+  body.printing-compare .compare-sheet {
+    position: static !important;
+    max-height: none !important;
+    overflow: visible !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    animation: none !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+  body.printing-compare .compare-hd,
+  body.printing-compare .landscape-hint,
+  body.printing-compare .cmp-save-btn { display: none !important; }
+
+  body.printing-compare .compare-content { overflow: visible !important; }
+  body.printing-compare .cmp-scroll-wrap {
+    overflow: visible !important;
+    max-height: none !important;
+    max-width: none !important;
+    width: 100% !important;
+    border: none !important;
+  }
+  body.printing-compare #cmpTable { overflow: visible !important; }
+  body.printing-compare .cmp-table {
+    width: 100% !important;
+    table-layout: fixed !important;
+  }
+}
+</style>
 </body>
 </html>
