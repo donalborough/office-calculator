@@ -38,7 +38,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .gate-card{background:#fff;border-radius:20px;padding:32px 26px 28px;width:100%;max-width:400px;box-shadow:0 32px 80px rgba(0,0,0,.5);position:relative;animation:gateIn .4s cubic-bezier(.22,1,.36,1) both;z-index:1;text-align:center;}
 @keyframes gateIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 .gate-logo-wrap{display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
-.gate-logo-wrap img{height:46px;width:auto;}
+.gate-logo-wrap svg{height:54px;width:auto;color:var(--ink);}
 .gate-eyebrow{font-size:.6rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;}
 .gate-title{font-size:1.5rem;font-weight:900;color:var(--ink);line-height:1.2;margin-bottom:6px;}
 .gate-sub{font-size:.78rem;color:#64748b;line-height:1.7;margin-bottom:26px;}
@@ -54,8 +54,8 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 /* HEADER */
 .hdr{background:var(--navy);padding:14px 20px;padding-top:max(14px,env(safe-area-inset-top));position:sticky;top:0;z-index:100;}
 .hdr-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;}
-.hdr-title{display:flex;align-items:center;gap:10px;}
-.hdr-title img{height:28px;width:auto;}
+.hdr-title{display:flex;align-items:center;gap:12px;}
+.hdr-title svg{height:42px;width:auto;color:var(--lime);}
 .logo-wrap{display:inline-flex;flex-direction:column;align-items:flex-start;line-height:1.15;}
 .logo-top{font-size:.85rem;font-weight:700;color:#ffffff !important;letter-spacing:.5px;}
 .logo-bottom{font-size:1rem;font-weight:900;color:var(--lime) !important;letter-spacing:.5px;border-top:2px solid #ffffff;padding-top:3px;display:inline-block;}
@@ -119,7 +119,6 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .spin-btn{width:40px;height:44px;background:transparent;border:none;font-size:1.1rem;cursor:pointer;color:var(--ink3);display:flex;align-items:center;justify-content:center;transition:background .15s,color .15s;flex-shrink:0;}
 .spin-btn:hover{background:var(--bg);color:var(--ink);}
 .spin-inp{width:56px;text-align:center;border:none;background:transparent;font-size:.95rem;font-weight:800;font-family:'Heebo',sans-serif;color:var(--ink);padding:0;height:100%;-moz-appearance:textfield;}
-.spin-inp.w48{width:48px;}
 .spin-inp:focus{outline:none;background:var(--bg);}
 .spin-unit{font-size:.6rem;font-weight:600;color:var(--ink3);padding-left:8px;padding-right:2px;white-space:nowrap;}
 
@@ -257,13 +256,18 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
   html, body { height: auto !important; min-height: auto !important; overflow: visible !important; }
 }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
 <div class="gate" id="gateOv">
   <div class="gate-card">
     <div class="gate-logo-wrap">
-      <img src="Logo black.svg" alt="לוגו">
+      <svg viewBox="0 0 528 672" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M526 86L376 0L116 150V286L376 136L526 222V86Z" fill="currentColor" />
+        <path d="M527 349L376 261L116 411L114 289L2 347V671H114V547L375 396L527 483V349Z" fill="currentColor" />
+        <path d="M527 607L378 522L117 671H527V607Z" fill="currentColor" />
+      </svg>
     </div>
     <div class="gate-eyebrow" id="gate-eyebrow">כלי לניתוח עסקאות שכירות</div>
     <div class="gate-title" id="gate-title-txt">השורה התחתונה</div>
@@ -293,7 +297,11 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
   <div class="hdr-inner">
     <div style="text-align:right">
       <div class="hdr-title" id="hdr-title-txt">
-        <img src="Logo black.svg" alt="לוגו">
+        <svg viewBox="0 0 528 672" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M526 86L376 0L116 150V286L376 136L526 222V86Z" fill="currentColor" />
+          <path d="M527 349L376 261L116 411L114 289L2 347V671H114V547L375 396L527 483V349Z" fill="currentColor" />
+          <path d="M527 607L378 522L117 671H527V607Z" fill="currentColor" />
+        </svg>
         <span class="logo-wrap"><span class="logo-top">השורה</span><span class="logo-bottom">התחתונה</span></span>
       </div>
       <div class="hdr-sub" id="hdr-sub-txt">מחשבון מקצועי לניתוח עסקאות שכירות</div>
@@ -334,7 +342,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
               <div class="tog" id="customRatioTog" onclick="toggleCustomRatio()"></div>
               <div class="spin" id="customRatioSpin" style="display:none">
                 <button class="spin-btn" onclick="adj('customPct',-1)">−</button>
-                <input class="spin-inp w48" id="customPctInp" type="number" value="25" min="5" max="50" inputmode="numeric" oninput="onInput('customPct',this)">
+                <input class="spin-inp" id="customPctInp" type="number" value="25" min="5" max="50" inputmode="numeric" oninput="onInput('customPct',this)">
                 <span class="spin-unit">%</span>
                 <button class="spin-btn" onclick="adj('customPct',+1)">+</button>
               </div>
@@ -395,7 +403,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
             <div class="row-r">
               <div class="spin">
                 <button class="spin-btn" onclick="adj('rent',-5)">−</button>
-                <input class="spin-inp w48" id="rentInp" type="number" value="160" min="30" max="500" inputmode="numeric" oninput="onInput('rent',this)">
+                <input class="spin-inp" id="rentInp" type="number" value="160" min="30" max="500" inputmode="numeric" oninput="onInput('rent',this)">
                 <span class="spin-unit" id="unit-rent">₪/מ"ר</span>
                 <button class="spin-btn" onclick="adj('rent',+5)">+</button>
               </div>
@@ -424,7 +432,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
                 </div>
                 <div class="spin" id="arnManualSpin" style="display:none;margin-top:10px">
                   <button class="spin-btn" onclick="adjArn(-1)">−</button>
-                  <input class="spin-inp w48" id="arnManualInp" type="number" value="34" min="0" max="500" inputmode="numeric" oninput="onInputArn(this)">
+                  <input class="spin-inp" id="arnManualInp" type="number" value="34" min="0" max="500" inputmode="numeric" oninput="onInputArn(this)">
                   <span class="spin-unit" id="unit-arn">₪/מ"ר</span>
                   <button class="spin-btn" onclick="adjArn(+1)">+</button>
                 </div>
@@ -468,7 +476,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
             <div class="row-r">
               <div class="spin">
                 <button class="spin-btn" onclick="adj('parkingSpots',-1)">−</button>
-                <input class="spin-inp w48" id="parkingSpotsInp" type="number" value="0" min="0" max="200" inputmode="numeric" oninput="onInput('parkingSpots',this)">
+                <input class="spin-inp" id="parkingSpotsInp" type="number" value="0" min="0" max="200" inputmode="numeric" oninput="onInput('parkingSpots',this)">
                 <span class="spin-unit" id="unit-parking-spots">חניה</span>
                 <button class="spin-btn" onclick="adj('parkingSpots',+1)">+</button>
               </div>
@@ -482,7 +490,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
             <div class="row-r">
               <div class="spin">
                 <button class="spin-btn" onclick="adj('parkingPrice',-50)">−</button>
-                <input class="spin-inp w48" id="parkingPriceInp" type="number" value="1000" min="0" max="2000" inputmode="numeric" oninput="onInput('parkingPrice',this)">
+                <input class="spin-inp" id="parkingPriceInp" type="number" value="1000" min="0" max="2000" inputmode="numeric" oninput="onInput('parkingPrice',this)">
                 <span class="spin-unit" id="unit-parking-price">₪/חניה</span>
                 <button class="spin-btn" onclick="adj('parkingPrice',+50)">+</button>
               </div>
@@ -558,7 +566,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
             <div class="row-r">
               <div class="spin">
                 <button class="spin-btn" onclick="adj('grace',-1)">−</button>
-                <input class="spin-inp w48" id="graceInp" type="number" value="0" min="0" max="24" inputmode="numeric" oninput="onInput('grace',this)">
+                <input class="spin-inp" id="graceInp" type="number" value="0" min="0" max="24" inputmode="numeric" oninput="onInput('grace',this)">
                 <span class="spin-unit" id="unit-grace">חודש</span>
                 <button class="spin-btn" onclick="adj('grace',+1)">+</button>
               </div>
@@ -674,7 +682,11 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
     <div class="print-only" style="text-align:center; margin-bottom:16px; padding-top:16px;">
       <div class="logo-wrap" style="transform: scale(1.3);">
         <div style="display:flex; align-items:center; gap:8px; justify-content:center;">
-          <img src="logo.svg" alt="לוגו" style="height:28px; width:auto; display:block;">
+          <svg viewBox="0 0 528 672" style="height:28px; width:auto; color:var(--deep-black);">
+            <path d="M526 86L376 0L116 150V286L376 136L526 222V86Z" fill="currentColor" />
+            <path d="M527 349L376 261L116 411L114 289L2 347V671H114V547L375 396L527 483V349Z" fill="currentColor" />
+            <path d="M527 607L378 522L117 671H527V607Z" fill="currentColor" />
+          </svg>
           <div style="display:inline-flex;flex-direction:column;align-items:flex-start;line-height:1.15;">
             <span class="logo-top" style="color:var(--deep-black)!important; font-size:1.1rem;">השורה</span>
             <span class="logo-bottom" style="color:var(--ink)!important; border-top:2px solid var(--deep-black); font-size:1.4rem;">התחתונה</span>
@@ -1123,7 +1135,11 @@ function buildSummaryHTML(p, r){
     
     <div class="brand-hdr">
       <div style="display:flex; align-items:center; gap:8px; justify-content:center; margin-bottom:8px;">
-        <img src="logo.svg" alt="לוגו" style="height:32px; width:auto; display:block;">
+        <svg viewBox="0 0 528 672" style="height:32px; width:auto; color:var(--deep-black);">
+          <path d="M526 86L376 0L116 150V286L376 136L526 222V86Z" fill="currentColor" />
+          <path d="M527 349L376 261L116 411L114 289L2 347V671H114V547L375 396L527 483V349Z" fill="currentColor" />
+          <path d="M527 607L378 522L117 671H527V607Z" fill="currentColor" />
+        </svg>
       </div>
       <span class="logo-top">השורה</span><br><span class="logo-bottom">התחתונה</span>
     </div>
@@ -1211,7 +1227,6 @@ function savePDF(){
   const content=buildSummaryHTML(p,r);
   const win=window.open('','_blank','width=680,height=900');
   if(!win){ 
-      // חלון קופץ חלופי אם הדפדפן חוסם
       alert("אנא אפשר חלונות קופצים (Pop-ups) כדי לשמור את ה-PDF.");
       return; 
   }
