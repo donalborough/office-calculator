@@ -176,16 +176,29 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .brow-lbl{color:var(--ink2);font-weight:500;}
 .brow-val{font-weight:800;flex-shrink:0;color:var(--ink);}
 
-/* HERO RESULT (Dark theme for the totals) */
+/* HERO RESULT (Dark theme for the totals - Adjusted colors) */
 .results-total-box { background: var(--navy); padding: 24px 20px; border-radius: 0 0 var(--r) var(--r); position: relative; overflow: hidden; }
 .results-total-box::before { content:''; position:absolute; top:-50px; right:-50px; width:150px; height:150px; border-radius:50%; background:radial-gradient(circle, rgba(197,224,133,0.1) 0%, transparent 70%); pointer-events:none; }
-.rtb-header {font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#ffffff;margin-bottom:6px;}
-.rtb-amount {font-size:2.4rem;font-weight:900;color:var(--lime);line-height:1;}
+.rtb-header {font-size:.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#ffffff;margin-bottom:6px;} /* White label */
+.rtb-amount {font-size:2.4rem;font-weight:900;color:var(--lime);line-height:1;} /* Lime amount */
 .rtb-sub {font-size:.75rem;color:rgba(255,255,255,.6);margin-top:6px;margin-bottom:16px;}
 .rtb-grid {display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .rtb-cell {background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.05);border-radius:12px;padding:12px}
 .rtb-cell-val {font-size:.95rem;font-weight:800;color:#fff;}
 .rtb-cell-lbl {font-size:.65rem;color:rgba(255,255,255,.6);margin-top:2px;}
+
+/* GRACE HIGHLIGHT BOX */
+.grace-highlight {
+  display:none; 
+  background: rgba(197,224,133,0.15); 
+  border: 1px solid rgba(197,224,133,0.4); 
+  border-radius: 12px; 
+  padding: 14px 16px; 
+  margin-bottom: 16px;
+}
+.grace-highlight-title { font-size:.65rem; color:var(--lime); font-weight:700; letter-spacing:.8px; text-transform:uppercase; margin-bottom:4px; }
+.grace-highlight-val { font-size:1.8rem; font-weight:900; color:var(--lime); line-height:1; }
+.grace-highlight-sub { font-size:.75rem; color:#ffffff; margin-top:6px; opacity:0.9; }
 
 /* STABLE ACTION BAR BUTTONS (No jump on hover) */
 .action-btn{flex:1;padding:12px 8px;border-radius:12px;border:none;font-family:'Heebo',sans-serif;font-size:.8rem;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all 0.2s ease;white-space:nowrap;}
@@ -197,9 +210,10 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .action-clear:hover{background:#f8fafc;border-color:var(--border2);}
 .action-clear:active{transform:scale(0.98);}
 
-/* COMPARE BOTTOM BAR */
+/* COMPARE BOTTOM BAR - UPDATED */
 .compare-bar{position:fixed;bottom:0;left:0;right:0;z-index:200;padding:16px 20px;padding-bottom:max(16px,env(safe-area-inset-bottom));background:var(--navy);border-top:none;box-shadow:0 -10px 40px rgba(0,0,0,.15);}
 .compare-bar-inner{max-width:1100px;margin:0 auto;display:flex;gap:16px;align-items:center;justify-content:center;}
+/* Normal sized buttons for bottom bar */
 .compare-bar .action-btn { flex: 0 1 auto; min-width: 150px; padding: 12px 24px; }
 
 /* BROKER CARD - Elegant Icons */
@@ -218,7 +232,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .broker-icon-btn.wa:hover { background:#25d366; border-color:#25d366; }
 .broker-icon-btn.li:hover { background:#0ea5e9; border-color:#0ea5e9; }
 
-/* STABLE SAVE PDF & WHATSAPP BUTTONS SIDE BY SIDE */
+/* SAVE PDF & WHATSAPP BUTTONS SIDE BY SIDE */
 .btn-group-row { display: flex; gap: 10px; margin-bottom: 12px; width: 100%; }
 .btn-side { flex: 1; padding: 14px 10px; border-radius: 12px; border: none; font-family: 'Heebo', sans-serif; font-size: 0.9rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; white-space: nowrap; }
 .save-btn-pdf { background: var(--navy); color: var(--lime); }
@@ -238,7 +252,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .compare-hd-title{font-size:1.1rem;font-weight:900;color:var(--navy);}
 .compare-close{width:36px;height:36px;border-radius:10px;background:var(--bg);border:none;font-size:1.2rem;color:var(--ink2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s ease;}
 .compare-close:active{transform:scale(0.9);}
-.cmp-table{width:100%;padding:20px;}
+.cmp-table{width:100%;padding:10px 20px;}
 
 .cmp-save-btn{width:100%;max-width:300px;padding:14px;background:var(--navy);color:var(--lime);border:none;border-radius:12px;font-family:'Heebo',sans-serif;font-size:.9rem;font-weight:800;cursor:pointer;transition:all 0.2s ease;}
 .cmp-save-btn:hover{filter:brightness(1.2);}
@@ -256,7 +270,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 
 /* PRINT STYLES - Optimized for 1 Page Landscape Compare */
 @media print {
-  @page { size: landscape; margin: 8mm; }
+  @page { size: landscape; margin: 5mm; } /* Tightened margins for 1-page fit */
   body { background: #fff !important; }
   .print-hide, .hdr-back, .prop-tabs-wrap, .compare-bar, .compare-modal, .compare-backdrop { display: none !important; }
   .page-container { padding: 0 !important; max-width: 100% !important; }
@@ -276,17 +290,19 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
     box-shadow: none !important; animation: none !important; padding: 0 !important; width: 100% !important;
   }
   
-  body.printing-compare .print-only { display: block !important; }
+  body.printing-compare .print-only { display: block !important; margin-bottom: 5px !important; padding-top: 0 !important; }
   body.printing-compare .compare-hd, body.printing-compare .landscape-hint, body.printing-compare .print-hide, body.printing-compare .cmp-save-btn { display: none !important; }
 
-  /* Tighten the table to fit 1 page */
-  #cmpTable { margin: 0; margin-bottom: 0 !important; padding: 0; width: 100%; page-break-inside: avoid; }
-  .cmp-th { background-color: #202020 !important; color: #C5E085 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 8px 6px !important; font-size: 0.8rem; }
-  .cmp-td { padding: 6px 4px !important; font-size: 0.75rem !important; }
-  .print-only.footer-print { margin-top: 10px !important; padding-top: 8px !important; }
+  /* Tighten the table heavily to fit 1 page perfectly */
+  #cmpTable { margin: 0; padding: 0; width: 100%; page-break-inside: avoid; }
+  .cmp-th { background-color: #202020 !important; color: #C5E085 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 6px 4px !important; font-size: 0.75rem !important; }
+  .cmp-td { padding: 4px 2px !important; font-size: 0.7rem !important; }
+  
+  .print-only.footer-print { margin-top: 5px !important; padding-top: 5px !important; border-top: 1px solid #ccc; font-size: 0.7rem !important; }
   
   /* Prevent extra blank pages */
   html, body { height: auto !important; min-height: auto !important; overflow: visible !important; }
+  tr { page-break-inside: avoid !important; }
 }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -321,7 +337,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
     
     <div class="gate-privacy" id="gate-privacy-txt">הפרטים אינם מועברים לצד שלישי.<br>© דון אלבורו</div>
     
-    <div id="gateSuccess" style="display:none;text-align:center;padding:30px 0;flex-direction:column;align-items:center;justify-content:center;">
+    <div id="gateSuccess" style="display:none;text-align:center;padding:30px 0;flex-direction:column;align-items:center;justify-content:center;position:absolute;inset:0;background:#fff;border-radius:20px;z-index:10;">
       <div style="font-size:3rem;margin-bottom:12px;color:var(--lime);line-height:1;">✓</div>
       <div style="font-size:1.3rem;font-weight:900;color:var(--ink);margin-bottom:6px">ברוך הבא!</div>
       <div style="font-size:.85rem;color:var(--ink3);line-height:1.6">מעביר אותך למערכת...</div>
@@ -638,10 +654,10 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
             <div class="rtb-amount" id="rMain">—</div>
             <div class="rtb-sub" id="rSub">—</div>
 
-            <div id="graceEffectiveRow" style="display:none;background:rgba(197,224,133,.08);border:1px solid rgba(197,224,133,.2);border-radius:12px;padding:12px 16px;margin-bottom:16px">
-              <div style="font-size:.65rem;color:var(--neon);font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:4px">💡 <span id='grace-effective-lbl'>אחרי גרייס — עלות אפקטיבית</span></div>
-              <div style="font-size:1.8rem;font-weight:900;color:var(--neon);line-height:1" id="rEffective">—</div>
-              <div style="font-size:.7rem;color:rgba(255,255,255,.6);margin-top:4px" id="rEffectiveSub">—</div>
+            <div class="grace-highlight" id="graceEffectiveRow">
+              <div class="grace-highlight-title">💡 <span id='grace-effective-lbl'>אחרי גרייס — עלות אפקטיבית</span></div>
+              <div class="grace-highlight-val" id="rEffective">—</div>
+              <div class="grace-highlight-sub" id="rEffectiveSub">—</div>
             </div>
 
             <div class="rtb-grid">
@@ -747,10 +763,23 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
       <button class="action-btn cmp-save-btn" onclick="saveCmpPDF()" style="width:100%;max-width:300px;padding:14px;background:var(--navy);color:var(--neon);border:none;border-radius:12px;font-family:'Heebo',sans-serif;font-size:.9rem;font-weight:800;cursor:pointer">📄 שמור השוואה PDF</button>
     </div>
 
-    <div class="print-only footer-print" style="text-align:center; margin-top:10px; padding-top:8px; border-top:1px solid #e2e8f0; font-size:0.8rem; color:#64748b;">
+    <div class="print-only footer-print" style="text-align:center; border-top:1px solid #e2e8f0; color:#64748b;">
       דון אלבורו - מתווך משרדים מורשה | 050-7202874
     </div>
 
+  </div>
+</div>
+
+<div id="summaryModal" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(32,32,32,.6);backdrop-filter:blur(4px);overflow-y:auto;-webkit-overflow-scrolling:touch">
+  <div style="min-height:100%;display:flex;flex-direction:column;align-items:center;padding:24px 16px 40px">
+    <div style="width:100%;max-width:600px;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.4);position:relative">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);background:#fff;position:sticky;top:0;z-index:1;gap:8px">
+        <div style="font-size:1rem;font-weight:800;color:var(--navy);flex:1" id="summaryModalTitle">סיכום נכס</div>
+        <button class="action-btn" onclick="savePDF()" style="padding:8px 16px;border-radius:10px;background:var(--navy);color:var(--neon);border:none;font-size:.8rem;font-weight:800;cursor:pointer;font-family:'Heebo',sans-serif;white-space:nowrap">📄 PDF</button>
+        <button class="action-btn" onclick="closeSummaryModal()" style="width:34px;height:34px;border-radius:10px;background:#f1f5f9;border:none;font-size:.9rem;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">✕</button>
+      </div>
+      <div id="summaryModalBody" style="padding:0"></div>
+    </div>
   </div>
 </div>
 
@@ -795,7 +824,6 @@ function renderTabs(){
     const t = document.createElement('div');
     t.className = 'prop-tab' + (i===curProp?' active':'');
     
-    // פח אשפה עדין במקום כפתור מחיקה
     t.innerHTML = `
       <div class="tab-del-btn" onclick="deleteProp(${i}, event)" title="מחק נכס">
         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6"/></svg>
@@ -905,6 +933,7 @@ function adjMonths(d){ S().months = Math.max(6, Math.min(120, S().months + d)); 
 function onInputMonths(el){ const v = parseInt(el.value); if(!isNaN(v) && v >= 6) { S().months = v; calc(); } }
 function adjFurniture(d){ S().furniture = Math.max(0, S().furniture + d); document.getElementById('furnitureInp').value = S().furniture; calc(); }
 function onInputFurniture(el){ const v = parseInt(el.value); if(!isNaN(v) && v >= 0) { S().furniture = v; calc(); } }
+
 function updateGrace(p, r){
   const graceRow = document.getElementById('graceEffectiveRow');
   if(!p.grace || p.grace <= 0){ graceRow.style.display='none'; return; }
@@ -1004,13 +1033,13 @@ function openCompare(){
     const same = allSame(vals);
     const borderStyle = separator ? 'border-top:2px solid var(--border);' : 'border-top:1px solid #f8fafc;';
     const labelBg = separator ? 'background:#f1f5f9;' : 'background:#fff;';
+    const valWeight = bold ? '800' : '600';
     const valColor = same ? 'var(--ink3)' : 'var(--ink)';
-    const valWeight = bold ? '800' : (same ? '500' : '700');
     
     let r = `<tr>`;
     r += `<td class="cmp-td" style="${borderStyle} ${labelBg} font-weight:${separator?'800':'700'}; color:${separator?'var(--ink)':'var(--ink2)'};">
-      <div style="display:flex;align-items:center;gap:6px;">
-        ${icon?`<span style="font-size:.8rem;opacity:.5">${icon}</span>`:''}
+      <div style="display:flex;align-items:center;">
+        ${icon?`<span style="display:inline-block; width:22px; text-align:center; opacity:0.6; margin-left:6px;">${icon}</span>`:''}
         <div>
           <div>${label}</div>
           ${subLabel?`<div style="font-size:.6rem;color:var(--ink3);margin-top:2px;font-weight:normal;">${subLabel}</div>`:''}
@@ -1021,7 +1050,7 @@ function openCompare(){
     vals.forEach((v,i)=>{
       const hasArrow = arrow && arrow[i];
       const cellBg = separator ? 'background:#f8fafc;' : 'background:#fff;';
-      r += `<td class="cmp-td" style="${borderStyle} ${cellBg} text-align:center; font-weight:${valWeight}; color:${bold?'var(--ink)':valColor}; border-right:1px solid #f8fafc;">
+      r += `<td class="cmp-td" style="${borderStyle} ${cellBg} text-align:center; font-weight:${valWeight}; color:var(--ink); border-right:1px solid #f8fafc;">
         <span style="display:inline-flex;align-items:center;gap:4px;">
           ${v}${hasArrow?'<span style="font-size:.75rem;color:var(--green);line-height:1">↓</span>':''}
         </span>
