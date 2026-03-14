@@ -42,14 +42,29 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .gate-eyebrow{font-size:.6rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;}
 .gate-title{font-size:1.5rem;font-weight:900;color:var(--ink);line-height:1.2;margin-bottom:6px;}
 .gate-sub{font-size:.78rem;color:#64748b;line-height:1.7;margin-bottom:26px;}
-.field{margin-bottom:16px;text-align:right;}
-.field-label{display:block;font-size:.68rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:#475569;margin-bottom:6px;}
-.field-inp{width:100%;padding:12px 14px;border:1px solid var(--border2);border-radius:var(--r-sm);font-size:.92rem;font-family:'Heebo',sans-serif;color:var(--ink);background:#fff;transition:all .2s;-webkit-appearance:none;}
-.field-inp:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(32,32,32,.1);}
+
+/* AIRBNB STYLE FLOATING LABELS */
+.gate-form-group { display: flex; flex-direction: column; gap: 16px; margin-bottom: 12px; }
+.floating-field { position: relative; width: 100%; text-align: right; }
+.floating-input {
+  width: 100%; height: 56px; padding: 24px 14px 8px; border: 1px solid var(--border2);
+  border-radius: var(--r-sm); font-size: 1rem; font-family: 'Heebo', sans-serif; color: var(--ink);
+  background: #fff; outline: none; transition: border-color 0.2s;
+}
+.floating-input:focus { border-color: var(--navy); border-width: 2px; padding: 23px 13px 7px; }
+.floating-label {
+  position: absolute; top: 18px; right: 14px; font-size: 1rem; color: #717171; pointer-events: none;
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1); transform-origin: top right;
+}
+.floating-input:focus ~ .floating-label,
+.floating-input:not(:placeholder-shown) ~ .floating-label {
+  transform: scale(0.75) translateY(-18px); color: #717171;
+}
+
 .gate-err{font-size:.74rem;color:var(--rose);background:var(--rose-l);border-radius:8px;padding:8px 12px;margin-bottom:14px;display:none;text-align:right;}
-.gate-cta{width:100%;padding:14px;background:var(--lime);color:var(--deep-black);border:none;border-radius:var(--r-sm);font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;transition:opacity .15s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.gate-cta{width:100%;height:56px;background:var(--lime);color:var(--deep-black);border:none;border-radius:var(--r-sm);font-family:'Heebo',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:opacity .15s;display:flex;align-items:center;justify-content:center;gap:8px;}
 .gate-cta:active{opacity:.85;}
-.gate-privacy{font-size:.67rem;color:#94a3b8;text-align:center;margin-top:12px;line-height:1.6;}
+.gate-privacy{font-size:.67rem;color:#94a3b8;text-align:center;margin-top:16px;line-height:1.6;}
 
 /* HEADER */
 .hdr{background:var(--navy);padding:14px 20px;padding-top:max(14px,env(safe-area-inset-top));position:sticky;top:0;z-index:100;}
@@ -154,11 +169,11 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .brow-lbl{color:var(--ink2);font-weight:500;}
 .brow-val{font-weight:800;flex-shrink:0;color:var(--ink);}
 
-/* HERO RESULT (Dark theme for the totals) */
+/* HERO RESULT (Dark theme for the totals - Adjusted colors) */
 .results-total-box { background: var(--navy); padding: 24px 20px; border-radius: 0 0 var(--r) var(--r); position: relative; overflow: hidden; }
 .results-total-box::before { content:''; position:absolute; top:-50px; right:-50px; width:150px; height:150px; border-radius:50%; background:radial-gradient(circle, rgba(197,224,133,0.1) 0%, transparent 70%); pointer-events:none; }
-.rtb-header {font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--lime);margin-bottom:6px;}
-.rtb-amount {font-size:2.4rem;font-weight:900;color:#fff;line-height:1;}
+.rtb-header {font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#ffffff;margin-bottom:6px;} /* White label */
+.rtb-amount {font-size:2.4rem;font-weight:900;color:var(--lime);line-height:1;} /* Lime amount */
 .rtb-sub {font-size:.75rem;color:rgba(255,255,255,.6);margin-top:6px;margin-bottom:16px;}
 .rtb-grid {display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .rtb-cell {background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.05);border-radius:12px;padding:12px}
@@ -172,10 +187,9 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .action-compare:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(197,224,133,0.3);}
 .action-clear{background:#fff;border:1px solid var(--border);color:var(--ink3);flex:1;}
 
-/* COMPARE BOTTOM BAR - UPDATED */
+/* COMPARE BOTTOM BAR */
 .compare-bar{position:fixed;bottom:0;left:0;right:0;z-index:200;padding:16px 20px;padding-bottom:max(16px,env(safe-area-inset-bottom));background:var(--navy);border-top:none;box-shadow:0 -10px 40px rgba(0,0,0,.15);}
 .compare-bar-inner{max-width:1100px;margin:0 auto;display:flex;gap:16px;align-items:center;justify-content:center;}
-/* Normal sized buttons for bottom bar */
 .compare-bar .action-btn { flex: 0 1 auto; min-width: 150px; padding: 12px 24px; }
 
 /* BROKER CARD - Elegant Icons */
@@ -222,9 +236,9 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 
 .print-only { display: none !important; }
 
-/* PRINT STYLES - Optimized for 1 Page Landscape */
+/* PRINT STYLES - Optimized for 1 Page Landscape Compare */
 @media print {
-  @page { size: landscape; margin: 10mm; }
+  @page { size: landscape; margin: 8mm; }
   body { background: #fff !important; }
   .print-hide, .hdr-back, .prop-tabs-wrap, .compare-bar, .compare-modal, .compare-backdrop { display: none !important; }
   .page-container { padding: 0 !important; max-width: 100% !important; }
@@ -248,9 +262,10 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
   body.printing-compare .compare-hd, body.printing-compare .landscape-hint, body.printing-compare .print-hide, body.printing-compare .cmp-save-btn { display: none !important; }
 
   /* Tighten the table to fit 1 page */
-  #cmpTable { margin: 0; padding: 0; width: 100%; page-break-inside: avoid; }
-  .cmp-th { background-color: #202020 !important; color: #C5E085 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 10px 8px !important; font-size: 0.8rem; }
-  .cmp-td { padding: 8px 6px !important; font-size: 0.75rem !important; }
+  #cmpTable { margin: 0; margin-bottom: 0 !important; padding: 0; width: 100%; page-break-inside: avoid; }
+  .cmp-th { background-color: #202020 !important; color: #C5E085 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 8px 6px !important; font-size: 0.8rem; }
+  .cmp-td { padding: 6px 4px !important; font-size: 0.75rem !important; }
+  .print-only.footer-print { margin-top: 10px !important; padding-top: 8px !important; }
   
   /* Prevent extra blank pages */
   html, body { height: auto !important; min-height: auto !important; overflow: visible !important; }
@@ -272,20 +287,22 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
     <div class="gate-eyebrow" id="gate-eyebrow">כלי לניתוח עסקאות שכירות</div>
     <div class="gate-title" id="gate-title-txt">השורה התחתונה</div>
     <div class="gate-sub" id="gate-sub-txt">הזינו נתונים, קבלו תמונה פיננסית מלאה – בשניות.</div>
-    <div class="field">
-      <label class="field-label" id="gate-label-name">שם מלא</label>
-      <input class="field-inp" id="gateName" autofocus type="text" placeholder="ישראל ישראלי" autocomplete="name">
+    
+    <div class="gate-form-group">
+      <div class="floating-field">
+        <input class="floating-input" id="gateName" type="text" placeholder=" " autocomplete="name">
+        <label class="floating-label">שם מלא (למשל: ישראל ישראלי)</label>
+      </div>
+      <div class="floating-field">
+        <input class="floating-input" id="gateMail" type="email" placeholder=" " oninput="validateMailInput(this)" autocomplete="email" inputmode="email">
+        <label class="floating-label">כתובת מייל (israel@company.com)</label>
+      </div>
+      <div class="gate-err" id="gateErr"></div>
+      <button class="gate-cta" id="gateCta" onclick="gateSubmit()">כניסה למערכת ←</button>
     </div>
-    <div class="field">
-      <label class="field-label" id="gate-label-mail">כתובת מייל</label>
-      <input class="field-inp" id="gateMail" type="email" oninput="validateMailInput(this)" placeholder="israel@company.com" autocomplete="email" inputmode="email">
-    </div>
-    <div class="gate-err" id="gateErr"></div>
-    <button class="gate-cta" id="gateCta" onclick="gateSubmit()">
-      <span id="gate-cta-txt">כניסה למערכת ←</span>
-    </button>
+    
     <div class="gate-privacy" id="gate-privacy-txt">הפרטים אינם מועברים לצד שלישי.<br>© דון אלבורו</div>
-    <div id="gateSuccess" style="display:none;text-align:center;padding:8px 0 4px">
+    <div id="gateSuccess" style="display:none;text-align:center;padding:8px 0 4px;position:absolute;inset:0;background:#fff;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;">
       <div style="font-size:2.5rem;margin-bottom:8px;color:var(--neon)">✓</div>
       <div style="font-size:1.1rem;font-weight:900;color:var(--ink);margin-bottom:4px">ברוך הבא!</div>
       <div style="font-size:.8rem;color:var(--ink3);line-height:1.6">הפרטים נשמרו בהצלחה.<br>עוברים לכלי...</div>
@@ -711,7 +728,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
       <button class="cmp-save-btn" onclick="saveCmpPDF()" style="width:100%;max-width:300px;padding:14px;background:var(--navy);color:var(--neon);border:none;border-radius:12px;font-family:'Heebo',sans-serif;font-size:.9rem;font-weight:800;cursor:pointer">📄 שמור השוואה PDF</button>
     </div>
 
-    <div class="print-only" style="text-align:center; margin-top:20px; padding-top:10px; border-top:1px solid #e2e8f0; font-size:0.8rem; color:#64748b;">
+    <div class="print-only footer-print" style="text-align:center; margin-top:10px; padding-top:8px; border-top:1px solid #e2e8f0; font-size:0.8rem; color:#64748b;">
       דון אלבורו - מתווך משרדים מורשה | 050-7202874
     </div>
 
@@ -1054,7 +1071,7 @@ function gateSubmit(){
   sendToSheet({ action: 'login', name: nameVal, mail: mailVal });
 
   document.querySelectorAll('.gate-card > *:not(#gateSuccess)').forEach(el=>el.style.display='none');
-  document.getElementById('gateSuccess').style.display='block';
+  document.getElementById('gateSuccess').style.display='flex';
   setTimeout(()=>{document.getElementById('gateOv').style.display='none';}, 2000);
 }
 
@@ -1091,12 +1108,12 @@ function maybeSendPropUpdate(){
 
 function buildSummaryHTML(p, r){
   const arn = p.arnMode==='manual'?p.arnManual:(p.arn?17:34);
-  const rows = [ {l:'שכירות', v:p.rent}, {l:('ארנונה')+(p.arn&&p.arnMode!=='manual'?(' (הנחת תוכנה)'):''), v:arn}, {l:'דמי ניהול', v:p.mgmt}, {l:'שירותי ניקיון', v:p.clean}, {l:'חשמל, אינטרנט, מים', v:p.utils} ];
+  const rows = [ {l:'שכירות', v:p.rent}, {l:('ארנונה')+(p.arn&&p.arnMode!=='manual'?(' (הנחת תוכנה)'):''), v:arn}, {l:'דמי ניהול', v:p.mgmt}, {l:'שירותי ניקיון', v:p.clean}, {l:'חשמל+אינטרנט', v:p.utils} ];
   if(p.extra>0){ const ep = p.extraMode==='sqm'?p.extra:Math.round(p.extra/p.sqm); rows.push({l:'עלויות נוספות', v:ep}); }
   const rowsHTML = rows.map(row=>`<tr><td>${row.l}</td><td style="text-align:left;font-weight:700">${row.v} ₪/מ"ר</td><td style="text-align:left;font-weight:800">${fmt(row.v*p.sqm)} ₪</td></tr>`).join('');
   const parkingHTML = r.parkingMonthly>0?`<tr><td>חניות (${p.parkingSpots} × ${p.parkingPrice} ₪)</td><td></td><td style="text-align:left;font-weight:800">${fmt(r.parkingMonthly)} ₪</td></tr>`:'';
   const furnitureHTML = r.furnitureMonthly>0?`<tr><td>ריהוט (פרוס ל-${p.months} חודשים)</td><td style="text-align:left">${r.furniturePerSqmMonth.toFixed(1)} ₪/מ"ר</td><td style="text-align:left;font-weight:800">${fmt(r.furnitureMonthly)} ₪</td></tr>`:'';
-  const graceHTML = p.grace>0?`<div style="background:rgba(197,224,133,0.1);border:1px solid rgba(197,224,133,0.3);border-radius:12px;padding:16px 20px;margin-top:20px"><div style="font-size:.7rem;font-weight:800;color:#202020;margin-bottom:6px">💡 גרייס ${p.grace} חודשים</div><div style="font-size:.85rem;color:#334155">עלות אפקטיבית: <strong style="color:#202020;font-size:1.1rem">${fmt(r.effectiveMonthly)} ₪/חודש</strong> <br> הנחה: <strong>${r.gracePct}%</strong> | חיסכון לתקופה: <strong>${fmt(r.graceSaving*p.months)} ₪</strong></div></div>`:'';
+  const graceHTML = p.grace>0?`<div style="background:rgba(197,224,133,0.1);border:1px solid rgba(197,224,133,0.3);border-radius:12px;padding:12px 16px;margin-top:12px"><div style="font-size:.7rem;font-weight:800;color:#202020;margin-bottom:6px">💡 גרייס ${p.grace} חודשים</div><div style="font-size:.85rem;color:#334155">עלות אפקטיבית: <strong style="color:#202020;font-size:1.1rem">${fmt(r.effectiveMonthly)} ₪/חודש</strong> <br> הנחה: <strong>${r.gracePct}%</strong> | חיסכון לתקופה: <strong>${fmt(r.graceSaving*p.months)} ₪</strong></div></div>`:'';
   const effectiveRatio = p.useCustomRatio?(1+p.customPct/100):p.grossRatio;
   const pct = Math.round((effectiveRatio-1)*100);
   
@@ -1105,34 +1122,33 @@ function buildSummaryHTML(p, r){
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <style>
       *{box-sizing:border-box;margin:0;padding:0}
-      body{font-family:'Heebo',sans-serif;direction:rtl;background:#F4EFEB;color:#202020;padding:32px;max-width:680px;margin:0 auto}
-      .brand-hdr {text-align:center; margin-bottom:24px;}
+      body{font-family:'Heebo',sans-serif;direction:rtl;background:#F4EFEB;color:#202020;padding:16px;max-width:700px;margin:0 auto}
+      .brand-hdr {text-align:center; margin-bottom:12px;}
       .logo-top {font-size:1.2rem;font-weight:800;color:#202020;letter-spacing:.5px;}
       .logo-bottom {font-size:1.6rem;font-weight:900;color:#202020;letter-spacing:.5px;border-top:2px solid #202020;padding-top:4px;display:inline-block;}
-      h1{font-size:1.6rem;font-weight:900;margin-bottom:6px;text-align:center;color:#202020;}
-      .sub{font-size:.8rem;color:#64748b;margin-bottom:32px;text-align:center;font-weight:500;}
-      .section{background:#fff;border-radius:16px;padding:20px;margin-bottom:20px;border:1px solid #e2e8f0;}
+      h1{font-size:1.4rem;font-weight:900;margin-bottom:4px;text-align:center;color:#202020;}
+      .sub{font-size:.75rem;color:#64748b;margin-bottom:16px;text-align:center;font-weight:500;}
+      .section{background:#fff;border-radius:16px;padding:12px 16px;margin-bottom:12px;border:1px solid #e2e8f0;}
       .sec-title{font-size:.65rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#64748b;margin-bottom:12px}
       table{width:100%;border-collapse:collapse;font-size:.9rem}
-      td{padding:10px 6px;border-bottom:1px solid #f1f5f9;color:#334155;}
+      td{padding:6px 4px;border-bottom:1px solid #f1f5f9;color:#334155;font-size:.85rem}
       tr:last-child td{border-bottom:none}
       .total-row{background:#f8fafc;font-weight:800;color:#202020;font-size:1.05rem}
-      .total-row td{padding:14px 6px;border-top:2px solid #e2e8f0;color:#202020;}
-      .hero{background:#000000;border-radius:16px;padding:24px;color:#fff;margin-bottom:20px;position:relative;overflow:hidden;}
+      .total-row td{padding:10px 4px;border-top:2px solid #e2e8f0;color:#202020;}
+      .hero{background:#000000;border-radius:16px;padding:16px;color:#fff;margin-bottom:12px;position:relative;overflow:hidden;}
       .hero::before{content:'';position:absolute;top:-50px;right:-50px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle, rgba(197,224,133,0.15) 0%, transparent 70%);pointer-events:none;}
       .hero-amount{font-size:2.4rem;font-weight:900;color:#C5E085;line-height:1.1;margin-bottom:16px;}
       .hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
       .hero-cell{background:rgba(255,255,255,.05);border-radius:10px;padding:12px 14px;border:1px solid rgba(255,255,255,.05);}
       .hero-val{font-size:1rem;font-weight:800;color:#fff;}
       .hero-lbl{font-size:.65rem;color:rgba(255,255,255,.5);margin-top:4px;font-weight:500;}
-      .footer{text-align:center;font-size:.75rem;color:#64748b;margin-top:32px;padding-top:20px;border-top:1px solid #e2e8f0;font-weight:500;}
-      .print-btn{display:block;width:100%;padding:16px;background:#000000;color:#C5E085;border:none;border-radius:12px;font-family:'Heebo',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;margin-bottom:24px;text-align:center;transition:transform .2s;}
-      .print-btn:hover{transform:translateY(-2px);}
-      @media print{ .print-btn{display:none} div{page-break-inside:avoid} body{padding:12px;background:#fff;} }
+      .footer{text-align:center;font-size:.75rem;color:#64748b;margin-top:16px;padding-top:12px;border-top:1px solid #e2e8f0;font-weight:500;}
+      @media print{ 
+        @page { size: A4 portrait; margin: 10mm; }
+        body{padding:0;background:#fff;} 
+      }
     </style>
   </head><body>
-    <button class="print-btn" onclick="window.print()">📄 הדפס / שמור PDF</button>
-    
     <div class="brand-hdr">
       <div style="display:flex; align-items:center; gap:8px; justify-content:center; margin-bottom:8px;">
         <svg viewBox="0 0 528 672" style="height:32px; width:auto; color:var(--deep-black);">
@@ -1159,7 +1175,7 @@ function buildSummaryHTML(p, r){
 
     ${graceHTML}
 
-    <div class="section" style="margin-top:20px;">
+    <div class="section" style="margin-top:12px;">
       <div class="sec-title">שטח</div>
       <table>
         <tr><td>שטח ברוטו (חוזה)</td><td style="text-align:left;font-weight:800;color:#202020;">${fmt(p.sqm)} מ"ר</td></tr>
@@ -1189,6 +1205,7 @@ function shareWhatsApp(){
   const totalPerSqm=(r.totalMonthly/p.sqm).toFixed(0);
   
   let msg = '';
+  // RLM \u200F is used to force RTL formatting in WhatsApp
   if (p.name) msg += `*${p.name}*\n`;
   msg += `\u200Fשטח: ${fmt(p.sqm)} מ"ר ברוטו\n`;
   msg += `\u200Fתקופה: ${p.months} חודשים\n`;
