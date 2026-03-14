@@ -9,7 +9,7 @@
 <style>
 :root {
   color-scheme: light only;
-  /* --- פלטת הצבעים החדשה --- */
+  /* DESIGN SYSTEM */
   --bg: #F4EFEB; 
   --surface: #ffffff; 
   --card: #ffffff;
@@ -18,9 +18,10 @@
   --ink3: #64748b;
   --border: #e2e8f0; 
   --border2: #cbd5e1;
-  --neon: #C5E085; /* צהוב-ליים */
+  --lime: #C5E085; 
+  --deep-black: #000000;
   --rose: #e11d48; --rose-l: #fff1f2;
-  --navy: #202020; /* שחור-פחם להדר וכרטיסים */
+  --navy: #202020; 
   --green: #10b981;
   --shadow-s: 0 2px 4px rgba(0, 0, 0, 0.04);
   --shadow-m: 0 8px 24px rgba(0, 0, 0, 0.06);
@@ -32,12 +33,12 @@ html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
 body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direction:rtl;min-height:100vh;padding-bottom:max(100px,env(safe-area-inset-bottom));-webkit-font-smoothing:antialiased;}
 
 /* GATE */
-.gate{position:fixed;inset:0;z-index:1000;background:var(--navy);display:flex;align-items:center;justify-content:center;padding:20px;}
-.gate::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 30% 80%,rgba(197,224,133,.08) 0%,transparent 70%);pointer-events:none;}
+.gate{position:fixed;inset:0;z-index:1000;background:var(--deep-black);display:flex;align-items:center;justify-content:center;padding:20px;}
+.gate::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 30% 80%,rgba(197,224,133,.08) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 80% 20%,rgba(255,255,255,.03) 0%,transparent 60%);pointer-events:none;}
 .gate-card{background:#fff;border-radius:20px;padding:32px 26px 28px;width:100%;max-width:400px;box-shadow:0 32px 80px rgba(0,0,0,.5);position:relative;animation:gateIn .4s cubic-bezier(.22,1,.36,1) both;z-index:1;text-align:center;}
 @keyframes gateIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-.gate-logo-wrap{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;}
-.gate-logo-wrap img{height:40px;width:auto;}
+.gate-logo-wrap{display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+.gate-logo-wrap svg{height:46px;width:auto;fill:var(--ink);}
 .gate-eyebrow{font-size:.6rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;}
 .gate-title{font-size:1.5rem;font-weight:900;color:var(--ink);line-height:1.2;margin-bottom:6px;}
 .gate-sub{font-size:.78rem;color:#64748b;line-height:1.7;margin-bottom:26px;}
@@ -46,7 +47,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .field-inp{width:100%;padding:12px 14px;border:1px solid var(--border2);border-radius:var(--r-sm);font-size:.92rem;font-family:'Heebo',sans-serif;color:var(--ink);background:#fff;transition:all .2s;-webkit-appearance:none;}
 .field-inp:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(32,32,32,.1);}
 .gate-err{font-size:.74rem;color:var(--rose);background:var(--rose-l);border-radius:8px;padding:8px 12px;margin-bottom:14px;display:none;text-align:right;}
-.gate-cta{width:100%;padding:14px;background:var(--neon);color:var(--navy);border:none;border-radius:var(--r-sm);font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;transition:opacity .15s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.gate-cta{width:100%;padding:14px;background:var(--lime);color:var(--deep-black);border:none;border-radius:var(--r-sm);font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;transition:opacity .15s;display:flex;align-items:center;justify-content:center;gap:8px;}
 .gate-cta:active{opacity:.85;}
 .gate-privacy{font-size:.67rem;color:#94a3b8;text-align:center;margin-top:12px;line-height:1.6;}
 
@@ -54,10 +55,10 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .hdr{background:var(--navy);padding:14px 20px;padding-top:max(14px,env(safe-area-inset-top));position:sticky;top:0;z-index:100;}
 .hdr-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;}
 .hdr-title{display:flex;align-items:center;gap:10px;}
-.hdr-title img{height:32px;width:auto;}
+.hdr-title svg{height:28px;width:auto;fill:var(--lime);}
 .logo-wrap{display:inline-flex;flex-direction:column;align-items:flex-start;line-height:1.15;}
 .logo-top{font-size:.85rem;font-weight:700;color:#ffffff !important;letter-spacing:.5px;}
-.logo-bottom{font-size:1rem;font-weight:900;color:var(--neon) !important;letter-spacing:.5px;border-top:2px solid #ffffff;padding-top:3px;display:inline-block;}
+.logo-bottom{font-size:1rem;font-weight:900;color:var(--lime) !important;letter-spacing:.5px;border-top:2px solid #ffffff;padding-top:3px;display:inline-block;}
 .hdr-back{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.9);border-radius:8px;padding:8px 14px;font-family:'Heebo',sans-serif;font-size:.75rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:0.2s;}
 .hdr-back:hover{background:rgba(255,255,255,.1);}
 
@@ -77,7 +78,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .prop-tabs{display:flex;gap:10px;align-items:center;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;padding-bottom:4px;}
 .prop-tabs::-webkit-scrollbar { display: none; }
 .prop-tab{flex:0 0 auto;padding:10px 16px;border-radius:12px;border:1px solid var(--border);background:#fff;color:var(--ink3);font-family:'Heebo',sans-serif;font-size:.75rem;font-weight:600;cursor:pointer;text-align:right;transition:all .2s;position:relative;min-width:130px;padding-left:36px;}
-.prop-tab.active{background:var(--navy);color:var(--neon);border-color:var(--navy);font-weight:800;box-shadow:0 4px 12px rgba(32,32,32,.15);}
+.prop-tab.active{background:var(--navy);color:var(--lime);border-color:var(--navy);font-weight:800;box-shadow:0 4px 12px rgba(32,32,32,.15);}
 .prop-tab .tab-name{display:block;font-size:.65rem;font-weight:500;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .prop-tab.active .tab-name{color:#f8fafc; opacity:.8;}
 .prop-tab-add{width:42px;height:42px;border-radius:12px;border:2px dashed var(--border2);background:transparent;color:var(--ink3);font-size:1.4rem;font-weight:400;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
@@ -99,7 +100,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 /* SECTION & CARDS */
 .sec{margin-bottom:24px;}
 .sec-hd{display:flex;align-items:center;gap:8px;padding:0 4px 12px;}
-.sec-num{width:24px;height:24px;border-radius:6px;background:var(--navy);color:var(--neon);font-size:.65rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sec-num{width:24px;height:24px;border-radius:6px;background:var(--navy);color:var(--lime);font-size:.65rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .sec-title{font-size:.75rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--ink);}
 
 .card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow-m);overflow:hidden;border:1px solid var(--border);}
@@ -126,20 +127,19 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .chips{display:flex;flex-wrap:wrap;gap:8px;padding:16px 20px;}
 .chip{padding:10px 16px;border-radius:12px;border:1px solid var(--border);background:#fff;color:var(--ink2);font-size:.78rem;font-family:'Heebo',sans-serif;cursor:pointer;transition:all .2s;font-weight:600;line-height:1.3;text-align:center;}
 .chip .cs{font-size:.6rem;opacity:.7;display:block;margin-top:3px;font-weight:400;}
-.chip.sel{background:var(--navy);color:var(--neon);border-color:var(--navy);box-shadow:0 4px 16px rgba(32,32,32,.15);}
-/* תיקון צבע הכיתוב הקטן בתוך כפתור שחור ללבן עדין */
+.chip.sel{background:var(--navy);color:var(--lime);border-color:var(--navy);box-shadow:0 4px 16px rgba(32,32,32,.15);}
 .chip.sel .cs{color:rgba(255,255,255,0.7) !important;}
 
 .tog-wrap{display:flex;align-items:center;gap:9px;}
 .tog{width:44px;height:24px;border-radius:999px;background:var(--border2);cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;}
-.tog.on{background:var(--neon);}
+.tog.on{background:var(--lime);}
 .tog::after{content:'';position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:right .2s,left .2s;}
 .tog.on::after{right:auto;left:3px;background:var(--navy);}
 .tog-lbl{font-size:.78rem;color:var(--ink);font-weight:600;}
 
 .mode-btns{display:flex;border:1px solid var(--border);border-radius:10px;overflow:hidden;}
 .mode-btn{padding:8px 14px;border:none;cursor:pointer;font-family:'Heebo',sans-serif;font-size:.72rem;font-weight:700;background:#fff;color:var(--ink3);transition:all .15s;}
-.mode-btn.active{background:var(--navy);color:var(--neon);}
+.mode-btn.active{background:var(--navy);color:var(--lime);}
 
 /* NOTICES */
 .notice{display:flex;gap:10px;align-items:flex-start;border-radius:12px;padding:14px 16px;font-size:.78rem;line-height:1.7;margin-bottom:10px;border:1px solid transparent;}
@@ -158,7 +158,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 /* HERO RESULT (Dark theme for the totals - Fixed Visibility) */
 .results-total-box { background: var(--navy); padding: 24px 20px; border-radius: 0 0 var(--r) var(--r); position: relative; overflow: hidden; }
 .results-total-box::before { content:''; position:absolute; top:-50px; right:-50px; width:150px; height:150px; border-radius:50%; background:radial-gradient(circle, rgba(197,224,133,0.1) 0%, transparent 70%); pointer-events:none; }
-.rtb-header {font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--neon);margin-bottom:6px;}
+.rtb-header {font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--lime);margin-bottom:6px;}
 .rtb-amount {font-size:2.4rem;font-weight:900;color:#fff;line-height:1;}
 .rtb-sub {font-size:.75rem;color:rgba(255,255,255,.6);margin-top:6px;margin-bottom:16px;}
 .rtb-grid {display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -169,7 +169,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 /* ACTION BAR BUTTONS */
 .action-btn{flex:1;padding:12px 8px;border-radius:12px;border:none;font-family:'Heebo',sans-serif;font-size:.8rem;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s;white-space:nowrap;}
 .action-btn:disabled{opacity:.4;cursor:not-allowed;}
-.action-compare{background:var(--neon);color:var(--navy);flex:1.4;box-shadow:0 4px 12px rgba(197,224,133,0.2);}
+.action-compare{background:var(--lime);color:var(--navy);flex:1.4;box-shadow:0 4px 12px rgba(197,224,133,0.2);}
 .action-compare:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(197,224,133,0.3);}
 .action-clear{background:#fff;border:1px solid var(--border);color:var(--ink3);flex:1;}
 
@@ -183,7 +183,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .broker-name{font-size:1.1rem;font-weight:900;color:#fff;margin-bottom:2px;}
 .broker-title{font-size:.75rem;color:rgba(255,255,255,.4);margin-bottom:12px;}
 .broker-text{font-size:.82rem;color:rgba(255,255,255,.7);line-height:1.8;margin-bottom:20px;}
-.broker-text em{color:var(--neon);font-style:normal;font-weight:700;}
+.broker-text em{color:var(--lime);font-style:normal;font-weight:700;}
 
 .broker-btns{display:flex;gap:12px;align-items:center;}
 .broker-icon-btn{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);transition:0.2s;text-decoration:none;font-size:1.2rem;}
@@ -192,9 +192,13 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .broker-icon-btn.wa:hover { background:#25d366; border-color:#25d366; }
 .broker-icon-btn.li:hover { background:#0ea5e9; border-color:#0ea5e9; }
 
-/* SAVE PDF/PNG BUTTONS */
-.save-btn-pdf { background: var(--navy); color: var(--neon); }
-.save-btn-png { background: #fff; color: var(--navy); border: 1px solid var(--border); }
+/* SAVE PDF BUTTONS SIDE BY SIDE */
+.btn-group-row { display: flex; gap: 10px; margin-bottom: 12px; width: 100%; }
+.btn-side { flex: 1; padding: 14px 10px; border-radius: 12px; border: none; font-family: 'Heebo', sans-serif; font-size: 0.9rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; white-space: nowrap; }
+.save-btn-pdf { background: var(--navy); color: var(--lime); }
+.save-btn-pdf:hover { background: var(--deep-black); }
+.wa-btn { background: #25d366; color: #fff; box-shadow: 0 4px 12px rgba(37,211,102,0.2); }
+.wa-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(37,211,102,0.3); }
 
 /* COMPARE MODAL */
 .compare-modal{position:fixed;inset:0;z-index:500;display:none;flex-direction:column;}
@@ -258,7 +262,9 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 <div class="gate" id="gateOv">
   <div class="gate-card">
     <div class="gate-logo-wrap">
-      <img src="Logo black.svg" alt="לוגו">
+      <svg viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
+        <path d="M400 715.342V518.729L678.077 369.349V505.772L431.118 638.647V698.815L678.077 565.94V702.362L431.118 835.238H678.077V715.342H400Z"/>
+      </svg>
     </div>
     <div class="gate-eyebrow" id="gate-eyebrow">כלי לניתוח עסקאות שכירות</div>
     <div class="gate-title" id="gate-title-txt">השורה התחתונה</div>
@@ -288,12 +294,14 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
   <div class="hdr-inner">
     <div style="text-align:right">
       <div class="hdr-title" id="hdr-title-txt">
-        <img src="Logo black.svg" alt="לוגו">
+        <svg viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
+          <path d="M400 715.342V518.729L678.077 369.349V505.772L431.118 638.647V698.815L678.077 565.94V702.362L431.118 835.238H678.077V715.342H400Z"/>
+        </svg>
         <span class="logo-wrap"><span class="logo-top">השורה</span><span class="logo-bottom">התחתונה</span></span>
       </div>
       <div class="hdr-sub" id="hdr-sub-txt">מחשבון מקצועי לניתוח עסקאות שכירות</div>
     </div>
-    <button class="hdr-back" onclick="logout()"><span id="hdr-back-txt">התנתקות מהמערכת</span></button>
+    <button class="hdr-back" onclick="logoutSession()"><span id="hdr-back-txt">התנתקות מהמערכת</span></button>
   </div>
 </div>
 
@@ -567,7 +575,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
       
       <div class="sec">
         <div class="sec-hd"><div class="sec-num" style="background:var(--neon);color:var(--navy);">✓</div><div class="sec-title" id="summary-title-txt">סיכום פרטים</div></div>
-        <div class="card" style="margin-bottom:16px;">
+        <div class="card" style="padding:0; overflow:hidden; margin-bottom:16px;">
 
           <div class="brow" style="background:#f8fafc;border-bottom:1px solid var(--border)">
             <span class="brow-lbl" id="lbl-area-hdr" style="font-weight:800;font-size:.7rem;letter-spacing:.8px;text-transform:uppercase;color:var(--ink2)">שטח</span>
@@ -618,18 +626,13 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
       </div>
 
       <div class="sec print-hide" id="saveBtns">
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <button class="action-btn save-btn-pdf" onclick="savePDF()">
-            <span id="save-btn-txt">📄 שמור PDF</span>
-          </button>
-          <button class="action-btn save-btn-png" onclick="savePNG()">
-            <span id="save-png-btn-txt">🖼️ שמור תמונה</span>
+        <div class="btn-group-row">
+          <button class="btn-side save-btn-pdf" onclick="savePDF()">📄 שמור PDF</button>
+          <button class="btn-side wa-btn" onclick="shareWhatsApp()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            שתף תקציר
           </button>
         </div>
-        <button onclick="shareWhatsApp()" style="width:100%;margin-top:10px;padding:14px 16px;background:#25d366;color:#fff;border:none;border-radius:12px;font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;box-shadow:0 4px 16px rgba(37, 211, 102, 0.2);">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          <span id="wa-btn-txt">שתף תקציר בוואטסאפ</span>
-        </button>
       </div>
 
       <div class="sec print-hide">
@@ -638,21 +641,21 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
           <div class="broker-title" id="broker-title-txt">מתווך משרדים מורשה</div>
           <div class="broker-text" id="broker-body-txt">מחפשים שטח ספציפי?<br>רוצים לשמוע על המלצות ומשרדים <em>"אוף מרקט"</em>?<br>צרו קשר ואעזור.</div>
           <div class="broker-btns">
-            <a class="broker-icon-btn wa" href="https://wa.me/9720507202874" target="_blank" title="WhatsApp">
-              <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            <a class="broker-icon-btn tel" href="tel:0507202874" title="התקשר">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
             </a>
             <a class="broker-icon-btn li" href="https://www.linkedin.com/in/don-alborough/" target="_blank" title="LinkedIn">
               <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
             </a>
-            <a class="broker-icon-btn" href="tel:0507202874" title="התקשר">
-              📱
+            <a class="broker-icon-btn wa" href="https://wa.me/9720507202874" target="_blank" title="WhatsApp">
+              <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
             </a>
           </div>
         </div>
       </div>
 
       <div style="padding:0 4px;margin-top:4px" class="print-hide">
-        <p style="font-size:.62rem;color:var(--ink3);line-height:1.7;text-align:center" id="disclaimer-txt">* המספרים המוצגים הם הערכות מקובלות בענף המשרדים ומשמשים לצורך אינדיקציה בלבד. העלויות בפועל עשויות להשתנות בהתאם לעסקה הספציפית. אין לראות בנתונים אלו ייעוץ מקצועי מחייב. <br>כל המחירים לפני מע"מ.</p>
+        <p style="font-size:.62rem;color:var(--ink3);line-height:1.7;text-align:center" id="disclaimer-txt">* הנתונים מהווים הערכה לאינדיקציה בלבד ואינם ייעוץ מחייב. העלויות בפועל עשויות להשתנות. כל המחירים לפני מע"מ.</p>
       </div>
 
     </div> </div> </div>
@@ -670,9 +673,15 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
     
     <div class="print-only" style="text-align:center; margin-bottom:16px; padding-top:16px;">
       <div class="logo-wrap" style="transform: scale(1.3);">
-        <img src="Logo black.svg" alt="לוגו" style="height:32px; width:auto; display:block; margin:0 auto 4px;">
-        <span class="logo-top" style="color:#0f172a!important; font-size:1.1rem;">השורה</span>
-        <span class="logo-bottom" style="color:var(--ink)!important; border-top:2px solid #0f172a; font-size:1.4rem;">התחתונה</span>
+        <div style="display:flex; align-items:center; gap:8px; justify-content:center;">
+          <svg viewBox="0 0 1080 1080" style="height:28px; width:auto; fill:var(--deep-black);">
+            <path d="M400 715.342V518.729L678.077 369.349V505.772L431.118 638.647V698.815L678.077 565.94V702.362L431.118 835.238H678.077V715.342H400Z"/>
+          </svg>
+          <div style="display:inline-flex;flex-direction:column;align-items:flex-start;line-height:1.15;">
+            <span class="logo-top" style="color:var(--deep-black)!important; font-size:1.1rem;">השורה</span>
+            <span class="logo-bottom" style="color:var(--ink)!important; border-top:2px solid var(--deep-black); font-size:1.4rem;">התחתונה</span>
+          </div>
+        </div>
       </div>
       <div style="font-size:0.8rem; color:#64748b; margin-top:8px;">מחשבון מקצועי לניתוח עסקאות שכירות</div>
     </div>
@@ -688,9 +697,8 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
       💡 לחוויית צפייה מיטבית, מומלץ לסובב את המכשיר לתצוגה אופקית
     </div>
     
-    <div class="print-hide" style="padding:16px 24px;display:flex;gap:12px">
-      <button class="cmp-save-btn" onclick="saveCmpPDF()" style="flex:1;padding:14px;background:var(--navy);color:var(--neon);border:none;border-radius:12px;font-family:'Heebo',sans-serif;font-size:.9rem;font-weight:800;cursor:pointer">📄 שמור השוואה PDF</button>
-      <button onclick="saveCmpPNG()" style="flex:1;padding:14px;background:#fff;color:var(--navy);border:1px solid var(--border);border-radius:12px;font-family:'Heebo',sans-serif;font-size:.9rem;font-weight:800;cursor:pointer">🖼️ שמור תמונה</button>
+    <div class="print-hide" style="padding:16px 24px;display:flex;justify-content:center;">
+      <button class="cmp-save-btn" onclick="saveCmpPDF()" style="width:100%;max-width:300px;padding:14px;background:var(--navy);color:var(--neon);border:none;border-radius:12px;font-family:'Heebo',sans-serif;font-size:.9rem;font-weight:800;cursor:pointer">📄 שמור השוואה PDF</button>
     </div>
 
     <div class="print-only" style="text-align:center; margin-top:20px; padding-top:10px; border-top:1px solid #e2e8f0; font-size:0.8rem; color:#64748b;">
@@ -706,7 +714,6 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
       <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);background:#fff;position:sticky;top:0;z-index:1;gap:8px">
         <div style="font-size:1rem;font-weight:800;color:var(--navy);flex:1" id="summaryModalTitle">סיכום נכס</div>
         <button onclick="savePDF()" style="padding:8px 16px;border-radius:10px;background:var(--navy);color:var(--neon);border:none;font-size:.8rem;font-weight:800;cursor:pointer;font-family:'Heebo',sans-serif;white-space:nowrap">📄 PDF</button>
-        <button onclick="savePNG()" style="padding:8px 16px;border-radius:10px;background:#f1f5f9;color:var(--ink);border:none;font-size:.8rem;font-weight:800;cursor:pointer;font-family:'Heebo',sans-serif;white-space:nowrap">🖼️ תמונה</button>
         <button onclick="closeSummaryModal()" style="width:34px;height:34px;border-radius:10px;background:#f1f5f9;border:none;font-size:.9rem;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">✕</button>
       </div>
       <div id="summaryModalBody" style="padding:0"></div>
@@ -755,19 +762,18 @@ function renderTabs(){
     const t = document.createElement('div');
     t.className = 'prop-tab' + (i===curProp?' active':'');
     
-    // פח אשפה במקום כפתור ענק למטה
+    // פח אשפה עדין במקום כפתור מחיקה
     t.innerHTML = `
       <div class="tab-del-btn" onclick="deleteProp(${i}, event)" title="מחק נכס">
         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6"/></svg>
       </div>
       <div onclick="switchProp(${i})" style="width:100%; height:100%;">
-        <span>נכס ${String.fromCharCode(0x05D0+i)}</span>
+        <span style="font-weight:800;font-size:0.75rem;">נכס ${String.fromCharCode(0x05D0+i)}</span>
         <span class="tab-name">${p.name||'ללא שם'}</span>
       </div>
     `;
     wrap.appendChild(t);
   });
-  // תומך ב-6 נכסים
   if(props.length < 6){
     const add = document.createElement('button');
     add.className = 'prop-tab-add';
@@ -788,7 +794,7 @@ function addProperty(){
   renderTabs(); loadPropToUI();
   window.scrollTo({top:0, behavior:'smooth'}); saveState();
 }
-function updatePropName(val){ S().name = val; renderTabs(); saveState(); }
+function updatePropName(val){ S().name = val; renderTabs(); saveState(); maybeSendPropUpdate(); }
 
 function deleteProp(i, e) {
   e.stopPropagation();
@@ -1055,7 +1061,7 @@ function gateSubmit(){
   setTimeout(()=>{document.getElementById('gateOv').style.display='none';}, 2000);
 }
 
-function logout() {
+function logoutSession() {
   localStorage.removeItem('office_session');
   location.reload();
 }
@@ -1097,9 +1103,6 @@ function buildSummaryHTML(p, r){
   const effectiveRatio = p.useCustomRatio?(1+p.customPct/100):p.grossRatio;
   const pct = Math.round((effectiveRatio-1)*100);
   
-  // Create an absolute URL for the logo so it loads securely in window.open
-  const logoUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, '') + 'Logo black.svg';
-  
   return `<!DOCTYPE html><html dir="rtl"><head>
     <meta charset="UTF-8">
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&display=swap" rel="stylesheet">
@@ -1134,7 +1137,11 @@ function buildSummaryHTML(p, r){
     <button class="print-btn" onclick="window.print()">📄 הדפס / שמור PDF</button>
     
     <div class="brand-hdr">
-      <img src="${logoUrl}" alt="לוגו" style="height:48px; width:auto; display:block; margin:0 auto 8px;" onerror="this.style.display='none'">
+      <div style="display:flex; align-items:center; gap:8px; justify-content:center; margin-bottom:8px;">
+        <svg viewBox="0 0 1080 1080" style="height:32px; width:auto; fill:var(--deep-black);">
+          <path d="M400 715.342V518.729L678.077 369.349V505.772L431.118 638.647V698.815L678.077 565.94V702.362L431.118 835.238H678.077V715.342H400Z"/>
+        </svg>
+      </div>
       <span class="logo-top">השורה</span><br><span class="logo-bottom">התחתונה</span>
     </div>
     
@@ -1227,7 +1234,6 @@ function saveCmpPDF(){
   window.print();
   setTimeout(()=>document.body.classList.remove('printing-compare'), 1500);
 }
-function saveCmpPNG(){ saveCmpPDF(); }
 
 const STATE_KEY='office_props_v2';
 function saveState(){try{localStorage.setItem(STATE_KEY,JSON.stringify({props,curProp}));}catch(e){}}
