@@ -62,8 +62,12 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 }
 
 .gate-err{font-size:.74rem;color:var(--rose);background:var(--rose-l);border-radius:8px;padding:8px 12px;margin-bottom:14px;display:none;text-align:right;}
-.gate-cta{width:100%;height:56px;background:var(--lime);color:var(--deep-black);border:none;border-radius:var(--r-sm);font-family:'Heebo',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:opacity .15s;display:flex;align-items:center;justify-content:center;gap:8px;}
-.gate-cta:active{opacity:.85;}
+
+/* STABLE & ACTIVE BUTTONS (No Jumping) */
+.gate-cta{width:100%;height:56px;background:var(--lime);color:var(--deep-black);border:none;border-radius:var(--r-sm);font-family:'Heebo',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:all 0.2s ease;display:flex;align-items:center;justify-content:center;gap:8px;}
+.gate-cta:hover{filter:brightness(1.05);box-shadow:0 4px 12px rgba(197,224,133,0.3);}
+.gate-cta:active{transform:scale(0.98);}
+
 .gate-privacy{font-size:.67rem;color:#94a3b8;text-align:center;margin-top:16px;line-height:1.6;}
 
 /* HEADER */
@@ -74,8 +78,10 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .logo-wrap{display:inline-flex;flex-direction:column;align-items:flex-start;line-height:1.15;}
 .logo-top{font-size:.85rem;font-weight:700;color:#ffffff !important;letter-spacing:.5px;}
 .logo-bottom{font-size:1rem;font-weight:900;color:var(--lime) !important;letter-spacing:.5px;border-top:2px solid #ffffff;padding-top:3px;display:inline-block;}
-.hdr-back{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.9);border-radius:8px;padding:8px 14px;font-family:'Heebo',sans-serif;font-size:.75rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:0.2s;}
-.hdr-back:hover{background:rgba(255,255,255,.1);}
+
+.hdr-back{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.9);border-radius:8px;padding:8px 14px;font-family:'Heebo',sans-serif;font-size:.75rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all 0.2s ease;}
+.hdr-back:hover{background:rgba(255,255,255,.15);}
+.hdr-back:active{transform:scale(0.96);}
 
 /* LAYOUT (GRID FOR DESKTOP, COLUMN FOR MOBILE) */
 .page-container { max-width: 1100px; margin: 0 auto; padding: 20px 16px 120px; }
@@ -98,9 +104,10 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .prop-tab.active .tab-name{color:#f8fafc; opacity:.8;}
 .prop-tab-add{width:42px;height:42px;border-radius:12px;border:2px dashed var(--border2);background:transparent;color:var(--ink3);font-size:1.4rem;font-weight:400;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
 .prop-tab-add:hover{border-color:var(--ink2);color:var(--ink2);background:#fff;}
+.prop-tab-add:active{transform:scale(0.92);}
 
 /* DELETE TRASH ICON IN TAB */
-.tab-del-btn {position:absolute; left:6px; top:8px; width:24px; height:24px; border-radius:6px; background:transparent; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--ink3); transition:0.2s;}
+.tab-del-btn {position:absolute; left:6px; top:8px; width:24px; height:24px; border-radius:6px; background:transparent; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--ink3); transition:all 0.2s;}
 .prop-tab.active .tab-del-btn {color:rgba(255,255,255,0.5);}
 .tab-del-btn:hover {background:var(--rose-l); color:var(--rose);}
 .prop-tab.active .tab-del-btn:hover {background:rgba(225,29,72,0.2); color:#ff4d6d;}
@@ -169,30 +176,33 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .brow-lbl{color:var(--ink2);font-weight:500;}
 .brow-val{font-weight:800;flex-shrink:0;color:var(--ink);}
 
-/* HERO RESULT (Dark theme for the totals - Adjusted colors) */
+/* HERO RESULT (Dark theme for the totals) */
 .results-total-box { background: var(--navy); padding: 24px 20px; border-radius: 0 0 var(--r) var(--r); position: relative; overflow: hidden; }
 .results-total-box::before { content:''; position:absolute; top:-50px; right:-50px; width:150px; height:150px; border-radius:50%; background:radial-gradient(circle, rgba(197,224,133,0.1) 0%, transparent 70%); pointer-events:none; }
-.rtb-header {font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#ffffff;margin-bottom:6px;} /* White label */
-.rtb-amount {font-size:2.4rem;font-weight:900;color:var(--lime);line-height:1;} /* Lime amount */
+.rtb-header {font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#ffffff;margin-bottom:6px;}
+.rtb-amount {font-size:2.4rem;font-weight:900;color:var(--lime);line-height:1;}
 .rtb-sub {font-size:.75rem;color:rgba(255,255,255,.6);margin-top:6px;margin-bottom:16px;}
 .rtb-grid {display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .rtb-cell {background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.05);border-radius:12px;padding:12px}
 .rtb-cell-val {font-size:.95rem;font-weight:800;color:#fff;}
 .rtb-cell-lbl {font-size:.65rem;color:rgba(255,255,255,.6);margin-top:2px;}
 
-/* ACTION BAR BUTTONS */
-.action-btn{flex:1;padding:12px 8px;border-radius:12px;border:none;font-family:'Heebo',sans-serif;font-size:.8rem;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s;white-space:nowrap;}
+/* STABLE ACTION BAR BUTTONS (No jump on hover) */
+.action-btn{flex:1;padding:12px 8px;border-radius:12px;border:none;font-family:'Heebo',sans-serif;font-size:.8rem;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all 0.2s ease;white-space:nowrap;}
 .action-btn:disabled{opacity:.4;cursor:not-allowed;}
 .action-compare{background:var(--lime);color:var(--navy);flex:1.4;box-shadow:0 4px 12px rgba(197,224,133,0.2);}
-.action-compare:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(197,224,133,0.3);}
+.action-compare:not(:disabled):hover{filter:brightness(1.05);box-shadow:0 6px 16px rgba(197,224,133,0.3);}
+.action-compare:not(:disabled):active{transform:scale(0.98);}
 .action-clear{background:#fff;border:1px solid var(--border);color:var(--ink3);flex:1;}
+.action-clear:hover{background:#f8fafc;border-color:var(--border2);}
+.action-clear:active{transform:scale(0.98);}
 
 /* COMPARE BOTTOM BAR */
 .compare-bar{position:fixed;bottom:0;left:0;right:0;z-index:200;padding:16px 20px;padding-bottom:max(16px,env(safe-area-inset-bottom));background:var(--navy);border-top:none;box-shadow:0 -10px 40px rgba(0,0,0,.15);}
 .compare-bar-inner{max-width:1100px;margin:0 auto;display:flex;gap:16px;align-items:center;justify-content:center;}
 .compare-bar .action-btn { flex: 0 1 auto; min-width: 150px; padding: 12px 24px; }
 
-/* BROKER CARD - Elegant Icons */
+/* BROKER CARD */
 .broker{background:var(--navy);border-radius:var(--r);padding:24px 20px;box-shadow:var(--shadow-m);position:relative;overflow:hidden;}
 .broker::before{content:'';position:absolute;bottom:-30px;left:-30px;width:140px;height:140px;border-radius:50%;background:rgba(197,224,133,.05);pointer-events:none;}
 .broker-name{font-size:1.1rem;font-weight:900;color:#fff;margin-bottom:2px;}
@@ -201,19 +211,22 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .broker-text em{color:var(--lime);font-style:normal;font-weight:700;}
 
 .broker-btns{display:flex;gap:12px;align-items:center;}
-.broker-icon-btn{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);transition:0.2s;text-decoration:none;font-size:1.2rem;}
-.broker-icon-btn:hover{transform:translateY(-2px);background:rgba(255,255,255,0.15);}
+.broker-icon-btn{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);transition:all 0.2s ease;text-decoration:none;font-size:1.2rem;}
+.broker-icon-btn:hover{background:rgba(255,255,255,0.15);}
+.broker-icon-btn:active{transform:scale(0.92);}
 .broker-icon-btn svg { width: 20px; height: 20px; fill: currentColor; }
 .broker-icon-btn.wa:hover { background:#25d366; border-color:#25d366; }
 .broker-icon-btn.li:hover { background:#0ea5e9; border-color:#0ea5e9; }
 
-/* SAVE PDF & WHATSAPP BUTTONS SIDE BY SIDE */
+/* STABLE SAVE PDF & WHATSAPP BUTTONS SIDE BY SIDE */
 .btn-group-row { display: flex; gap: 10px; margin-bottom: 12px; width: 100%; }
-.btn-side { flex: 1; padding: 14px 10px; border-radius: 12px; border: none; font-family: 'Heebo', sans-serif; font-size: 0.9rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; white-space: nowrap; }
+.btn-side { flex: 1; padding: 14px 10px; border-radius: 12px; border: none; font-family: 'Heebo', sans-serif; font-size: 0.9rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; white-space: nowrap; }
 .save-btn-pdf { background: var(--navy); color: var(--lime); }
-.save-btn-pdf:hover { background: var(--deep-black); }
+.save-btn-pdf:hover { filter: brightness(1.2); }
+.save-btn-pdf:active { transform: scale(0.98); }
 .wa-btn { background: #25d366; color: #fff; box-shadow: 0 4px 12px rgba(37,211,102,0.2); }
-.wa-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(37,211,102,0.3); }
+.wa-btn:hover { filter: brightness(1.05); box-shadow: 0 6px 16px rgba(37,211,102,0.3); }
+.wa-btn:active { transform: scale(0.98); }
 
 /* COMPARE MODAL */
 .compare-modal{position:fixed;inset:0;z-index:500;display:none;flex-direction:column;}
@@ -223,8 +236,13 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .compare-hd{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:30;}
 .compare-hd-title{font-size:1.1rem;font-weight:900;color:var(--navy);}
-.compare-close{width:36px;height:36px;border-radius:10px;background:var(--bg);border:none;font-size:1.2rem;color:var(--ink2);cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.compare-close{width:36px;height:36px;border-radius:10px;background:var(--bg);border:none;font-size:1.2rem;color:var(--ink2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s ease;}
+.compare-close:active{transform:scale(0.9);}
 .cmp-table{width:100%;padding:20px;}
+
+.cmp-save-btn{width:100%;max-width:300px;padding:14px;background:var(--navy);color:var(--lime);border:none;border-radius:12px;font-family:'Heebo',sans-serif;font-size:.9rem;font-weight:800;cursor:pointer;transition:all 0.2s ease;}
+.cmp-save-btn:hover{filter:brightness(1.2);}
+.cmp-save-btn:active{transform:scale(0.98);}
 
 .landscape-hint {
   margin:10px 20px; padding:10px 16px; background:rgba(197,224,133,0.1); border-radius:12px; border:1px solid rgba(197,224,133,0.2);
@@ -302,8 +320,9 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
     </div>
     
     <div class="gate-privacy" id="gate-privacy-txt">הפרטים אינם מועברים לצד שלישי.<br>© דון אלבורו</div>
-    <div id="gateSuccess" style="display:none;text-align:center;padding:8px 0 4px;position:absolute;inset:0;background:#fff;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;">
-      <div style="font-size:2.5rem;margin-bottom:8px;color:var(--neon)">✓</div>
+    
+    <div id="gateSuccess" style="display:none;text-align:center;padding:8px 0 4px;position:absolute;inset:0;background:#fff;border-radius:20px;flex-direction:column;align-items:center;justify-content:center;z-index:10;">
+      <div style="font-size:2.5rem;margin-bottom:8px;color:var(--lime)">✓</div>
       <div style="font-size:1.1rem;font-weight:900;color:var(--ink);margin-bottom:4px">ברוך הבא!</div>
       <div style="font-size:.8rem;color:var(--ink3);line-height:1.6">הפרטים נשמרו בהצלחה.<br>עוברים לכלי...</div>
     </div>
@@ -649,11 +668,11 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 
       <div class="sec print-hide" id="saveBtns">
         <div class="btn-group-row">
-          <button class="btn-side save-btn-pdf" onclick="savePDF()">
+          <button class="btn-side save-btn-pdf action-btn" onclick="savePDF()">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>  
             שמור PDF
           </button>
-          <button class="btn-side wa-btn" onclick="shareWhatsApp()">
+          <button class="btn-side wa-btn action-btn" onclick="shareWhatsApp()">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
             שתף תקציר
           </button>
@@ -725,13 +744,26 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
     </div>
     
     <div class="print-hide" style="padding:16px 24px;display:flex;justify-content:center;">
-      <button class="cmp-save-btn" onclick="saveCmpPDF()" style="width:100%;max-width:300px;padding:14px;background:var(--navy);color:var(--neon);border:none;border-radius:12px;font-family:'Heebo',sans-serif;font-size:.9rem;font-weight:800;cursor:pointer">📄 שמור השוואה PDF</button>
+      <button class="action-btn cmp-save-btn" onclick="saveCmpPDF()">📄 שמור השוואה PDF</button>
     </div>
 
     <div class="print-only footer-print" style="text-align:center; margin-top:10px; padding-top:8px; border-top:1px solid #e2e8f0; font-size:0.8rem; color:#64748b;">
       דון אלבורו - מתווך משרדים מורשה | 050-7202874
     </div>
 
+  </div>
+</div>
+
+<div id="summaryModal" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(32,32,32,.6);backdrop-filter:blur(4px);overflow-y:auto;-webkit-overflow-scrolling:touch">
+  <div style="min-height:100%;display:flex;flex-direction:column;align-items:center;padding:24px 16px 40px">
+    <div style="width:100%;max-width:600px;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.4);position:relative">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);background:#fff;position:sticky;top:0;z-index:1;gap:8px">
+        <div style="font-size:1rem;font-weight:800;color:var(--navy);flex:1" id="summaryModalTitle">סיכום נכס</div>
+        <button class="action-btn" onclick="savePDF()" style="padding:8px 16px;border-radius:10px;background:var(--navy);color:var(--neon);border:none;font-size:.8rem;font-weight:800;cursor:pointer;font-family:'Heebo',sans-serif;white-space:nowrap">📄 PDF</button>
+        <button class="action-btn" onclick="closeSummaryModal()" style="width:34px;height:34px;border-radius:10px;background:#f1f5f9;border:none;font-size:.9rem;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">✕</button>
+      </div>
+      <div id="summaryModalBody" style="padding:0"></div>
+    </div>
   </div>
 </div>
 
@@ -1058,9 +1090,13 @@ function gateSubmit(){
   const nameVal=document.getElementById('gateName').value.trim();
   const mailVal=document.getElementById('gateMail').value.trim();
   const err=document.getElementById('gateErr');
+  const btn = document.getElementById('gateCta');
+  
   if(!nameVal){err.textContent='נא להזין שם מלא';err.style.display='block';return;}
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mailVal)){err.textContent='נא להזין כתובת מייל תקינה';err.style.display='block';return;}
   err.style.display='none';
+  btn.disabled = true; // Prevent double clicks
+  
   try{
     const ex=JSON.parse(localStorage.getItem('office_leads')||'[]');
     ex.push({name:nameVal,mail:mailVal,ts:new Date().toISOString()});
@@ -1072,12 +1108,32 @@ function gateSubmit(){
 
   document.querySelectorAll('.gate-card > *:not(#gateSuccess)').forEach(el=>el.style.display='none');
   document.getElementById('gateSuccess').style.display='flex';
-  setTimeout(()=>{document.getElementById('gateOv').style.display='none';}, 2000);
+  
+  setTimeout(()=>{
+    document.getElementById('gateOv').style.display='none';
+    btn.disabled = false;
+  }, 2000);
 }
 
 function logoutSession() {
+  // SPA Logout - No page reload
   localStorage.removeItem('office_session');
-  location.reload();
+  document.getElementById('gateName').value = '';
+  document.getElementById('gateMail').value = '';
+  
+  // Reset the UI components of the gate
+  document.querySelectorAll('.gate-card > *').forEach(el => {
+    if(el.id !== 'gateSuccess') el.style.display = '';
+  });
+  document.getElementById('gateSuccess').style.display = 'none';
+  document.getElementById('gateOv').style.display = 'flex';
+  
+  // Reset property data
+  props = [defaultProp()];
+  curProp = 0;
+  saveState();
+  renderTabs();
+  loadPropToUI();
 }
 
 let sendTimeout;
@@ -1108,7 +1164,7 @@ function maybeSendPropUpdate(){
 
 function buildSummaryHTML(p, r){
   const arn = p.arnMode==='manual'?p.arnManual:(p.arn?17:34);
-  const rows = [ {l:'שכירות', v:p.rent}, {l:('ארנונה')+(p.arn&&p.arnMode!=='manual'?(' (הנחת תוכנה)'):''), v:arn}, {l:'דמי ניהול', v:p.mgmt}, {l:'שירותי ניקיון', v:p.clean}, {l:'חשמל+אינטרנט', v:p.utils} ];
+  const rows = [ {l:'שכירות', v:p.rent}, {l:('ארנונה')+(p.arn&&p.arnMode!=='manual'?(' (הנחת תוכנה)'):''), v:arn}, {l:'דמי ניהול', v:p.mgmt}, {l:'שירותי ניקיון', v:p.clean}, {l:'חשמל, אינטרנט, מים', v:p.utils} ];
   if(p.extra>0){ const ep = p.extraMode==='sqm'?p.extra:Math.round(p.extra/p.sqm); rows.push({l:'עלויות נוספות', v:ep}); }
   const rowsHTML = rows.map(row=>`<tr><td>${row.l}</td><td style="text-align:left;font-weight:700">${row.v} ₪/מ"ר</td><td style="text-align:left;font-weight:800">${fmt(row.v*p.sqm)} ₪</td></tr>`).join('');
   const parkingHTML = r.parkingMonthly>0?`<tr><td>חניות (${p.parkingSpots} × ${p.parkingPrice} ₪)</td><td></td><td style="text-align:left;font-weight:800">${fmt(r.parkingMonthly)} ₪</td></tr>`:'';
@@ -1205,7 +1261,6 @@ function shareWhatsApp(){
   const totalPerSqm=(r.totalMonthly/p.sqm).toFixed(0);
   
   let msg = '';
-  // RLM \u200F is used to force RTL formatting in WhatsApp
   if (p.name) msg += `*${p.name}*\n`;
   msg += `\u200Fשטח: ${fmt(p.sqm)} מ"ר ברוטו\n`;
   msg += `\u200Fתקופה: ${p.months} חודשים\n`;
