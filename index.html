@@ -132,7 +132,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .compare-bar-inner{max-width:1100px;margin:0 auto;display:flex;gap:16px;align-items:center;justify-content:center;}
 .compare-bar .action-btn { flex: 0 1 auto; min-width: 150px; padding: 12px 24px; }
 .broker{background:var(--navy);border-radius:var(--r);padding:24px 20px;box-shadow:var(--shadow-m);position:relative;overflow:hidden;}
-.broker::before{content:'';position:absolute;bottom:-30px;left:-30px;width:140px;height:140px;border-radius:50%;background:rgba(197,224,133,.05);pointer-events:none;}
+.broker::before{content:'absolute';position:absolute;bottom:-30px;left:-30px;width:140px;height:140px;border-radius:50%;background:rgba(197,224,133,.05);pointer-events:none;}
 .broker-name{font-size:1.1rem;font-weight:900;color:#fff;margin-bottom:2px;}
 .broker-title{font-size:.75rem;color:rgba(255,255,255,.4);margin-bottom:12px;}
 .broker-text{font-size:.82rem;color:rgba(255,255,255,.7);line-height:1.8;margin-bottom:20px;}
@@ -331,20 +331,22 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
             </div>
           </div>
           
-          <div class="row" style="border-top:1px solid var(--border);flex-direction:column;align-items:stretch;gap:12px;padding:16px 20px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-              <div style="flex:1;min-width:120px;">
+          <div style="border-top:1px solid var(--border); padding: 16px 20px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
+              <div class="row-l">
                 <div class="row-label" id="lbl-rent">דמי שכירות בסיס</div>
                 <div class="row-sub" id="sub-rent">למ"ר / סה"כ חודשי</div>
               </div>
-              <div class="spin" style="flex-shrink:0;">
-                <button class="spin-btn" onclick="adjRent(-5)">−</button>
-                <input class="spin-inp" id="rentInp" type="number" value="100" min="0" max="9999999" inputmode="numeric" oninput="onInputRent(this)" style="width:72px">
-                <span class="spin-unit" id="rentUnit">₪/מ"ר</span>
-                <button class="spin-btn" onclick="adjRent(+5)">+</button>
+              <div class="row-r">
+                <div class="spin">
+                  <button class="spin-btn" onclick="adjRent(-5)">−</button>
+                  <input class="spin-inp" id="rentInp" type="number" value="100" min="0" max="9999999" inputmode="numeric" oninput="onInputRent(this)" style="width:72px">
+                  <span class="spin-unit" id="rentUnit">₪/מ"ר</span>
+                  <button class="spin-btn" onclick="adjRent(+5)">+</button>
+                </div>
               </div>
             </div>
-            <div style="display:flex;justify-content:flex-end">
+            <div style="display:flex; justify-content:flex-end;">
               <div class="mode-btns">
                 <button class="mode-btn active" id="rentModeSqm" onclick="setRentMode('sqm')">₪/מ"ר</button>
                 <button class="mode-btn" id="rentModeTotal" onclick="setRentMode('total')">סה"כ</button>
@@ -358,28 +360,35 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
       <div class="sec">
         <div class="sec-hd"><div class="sec-num">3</div><div class="sec-title" id="step3-title">עלויות נלוות</div></div>
         <div class="card">
-          <div class="row" style="flex-direction:column;align-items:stretch;gap:14px;padding:18px 20px">
-            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
-              <div>
+          <div style="padding: 16px 20px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+              <div class="row-l">
                 <div class="row-label" id="lbl-arn">ארנונה</div>
                 <div class="row-sub" id="arnSub">34 ₪/מ"ר — ללא הנחה</div>
               </div>
-              <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+              <div class="row-r" style="gap:12px;">
                 <div class="tog-wrap">
                   <div class="tog" id="arnTog" onclick="toggleArn()"></div>
-                  <span class="tog-lbl" id="arn-software-lbl">הנחת תוכנה</span>
                 </div>
                 <div class="mode-btns">
                   <button class="mode-btn active" id="arnModeAuto" onclick="setArnMode('auto')">אוטו</button>
                   <button class="mode-btn" id="arnModeManual" onclick="setArnMode('manual')">ידני</button>
                 </div>
-                <div class="spin" id="arnManualSpin" style="display:none;margin-top:10px">
-                  <button class="spin-btn" onclick="adjArn(-1)">−</button>
-                  <input class="spin-inp" id="arnManualInp" type="number" value="34" min="0" max="500" inputmode="numeric" oninput="onInputArn(this)">
-                  <span class="spin-unit" id="unit-arn">₪/מ"ר</span>
-                  <button class="spin-btn" onclick="adjArn(+1)">+</button>
-                </div>
               </div>
+            </div>
+            <div id="arnManualRow" style="display:none; justify-content:space-between; align-items:center; margin-top:16px; padding-top:16px; border-top:1px dashed var(--border);">
+               <div class="row-l">
+                 <div class="row-label" style="font-size:0.88rem; font-weight:700;">תעריף ארנונה</div>
+                 <div class="row-sub">הזנה ידנית למ"ר</div>
+               </div>
+               <div class="row-r">
+                 <div class="spin">
+                   <button class="spin-btn" onclick="adjArn(-1)">−</button>
+                   <input class="spin-inp" id="arnManualInp" type="number" value="34" min="0" max="500" inputmode="numeric" oninput="onInputArn(this)">
+                   <span class="spin-unit" id="unit-arn">₪/מ"ר</span>
+                   <button class="spin-btn" onclick="adjArn(+1)">+</button>
+                 </div>
+               </div>
             </div>
           </div>
 
@@ -455,23 +464,25 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
             </div>
           </div>
 
-          <div class="row" style="flex-direction:column;align-items:stretch;gap:12px;padding:16px 20px;border-top:1px solid var(--border)">
-            <div style="display:flex;justify-content:space-between;align-items:center">
-              <div>
+          <div style="border-top:1px solid var(--border); padding: 16px 20px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
+              <div class="row-l">
                 <div class="row-label" id="lbl-extra">עלויות נוספות</div>
                 <div class="row-sub" id="sub-extra">ביטוח, ציוד משרדי, שונות</div>
               </div>
+              <div class="row-r">
+                <div class="spin">
+                  <button class="spin-btn" onclick="adjExtra(-1)">−</button>
+                  <input class="spin-inp" id="extraInp" type="number" value="0" min="0" max="99999" inputmode="numeric" oninput="onInputExtra(this)">
+                  <span class="spin-unit" id="extraUnit">₪/מ"ר</span>
+                  <button class="spin-btn" onclick="adjExtra(+1)">+</button>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex; justify-content:flex-end;">
               <div class="mode-btns">
                 <button class="mode-btn active" id="extraModePerSqm" onclick="setExtraMode('sqm')">₪/מ"ר</button>
                 <button class="mode-btn" id="extraModeTotal" onclick="setExtraMode('total')">סה"כ</button>
-              </div>
-            </div>
-            <div style="display:flex;justify-content:flex-end">
-              <div class="spin">
-                <button class="spin-btn" onclick="adjExtra(-1)">−</button>
-                <input class="spin-inp" id="extraInp" type="number" value="0" min="0" max="99999" inputmode="numeric" oninput="onInputExtra(this)">
-                <span class="spin-unit" id="extraUnit">₪/מ"ר</span>
-                <button class="spin-btn" onclick="adjExtra(+1)">+</button>
               </div>
             </div>
           </div>
@@ -731,7 +742,7 @@ function loadPropToUI(){
   document.getElementById('parkingPriceInp').value = p.parkingPrice;
   document.getElementById('arnTog').classList.toggle('on', p.arn);
   setArnModeUI(p.arnMode);
-  document.getElementById('arnManualSpin').style.display = p.arnMode==='manual' ? 'flex' : 'none';
+  document.getElementById('arnManualRow').style.display = p.arnMode==='manual' ? 'flex' : 'none';
   setExtraModeUI(p.extraMode);
   calc();
 }
@@ -797,7 +808,7 @@ function adj(key,d){
 function toggleCustomRatio(){ S().useCustomRatio=!S().useCustomRatio; document.getElementById('customRatioTog').classList.toggle('on',S().useCustomRatio); document.getElementById('customRatioSpin').style.display=S().useCustomRatio?'flex':'none'; document.querySelectorAll('#bldgChips .chip').forEach(c=>c.classList.toggle('sel',!S().useCustomRatio&&parseFloat(c.dataset.ratio)===S().grossRatio)); calc(); }
 function setBldg(el,ratio){ S().useCustomRatio=false; document.getElementById('customRatioTog').classList.remove('on'); document.getElementById('customRatioSpin').style.display='none'; document.querySelectorAll('#bldgChips .chip').forEach(c=>c.classList.remove('sel')); el.classList.add('sel'); S().grossRatio=ratio; calc(); saveState(); }
 function toggleArn(){ S().arn=!S().arn; document.getElementById('arnTog').classList.toggle('on',S().arn); updateArnSub(); calc(); saveState(); }
-function setArnModeUI(mode){ document.getElementById('arnModeAuto').classList.toggle('active', mode==='auto'); document.getElementById('arnModeManual').classList.toggle('active', mode==='manual'); const amr=document.getElementById('arnManualSpin'); if(amr) amr.style.display=mode==='manual'?'flex':'none'; }
+function setArnModeUI(mode){ document.getElementById('arnModeAuto').classList.toggle('active', mode==='auto'); document.getElementById('arnModeManual').classList.toggle('active', mode==='manual'); const amr=document.getElementById('arnManualRow'); if(amr) amr.style.display=mode==='manual'?'flex':'none'; }
 function setArnMode(mode){ S().arnMode=mode; setArnModeUI(mode); updateArnSub(); calc(); saveState(); }
 function adjArn(d){ S().arnManual=Math.max(0,S().arnManual+d); document.getElementById('arnManualInp').value=S().arnManual; calc(); }
 function onInputArn(el){ const v=parseInt(el.value); if(!isNaN(v)&&v>=0){S().arnManual=v;calc();} }
