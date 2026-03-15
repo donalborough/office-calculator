@@ -144,6 +144,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .broker-icon-btn svg { width: 20px; height: 20px; fill: currentColor; }
 .broker-icon-btn.wa:hover { background:#25d366; border-color:#25d366; }
 .broker-icon-btn.li:hover { background:#0ea5e9; border-color:#0ea5e9; }
+.broker-icon-btn.tel:hover { background:#f59e0b; border-color:#f59e0b; }
 .btn-group-row { display: flex; gap: 10px; margin-bottom: 12px; width: 100%; }
 .btn-side { flex: 1; padding: 14px 10px; border-radius: 12px; border: none; font-family: 'Heebo', sans-serif; font-size: 0.9rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; white-space: nowrap; }
 .save-btn-pdf { background: var(--navy); color: var(--lime); }
@@ -331,22 +332,22 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
           </div>
           
           <div class="row" style="border-top:1px solid var(--border);flex-direction:column;align-items:stretch;gap:12px;padding:16px 20px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
               <div>
                 <div class="row-label" id="lbl-rent">דמי שכירות בסיס</div>
                 <div class="row-sub" id="sub-rent">הזן מחיר למ"ר או סכום כולל לחודש</div>
               </div>
-              <div class="mode-btns">
-                <button class="mode-btn active" id="rentModeSqm" onclick="setRentMode('sqm')">₪/מ"ר</button>
-                <button class="mode-btn" id="rentModeTotal" onclick="setRentMode('total')">סה"כ</button>
-              </div>
-            </div>
-            <div style="display:flex;justify-content:flex-end">
               <div class="spin">
                 <button class="spin-btn" onclick="adjRent(-5)">−</button>
                 <input class="spin-inp" id="rentInp" type="number" value="100" min="0" max="9999999" inputmode="numeric" oninput="onInputRent(this)" style="width:72px">
                 <span class="spin-unit" id="rentUnit">₪/מ"ר</span>
                 <button class="spin-btn" onclick="adjRent(+5)">+</button>
+              </div>
+            </div>
+            <div style="display:flex;justify-content:flex-end">
+              <div class="mode-btns">
+                <button class="mode-btn active" id="rentModeSqm" onclick="setRentMode('sqm')">₪/מ"ר</button>
+                <button class="mode-btn" id="rentModeTotal" onclick="setRentMode('total')">סה"כ</button>
               </div>
             </div>
           </div>
@@ -640,7 +641,7 @@ let curProp = 0;
 
 const fmt = n => Math.round(n).toLocaleString('he');
 const clamp = (v,mn,mx) => Math.max(mn,Math.min(mx,v));
-const IDEAL_MIN=10, IDEAL_MAX=14, IDEAL_WARN=18;
+const IDEAL_MIN=10, IDEAL_MAX=15, IDEAL_WARN=18;
 const S = () => props[curProp];
 const _sentProps = new Set();
 const _sentPropsFinal = new Map();
