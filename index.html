@@ -333,11 +333,11 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
           
           <div class="row" style="border-top:1px solid var(--border);flex-direction:column;align-items:stretch;gap:12px;padding:16px 20px;">
             <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-              <div>
+              <div style="flex:1;min-width:120px;">
                 <div class="row-label" id="lbl-rent">דמי שכירות בסיס</div>
-                <div class="row-sub" id="sub-rent">הזן מחיר למ"ר או סכום כולל לחודש</div>
+                <div class="row-sub" id="sub-rent">למ"ר / סה"כ חודשי</div>
               </div>
-              <div class="spin">
+              <div class="spin" style="flex-shrink:0;">
                 <button class="spin-btn" onclick="adjRent(-5)">−</button>
                 <input class="spin-inp" id="rentInp" type="number" value="100" min="0" max="9999999" inputmode="numeric" oninput="onInputRent(this)" style="width:72px">
                 <span class="spin-unit" id="rentUnit">₪/מ"ר</span>
