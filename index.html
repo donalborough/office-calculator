@@ -30,6 +30,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .gate-cta:hover{filter:brightness(1.05);box-shadow:0 4px 12px rgba(197,224,133,0.3);}
 .gate-cta:active{transform:scale(0.98);}
 .gate-privacy{font-size:.67rem;color:#94a3b8;text-align:center;margin-top:16px;line-height:1.6;}
+#gateSuccess {display:none;text-align:center;padding:40px 20px;flex-direction:column;align-items:center;justify-content:center;background:#fff;border-radius:20px;}
 .hdr{background:var(--navy);padding:12px 20px;padding-top:max(12px,env(safe-area-inset-top));position:sticky;top:0;z-index:100;}
 .hdr-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;}
 .hdr-title{display:flex;align-items:center;gap:12px;}
@@ -198,7 +199,6 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
   tr { page-break-inside: avoid !important; }
 }
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
@@ -228,8 +228,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
       <button class="gate-cta" id="gateCta" onclick="gateSubmit()">כניסה למערכת ←</button>
     </div>
     <div class="gate-privacy" id="gate-privacy-txt">הפרטים אינם מועברים לצד שלישי.<br>© דון אלבורו</div>
-    
-    <div id="gateSuccess" style="display:none;text-align:center;padding:40px 20px;flex-direction:column;align-items:center;justify-content:center;background:#fff;border-radius:20px;">
+    <div id="gateSuccess">
       <div style="font-size:3rem;margin-bottom:12px;color:var(--lime);line-height:1;">✓</div>
       <div style="font-size:1.3rem;font-weight:900;color:var(--ink);margin-bottom:6px">ברוך הבא!</div>
       <div style="font-size:.85rem;color:var(--ink3);line-height:1.6">מעביר אותך למערכת...</div>
@@ -318,14 +317,14 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
           </div>
           <div class="row">
             <div class="row-l">
-              <div class="row-label" id="lbl-emp">מספר עובדים</div>
+              <div class="row-label" id="lbl-emp">מס' עמדות עבודה</div>
               <div class="row-sub" id="sqmPerEmpInline">—</div>
             </div>
             <div class="row-r">
               <div class="spin">
                 <button class="spin-btn" onclick="adj('emp',-5)">−</button>
                 <input class="spin-inp" id="empInp" type="number" value="40" min="1" max="2000" inputmode="numeric" oninput="onInput('emp',this)">
-                <span class="spin-unit" id="unit-emp">עובד</span>
+                <span class="spin-unit" id="unit-emp">עמדות</span>
                 <button class="spin-btn" onclick="adj('emp',+5)">+</button>
               </div>
             </div>
@@ -356,7 +355,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
       </div>
 
       <div class="sec">
-        <div class="sec-hd"><div class="sec-num">3</div><div class="sec-title" id="step4-title">עלויות נלוות</div></div>
+        <div class="sec-hd"><div class="sec-num">3</div><div class="sec-title" id="step3-title">עלויות נלוות</div></div>
         <div class="card">
           <div class="row" style="flex-direction:column;align-items:stretch;gap:14px;padding:18px 20px">
             <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
@@ -479,7 +478,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
       </div>
 
       <div class="sec">
-        <div class="sec-hd"><div class="sec-num">4</div><div class="sec-title" id="step5-title">תקופת ההסכם</div></div>
+        <div class="sec-hd"><div class="sec-num">4</div><div class="sec-title" id="step4-title">תקופת הסכם וגרייס</div></div>
         <div class="card">
           <div class="row">
             <div class="row-l">
@@ -495,15 +494,9 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
               </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div class="sec">
-        <div class="sec-hd"><div class="sec-num">5</div><div class="sec-title" id="step6-title">חודשי גרייס</div></div>
-        <div class="card">
           <div class="row">
             <div class="row-l">
-              <div class="row-label" id="lbl-grace">מספר חודשים</div>
+              <div class="row-label" id="lbl-grace">חודשי גרייס</div>
               <div class="row-sub" id="sub-grace">הזן רק אם סוכם במו"מ</div>
             </div>
             <div class="row-r">
@@ -515,7 +508,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
               </div>
             </div>
           </div>
-          <div class="card-note" id="grace-note-txt">חודשים ללא שכירות בתחילת ההסכם — מוצג כעלות אפקטיבית בסיכום.</div>
+          <div class="card-note" id="grace-note-txt">גרייס (ללא שכירות) בתחילת ההסכם יוצג כעלות אפקטיבית בסיכום.</div>
         </div>
       </div>
 
@@ -727,7 +720,7 @@ function loadPropToUI(){
   document.getElementById('customRatioTog').classList.toggle('on', p.useCustomRatio);
   document.getElementById('customRatioSpin').style.display = p.useCustomRatio ? 'flex' : 'none';
   
-  if(!p.rentMode) { p.rentMode = 'sqm'; p.rentTotal = p.rent * p.sqm; } // legacy safety
+  if(!p.rentMode) { p.rentMode = 'sqm'; p.rentTotal = p.rent * p.sqm; }
   setRentModeUI(p.rentMode);
   
   document.getElementById('monthsInp').value = p.months;
@@ -742,7 +735,6 @@ function loadPropToUI(){
   calc();
 }
 
-// Rent toggle logic
 function setRentModeUI(mode){
   document.getElementById('rentModeSqm').classList.toggle('active', mode==='sqm');
   document.getElementById('rentModeTotal').classList.toggle('active', mode==='total');
@@ -841,7 +833,7 @@ function calcProp(p){
 function calc(){
   const p=S(); const r=calcProp(p);
   document.getElementById('netNote').textContent='≈ '+r.net+' מ"ר נטו בפועל';
-  document.getElementById('sqmPerEmpInline').textContent=r.sqmPerEmp.toFixed(1)+' מ"ר לעובד';
+  document.getElementById('sqmPerEmpInline').textContent=r.sqmPerEmp.toFixed(1)+' מ"ר לעמדה';
   
   const graceRow = document.getElementById('graceEffectiveRow');
   if(p.grace > 0){ 
@@ -872,10 +864,10 @@ function calc(){
 
   const bpe=r.sqmPerEmp; const idealBruto=Math.ceil(p.emp*IDEAL_MIN/50)*50; const maxBruto=Math.floor(p.emp*IDEAL_MAX/50)*50;
   let nh='';
-  if(bpe<IDEAL_MIN) nh=`<div class="notice bad"><span class="notice-icon">⚠️</span><div class="notice-text"><strong>צפוף מדי — ${bpe.toFixed(1)} מ"ר/עובד</strong>מינימום מומלץ ${IDEAL_MIN} מ"ר. שקול לשדרג לכ-${idealBruto} מ"ר.</div></div>`;
-  else if(bpe<=IDEAL_MAX) nh=`<div class="notice ok"><span class="notice-icon">✅</span><div class="notice-text"><strong>שטח אידאלי — ${bpe.toFixed(1)} מ"ר/עובד</strong>בדיוק בטווח המומלץ (${IDEAL_MIN}–${IDEAL_MAX} מ"ר לעובד).</div></div>`;
-  else if(bpe<=IDEAL_WARN) nh=`<div class="notice warn"><span class="notice-icon">💡</span><div class="notice-text"><strong>קצת גדול — ${bpe.toFixed(1)} מ"ר/עובד</strong>הטווח האידאלי ${IDEAL_MIN}–${IDEAL_MAX} מ"ר. שווה לבחון כ-${maxBruto} מ"ר.</div></div>`;
-  else nh=`<div class="notice warn"><span class="notice-icon">💡</span><div class="notice-text"><strong>שטח גדול משמעותית — ${bpe.toFixed(1)} מ"ר/עובד</strong>יש מרווח לצמיחה משמעותית.</div></div>`;
+  if(bpe<IDEAL_MIN) nh=`<div class="notice bad"><span class="notice-icon">⚠️</span><div class="notice-text"><strong>צפוף מדי — ${bpe.toFixed(1)} מ"ר/עמדה</strong>מינימום מומלץ ${IDEAL_MIN} מ"ר. שקול לשדרג לכ-${idealBruto} מ"ר.</div></div>`;
+  else if(bpe<=IDEAL_MAX) nh=`<div class="notice ok"><span class="notice-icon">✅</span><div class="notice-text"><strong>שטח אידאלי — ${bpe.toFixed(1)} מ"ר/עמדה</strong>בדיוק בטווח המומלץ (${IDEAL_MIN}–${IDEAL_MAX} מ"ר לעמדה).</div></div>`;
+  else if(bpe<=IDEAL_WARN) nh=`<div class="notice warn"><span class="notice-icon">💡</span><div class="notice-text"><strong>קצת גדול — ${bpe.toFixed(1)} מ"ר/עמדה</strong>הטווח האידאלי ${IDEAL_MIN}–${IDEAL_MAX} מ"ר. שווה לבחון כ-${maxBruto} מ"ר.</div></div>`;
+  else nh=`<div class="notice warn"><span class="notice-icon">💡</span><div class="notice-text"><strong>שטח גדול משמעותית — ${bpe.toFixed(1)} מ"ר/עמדה</strong>יש מרווח לצמיחה משמעותית.</div></div>`;
   document.getElementById('spaceNotice').innerHTML=nh;
 
   if(p.arnMode==='manual') document.getElementById('arnSub').textContent=p.arnManual+' ₪/מ"ר — הזנה ידנית'; else document.getElementById('arnSub').textContent=p.arn?'17 ₪/מ"ר — הנחת עסקי תוכנה':'34 ₪/מ"ר — ללא הנחה';
@@ -1113,7 +1105,7 @@ function shareWhatsApp(){
   let msg = '';
   if (p.name) msg += `*${p.name}*\n`;
   msg += `\u200Fשטח: ${fmt(p.sqm)} מ"ר ברוטו\n\u200Fתקופה: ${p.months} חודשים\n\n*פירוט עלויות למ"ר:*\n`;
-  msg += `\u200F• שכירות: ${p.rent} ₪\n\u200F• ארנונה: ${arn} ₪${(p.arn&&p.arnMode!=='manual')?' (הנחת תוכנה)':''}\n`;
+  msg += `\u200F• שכירות בסיס: ${p.rent} ₪\n\u200F• ארנונה: ${arn} ₪${(p.arn&&p.arnMode!=='manual')?' (הנחת תוכנה)':''}\n`;
   msg += `\u200F• ניהול: ${p.mgmt} ₪\n\u200F• ניקיון: ${p.clean} ₪\n\u200F• חשמל, אינטרנט, מים: ${p.utils} ₪\n`;
   if(p.extra>0){ const ep=p.extraMode==='sqm'?p.extra:Math.round(p.extra/p.sqm); msg+=`\u200F• עלויות נוספות: ${ep} ₪\n`; }
   msg += `\n*סה"כ למ"ר: ${totalPerSqm} ₪*\n\n*עלויות:*\n\u200F• חודשי: ${fmt(r.totalMonthly)} ₪\n\u200F• שנתי: ${fmt(r.totalMonthly*12)} ₪\n\u200F• ${p.months} חודשים: ${fmt(r.totalMonthly*p.months)} ₪\n`;
