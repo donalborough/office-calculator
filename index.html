@@ -228,7 +228,8 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
       <button class="gate-cta" id="gateCta" onclick="gateSubmit()">כניסה למערכת ←</button>
     </div>
     <div class="gate-privacy" id="gate-privacy-txt">הפרטים אינם מועברים לצד שלישי.<br>© דון אלבורו</div>
-    <div id="gateSuccess" style="display:none;text-align:center;padding:30px 0;flex-direction:column;align-items:center;justify-content:center;position:absolute;inset:0;background:#fff;border-radius:20px;z-index:10;">
+    
+    <div id="gateSuccess" style="display:none;text-align:center;padding:40px 20px;flex-direction:column;align-items:center;justify-content:center;background:#fff;border-radius:20px;">
       <div style="font-size:3rem;margin-bottom:12px;color:var(--lime);line-height:1;">✓</div>
       <div style="font-size:1.3rem;font-weight:900;color:var(--ink);margin-bottom:6px">ברוך הבא!</div>
       <div style="font-size:.85rem;color:var(--ink3);line-height:1.6">מעביר אותך למערכת...</div>
@@ -299,7 +300,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
       </div>
 
       <div class="sec">
-        <div class="sec-hd"><div class="sec-num">2</div><div class="sec-title" id="step2-title">שטח ועובדים</div></div>
+        <div class="sec-hd"><div class="sec-num">2</div><div class="sec-title" id="step2-title">נתוני בסיס: שטח ושכירות</div></div>
         <div class="card">
           <div class="row">
             <div class="row-l">
@@ -329,37 +330,33 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
               </div>
             </div>
           </div>
+          
+          <div class="row" style="border-top:1px solid var(--border);flex-direction:column;align-items:stretch;gap:12px;padding:16px 20px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div>
+                <div class="row-label" id="lbl-rent">דמי שכירות בסיס</div>
+                <div class="row-sub" id="sub-rent">הזן מחיר למ"ר או סכום כולל לחודש</div>
+              </div>
+              <div class="mode-btns">
+                <button class="mode-btn active" id="rentModeSqm" onclick="setRentMode('sqm')">₪/מ"ר</button>
+                <button class="mode-btn" id="rentModeTotal" onclick="setRentMode('total')">סה"כ</button>
+              </div>
+            </div>
+            <div style="display:flex;justify-content:flex-end">
+              <div class="spin">
+                <button class="spin-btn" onclick="adjRent(-5)">−</button>
+                <input class="spin-inp" id="rentInp" type="number" value="100" min="0" max="9999999" inputmode="numeric" oninput="onInputRent(this)" style="width:72px">
+                <span class="spin-unit" id="rentUnit">₪/מ"ר</span>
+                <button class="spin-btn" onclick="adjRent(+5)">+</button>
+              </div>
+            </div>
+          </div>
         </div>
         <div id="spaceNotice"></div>
       </div>
 
       <div class="sec">
-        <div class="sec-hd"><div class="sec-num">3</div><div class="sec-title" id="step3-title">אזור ושכירות</div></div>
-        <div class="card">
-          <div class="chips" id="cityChips">
-            <div class="chip sel" onclick="setCity(this,160)" id="city-ta">תל אביב מרכז<span class="cs">~160 ₪/מ"ר</span></div>
-            <div class="chip" onclick="setCity(this,130)" id="city-rg">רמת גן הבורסה<span class="cs">~130 ₪/מ"ר</span></div>
-            <div class="chip" onclick="setCity(this,110)" id="city-hz">הרצליה פיתוח<span class="cs">~110 ₪/מ"ר</span></div>
-          </div>
-          <div class="row" style="border-top:1px solid var(--border)">
-            <div class="row-l">
-              <div class="row-label" id="lbl-rent">דמי שכירות</div>
-              <div class="row-sub" id="sub-rent">לפי הצעת המחיר</div>
-            </div>
-            <div class="row-r">
-              <div class="spin">
-                <button class="spin-btn" onclick="adj('rent',-5)">−</button>
-                <input class="spin-inp" id="rentInp" type="number" value="160" min="30" max="500" inputmode="numeric" oninput="onInput('rent',this)">
-                <span class="spin-unit" id="unit-rent">₪/מ"ר</span>
-                <button class="spin-btn" onclick="adj('rent',+5)">+</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="sec">
-        <div class="sec-hd"><div class="sec-num">4</div><div class="sec-title" id="step4-title">עלויות נלוות</div></div>
+        <div class="sec-hd"><div class="sec-num">3</div><div class="sec-title" id="step4-title">עלויות נלוות</div></div>
         <div class="card">
           <div class="row" style="flex-direction:column;align-items:stretch;gap:14px;padding:18px 20px">
             <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
@@ -482,7 +479,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
       </div>
 
       <div class="sec">
-        <div class="sec-hd"><div class="sec-num">5</div><div class="sec-title" id="step5-title">תקופת ההסכם</div></div>
+        <div class="sec-hd"><div class="sec-num">4</div><div class="sec-title" id="step5-title">תקופת ההסכם</div></div>
         <div class="card">
           <div class="row">
             <div class="row-l">
@@ -502,7 +499,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
       </div>
 
       <div class="sec">
-        <div class="sec-hd"><div class="sec-num">6</div><div class="sec-title" id="step6-title">חודשי גרייס</div></div>
+        <div class="sec-hd"><div class="sec-num">5</div><div class="sec-title" id="step6-title">חודשי גרייס</div></div>
         <div class="card">
           <div class="row">
             <div class="row-l">
@@ -568,9 +565,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 
       <div class="sec print-hide" id="saveBtns">
         <div class="btn-group-row">
-          <button class="btn-side save-btn-pdf action-btn" onclick="savePDF()">
-            📄 שמור PDF
-          </button>
+          <button class="btn-side save-btn-pdf action-btn" onclick="savePDF()">📄 שמור PDF</button>
           <button class="btn-side wa-btn action-btn" onclick="shareWhatsApp()">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
             שתף תקציר
@@ -584,15 +579,9 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
           <div class="broker-title" id="broker-title-txt">מתווך משרדים מורשה</div>
           <div class="broker-text" id="broker-body-txt">מחפשים שטח ספציפי?<br>רוצים לשמוע על המלצות ומשרדים <em>"אוף מרקט"</em>?<br>צרו קשר ואעזור.</div>
           <div class="broker-btns">
-            <a class="broker-icon-btn tel" href="tel:0507202874" title="התקשר">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-            </a>
-            <a class="broker-icon-btn li" href="https://www.linkedin.com/in/don-alborough/" target="_blank" title="LinkedIn">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-            </a>
-            <a class="broker-icon-btn wa" href="https://wa.me/9720507202874" target="_blank" title="WhatsApp">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            </a>
+            <a class="broker-icon-btn tel" href="tel:0507202874" title="התקשר"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></a>
+            <a class="broker-icon-btn li" href="https://www.linkedin.com/in/don-alborough/" target="_blank" title="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+            <a class="broker-icon-btn wa" href="https://wa.me/9720507202874" target="_blank" title="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
           </div>
         </div>
       </div>
@@ -613,7 +602,6 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 <div class="compare-modal" id="compareModal">
   <div class="compare-backdrop print-hide" onclick="closeCompare()"></div>
   <div class="compare-sheet">
-    
     <div class="compare-hd print-hide">
       <div class="compare-hd-title">השוואת נכסים</div>
       <button class="compare-close" onclick="closeCompare()">✕</button>
@@ -624,18 +612,17 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
     </div>
     
     <div class="landscape-hint print-hide">
-      לחוויית צפייה מיטבית, מומלץ לסובב את המכשיר לתצוגה אופקית
+      מומלץ לסובב את המכשיר לרוחב לצפייה נוחה
     </div>
     
     <div class="print-hide" style="padding:16px 24px;display:flex;justify-content:center;">
       <button class="action-btn cmp-save-btn" onclick="saveCmpPDF()">ייצא 📄</button>
     </div>
-
   </div>
 </div>
 
 <script>
-// ══ חיבור לאקסל ══
+// ══ API CONNECTION ══
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyivyw8rHoib5Rhz-NUsbqYf_7O1bmINHZfhPQR3sFk2P5QTiec4lKuyWQYXnZPhMWJ_A/exec';
 
 function sendToSheet(data) {
@@ -646,7 +633,8 @@ function sendToSheet(data) {
 }
 
 const defaultProp = () => ({
-  name:'',sqm:480,emp:40,rent:160,arn:false,arnMode:'auto',arnManual:34,
+  name:'',sqm:480,emp:40,rent:100,rentMode:'sqm',rentTotal:48000,
+  arn:false,arnMode:'auto',arnManual:34,
   mgmt:20,clean:8,utils:12,extra:0,extraMode:'sqm',
   grossRatio:1.30,useCustomRatio:false,customPct:25,
   months:24,furniture:0,
@@ -670,7 +658,6 @@ function renderTabs(){
   props.forEach((p,i) => {
     const t = document.createElement('div');
     t.className = 'prop-tab' + (i===curProp?' active':'');
-    
     t.innerHTML = `
       <div class="tab-del-btn" onclick="deleteProp(${i}, event)" title="מחק נכס">
         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6"/></svg>
@@ -718,14 +705,9 @@ function onPropNameBlur(val){
   if(!trimmed) return;
   if(_sentProps.has(trimmed)) return;
   _sentProps.add(trimmed);
-  
   let userName='', userMail='';
   try{const s=JSON.parse(localStorage.getItem('office_session')||'null'); if(s){userName=s.name||'';userMail=s.mail||'';}}catch(e){}
-  
-  sendToSheet({
-    sheet: 'נכסים', name: userName, mail: userMail, propName: trimmed,
-    sqm: '', rent: '', totalMonthly: '', months: '', grace: 0
-  });
+  sendToSheet({ sheet: 'נכסים', name: userName, mail: userMail, propName: trimmed, sqm: '', rent: '', totalMonthly: '', months: '', grace: 0 });
 }
 
 function loadPropToUI(){
@@ -733,7 +715,6 @@ function loadPropToUI(){
   document.getElementById('propNameInp').value = p.name;
   document.getElementById('sqmInp').value = p.sqm;
   document.getElementById('empInp').value = p.emp;
-  document.getElementById('rentInp').value = p.rent;
   document.getElementById('mgmtInp').value = p.mgmt;
   document.getElementById('cleanInp').value = p.clean;
   document.getElementById('utilsInp').value = p.utils;
@@ -745,10 +726,10 @@ function loadPropToUI(){
   });
   document.getElementById('customRatioTog').classList.toggle('on', p.useCustomRatio);
   document.getElementById('customRatioSpin').style.display = p.useCustomRatio ? 'flex' : 'none';
-  document.querySelectorAll('#cityChips .chip').forEach(c => {
-    const rent = parseInt(c.getAttribute('onclick').match(/\d+/)[0]);
-    c.classList.toggle('sel', rent===p.rent);
-  });
+  
+  if(!p.rentMode) { p.rentMode = 'sqm'; p.rentTotal = p.rent * p.sqm; } // legacy safety
+  setRentModeUI(p.rentMode);
+  
   document.getElementById('monthsInp').value = p.months;
   document.getElementById('graceInp').value = p.grace;
   document.getElementById('furnitureInp').value = p.furniture;
@@ -761,9 +742,65 @@ function loadPropToUI(){
   calc();
 }
 
-function onInput(key,el){ const v=parseInt(el.value); if(!isNaN(v)&&v>0){ S()[key]=v; calc(); if(key==='sqm'||key==='rent') maybeSendPropUpdate(); } }
-function adj(key,d){ const lim={sqm:[50,9999],emp:[1,2000],rent:[30,500],mgmt:[0,100],clean:[0,60],utils:[0,60],extra:[0,200],customPct:[5,50],parkingSpots:[0,200],parkingPrice:[0,2000],grace:[0,24]}; S()[key]=clamp(S()[key]+d,lim[key][0],lim[key][1]); document.getElementById(key+'Inp').value=S()[key]; calc(); if(key==='sqm'||key==='rent') maybeSendPropUpdate(); saveState(); }
-function setCity(el,rent){ document.querySelectorAll('#cityChips .chip').forEach(c=>c.classList.remove('sel')); el.classList.add('sel'); S().rent=rent; document.getElementById('rentInp').value=rent; calc(); maybeSendPropUpdate(); saveState(); }
+// Rent toggle logic
+function setRentModeUI(mode){
+  document.getElementById('rentModeSqm').classList.toggle('active', mode==='sqm');
+  document.getElementById('rentModeTotal').classList.toggle('active', mode==='total');
+  document.getElementById('rentUnit').textContent = mode==='sqm' ? '₪/מ"ר' : '₪/חודש';
+  document.getElementById('rentInp').value = mode==='sqm' ? S().rent : S().rentTotal;
+}
+function setRentMode(mode){
+  S().rentMode = mode;
+  if(mode === 'total') S().rentTotal = Math.round(S().rent * S().sqm);
+  else S().rent = Math.round(S().rentTotal / S().sqm);
+  setRentModeUI(mode);
+  calc(); saveState();
+}
+function adjRent(d){
+  if(S().rentMode === 'sqm') {
+    S().rent = Math.max(0, S().rent + d);
+    S().rentTotal = Math.round(S().rent * S().sqm);
+    document.getElementById('rentInp').value = S().rent;
+  } else {
+    const step = 500;
+    S().rentTotal = Math.max(0, S().rentTotal + (d > 0 ? step : -step));
+    S().rent = Math.round(S().rentTotal / S().sqm);
+    document.getElementById('rentInp').value = S().rentTotal;
+  }
+  calc(); maybeSendPropUpdate(); saveState();
+}
+function onInputRent(el){
+  const v = parseInt(el.value);
+  if(!isNaN(v) && v >= 0) {
+    if(S().rentMode === 'sqm') { S().rent = v; S().rentTotal = Math.round(v * S().sqm); } 
+    else { S().rentTotal = v; S().rent = Math.round(v / S().sqm); }
+    calc(); maybeSendPropUpdate();
+  }
+}
+function syncRentAfterSqmChange() {
+  if (S().rentMode === 'total') S().rent = Math.round(S().rentTotal / S().sqm);
+  else S().rentTotal = Math.round(S().rent * S().sqm);
+}
+
+function onInput(key,el){ 
+  const v=parseInt(el.value); 
+  if(!isNaN(v)&&v>0){ 
+    S()[key]=v; 
+    if(key==='sqm') syncRentAfterSqmChange();
+    calc(); 
+    if(key==='sqm') maybeSendPropUpdate(); 
+  } 
+}
+function adj(key,d){ 
+  const lim={sqm:[50,9999],emp:[1,2000],mgmt:[0,100],clean:[0,60],utils:[0,60],customPct:[5,50],parkingSpots:[0,200],parkingPrice:[0,2000],grace:[0,24]}; 
+  S()[key]=clamp(S()[key]+d,lim[key][0],lim[key][1]); 
+  document.getElementById(key+'Inp').value=S()[key]; 
+  if(key==='sqm') syncRentAfterSqmChange();
+  calc(); 
+  if(key==='sqm') maybeSendPropUpdate(); 
+  saveState(); 
+}
+
 function toggleCustomRatio(){ S().useCustomRatio=!S().useCustomRatio; document.getElementById('customRatioTog').classList.toggle('on',S().useCustomRatio); document.getElementById('customRatioSpin').style.display=S().useCustomRatio?'flex':'none'; document.querySelectorAll('#bldgChips .chip').forEach(c=>c.classList.toggle('sel',!S().useCustomRatio&&parseFloat(c.dataset.ratio)===S().grossRatio)); calc(); }
 function setBldg(el,ratio){ S().useCustomRatio=false; document.getElementById('customRatioTog').classList.remove('on'); document.getElementById('customRatioSpin').style.display='none'; document.querySelectorAll('#bldgChips .chip').forEach(c=>c.classList.remove('sel')); el.classList.add('sel'); S().grossRatio=ratio; calc(); saveState(); }
 function toggleArn(){ S().arn=!S().arn; document.getElementById('arnTog').classList.toggle('on',S().arn); updateArnSub(); calc(); saveState(); }
@@ -787,7 +824,7 @@ function calcProp(p){
   const net=Math.round(bruto/effectiveRatio);
   const arn=p.arnMode==='manual'?p.arnManual:(p.arn?17:34);
   const extraPerSqm=p.extraMode==='sqm'?p.extra:(p.extra>0?Math.round(p.extra/bruto):0);
-  const rows=[ {l:'שכירות',v:p.rent}, {l:('ארנונה')+(p.arn&&p.arnMode!=='manual'?(' (הנחת תוכנה)'):''),v:arn}, {l:'דמי ניהול',v:p.mgmt}, {l:'שירותי ניקיון',v:p.clean}, {l:'חשמל, אינטרנט, מים',v:p.utils}, ...(p.extra>0?[{l:'עלויות נוספות',v:extraPerSqm}]:[]), ];
+  const rows=[ {l:'שכירות בסיס',v:p.rent}, {l:'ארנונה',v:arn}, {l:'דמי ניהול',v:p.mgmt}, {l:'שירותי ניקיון',v:p.clean}, {l:'חשמל, אינטרנט, מים',v:p.utils}, ...(p.extra>0?[{l:'עלויות נוספות',v:extraPerSqm}]:[]), ];
   const perSqm=rows.reduce((s,r)=>s+r.v,0);
   const monthly=perSqm*bruto;
   const parkingMonthly = p.parkingSpots * p.parkingPrice;
@@ -803,6 +840,7 @@ function calcProp(p){
 
 function calc(){
   const p=S(); const r=calcProp(p);
+  document.getElementById('netNote').textContent='≈ '+r.net+' מ"ר נטו בפועל';
   document.getElementById('sqmPerEmpInline').textContent=r.sqmPerEmp.toFixed(1)+' מ"ר לעובד';
   
   const graceRow = document.getElementById('graceEffectiveRow');
@@ -876,14 +914,13 @@ function generateCompareTable(forPrint = false) {
         </div>
       </div>
     </td>`;
-    
     vals.forEach(v => { r += `<td class="cmp-td" style="text-align:center; font-weight:${fw}; color:${c};">${v}</td>`; });
     r += `</tr>`;
     return r;
   };
 
   html += row('שטח ברוטו', results.map(({p})=>fmt(p.sqm)+' מ"ר'), {bold:true});
-  html += row('שכירות', results.map(({p})=>p.rent+' ₪/מ"ר'), {separator:true});
+  html += row('שכירות בסיס', results.map(({p})=>p.rent+' ₪/מ"ר'), {separator:true});
   html += row('ארנונה', results.map(({p})=>{ return (p.arnMode==='manual'?p.arnManual:(p.arn?17:34))+' ₪/מ"ר'; }));
   html += row('דמי ניהול', results.map(({p})=>p.mgmt+' ₪/מ"ר'));
   html += row('ניקיון', results.map(({p})=>p.clean+' ₪/מ"ר'));
@@ -977,7 +1014,7 @@ function maybeSendPropUpdate(){
     const p = S();
     const trimmed = (p.name||'').trim();
     if(!trimmed) return;
-    if(p.sqm === 480 && p.rent === 160) return; 
+    if(p.sqm === 480 && p.rent === 100) return; 
     
     const prev = _sentPropsFinal.get(trimmed);
     if(prev && prev.sqm === p.sqm && prev.rent === p.rent) return;
@@ -992,7 +1029,7 @@ function maybeSendPropUpdate(){
 
 function buildSummaryHTML(p, r){
   const arn = p.arnMode==='manual'?p.arnManual:(p.arn?17:34);
-  const rows = [ {l:'שכירות', v:p.rent}, {l:('ארנונה')+(p.arn&&p.arnMode!=='manual'?(' (הנחת תוכנה)'):''), v:arn}, {l:'דמי ניהול', v:p.mgmt}, {l:'שירותי ניקיון', v:p.clean}, {l:'חשמל, אינטרנט, מים', v:p.utils} ];
+  const rows = [ {l:'שכירות בסיס', v:p.rent}, {l:'ארנונה', v:arn}, {l:'דמי ניהול', v:p.mgmt}, {l:'שירותי ניקיון', v:p.clean}, {l:'חשמל, אינטרנט, מים', v:p.utils} ];
   if(p.extra>0){ const ep = p.extraMode==='sqm'?p.extra:Math.round(p.extra/p.sqm); rows.push({l:'עלויות נוספות', v:ep}); }
   const rowsHTML = rows.map(row=>`<tr><td>${row.l}</td><td style="text-align:left;font-weight:700">${row.v} ₪/מ"ר</td><td style="text-align:left;font-weight:800">${fmt(row.v*p.sqm)} ₪</td></tr>`).join('');
   const parkingHTML = r.parkingMonthly>0?`<tr><td>חניות (${p.parkingSpots} × ${p.parkingPrice} ₪)</td><td></td><td style="text-align:left;font-weight:800">${fmt(r.parkingMonthly)} ₪</td></tr>`:'';
