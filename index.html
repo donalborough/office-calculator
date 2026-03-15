@@ -62,7 +62,6 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 
 .gate-err{font-size:.74rem;color:var(--rose);background:var(--rose-l);border-radius:8px;padding:8px 12px;margin-bottom:14px;display:none;text-align:right;}
 
-/* STABLE & ACTIVE BUTTONS */
 .gate-cta{width:100%;height:56px;background:var(--lime);color:var(--deep-black);border:none;border-radius:var(--r-sm);font-family:'Heebo',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:all 0.2s ease;display:flex;align-items:center;justify-content:center;gap:8px;}
 .gate-cta:hover{filter:brightness(1.05);box-shadow:0 4px 12px rgba(197,224,133,0.3);}
 .gate-cta:active{transform:scale(0.98);}
@@ -105,7 +104,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .prop-tab-add:hover{border-color:var(--ink2);color:var(--ink2);background:#fff;}
 .prop-tab-add:active{transform:scale(0.92);}
 
-/* DELETE TRASH ICON IN TAB */
+/* DELETE TRASH ICON */
 .tab-del-btn {position:absolute; left:6px; top:8px; width:24px; height:24px; border-radius:6px; background:transparent; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--ink3); transition:all 0.2s;}
 .prop-tab.active .tab-del-btn {color:rgba(255,255,255,0.5);}
 .tab-del-btn:hover {background:var(--rose-l); color:var(--rose);}
@@ -175,7 +174,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .brow-lbl{color:var(--ink2);font-weight:500;}
 .brow-val{font-weight:800;flex-shrink:0;color:var(--ink);}
 
-/* HERO RESULT (Dark theme for the totals) */
+/* HERO RESULT */
 .results-total-box { background: var(--navy); padding: 24px 20px; border-radius: 0 0 var(--r) var(--r); position: relative; overflow: hidden; }
 .results-total-box::before { content:''; position:absolute; top:-50px; right:-50px; width:150px; height:150px; border-radius:50%; background:radial-gradient(circle, rgba(197,224,133,0.1) 0%, transparent 70%); pointer-events:none; }
 .rtb-header {font-size:.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#ffffff;margin-bottom:6px;}
@@ -186,7 +185,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .rtb-cell-val {font-size:.95rem;font-weight:800;color:#fff;}
 .rtb-cell-lbl {font-size:.65rem;color:rgba(255,255,255,.6);margin-top:2px;}
 
-/* GRACE HIGHLIGHT FIX - 100% Readable */
+/* GRACE HIGHLIGHT FIX */
 #graceEffectiveRow {
   background: rgba(197,224,133,0.15); 
   border: 1px solid rgba(197,224,133,0.4); 
@@ -213,7 +212,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .compare-bar-inner{max-width:1100px;margin:0 auto;display:flex;gap:16px;align-items:center;justify-content:center;}
 .compare-bar .action-btn { flex: 0 1 auto; min-width: 150px; padding: 12px 24px; }
 
-/* BROKER CARD - Elegant Icons */
+/* BROKER CARD */
 .broker{background:var(--navy);border-radius:var(--r);padding:24px 20px;box-shadow:var(--shadow-m);position:relative;overflow:hidden;}
 .broker::before{content:'';position:absolute;bottom:-30px;left:-30px;width:140px;height:140px;border-radius:50%;background:rgba(197,224,133,.05);pointer-events:none;}
 .broker-name{font-size:1.1rem;font-weight:900;color:#fff;margin-bottom:2px;}
@@ -246,56 +245,32 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .compare-sheet{position:absolute;bottom:0;left:0;right:0;background:#fff;border-radius:24px 24px 0 0;max-height:92vh;overflow-y:auto;padding:0 0 max(24px,env(safe-area-inset-bottom));animation:slideUp .3s cubic-bezier(.22,1,.36,1) both;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 
-/* STICKY COMPARE HEADER + SCROLLABLE TABLE */
 .compare-hd{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:#fff;}
 .compare-hd-title{font-size:1.1rem;font-weight:900;color:var(--navy);}
 .compare-close{width:36px;height:36px;border-radius:10px;background:var(--bg);border:none;font-size:1.2rem;color:var(--ink2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s ease;}
 .compare-close:active{transform:scale(0.9);}
 
-.cmp-table-wrapper { flex:1; overflow-y:auto; overflow-x:auto; max-height: 65vh; padding: 0 20px; }
-.cmp-table{width:100%; border-collapse:collapse; min-width:700px;}
+/* STICKY MATRIX TABLE */
+.cmp-table-wrapper { flex:1; overflow-y:auto; overflow-x:auto; max-height: 65vh; padding: 0; }
+.cmp-table{width:100%; border-collapse:separate; border-spacing: 0; min-width:700px; text-align:center; direction:rtl;}
 .cmp-th { position:sticky; top:0; background-color:var(--navy); color:var(--lime); padding:12px 16px; z-index:10; border-bottom:2px solid var(--lime); border-left:1px solid rgba(255,255,255,0.1); }
 .cmp-th:last-child { border-left:none; }
 .cmp-td { padding:12px 16px; border-bottom:1px solid #f1f5f9; border-left:1px solid #f8fafc; }
 .cmp-td:last-child { border-left:none; }
 
-.cmp-save-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;max-width:300px;padding:14px;background:var(--navy);color:var(--lime);border:none;border-radius:12px;font-family:'Heebo',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:all 0.2s ease;box-shadow:0 4px 12px rgba(0,0,0,0.1);}
-.cmp-save-btn:hover{filter:brightness(1.2);}
+/* The rightmost column (Criteria) freezes horizontally */
+.sticky-col { position: sticky; right: 0; background: inherit; z-index: 5; box-shadow: -2px 0 5px rgba(0,0,0,0.03); text-align:right; }
+.cmp-th.sticky-col { z-index: 15; background-color: var(--navy); border-left: 1px solid rgba(255,255,255,0.1); }
+.cmp-td.sticky-col { border-left: 1px solid #e2e8f0; }
+
+.cmp-save-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;max-width:300px;padding:14px;background:var(--card);color:var(--ink);border:1px solid var(--border);border-radius:12px;font-family:'Heebo',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:all 0.2s ease;box-shadow:0 4px 12px rgba(0,0,0,0.05);}
+.cmp-save-btn:hover{background:#f8fafc;}
 .cmp-save-btn:active{transform:scale(0.98);}
 
-.landscape-hint { margin:10px 20px; padding:10px 16px; background:rgba(197,224,133,0.1); border-radius:12px; border:1px solid rgba(197,224,133,0.2); font-size:.75rem; color:var(--navy); font-weight:700; text-align:center; }
+.landscape-hint { margin:0; padding:10px 0; font-size:.7rem; color:var(--ink3); text-align:center; }
 @media(min-width: 768px) { .landscape-hint { display: none !important; } }
 
-.print-only { display: none !important; }
-
-/* PRINT STYLES - Optimized for High Contrast & Perfect 1 Page Fit */
-@media print {
-  @page { size: A4 portrait; margin: 15mm; }
-  body { background: #fff !important; }
-  .print-hide, .hdr-back, .prop-tabs-wrap, .compare-bar, .compare-modal, .compare-backdrop { display: none !important; }
-  .page-container { padding: 0 !important; max-width: 100% !important; display: block !important; margin: 0 !important;}
-  .main-layout-grid { display: block !important; gap: 0 !important; }
-  .layout-left, .layout-right { width: 100% !important; position: static !important; }
-  
-  /* Compare PDF Settings (Landscape) */
-  body.printing-compare @page { size: landscape; margin: 5mm; }
-  body.printing-compare .page-container, body.printing-compare .hdr { display: none !important; }
-  body.printing-compare .compare-modal { display: block !important; position: static !important; background: transparent !important; }
-  body.printing-compare .compare-sheet { position: static !important; max-height: none !important; overflow: visible !important; border-radius: 0 !important; box-shadow: none !important; animation: none !important; padding: 0 !important; }
-  body.printing-compare .cmp-table-wrapper { max-height: none !important; overflow: visible !important; padding: 0 !important; }
-  body.printing-compare .print-only { display: block !important; margin-bottom: 4px !important; padding-top: 0 !important; }
-  body.printing-compare #cmpTable { width: 100%; margin: 0; padding: 0; page-break-inside: avoid; border: 1px solid #ccc; }
-  body.printing-compare .cmp-th { background-color: #202020 !important; color: #C5E085 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 4px !important; font-size: 0.7rem !important; line-height: 1.1 !important; border-bottom: 1px solid #000 !important; }
-  body.printing-compare .cmp-td { padding: 3px !important; font-size: 0.65rem !important; line-height: 1.1 !important; border-bottom: 1px solid #eee !important; border-left: 1px solid #eee !important; color: #000 !important;}
-  body.printing-compare .print-only h1 { font-size: 1.1rem !important; margin: 4px 0 !important; }
-  body.printing-compare .logo-wrap svg { height: 20px !important; }
-  body.printing-compare .print-only.footer-print { margin-top: 4px !important; padding-top: 4px !important; font-size: 0.6rem !important; border-top: 1px solid #ccc; }
-  
-  html, body { height: auto !important; min-height: auto !important; overflow: visible !important; }
-  tr { page-break-inside: avoid !important; }
-}
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
@@ -489,28 +464,28 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
           <div class="row" style="border-top:1px solid var(--border)">
             <div class="row-l"><div class="row-label" id="lbl-mgmt">דמי ניהול</div><div class="row-sub" id="sub-mgmt">אחזקה + שירותים משותפים</div></div>
             <div class="row-r"><div class="spin">
-              <button class="spin-btn" onclick="adj('mgmt',-2)">−</button>
+              <button class="spin-btn" onclick="adj('mgmt',-1)">−</button>
               <input class="spin-inp" id="mgmtInp" type="number" value="20" min="0" max="100" inputmode="numeric" oninput="onInput('mgmt',this)">
               <span class="spin-unit" id="unit-mgmt">₪/מ"ר</span>
-              <button class="spin-btn" onclick="adj('mgmt',+2)">+</button>
+              <button class="spin-btn" onclick="adj('mgmt',+1)">+</button>
             </div></div>
           </div>
           <div class="row">
             <div class="row-l"><div class="row-label" id="lbl-clean">שירותי ניקיון</div></div>
             <div class="row-r"><div class="spin">
-              <button class="spin-btn" onclick="adj('clean',-2)">−</button>
+              <button class="spin-btn" onclick="adj('clean',-1)">−</button>
               <input class="spin-inp" id="cleanInp" type="number" value="8" min="0" max="60" inputmode="numeric" oninput="onInput('clean',this)">
               <span class="spin-unit" id="unit-clean">₪/מ"ר</span>
-              <button class="spin-btn" onclick="adj('clean',+2)">+</button>
+              <button class="spin-btn" onclick="adj('clean',+1)">+</button>
             </div></div>
           </div>
           <div class="row">
             <div class="row-l"><div class="row-label" id="lbl-utils">חשמל, אינטרנט, מים</div></div>
             <div class="row-r"><div class="spin">
-              <button class="spin-btn" onclick="adj('utils',-2)">−</button>
+              <button class="spin-btn" onclick="adj('utils',-1)">−</button>
               <input class="spin-inp" id="utilsInp" type="number" value="12" min="0" max="60" inputmode="numeric" oninput="onInput('utils',this)">
               <span class="spin-unit" id="unit-utils">₪/מ"ר</span>
-              <button class="spin-btn" onclick="adj('utils',+2)">+</button>
+              <button class="spin-btn" onclick="adj('utils',+1)">+</button>
             </div></div>
           </div>
           
@@ -550,10 +525,10 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
             </div>
             <div class="row-r">
               <div class="spin">
-                <button class="spin-btn" onclick="adjFurniture(-10000)">−</button>
+                <button class="spin-btn" onclick="adjFurniture(-5000)">−</button>
                 <input class="spin-inp" id="furnitureInp" type="number" value="0" min="0" max="9999999" inputmode="numeric" oninput="onInputFurniture(this)" style="width:72px">
                 <span class="spin-unit">₪</span>
-                <button class="spin-btn" onclick="adjFurniture(+10000)">+</button>
+                <button class="spin-btn" onclick="adjFurniture(+5000)">+</button>
               </div>
             </div>
           </div>
@@ -602,11 +577,11 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
       </div>
 
       <div class="sec">
-        <div class="sec-hd"><div class="sec-num">6</div><div class="sec-title" id="step6-title">גרייס 💡</div></div>
+        <div class="sec-hd"><div class="sec-num">6</div><div class="sec-title" id="step6-title">חודשי גרייס</div></div>
         <div class="card">
           <div class="row">
             <div class="row-l">
-              <div class="row-label" id="lbl-grace">חודשי גרייס</div>
+              <div class="row-label" id="lbl-grace">מספר חודשים</div>
               <div class="row-sub" id="sub-grace">הזן רק אם סוכם במו"מ</div>
             </div>
             <div class="row-r">
@@ -649,7 +624,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
             <div class="rtb-sub" id="rSub">—</div>
 
             <div id="graceEffectiveRow" style="display:none;background:rgba(197,224,133,.15);border:1px solid rgba(197,224,133,.4);border-radius:12px;padding:14px 16px;margin-bottom:16px">
-              <div class="grace-highlight-title" style="font-size:.65rem;color:var(--lime);font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:4px;">💡 <span id='grace-effective-lbl'>אחרי גרייס — עלות אפקטיבית</span></div>
+              <div class="grace-highlight-title" style="font-size:.65rem;color:var(--lime);font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:4px;"><span id='grace-effective-lbl'>אחרי גרייס — עלות אפקטיבית</span></div>
               <div class="grace-highlight-val" id="rEffective" style="font-size:1.8rem;font-weight:900;color:var(--lime);line-height:1;">—</div>
               <div class="grace-highlight-sub" id="rEffectiveSub" style="font-size:.75rem;color:#ffffff;margin-top:6px;opacity:0.95;font-weight:500;">—</div>
             </div>
@@ -679,31 +654,13 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
       <div class="sec print-hide" id="saveBtns">
         <div class="btn-group-row">
           <button class="btn-side save-btn-pdf action-btn" onclick="savePDF()">
-            📄 שמור PDF
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>  
+            הורד כ-PDF
           </button>
           <button class="btn-side wa-btn action-btn" onclick="shareWhatsApp()">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
             שתף תקציר
           </button>
-        </div>
-      </div>
-
-      <div class="sec print-hide">
-        <div class="broker">
-          <div class="broker-name">דון אלבורו</div>
-          <div class="broker-title" id="broker-title-txt">מתווך משרדים מורשה</div>
-          <div class="broker-text" id="broker-body-txt">מחפשים שטח ספציפי?<br>רוצים לשמוע על המלצות ומשרדים <em>"אוף מרקט"</em>?<br>צרו קשר ואעזור.</div>
-          <div class="broker-btns">
-            <a class="broker-icon-btn tel" href="tel:0507202874" title="התקשר">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-            </a>
-            <a class="broker-icon-btn li" href="https://www.linkedin.com/in/don-alborough/" target="_blank" title="LinkedIn">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-            </a>
-            <a class="broker-icon-btn wa" href="https://wa.me/9720507202874" target="_blank" title="WhatsApp">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            </a>
-          </div>
         </div>
       </div>
 
@@ -723,24 +680,6 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 <div class="compare-modal" id="compareModal">
   <div class="compare-backdrop print-hide" onclick="closeCompare()"></div>
   <div class="compare-sheet">
-    
-    <div class="print-only" style="text-align:center; margin-bottom:16px; padding-top:16px;">
-      <div class="logo-wrap" style="transform: scale(1.3);">
-        <div style="display:flex; align-items:center; gap:8px; justify-content:center;">
-          <svg viewBox="0 0 528 672" style="height:28px; width:auto; color:var(--deep-black);">
-            <path d="M526 86L376 0L116 150V286L376 136L526 222V86Z" fill="currentColor" />
-            <path d="M527 349L376 261L116 411L114 289L2 347V671H114V547L375 396L527 483V349Z" fill="currentColor" />
-            <path d="M527 607L378 522L117 671H527V607Z" fill="currentColor" />
-          </svg>
-          <div style="display:inline-flex;flex-direction:column;align-items:flex-start;line-height:1.15;">
-            <span class="logo-top" style="color:var(--deep-black)!important; font-size:1.1rem;">השורה</span>
-            <span class="logo-bottom" style="color:var(--ink)!important; border-top:2px solid var(--deep-black); font-size:1.4rem;">התחתונה</span>
-          </div>
-        </div>
-      </div>
-      <div style="font-size:0.8rem; color:#64748b; margin-top:8px;">מחשבון מקצועי לניתוח עסקאות שכירות</div>
-    </div>
-
     <div class="compare-hd print-hide">
       <div class="compare-hd-title">השוואת נכסים</div>
       <button class="compare-close" onclick="closeCompare()">✕</button>
@@ -751,7 +690,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
     </div>
     
     <div class="landscape-hint print-hide">
-      לחוויית צפייה מיטבית, מומלץ לסובב את המכשיר לתצוגה אופקית
+      * מומלץ לסובב את המכשיר לרוחב לצפייה נוחה
     </div>
     
     <div class="print-hide" style="padding:16px 24px;display:flex;justify-content:center;">
@@ -759,38 +698,17 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
         ייצא 📄
       </button>
     </div>
-
-    <div class="print-only footer-print" style="text-align:center; border-top:1px solid #e2e8f0; color:#64748b;">
-      דון אלבורו - מתווך משרדים מורשה | 050-7202874
-    </div>
-
-  </div>
-</div>
-
-<div id="summaryModal" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(32,32,32,.6);backdrop-filter:blur(4px);overflow-y:auto;-webkit-overflow-scrolling:touch">
-  <div style="min-height:100%;display:flex;flex-direction:column;align-items:center;padding:24px 16px 40px">
-    <div style="width:100%;max-width:600px;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.4);position:relative">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);background:#fff;position:sticky;top:0;z-index:1;gap:8px">
-        <div style="font-size:1rem;font-weight:800;color:var(--navy);flex:1" id="summaryModalTitle">סיכום נכס</div>
-        <button class="action-btn" onclick="savePDF()" style="padding:8px 16px;border-radius:10px;background:var(--navy);color:var(--neon);border:none;font-size:.8rem;font-weight:800;cursor:pointer;font-family:'Heebo',sans-serif;white-space:nowrap">📄 PDF</button>
-        <button class="action-btn" onclick="closeSummaryModal()" style="width:34px;height:34px;border-radius:10px;background:#f1f5f9;border:none;font-size:.9rem;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">✕</button>
-      </div>
-      <div id="summaryModalBody" style="padding:0"></div>
-    </div>
   </div>
 </div>
 
 <script>
-// ══ חיבור נקי ובטוח לאקסל ══
+// ══ חיבור לאקסל ══
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyivyw8rHoib5Rhz-NUsbqYf_7O1bmINHZfhPQR3sFk2P5QTiec4lKuyWQYXnZPhMWJ_A/exec';
 
 function sendToSheet(data) {
   try {
     const params = new URLSearchParams(data);
-    fetch(SCRIPT_URL + '?' + params.toString(), {
-      method: 'GET',
-      mode: 'no-cors'
-    });
+    fetch(SCRIPT_URL + '?' + params.toString(), { method: 'GET', mode: 'no-cors' });
   } catch(e) {}
 }
 
@@ -1001,20 +919,19 @@ function calc(){
   updateArnSub();
 }
 
-function openCompare(){
-  if(props.length < 2) return;
+function generateCompareTable(forPrint = false) {
   const results = props.map(p => ({p, r:calcProp(p)}));
   const hasGrace = results.some(x=>x.p.grace>0);
   const hasParking = results.some(x=>x.p.parkingSpots>0);
   const hasFurniture = results.some(x=>x.p.furniture>0);
   const n = results.length;
 
-  let html = `<thead style="position:sticky;top:0;z-index:10;background:var(--navy);box-shadow:0 2px 4px rgba(0,0,0,.1);"><tr>`;
-  html += `<th class="cmp-th" style="text-align:right; border-right:none; width:140px;">קריטריון</th>`;
+  let html = `<thead style="${!forPrint ? 'position:sticky;top:0;z-index:20;box-shadow:0 2px 4px rgba(0,0,0,.1);' : ''}"><tr>`;
+  html += `<th class="cmp-th ${!forPrint ? 'sticky-col' : ''}" style="text-align:right; border-right:none; width:140px; ${!forPrint ? 'z-index:21;' : ''}">קריטריון</th>`;
   results.forEach(({p},i)=>{
     html += `<th class="cmp-th" style="text-align:center;">
       <div style="font-size:.65rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;">${['נכס א׳','נכס ב׳','נכס ג׳','נכס ד׳','נכס ה׳','נכס ו׳'][i]}</div>
-      <div style="font-size:.85rem;font-weight:800;margin-top:4px;color:#fff;">${p.name||'ללא שם'}</div>
+      <div style="font-size:.85rem;font-weight:800;margin-top:4px;color:${forPrint ? 'var(--lime)' : '#fff'};">${p.name||'ללא שם'}</div>
     </th>`;
   });
   html += `</tr></thead><tbody>`;
@@ -1028,7 +945,7 @@ function openCompare(){
     const c = same ? 'var(--ink3)' : 'var(--ink)';
     
     let r = `<tr style="background:${bg};">`;
-    r += `<td class="cmp-td" style="font-weight:${bold?'800':'600'}; color:var(--ink);">
+    r += `<td class="cmp-td ${!forPrint ? 'sticky-col' : ''}" style="font-weight:${bold?'800':'600'}; color:var(--ink);">
       <div style="display:flex; align-items:center;">
         <div>
           <div>${label}</div>
@@ -1063,7 +980,7 @@ function openCompare(){
 
   html += row('תקופת הסכם', results.map(({p})=>p.months+' חודשים'), {separator:true});
   if(hasGrace){
-    html += row('גרייס', results.map(({p})=>p.grace>0?p.grace+' חודשים':'ללא'));
+    html += row('חודשי גרייס', results.map(({p})=>p.grace>0?p.grace+' חודשים':'ללא'));
   }
   html += row('סה"כ לחודש', results.map(({p,r})=>fmt(r.totalMonthly)+' ₪'), {bold:true, separator:true});
 
@@ -1073,7 +990,12 @@ function openCompare(){
   html += row('סה"כ לתקופה', results.map(({p,r})=>fmt(r.effectiveMonthly*p.months)+' ₪'), { subLabel: hasGrace ? 'כולל חיסכון מגרייס' : null });
 
   html += `</tbody>`;
-  document.getElementById('cmpTable').innerHTML = html;
+  return html;
+}
+
+function openCompare(){
+  if(props.length < 2) return;
+  document.getElementById('cmpTable').innerHTML = generateCompareTable(false);
   document.getElementById('compareModal').classList.add('open');
 }
 
@@ -1175,7 +1097,7 @@ function buildSummaryHTML(p, r){
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <style>
       *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-      body{font-family:'Heebo',sans-serif;direction:rtl;background:#fff;color:#202020;padding:10px 20px;max-width:100%;margin:0 auto}
+      body{font-family:'Heebo',sans-serif;direction:rtl;background:#fff;color:#202020;padding:16px;max-width:700px;margin:0 auto}
       .brand-hdr {text-align:center; margin-bottom:12px; margin-top:20px;}
       .logo-top {font-size:1rem;font-weight:800;color:#202020;letter-spacing:.5px;}
       .logo-bottom {font-size:1.3rem;font-weight:900;color:#202020;letter-spacing:.5px;border-top:2px solid #202020;padding-top:2px;display:inline-block;}
@@ -1247,7 +1169,7 @@ function buildSummaryHTML(p, r){
       </table>
     </div>
     
-    <div class="footer">דון אלבורו - מתווך משרדים מורשה | 050-7202874 | linkedin.com/in/don-alborough</div>
+    <div class="footer">דון אלבורו - מתווך משרדים מורשה | 050-7202874</div>
   </body></html>`;
 }
 
@@ -1257,7 +1179,6 @@ function shareWhatsApp(){
   const totalPerSqm=(r.totalMonthly/p.sqm).toFixed(0);
   
   let msg = '';
-  // RLM \u200F is used to force RTL formatting in WhatsApp
   if (p.name) msg += `*${p.name}*\n`;
   msg += `\u200Fשטח: ${fmt(p.sqm)} מ"ר ברוטו\n`;
   msg += `\u200Fתקופה: ${p.months} חודשים\n`;
@@ -1304,9 +1225,57 @@ function savePDF(){
 }
 
 function saveCmpPDF(){
-  document.body.classList.add('printing-compare');
-  window.print();
-  setTimeout(()=>document.body.classList.remove('printing-compare'), 1500);
+  const htmlTable = generateCompareTable(true);
+  const content = `<!DOCTYPE html><html dir="rtl"><head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <style>
+      *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+      body{font-family:'Heebo',sans-serif;direction:rtl;background:#fff;color:#202020;padding:0;max-width:100%;margin:0 auto}
+      .brand-hdr {text-align:center; margin-bottom:16px; margin-top:0;}
+      .logo-top {font-size:1.1rem;font-weight:800;color:#202020;letter-spacing:.5px;}
+      .logo-bottom {font-size:1.4rem;font-weight:900;color:#202020;letter-spacing:.5px;border-top:2px solid #202020;padding-top:2px;display:inline-block;}
+      .sub{font-size:.75rem;color:#64748b;margin-top:6px;text-align:center;font-weight:500;}
+      table{width:100%;border-collapse:collapse;font-size:.7rem;text-align:center;}
+      th{background:#202020;color:#C5E085;padding:6px 4px;border:1px solid #333;}
+      td{padding:4px 2px;border:1px solid #e2e8f0;color:#202020;}
+      tr:nth-child(even){background:#f8fafc;}
+      .footer{text-align:center;font-size:.65rem;color:#64748b;margin-top:12px;padding-top:8px;border-top:1px solid #e2e8f0;font-weight:500;}
+      @media print{ 
+        @page { size: A4 landscape; margin: 8mm; }
+        body{padding:0;} 
+      }
+    </style>
+  </head><body>
+    <div class="brand-hdr">
+      <div style="display:flex; align-items:center; gap:8px; justify-content:center; margin-bottom:4px;">
+        <svg viewBox="0 0 528 672" style="height:26px; width:auto; color:var(--deep-black);">
+          <path d="M526 86L376 0L116 150V286L376 136L526 222V86Z" fill="currentColor" />
+          <path d="M527 349L376 261L116 411L114 289L2 347V671H114V547L375 396L527 483V349Z" fill="currentColor" />
+          <path d="M527 607L378 522L117 671H527V607Z" fill="currentColor" />
+        </svg>
+        <div style="display:inline-flex;flex-direction:column;align-items:flex-start;line-height:1.15;">
+          <span class="logo-top">השורה</span>
+          <span class="logo-bottom">התחתונה</span>
+        </div>
+      </div>
+      <div class="sub">השוואת נכסים | ${new Date().toLocaleDateString('he-IL')}</div>
+    </div>
+    
+    <table class="cmp-table">
+      ${htmlTable}
+    </table>
+    
+    <div class="footer">דון אלבורו - מתווך משרדים מורשה | 050-7202874</div>
+  </body></html>`;
+  
+  const win = window.open('', '_blank');
+  if(!win){ 
+      alert("אנא אפשר חלונות קופצים (Pop-ups) כדי לשמור את ה-PDF.");
+      return; 
+  }
+  win.document.write(content); win.document.close(); win.focus();
+  setTimeout(() => win.print(), 800);
 }
 
 const STATE_KEY='office_props_v2';
