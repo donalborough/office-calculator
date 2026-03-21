@@ -551,6 +551,10 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
             <div class="rtb-header" id="lbl-total-monthly">סה"כ עלויות חודשיות</div>
             <div class="rtb-amount" id="rMain">—</div>
             <div class="rtb-sub" id="rSub">—</div>
+            <div style="margin-top:10px;margin-bottom:4px;display:flex;align-items:center;gap:10px;">
+              <button id="vatToggleBtn" onclick="toggleVAT()" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.8);border-radius:8px;padding:5px 12px;font-family:'Heebo',sans-serif;font-size:.72rem;font-weight:700;cursor:pointer;transition:all 0.2s;">+ מע"מ 18%</button>
+              <div id="vatRow" style="display:none;font-size:.82rem;color:rgba(255,255,255,0.9);font-weight:700;"></div>
+            </div>
 
             <div id="graceEffectiveRow" style="display:none;background:rgba(197,224,133,.15);border:1px solid rgba(197,224,133,.4);border-radius:12px;padding:14px 16px;margin-bottom:16px">
               <div class="grace-highlight-title" style="font-size:.65rem;color:var(--lime);font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:4px;"><span id='grace-effective-lbl'>אחרי גרייס — עלות אפקטיבית</span></div>
@@ -664,6 +668,18 @@ let curProp = 0;
 
 const fmt = n => Math.round(n).toLocaleString('he');
 const clamp = (v,mn,mx) => Math.max(mn,Math.min(mx,v));
+const VAT = 1.18;
+let showVAT = false;
+function toggleVAT(){
+  showVAT = !showVAT;
+  const btn = document.getElementById('vatToggleBtn');
+  const row = document.getElementById('vatRow');
+  btn.style.background = showVAT ? 'rgba(197,224,133,0.25)' : 'rgba(255,255,255,0.1)';
+  btn.style.borderColor = showVAT ? 'rgba(197,224,133,0.6)' : 'rgba(255,255,255,0.2)';
+  btn.style.color = showVAT ? 'var(--lime)' : 'rgba(255,255,255,0.8)';
+  row.style.display = showVAT ? 'block' : 'none';
+  calc();
+}
 const IDEAL_MIN=10, IDEAL_MAX=15, IDEAL_WARN=18;
 const S = () => props[curProp];
 const _sentProps = new Set();
@@ -886,13 +902,20 @@ function calc(){
     rMainEl.style.transition='none'; rMainEl.style.opacity='0'; rMainEl.style.transform='translateY(4px)';
     requestAnimationFrame(()=>{ rMainEl.textContent=fmt(r.totalMonthly)+' ₪'; rMainEl.style.transition='opacity .25s,transform .25s'; rMainEl.style.opacity='1'; rMainEl.style.transform='translateY(0)'; });
   } else { rMainEl.textContent=fmt(r.totalMonthly)+' ₪'; }
-  document.getElementById('rSub').textContent=fmt(r.bruto)+' מ"ר ברוטו';
-  document.getElementById('rPerSqm').textContent=fmt(r.totalMonthly)+' ₪';
-  document.getElementById('rPerSqmVal').textContent = totalPerSqm + ' ₪';
-  document.getElementById('rYear').textContent=fmt(r.totalMonthly*12)+' ₪';
+  document.getElementById('rSub').textContent=fmt(r.bruto)+' מ"ר ברוטו · לפני מע"מ';
+
+  const vatMult = showVAT ? VAT : 1;
+  const vatLabel = showVAT ? ' כולל מע"מ' : '';
+  document.getElementById('vatRow').textContent = fmt(Math.round(r.totalMonthly * VAT)) + ' ₪ כולל מע"מ';
+  document.getElementById('rPerSqm').textContent=fmt(Math.round(r.totalMonthly*vatMult))+' ₪';
+  document.getElementById('lbl-cell-monthly').textContent='שכ"ד חודשי'+vatLabel;
+  document.getElementById('rPerSqmVal').textContent = (r.totalMonthly*vatMult/r.bruto).toFixed(1) + ' ₪';
+  document.getElementById('lbl-cell-sqm').textContent='₪ למ"ר'+vatLabel;
+  document.getElementById('rYear').textContent=fmt(Math.round(r.totalMonthly*12*vatMult))+' ₪';
+  document.getElementById('lbl-cell-yearly').textContent='שכ"ד שנתי'+vatLabel;
   const periodDisplay = p.grace>0 ? r.effectiveMonthly*p.months : r.totalMonthly*p.months;
-  document.getElementById('rPeriod').textContent=fmt(periodDisplay)+' ₪';
-  document.getElementById('rPeriodLbl').textContent=(p.grace>0?'₪ אפקטיבי ל-':'₪ ל-')+p.months+' חודשים';
+  document.getElementById('rPeriod').textContent=fmt(Math.round(periodDisplay*vatMult))+' ₪';
+  document.getElementById('rPeriodLbl').textContent=(p.grace>0?'₪ אפקטיבי ל-':'₪ ל-')+p.months+' חודשים'+vatLabel;
 
   const bpe=r.sqmPerEmp; const idealBruto=Math.ceil(p.emp*IDEAL_MIN/50)*50; const maxBruto=Math.floor(p.emp*IDEAL_MAX/50)*50;
   let nh='';
