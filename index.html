@@ -461,6 +461,21 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
             </div>
           </div>
 
+          <div class="row">
+            <div class="row-l">
+              <div class="row-label" id="lbl-renovation">עלות שיפוץ / התאמות</div>
+              <div class="row-sub" id="renovationSub"></div>
+            </div>
+            <div class="row-r">
+              <div class="spin">
+                <button class="spin-btn" onclick="adjRenovation(-5000)">−</button>
+                <input class="spin-inp" id="renovationInp" type="number" value="0" min="0" max="9999999" inputmode="numeric" oninput="onInputRenovation(this)" style="width:72px">
+                <span class="spin-unit">₪</span>
+                <button class="spin-btn" onclick="adjRenovation(+5000)">+</button>
+              </div>
+            </div>
+          </div>
+
           <div style="border-top:1px solid var(--border); padding: 16px 20px;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
               <div class="row-l">
@@ -639,7 +654,7 @@ const defaultProp = () => ({
   arn:false,arnMode:'auto',arnManual:34,
   mgmt:20,clean:8,utils:12,extra:0,extraMode:'sqm',
   grossRatio:1.30,useCustomRatio:false,customPct:25,
-  months:24,furniture:0,
+  months:24,furniture:0,renovation:0,
   parkingSpots:0,parkingPrice:1000,
   grace:0
 });
@@ -735,6 +750,7 @@ function loadPropToUI(){
   document.getElementById('monthsInp').value = p.months;
   document.getElementById('graceInp').value = p.grace;
   document.getElementById('furnitureInp').value = p.furniture;
+  document.getElementById('renovationInp').value = p.renovation;
   document.getElementById('parkingSpotsInp').value = p.parkingSpots;
   document.getElementById('parkingPriceInp').value = p.parkingPrice;
   document.getElementById('arnTog').classList.toggle('on', p.arn);
@@ -818,6 +834,8 @@ function adjMonths(d){ S().months = Math.max(6, Math.min(120, S().months + d)); 
 function onInputMonths(el){ const v = parseInt(el.value); if(!isNaN(v) && v >= 6) { S().months = v; calc(); } }
 function adjFurniture(d){ S().furniture = Math.max(0, S().furniture + d); document.getElementById('furnitureInp').value = S().furniture; calc(); }
 function onInputFurniture(el){ const v = parseInt(el.value); if(!isNaN(v) && v >= 0) { S().furniture = v; calc(); } }
+function adjRenovation(d){ S().renovation = Math.max(0, S().renovation + d); document.getElementById('renovationInp').value = S().renovation; calc(); }
+function onInputRenovation(el){ const v = parseInt(el.value); if(!isNaN(v) && v >= 0) { S().renovation = v; calc(); } }
 
 function calcProp(p){
   const bruto=p.sqm;
@@ -832,11 +850,13 @@ function calcProp(p){
   const parkingPerSqm = parkingMonthly > 0 ? parkingMonthly / bruto : 0;
   const furniturePerSqmMonth = p.furniture > 0 ? p.furniture / bruto / p.months : 0;
   const furnitureMonthly = p.furniture > 0 ? Math.round(p.furniture / p.months) : 0;
-  const totalMonthly=monthly+furnitureMonthly+parkingMonthly;
+  const renovationPerSqmMonth = p.renovation > 0 ? p.renovation / bruto / p.months : 0;
+  const renovationMonthly = p.renovation > 0 ? Math.round(p.renovation / p.months) : 0;
+  const totalMonthly=monthly+furnitureMonthly+parkingMonthly+renovationMonthly;
   const effectiveMonthly = p.grace>0 ? Math.round(totalMonthly*(p.months-p.grace)/p.months) : totalMonthly;
   const gracePct = p.grace>0 ? (p.grace/p.months*100).toFixed(1) : 0;
   const graceSaving = totalMonthly - effectiveMonthly;
-  return {bruto,net,effectiveRatio,rows,perSqm,monthly,yearly:monthly*12,perEmp:Math.round(monthly/p.emp),sqmPerEmp:bruto/p.emp,pct:Math.round((effectiveRatio-1)*100),furniturePerSqmMonth,furnitureMonthly,parkingMonthly,parkingPerSqm,totalMonthly,effectiveMonthly,gracePct,graceSaving};
+  return {bruto,net,effectiveRatio,rows,perSqm,monthly,yearly:monthly*12,perEmp:Math.round(monthly/p.emp),sqmPerEmp:bruto/p.emp,pct:Math.round((effectiveRatio-1)*100),furniturePerSqmMonth,furnitureMonthly,renovationPerSqmMonth,renovationMonthly,parkingMonthly,parkingPerSqm,totalMonthly,effectiveMonthly,gracePct,graceSaving};
 }
 
 function calc(){
@@ -855,7 +875,10 @@ function calc(){
 
   const parkingRow = r.parkingMonthly > 0 ? `<div class="brow"><span class="brow-lbl">חניות (${p.parkingSpots} × ${p.parkingPrice} ₪)</span><span class="brow-val">${r.parkingPerSqm.toFixed(1)} ₪/מ"ר · ${fmt(r.parkingMonthly)} ₪</span></div>` : '';
   const furnitureRow = r.furnitureMonthly > 0 ? `<div class="brow"><span class="brow-lbl">ריהוט משרדי (פרוס ל-${p.months} חודשים)</span><span class="brow-val">${r.furniturePerSqmMonth.toFixed(1)} ₪/מ"ר · ${fmt(r.furnitureMonthly)} ₪</span></div>` : '';
-  document.getElementById('breakdown').innerHTML= r.rows.map(row=>`<div class="brow"><span class="brow-lbl">${row.l}</span><span class="brow-val">${row.v} ₪/מ"ר · ${fmt(row.v*r.bruto)} ₪</span></div>`).join('')+parkingRow+furnitureRow;
+  const renovationRow = r.renovationMonthly > 0 ? `<div class="brow"><span class="brow-lbl">שיפוץ / התאמות (פרוס ל-${p.months} חודשים)</span><span class="brow-val">${r.renovationPerSqmMonth.toFixed(1)} ₪/מ"ר · ${fmt(r.renovationMonthly)} ₪</span></div>` : '';
+  document.getElementById('breakdown').innerHTML= r.rows.map(row=>`<div class="brow"><span class="brow-lbl">${row.l}</span><span class="brow-val">${row.v} ₪/מ"ר · ${fmt(row.v*r.bruto)} ₪</span></div>`).join('')+parkingRow+furnitureRow+renovationRow;
+  document.getElementById('furnitureSub').textContent = p.furniture > 0 ? 'פרוס על ' + p.months + ' חודשים → ' + fmt(r.furnitureMonthly) + ' ₪/חודש' : 'הזן עלות חד-פעמית';
+  document.getElementById('renovationSub').textContent = p.renovation > 0 ? 'פרוס על ' + p.months + ' חודשים → ' + fmt(r.renovationMonthly) + ' ₪/חודש' : 'הזן עלות חד-פעמית';
   
   const totalPerSqm = (r.totalMonthly / r.bruto).toFixed(1);
   const rMainEl = document.getElementById('rMain');
@@ -935,6 +958,10 @@ function generateCompareTable(forPrint = false) {
   }
   if(hasFurniture){
     html += row('ריהוט פרוס', results.map(({p,r})=>r.furnitureMonthly>0?fmt(r.furnitureMonthly)+' ₪/חודש':'—'), {subLabel:'פרוס לתקופה', separator:true});
+  }
+  const hasRenovation = results.some(x=>x.p.renovation>0);
+  if(hasRenovation){
+    html += row('שיפוץ / התאמות', results.map(({p,r})=>r.renovationMonthly>0?fmt(r.renovationMonthly)+' ₪/חודש':'—'), {subLabel:'פרוס לתקופה', separator:true});
   }
 
   html += row('תקופת הסכם', results.map(({p})=>p.months+' חודשים'), {separator:true});
@@ -1035,6 +1062,7 @@ function buildSummaryHTML(p, r){
   const rowsHTML = rows.map(row=>`<tr><td>${row.l}</td><td style="text-align:left;font-weight:700">${row.v} ₪/מ"ר</td><td style="text-align:left;font-weight:800">${fmt(row.v*p.sqm)} ₪</td></tr>`).join('');
   const parkingHTML = r.parkingMonthly>0?`<tr><td>חניות (${p.parkingSpots} × ${p.parkingPrice} ₪)</td><td></td><td style="text-align:left;font-weight:800">${fmt(r.parkingMonthly)} ₪</td></tr>`:'';
   const furnitureHTML = r.furnitureMonthly>0?`<tr><td>ריהוט (פרוס ל-${p.months} חודשים)</td><td style="text-align:left">${r.furniturePerSqmMonth.toFixed(1)} ₪/מ"ר</td><td style="text-align:left;font-weight:800">${fmt(r.furnitureMonthly)} ₪</td></tr>`:'';
+  const renovationHTML = r.renovationMonthly>0?`<tr><td>שיפוץ / התאמות (פרוס ל-${p.months} חודשים)</td><td style="text-align:left">${r.renovationPerSqmMonth.toFixed(1)} ₪/מ"ר</td><td style="text-align:left;font-weight:800">${fmt(r.renovationMonthly)} ₪</td></tr>`:'';
   const graceHTML = p.grace>0?`<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:8px;margin-bottom:12px;text-align:center;"><div style="font-size:.65rem;font-weight:800;color:#16a34a;">אחרי גרייס ${p.grace} חודשים</div><strong style="color:#16a34a;font-size:1.1rem;display:block;margin:2px 0;">${fmt(r.effectiveMonthly)} ₪ / לחודש</strong><div style="font-size:.65rem;color:#15803d;">חיסכון לתקופה: ${fmt(r.graceSaving*p.months)} ₪</div></div>`:'';
   
   return `<!DOCTYPE html><html dir="rtl"><head>
@@ -1100,6 +1128,7 @@ function buildSummaryHTML(p, r){
         ${rowsHTML}
         ${parkingHTML}
         ${furnitureHTML}
+        ${renovationHTML}
         <tr class="total-row"><td>סה"כ</td><td></td><td style="text-align:left">${fmt(r.totalMonthly)} ₪</td></tr>
       </table>
     </div>
@@ -1120,6 +1149,7 @@ function shareWhatsApp(){
   msg += `\n*סה"כ למ"ר: ${totalPerSqm} ₪*\n\n*עלויות:*\n\u200F• חודשי: ${fmt(r.totalMonthly)} ₪\n\u200F• שנתי: ${fmt(r.totalMonthly*12)} ₪\n\u200F• ${p.months} חודשים: ${fmt(r.totalMonthly*p.months)} ₪\n`;
   if(r.parkingMonthly>0) msg+=`\n*חניות (${p.parkingSpots}):* ${fmt(r.parkingMonthly)} ₪ לחודש\n`;
   if(r.furnitureMonthly>0) msg+=`*ריהוט (פרוס):* ${fmt(r.furnitureMonthly)} ₪ לחודש\n`;
+  if(r.renovationMonthly>0) msg+=`*שיפוץ / התאמות (פרוס):* ${fmt(r.renovationMonthly)} ₪ לחודש\n`;
   if(p.grace>0){ msg+=`\n*אחרי גרייס:*\n\u200F• עלות אפקטיבית: ${fmt(r.effectiveMonthly)} ₪/חודש\n\u200F• חיסכון לתקופה: ${fmt(r.graceSaving*p.months)} ₪\n`; }
   msg+=`\nהופק באמצעות השורה התחתונה — דון אלבורו`;
   
@@ -1136,10 +1166,10 @@ function shareWhatsApp(){
 function savePDF(){
   const p=S(), r=calcProp(p);
   const content=buildSummaryHTML(p,r);
-  const win=window.open('','_blank','width=680,height=900');
-  if(!win){ alert("אנא אפשר חלונות קופצים (Pop-ups) כדי לשמור את ה-PDF."); return; }
-  win.document.write(content); win.document.close(); win.focus();
-  setTimeout(()=>win.print(), 600);
+  let iframe=document.getElementById('_pdfFrame');
+  if(!iframe){ iframe=document.createElement('iframe'); iframe.id='_pdfFrame'; iframe.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden;'; document.body.appendChild(iframe); }
+  iframe.contentDocument.open(); iframe.contentDocument.write(content); iframe.contentDocument.close();
+  setTimeout(()=>{ iframe.contentWindow.focus(); iframe.contentWindow.print(); }, 700);
 }
 
 function saveCmpPDF(){
@@ -1176,10 +1206,10 @@ function saveCmpPDF(){
     <table class="cmp-table">${htmlTable}</table>
     <div class="footer">דון אלבורו - מתווך משרדים מורשה | 050-7202874</div>
   </body></html>`;
-  const win = window.open('', '_blank');
-  if(!win){ alert("אנא אפשר חלונות קופצים (Pop-ups) כדי לשמור את ה-PDF."); return; }
-  win.document.write(content); win.document.close(); win.focus();
-  setTimeout(() => win.print(), 800);
+  let iframe=document.getElementById('_cmpPdfFrame');
+  if(!iframe){ iframe=document.createElement('iframe'); iframe.id='_cmpPdfFrame'; iframe.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden;'; document.body.appendChild(iframe); }
+  iframe.contentDocument.open(); iframe.contentDocument.write(content); iframe.contentDocument.close();
+  setTimeout(()=>{ iframe.contentWindow.focus(); iframe.contentWindow.print(); }, 800);
 }
 
 const STATE_KEY='office_props_v2';
