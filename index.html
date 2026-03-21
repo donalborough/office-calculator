@@ -551,6 +551,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
             <div class="rtb-header" id="lbl-total-monthly">סה"כ עלויות חודשיות</div>
             <div class="rtb-amount" id="rMain">—</div>
             <div class="rtb-sub" id="rSub">—</div>
+            <div id="vatRow" style="font-size:.75rem;color:rgba(255,255,255,0.5);font-weight:500;margin-top:3px;"></div>
 
             <div id="graceEffectiveRow" style="display:none;background:rgba(197,224,133,.15);border:1px solid rgba(197,224,133,.4);border-radius:12px;padding:14px 16px;margin-bottom:16px">
               <div class="grace-highlight-title" style="font-size:.65rem;color:var(--lime);font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:4px;"><span id='grace-effective-lbl'>אחרי גרייס — עלות אפקטיבית</span></div>
@@ -853,10 +854,11 @@ function calcProp(p){
   const renovationPerSqmMonth = p.renovation > 0 ? p.renovation / bruto / p.months : 0;
   const renovationMonthly = p.renovation > 0 ? Math.round(p.renovation / p.months) : 0;
   const totalMonthly=monthly+furnitureMonthly+parkingMonthly+renovationMonthly;
+  const arnonaMonthly = arn * bruto;
   const effectiveMonthly = p.grace>0 ? Math.round(totalMonthly*(p.months-p.grace)/p.months) : totalMonthly;
   const gracePct = p.grace>0 ? (p.grace/p.months*100).toFixed(1) : 0;
   const graceSaving = totalMonthly - effectiveMonthly;
-  return {bruto,net,effectiveRatio,rows,perSqm,monthly,yearly:monthly*12,perEmp:Math.round(monthly/p.emp),sqmPerEmp:bruto/p.emp,pct:Math.round((effectiveRatio-1)*100),furniturePerSqmMonth,furnitureMonthly,renovationPerSqmMonth,renovationMonthly,parkingMonthly,parkingPerSqm,totalMonthly,effectiveMonthly,gracePct,graceSaving};
+  return {bruto,net,effectiveRatio,rows,perSqm,monthly,yearly:monthly*12,perEmp:Math.round(monthly/p.emp),sqmPerEmp:bruto/p.emp,pct:Math.round((effectiveRatio-1)*100),furniturePerSqmMonth,furnitureMonthly,renovationPerSqmMonth,renovationMonthly,parkingMonthly,parkingPerSqm,totalMonthly,arnonaMonthly,effectiveMonthly,gracePct,graceSaving};
 }
 
 function calc(){
@@ -887,6 +889,8 @@ function calc(){
     requestAnimationFrame(()=>{ rMainEl.textContent=fmt(r.totalMonthly)+' ₪'; rMainEl.style.transition='opacity .25s,transform .25s'; rMainEl.style.opacity='1'; rMainEl.style.transform='translateY(0)'; });
   } else { rMainEl.textContent=fmt(r.totalMonthly)+' ₪'; }
   document.getElementById('rSub').textContent=fmt(r.bruto)+' מ"ר ברוטו';
+  const vatTotal = Math.round((r.totalMonthly - r.arnonaMonthly) * 1.18 + r.arnonaMonthly);
+  document.getElementById('vatRow').textContent = '(' + fmt(vatTotal) + ' ₪ כולל מע"מ)';
   document.getElementById('rPerSqm').textContent=fmt(r.totalMonthly)+' ₪';
   document.getElementById('rPerSqmVal').textContent = totalPerSqm + ' ₪';
   document.getElementById('rYear').textContent=fmt(r.totalMonthly*12)+' ₪';
