@@ -198,6 +198,17 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .cmp-save-btn:hover{background:#f8fafc;}
 .cmp-save-btn:active{transform:scale(0.98);}
 .landscape-hint { margin:0; padding:10px 0; font-size:.7rem; color:var(--ink3); text-align:center; }
+.cmp-row-even { background: #f8fafc !important; }
+[data-theme="dark"] .cmp-row-even { background: rgba(255,255,255,0.03) !important; }
+.cmp-best { background: #f0fdf4 !important; color: #16a34a !important; font-weight: 900 !important; }
+[data-theme="dark"] .cmp-best { background: rgba(16,185,129,0.15) !important; color: #34d399 !important; }
+.cmp-worst { background: #fff7ed !important; color: #c2410c !important; }
+[data-theme="dark"] .cmp-worst { background: rgba(239,68,68,0.1) !important; color: #f87171 !important; }
+.cmp-section-divider td { border-top: 2px solid var(--border2) !important; }
+.cmp-rank-row td { border-top: 2px solid var(--border2) !important; background: var(--navy) !important; color: var(--lime) !important; font-weight: 800 !important; font-size: .85rem !important; }
+.cmp-th-name { font-weight: 800 !important; max-height: 2.6em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; text-overflow: ellipsis; }
+.page-break { page-break-after: always; }
+.page-break:last-child { page-break-after: avoid; }
 @media(min-width: 768px) { .landscape-hint { display: none !important; } }
 .print-only { display: none !important; }
 .dark-toggle { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); color: rgba(255,255,255,.9); border-radius: 8px; width: 38px; height: 36px; font-size: 1rem; cursor: pointer; transition: all 0.2s; display:flex; align-items:center; justify-content:center; }
@@ -720,7 +731,7 @@ function renderTabs(){
     `;
     wrap.appendChild(t);
   });
-  if(props.length < 6){
+  if(props.length < 10){
     const add = document.createElement('button');
     add.className = 'prop-tab-add';
     add.innerHTML = '+';
@@ -734,7 +745,7 @@ function renderTabs(){
 
 function switchProp(i){ curProp = i; loadPropToUI(); renderTabs(); }
 function addProperty(){
-  if(props.length >= 6) return;
+  if(props.length >= 10) return;
   props.push(defaultProp());
   curProp = props.length - 1;
   renderTabs(); loadPropToUI();
@@ -939,75 +950,138 @@ function calc(){
   if(p.arnMode==='manual') document.getElementById('arnSub').textContent=p.arnManual+' ₪/מ"ר — הזנה ידנית'; else document.getElementById('arnSub').textContent=p.arn?'17 ₪/מ"ר — הנחת עסקי תוכנה':'34 ₪/מ"ר — ללא הנחה';
 }
 
-function generateCompareTable(forPrint = false) {
-  const results = props.map(p => ({p, r:calcProp(p)}));
+function generateCompareTable(forPrint = false, subsetProps) {
+  const sourceProps = subsetProps || props;
+  const results = sourceProps.map(p => ({p, r:calcProp(p)}));
   const hasGrace = results.some(x=>x.p.grace>0);
   const hasParking = results.some(x=>x.p.parkingSpots>0);
   const hasFurniture = results.some(x=>x.p.furniture>0);
+  const hasRenovation = results.some(x=>x.p.renovation>0);
+
+  // Pre-compute numeric values for best/worst highlighting
+  const totalMonthlies = results.map(({r}) => r.totalMonthly);
+  const minTotal = Math.min(...totalMonthlies);
+  const maxTotal = Math.max(...totalMonthlies);
+  const rentPerSqms = results.map(({p}) => p.rent);
+  const minRent = Math.min(...rentPerSqms);
+  const maxRent = Math.max(...rentPerSqms);
+  const perSqms = results.map(({r}) => r.perSqm);
+  const minPerSqm = Math.min(...perSqms);
+  const maxPerSqm = Math.max(...perSqms);
+
+  // Rank by totalMonthly (lowest = rank 1)
+  const medals = ['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'];
+  const sorted = [...totalMonthlies].sort((a,b)=>a-b);
+  const ranks = totalMonthlies.map(v => sorted.indexOf(v));
+
+  const propNames = ['נכס א׳','נכס ב׳','נכס ג׳','נכס ד׳','נכס ה׳','נכס ו׳','נכס ז׳','נכס ח׳','נכס ט׳','נכס י׳'];
 
   let html = `<thead style="${!forPrint ? 'position:sticky;top:0;z-index:20;box-shadow:0 2px 4px rgba(0,0,0,.1);' : ''}"><tr>`;
   html += `<th class="cmp-th ${!forPrint ? 'sticky-col' : ''}" style="text-align:right; border-right:none; width:140px; ${!forPrint ? 'z-index:21;' : ''}">קריטריון</th>`;
   results.forEach(({p},i)=>{
+    const origIndex = subsetProps ? props.indexOf(p) : i;
+    const nameLabel = origIndex >= 0 ? propNames[origIndex] : propNames[i];
     html += `<th class="cmp-th" style="text-align:center;">
-      <div style="font-size:.65rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;">${['נכס א׳','נכס ב׳','נכס ג׳','נכס ד׳','נכס ה׳','נכס ו׳'][i]}</div>
-      <div style="font-size:.85rem;font-weight:800;margin-top:4px;color:${forPrint ? 'var(--lime)' : '#fff'};">${p.name||'ללא שם'}</div>
+      <div style="font-size:.65rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;">${nameLabel}</div>
+      <div class="cmp-th-name" style="font-size:.85rem;font-weight:800;margin-top:4px;color:${forPrint ? '#C5E085' : '#fff'};">${p.name||'ללא שם'}</div>
     </th>`;
   });
   html += `</tr></thead><tbody>`;
 
+  let rowIdx = 0;
   const allSame = vals => vals.every(v=>v===vals[0]);
+
   const row = (label, vals, opts={}) => {
-    const {bold, separator, subLabel} = opts;
-    const same = allSame(vals);
-    const bg = separator ? '#f1f5f9' : '#fff';
+    const {bold, sectionDivider, subLabel, numericVals, highlightMin, highlightMax} = opts;
+    const same = !numericVals && allSame(vals);
     const fw = bold ? '800' : '600';
     const c = same ? 'var(--ink3)' : 'var(--ink)';
-    
-    let r = `<tr style="background:${bg};">`;
+    const isEven = rowIdx % 2 === 0;
+    rowIdx++;
+
+    const trClasses = [sectionDivider ? 'cmp-section-divider' : '', isEven ? 'cmp-row-even' : ''].filter(Boolean).join(' ');
+    let r = `<tr class="${trClasses}">`;
     r += `<td class="cmp-td ${!forPrint ? 'sticky-col' : ''}" style="font-weight:${bold?'800':'600'}; color:var(--ink);">
-      <div style="display:flex; align-items:center;">
-        <div>
-          <div>${label}</div>
-          ${subLabel?`<div style="font-size:.6rem;color:var(--ink3);margin-top:2px;font-weight:400;">${subLabel}</div>`:''}
-        </div>
+      <div>
+        <div>${label}</div>
+        ${subLabel?`<div style="font-size:.6rem;color:var(--ink3);margin-top:2px;font-weight:400;">${subLabel}</div>`:''}
       </div>
     </td>`;
-    vals.forEach(v => { r += `<td class="cmp-td" style="text-align:center; font-weight:${fw}; color:${c};">${v}</td>`; });
+    vals.forEach((v, vi) => {
+      let cellClass = 'cmp-td';
+      let extraStyle = `text-align:center; font-weight:${fw}; color:${c};`;
+      if(numericVals && results.length > 1) {
+        const nv = numericVals[vi];
+        if(highlightMin && nv === Math.min(...numericVals)) { cellClass += ' cmp-best'; extraStyle = 'text-align:center;'; }
+        else if(highlightMax && nv === Math.max(...numericVals) && Math.max(...numericVals) !== Math.min(...numericVals)) { cellClass += ' cmp-worst'; extraStyle = 'text-align:center;'; }
+        else { extraStyle = `text-align:center; font-weight:${fw}; color:${c};`; }
+      }
+      r += `<td class="${cellClass}" style="${extraStyle}">${v}</td>`;
+    });
     r += `</tr>`;
     return r;
   };
 
+  // Section: עלויות בסיס
   html += row('שטח ברוטו', results.map(({p})=>fmt(p.sqm)+' מ"ר'), {bold:true});
-  html += row('שכירות בסיס', results.map(({p})=>p.rent+' ₪/מ"ר'), {separator:true});
+  html += row('שכירות בסיס', results.map(({p})=>p.rent+' ₪/מ"ר'), {
+    numericVals: rentPerSqms, highlightMin: true, highlightMax: true
+  });
   html += row('ארנונה', results.map(({p})=>{ return (p.arnMode==='manual'?p.arnManual:(p.arn?17:34))+' ₪/מ"ר'; }));
   html += row('דמי ניהול', results.map(({p})=>p.mgmt+' ₪/מ"ר'));
   html += row('ניקיון', results.map(({p})=>p.clean+' ₪/מ"ר'));
   html += row('חשמל, אינטרנט, מים', results.map(({p})=>p.utils+' ₪/מ"ר'));
-  html += row('עלות למ"ר', results.map(({p,r})=>r.perSqm+' ₪/מ"ר'), {bold:true, separator:true});
+  html += row('עלות למ"ר', results.map(({p,r})=>r.perSqm+' ₪/מ"ר'), {
+    bold:true, sectionDivider:true,
+    numericVals: perSqms, highlightMin: true, highlightMax: true
+  });
 
+  // Section: עלויות נוספות
   if(hasParking){
-    html += row('חניות', results.map(({p})=>p.parkingSpots>0?p.parkingSpots+' חניות':'—'));
+    html += row('חניות', results.map(({p})=>p.parkingSpots>0?p.parkingSpots+' חניות':'—'), {sectionDivider:true});
     html += row('מחיר/חניה', results.map(({p})=>p.parkingSpots>0?fmt(p.parkingPrice)+' ₪':'—'));
     html += row('עלות חניות', results.map(({p,r})=>r.parkingMonthly>0?fmt(r.parkingMonthly)+' ₪/חודש':'—'));
   }
   if(hasFurniture){
-    html += row('ריהוט פרוס', results.map(({p,r})=>r.furnitureMonthly>0?fmt(r.furnitureMonthly)+' ₪/חודש':'—'), {subLabel:'פרוס לתקופה', separator:true});
+    html += row('ריהוט פרוס', results.map(({p,r})=>r.furnitureMonthly>0?fmt(r.furnitureMonthly)+' ₪/חודש':'—'), {subLabel:'פרוס לתקופה', sectionDivider:!hasParking});
   }
-  const hasRenovation = results.some(x=>x.p.renovation>0);
   if(hasRenovation){
-    html += row('שיפוץ / התאמות', results.map(({p,r})=>r.renovationMonthly>0?fmt(r.renovationMonthly)+' ₪/חודש':'—'), {subLabel:'פרוס לתקופה', separator:true});
+    html += row('שיפוץ / התאמות', results.map(({p,r})=>r.renovationMonthly>0?fmt(r.renovationMonthly)+' ₪/חודש':'—'), {subLabel:'פרוס לתקופה', sectionDivider:(!hasParking&&!hasFurniture)});
   }
 
-  html += row('תקופת הסכם', results.map(({p})=>p.months+' חודשים'), {separator:true});
+  // Section: תקופה
+  html += row('תקופת הסכם', results.map(({p})=>p.months+' חודשים'), {sectionDivider:true});
   if(hasGrace){
     html += row('חודשי גרייס', results.map(({p})=>p.grace>0?p.grace+' חודשים':'ללא'));
   }
-  html += row('סה"כ לחודש', results.map(({p,r})=>fmt(r.totalMonthly)+' ₪'), {bold:true, separator:true});
 
+  // Section: סיכום
+  html += row('סה"כ לחודש', results.map(({p,r})=>fmt(r.totalMonthly)+' ₪'), {
+    bold:true, sectionDivider:true,
+    numericVals: totalMonthlies, highlightMin: true, highlightMax: true
+  });
   if(hasGrace){
-    html += row('עלות אפקטיבית', results.map(({p,r})=>fmt(r.effectiveMonthly)+' ₪'), { bold:true, subLabel:'לחודש אחרי גרייס', separator:true });
+    html += row('עלות אפקטיבית', results.map(({p,r})=>fmt(r.effectiveMonthly)+' ₪'), {
+      bold:true, subLabel:'לחודש אחרי גרייס', sectionDivider:true,
+      numericVals: results.map(({r})=>r.effectiveMonthly), highlightMin: true, highlightMax: true
+    });
   }
-  html += row('סה"כ לתקופה', results.map(({p,r})=>fmt(r.effectiveMonthly*p.months)+' ₪'), { subLabel: hasGrace ? 'כולל חיסכון מגרייס' : null });
+  html += row('סה"כ לתקופה', results.map(({p,r})=>fmt(r.effectiveMonthly*p.months)+' ₪'), {
+    subLabel: hasGrace ? 'כולל חיסכון מגרייס' : null,
+    numericVals: results.map(({p,r})=>r.effectiveMonthly*p.months), highlightMin: true, highlightMax: true
+  });
+
+  // Rank row
+  if(results.length > 1) {
+    let rankRow = `<tr class="cmp-rank-row"><td class="cmp-td ${!forPrint ? 'sticky-col' : ''}" style="color:var(--lime);font-weight:800;background:var(--navy);">דירוג</td>`;
+    results.forEach((_,vi) => {
+      const rank = ranks[vi];
+      const medal = medals[rank] || (rank+1)+'';
+      rankRow += `<td class="cmp-td" style="text-align:center;background:var(--navy);color:var(--lime);font-weight:800;font-size:.9rem;">${medal} #${rank+1}</td>`;
+    });
+    rankRow += `</tr>`;
+    html += rankRow;
+  }
 
   html += `</tbody>`;
   return html;
@@ -1207,39 +1281,61 @@ function savePDF(){
 }
 
 function saveCmpPDF(){
-  const htmlTable = generateCompareTable(true);
+  const n = props.length;
+  const brandHdr = `<div class="brand-hdr">
+    <div style="display:flex; align-items:center; gap:8px; justify-content:center; margin-bottom:4px;">
+      <svg viewBox="0 0 528 672" style="height:26px; width:auto; color:#202020;">
+        <path d="M526 86L376 0L116 150V286L376 136L526 222V86Z" fill="currentColor" />
+        <path d="M527 349L376 261L116 411L114 289L2 347V671H114V547L375 396L527 483V349Z" fill="currentColor" />
+        <path d="M527 607L378 522L117 671H527V607Z" fill="currentColor" />
+      </svg>
+      <div style="display:inline-flex;flex-direction:column;align-items:flex-start;line-height:1.15;">
+        <span class="logo-top">השורה</span><span class="logo-bottom">התחתונה</span>
+      </div>
+    </div>
+    <div class="sub">השוואת נכסים | ${new Date().toLocaleDateString('he-IL')}</div>
+  </div>`;
+  const footer = `<div class="footer">דון אלבורו - מתווך משרדים מורשה | 050-7202874</div>`;
+  const commonStyles = `
+    *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    body{font-family:'Heebo',sans-serif;direction:rtl;background:#fff;color:#202020;padding:0;max-width:100%;margin:0 auto}
+    .brand-hdr {text-align:center; margin-bottom:16px; margin-top:0;}
+    .logo-top {font-size:1.1rem;font-weight:800;color:#202020;letter-spacing:.5px;}
+    .logo-bottom {font-size:1.4rem;font-weight:900;color:#202020;letter-spacing:.5px;border-top:2px solid #202020;padding-top:2px;display:inline-block;}
+    .sub{font-size:.75rem;color:#64748b;margin-top:6px;text-align:center;font-weight:500;}
+    table{width:100%;border-collapse:collapse;font-size:.7rem;text-align:center;}
+    th{background:#202020 !important;color:#C5E085 !important;padding:6px 4px;border:1px solid #333;}
+    td{padding:4px 2px;border:1px solid #e2e8f0;color:#202020;}
+    .cmp-row-even{background:#f8fafc !important;}
+    .cmp-best{background:#f0fdf4 !important;color:#16a34a !important;font-weight:900 !important;}
+    .cmp-worst{background:#fff7ed !important;color:#c2410c !important;}
+    .cmp-section-divider td{border-top:2px solid #cbd5e1 !important;}
+    .cmp-rank-row td{background:#202020 !important;color:#C5E085 !important;font-weight:800 !important;border-top:2px solid #cbd5e1 !important;}
+    .footer{text-align:center;font-size:.65rem;color:#64748b;margin-top:12px;padding-top:8px;border-top:1px solid #e2e8f0;font-weight:500;}
+    .page-break{page-break-after:always;}
+    .page-break:last-child{page-break-after:avoid;}
+    @media print{ @page { size: A4 landscape; margin: 8mm; } body{padding:0;} }
+  `;
+
+  let bodyContent;
+  if(n <= 5) {
+    const htmlTable = generateCompareTable(true);
+    bodyContent = `<div class="page-break">${brandHdr}<table>${htmlTable}</table>${footer}</div>`;
+  } else {
+    const half1 = Math.ceil(n / 2);
+    const page1Props = props.slice(0, half1);
+    const page2Props = props.slice(half1);
+    const htmlTable1 = generateCompareTable(true, page1Props);
+    const htmlTable2 = generateCompareTable(true, page2Props);
+    const pageLabel1 = `<div style="font-size:.65rem;color:#64748b;text-align:center;margin-bottom:8px;font-weight:600;">עמוד 1 מתוך 2 · נכסים ${1}–${half1}</div>`;
+    const pageLabel2 = `<div style="font-size:.65rem;color:#64748b;text-align:center;margin-bottom:8px;font-weight:600;">עמוד 2 מתוך 2 · נכסים ${half1+1}–${n}</div>`;
+    bodyContent = `<div class="page-break">${brandHdr}${pageLabel1}<table>${htmlTable1}</table>${footer}</div><div class="page-break">${brandHdr}${pageLabel2}<table>${htmlTable2}</table>${footer}</div>`;
+  }
+
   const content = `<!DOCTYPE html><html dir="rtl"><head>
     <meta charset="UTF-8"><link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-    <style>
-      *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-      body{font-family:'Heebo',sans-serif;direction:rtl;background:#fff;color:#202020;padding:0;max-width:100%;margin:0 auto}
-      .brand-hdr {text-align:center; margin-bottom:16px; margin-top:0;}
-      .logo-top {font-size:1.1rem;font-weight:800;color:#202020;letter-spacing:.5px;}
-      .logo-bottom {font-size:1.4rem;font-weight:900;color:#202020;letter-spacing:.5px;border-top:2px solid #202020;padding-top:2px;display:inline-block;}
-      .sub{font-size:.75rem;color:#64748b;margin-top:6px;text-align:center;font-weight:500;}
-      table{width:100%;border-collapse:collapse;font-size:.7rem;text-align:center;}
-      th{background:#202020;color:#C5E085;padding:6px 4px;border:1px solid #333;}
-      td{padding:4px 2px;border:1px solid #e2e8f0;color:#202020;}
-      tr:nth-child(even){background:#f8fafc;}
-      .footer{text-align:center;font-size:.65rem;color:#64748b;margin-top:12px;padding-top:8px;border-top:1px solid #e2e8f0;font-weight:500;}
-      @media print{ @page { size: A4 landscape; margin: 8mm; } body{padding:0;} }
-    </style></head><body>
-    <div class="brand-hdr">
-      <div style="display:flex; align-items:center; gap:8px; justify-content:center; margin-bottom:4px;">
-        <svg viewBox="0 0 528 672" style="height:26px; width:auto; color:var(--deep-black);">
-          <path d="M526 86L376 0L116 150V286L376 136L526 222V86Z" fill="currentColor" />
-          <path d="M527 349L376 261L116 411L114 289L2 347V671H114V547L375 396L527 483V349Z" fill="currentColor" />
-          <path d="M527 607L378 522L117 671H527V607Z" fill="currentColor" />
-        </svg>
-        <div style="display:inline-flex;flex-direction:column;align-items:flex-start;line-height:1.15;">
-          <span class="logo-top">השורה</span><span class="logo-bottom">התחתונה</span>
-        </div>
-      </div>
-      <div class="sub">השוואת נכסים | ${new Date().toLocaleDateString('he-IL')}</div>
-    </div>
-    <table class="cmp-table">${htmlTable}</table>
-    <div class="footer">דון אלבורו - מתווך משרדים מורשה | 050-7202874</div>
-  </body></html>`;
+    <style>${commonStyles}</style></head><body>${bodyContent}</body></html>`;
+
   let iframe=document.getElementById('_cmpPdfFrame');
   if(!iframe){ iframe=document.createElement('iframe'); iframe.id='_cmpPdfFrame'; iframe.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden;'; document.body.appendChild(iframe); }
   iframe.contentDocument.open(); iframe.contentDocument.write(content); iframe.contentDocument.close();
