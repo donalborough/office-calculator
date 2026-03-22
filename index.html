@@ -2,12 +2,35 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="color-scheme" content="light only">
+<meta name="color-scheme" content="light dark">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>השורה התחתונה | דון אלבורו</title>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root { color-scheme: light only; --bg: #F4EFEB; --surface: #ffffff; --card: #ffffff; --ink: #202020; --ink2: #334155; --ink3: #64748b; --border: #e2e8f0; --border2: #cbd5e1; --lime: #C5E085; --deep-black: #000000; --rose: #e11d48; --rose-l: #fff1f2; --navy: #202020; --green: #10b981; --shadow-s: 0 2px 4px rgba(0, 0, 0, 0.04); --shadow-m: 0 8px 24px rgba(0, 0, 0, 0.06); --shadow-l: 0 16px 40px rgba(0, 0, 0, 0.08); --r: 16px; --r-sm: 10px; }
+[data-theme="dark"] {
+  --bg: #0f172a;
+  --surface: #1e293b;
+  --card: #1e293b;
+  --ink: #f1f5f9;
+  --ink2: #cbd5e1;
+  --ink3: #94a3b8;
+  --border: #334155;
+  --border2: #475569;
+}
+[data-theme="dark"] .spin { background: #1e293b; }
+[data-theme="dark"] .chip { background: #1e293b; color: var(--ink2); }
+[data-theme="dark"] .compare-sheet { background: #1e293b; }
+[data-theme="dark"] .compare-hd { background: #1e293b; }
+[data-theme="dark"] .gate-card { background: #1e293b; }
+[data-theme="dark"] .floating-input { background: #0f172a; color: var(--ink); border-color: var(--border); }
+[data-theme="dark"] .mode-btn { background: #1e293b; color: var(--ink3); }
+[data-theme="dark"] .mode-btn.active { background: var(--navy); color: var(--lime); }
+[data-theme="dark"] .action-clear { background: #1e293b; color: var(--ink3); border-color: var(--border); }
+[data-theme="dark"] .prop-tab { background: #1e293b; color: var(--ink3); }
+[data-theme="dark"] .card-note { background: #162032; }
+[data-theme="dark"] .cmp-save-btn { background: #1e293b; color: var(--ink); border-color: var(--border); }
+[data-theme="dark"] .compare-sheet { color: var(--ink); }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
 body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direction:rtl;min-height:100vh;padding-bottom:max(100px,env(safe-area-inset-bottom));-webkit-font-smoothing:antialiased;}
@@ -177,6 +200,11 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .landscape-hint { margin:0; padding:10px 0; font-size:.7rem; color:var(--ink3); text-align:center; }
 @media(min-width: 768px) { .landscape-hint { display: none !important; } }
 .print-only { display: none !important; }
+.dark-toggle { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); color: rgba(255,255,255,.9); border-radius: 8px; width: 38px; height: 36px; font-size: 1rem; cursor: pointer; transition: all 0.2s; display:flex; align-items:center; justify-content:center; }
+.dark-toggle:hover { background: rgba(255,255,255,.15); }
+.hdr-actions { display: flex; gap: 8px; align-items: center; }
+.io-btn { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); color: rgba(255,255,255,.9); border-radius: 8px; padding: 0 12px; height: 36px; font-family:'Heebo',sans-serif; font-size:.72rem; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:5px; transition:all 0.2s; white-space:nowrap; }
+.io-btn:hover { background: rgba(255,255,255,.15); }
 @media print {
   @page { size: A4 portrait; margin: 15mm; }
   body { background: #fff !important; }
@@ -253,7 +281,12 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
         </div>
       </div>
     </div>
-    <button class="hdr-back" onclick="logoutSession()"><span id="hdr-back-txt">התנתקות מהמערכת</span></button>
+    <div class="hdr-actions print-hide">
+      <button class="io-btn" onclick="exportJSON()" title="Export session">💾 ייצוא</button>
+      <label class="io-btn" title="Import session" style="cursor:pointer;">📂 ייבוא<input type="file" accept=".json" style="display:none" onchange="importJSON(this)"></label>
+      <button class="dark-toggle" id="darkToggle" onclick="toggleDark()" title="Dark / Light mode">🌙</button>
+      <button class="hdr-back" onclick="logoutSession()"><span id="hdr-back-txt">התנתקות מהמערכת</span></button>
+    </div>
   </div>
 </div>
 
@@ -439,7 +472,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
             <div class="row-r">
               <div class="spin">
                 <button class="spin-btn" onclick="adj('parkingPrice',-50)">−</button>
-                <input class="spin-inp" id="parkingPriceInp" type="number" value="1000" min="0" max="2000" inputmode="numeric" oninput="onInput('parkingPrice',this)">
+                <input class="spin-inp" id="parkingPriceInp" type="number" value="1000" min="0" max="99999" inputmode="numeric" oninput="onInput('parkingPrice',this)">
                 <span class="spin-unit" id="unit-parking-price">₪/חניה</span>
                 <button class="spin-btn" onclick="adj('parkingPrice',+50)">+</button>
               </div>
@@ -641,10 +674,11 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 <script>
 // ══ API CONNECTION ══
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyivyw8rHoib5Rhz-NUsbqYf_7O1bmINHZfhPQR3sFk2P5QTiec4lKuyWQYXnZPhMWJ_A/exec';
+const SCRIPT_TOKEN = 'offcalc_don2026_secure';
 
 function sendToSheet(data) {
   try {
-    const params = new URLSearchParams(data);
+    const params = new URLSearchParams(Object.assign({token: SCRIPT_TOKEN}, data));
     fetch(SCRIPT_URL + '?' + params.toString(), { method: 'GET', mode: 'no-cors' });
   } catch(e) {}
 }
@@ -809,7 +843,7 @@ function onInput(key,el){
   } 
 }
 function adj(key,d){ 
-  const lim={sqm:[50,9999],emp:[1,2000],mgmt:[0,100],clean:[0,60],utils:[0,60],customPct:[5,50],parkingSpots:[0,200],parkingPrice:[0,2000],grace:[0,24]}; 
+  const lim={sqm:[50,9999],emp:[1,2000],mgmt:[0,100],clean:[0,60],utils:[0,60],customPct:[5,50],parkingSpots:[0,200],parkingPrice:[0,99999],grace:[0,24]}; 
   S()[key]=clamp(S()[key]+d,lim[key][0],lim[key][1]); 
   document.getElementById(key+'Inp').value=S()[key]; 
   if(key==='sqm') syncRentAfterSqmChange();
@@ -1225,6 +1259,57 @@ function resetCurrentProp(){ if(!confirm('למחוק את נתוני הנכס ה
 function validateMailInput(el){ const v=el.value.trim(); const ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); el.classList.toggle('invalid',v.length>0&&!ok); el.classList.toggle('valid',ok); if(ok) document.getElementById('gateErr').style.display='none'; }
 window.resetCurrentProp = resetCurrentProp; window.openCompare = openCompare;
 document.addEventListener('DOMContentLoaded',function(){ loadState(); renderTabs(); loadPropToUI(); checkSession(); calc(); });
+
+function toggleDark(){
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const next = isDark ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  document.getElementById('darkToggle').textContent = next === 'dark' ? '☀️' : '🌙';
+  localStorage.setItem('offcalc_theme', next);
+}
+(function(){
+  const t = localStorage.getItem('offcalc_theme');
+  if(t === 'dark'){
+    document.documentElement.setAttribute('data-theme','dark');
+    document.addEventListener('DOMContentLoaded', function(){
+      const btn = document.getElementById('darkToggle');
+      if(btn) btn.textContent = '☀️';
+    });
+  }
+})();
+
+function exportJSON(){
+  const data = {version:1, props:props, curProp:curProp, ts:Date.now()};
+  const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'office-calc-' + new Date().toISOString().slice(0,10) + '.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+}
+function importJSON(input){
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    try {
+      const data = JSON.parse(e.target.result);
+      if(!data.props || !Array.isArray(data.props) || data.props.length === 0) throw new Error('invalid');
+      props = data.props.map(function(p){ return Object.assign(defaultProp(), p); });
+      curProp = Math.min(data.curProp || 0, props.length - 1);
+      saveState();
+      renderTabs();
+      loadPropToUI(props[curProp]);
+      calc();
+    } catch(err) {
+      alert('הקובץ אינו תקין או פגום.');
+    }
+  };
+  reader.readAsText(file);
+  input.value = '';
+}
 </script>
 </body>
 </html>
