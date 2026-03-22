@@ -88,6 +88,9 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .prop-name-inp{flex:1;border:none;background:transparent;font-family:'Heebo',sans-serif;font-size:1rem;font-weight:800;color:var(--ink);padding:0;}
 .prop-name-inp:focus{outline:none;}
 .prop-name-inp::placeholder{color:var(--border2);font-weight:500;}
+.prop-desc-inp{width:100%;border:none;border-top:1px solid var(--border);background:transparent;font-family:'Heebo',sans-serif;font-size:.82rem;color:var(--ink2);padding:10px 20px 12px;resize:none;line-height:1.55;min-height:52px;max-height:110px;overflow-y:auto;}
+.prop-desc-inp:focus{outline:none;color:var(--ink);}
+.prop-desc-inp::placeholder{color:var(--border2);font-weight:400;}
 .sec{margin-bottom:24px;}
 .sec-hd{display:flex;align-items:center;gap:8px;padding:0 4px 12px;}
 .sec-num{width:24px;height:24px;border-radius:6px;background:var(--navy);color:var(--lime);font-size:.65rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
@@ -334,9 +337,12 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
     <div class="prop-tabs" id="propTabs"></div>
   </div>
 
-  <div class="prop-name-row print-hide">
-    <span class="prop-name-label" id="prop-name-label">🏢 <span id="prop-name-lbl-txt">שם הנכס</span>:</span>
-    <input class="prop-name-inp" id="propNameInp" type="text" placeholder='למשל: מגדל עזריאלי קומה 20' oninput="updatePropName(this.value)" onblur="onPropNameBlur(this.value)">
+  <div class="prop-name-row print-hide" style="flex-direction:column;align-items:stretch;padding:0;gap:0;">
+    <div style="display:flex;align-items:center;gap:12px;padding:14px 20px;">
+      <span class="prop-name-label" id="prop-name-label">🏢 <span id="prop-name-lbl-txt">שם הנכס</span>:</span>
+      <input class="prop-name-inp" id="propNameInp" type="text" placeholder='למשל: מגדל עזריאלי קומה 20' oninput="updatePropName(this.value)" onblur="onPropNameBlur(this.value)">
+    </div>
+    <textarea class="prop-desc-inp" id="propDescInp" maxlength="200" placeholder="תיאור חופשי — למשל: קומות 2+3 זמינות, גג, קומת פרטר אפשרית..." oninput="updatePropDesc(this.value)" rows="2"></textarea>
   </div>
 
   <div class="main-layout-grid print-hide">
@@ -722,7 +728,7 @@ function sendToSheet(data) {
 }
 
 const defaultProp = () => ({
-  name:'',sqm:480,emp:40,rent:100,rentMode:'sqm',rentTotal:48000,
+  name:'',desc:'',sqm:480,emp:40,rent:100,rentMode:'sqm',rentTotal:48000,
   arn:false,arnMode:'auto',arnManual:34,
   mgmt:20,clean:8,utils:12,extra:0,extraMode:'sqm',
   grossRatio:1.30,useCustomRatio:false,customPct:25,
@@ -779,6 +785,7 @@ function addProperty(){
   window.scrollTo({top:0, behavior:'smooth'}); saveState();
 }
 function updatePropName(val){ S().name = val; renderTabs(); saveState(); maybeSendPropUpdate(); }
+function updatePropDesc(val){ S().desc = val.slice(0,200); saveState(); }
 
 function deleteProp(i, e) {
   e.stopPropagation();
@@ -802,6 +809,7 @@ function onPropNameBlur(val){
 function loadPropToUI(){
   const p = S();
   document.getElementById('propNameInp').value = p.name;
+  document.getElementById('propDescInp').value = p.desc || '';
   document.getElementById('sqmInp').value = p.sqm;
   document.getElementById('empInp').value = p.emp;
   document.getElementById('mgmtInp').value = p.mgmt;
@@ -1008,9 +1016,11 @@ function generateCompareTable(forPrint = false, subsetProps) {
   results.forEach(({p},i)=>{
     const origIndex = subsetProps ? props.indexOf(p) : i;
     const nameLabel = origIndex >= 0 ? propNames[origIndex] : propNames[i];
+    const descTrunc = p.desc ? (p.desc.length > 60 ? p.desc.slice(0,60)+'…' : p.desc) : '';
     html += `<th class="cmp-th" style="text-align:center;">
       <div style="font-size:.65rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;">${nameLabel}</div>
       <div class="cmp-th-name" style="font-size:.85rem;font-weight:800;margin-top:4px;color:${forPrint ? '#C5E085' : '#fff'};">${p.name||'ללא שם'}</div>
+      ${descTrunc ? `<div style="font-size:.65rem;font-weight:400;color:${forPrint ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,0.65)'};margin-top:3px;line-height:1.4;">${descTrunc}</div>` : ''}
     </th>`;
   });
   html += `</tr></thead><tbody>`;
@@ -1239,6 +1249,7 @@ function buildSummaryHTML(p, r){
       <span class="logo-top">השורה</span><br><span class="logo-bottom">התחתונה</span>
     </div>
     <h1>${p.name||'סיכום נכס'}</h1>
+    ${p.desc ? `<div style="font-size:.78rem;color:#475569;margin:-4px 0 6px;text-align:center;line-height:1.5;font-weight:500;">${p.desc}</div>` : ''}
     <div class="sub">${new Date().toLocaleDateString('he-IL')} · מחשבון עסקאות שכירות</div>
     <div class="hero">
       <div style="font-size:.65rem;font-weight:800;letter-spacing:1px;color:#64748b;margin-bottom:4px;">סה"כ עלויות חודשיות</div>
