@@ -215,19 +215,17 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .page-break:last-child { page-break-after: avoid; }
 @media(min-width: 768px) { .landscape-hint { display: none !important; } }
 .print-only { display: none !important; }
-.dark-toggle { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); color: rgba(255,255,255,.9); border-radius: 8px; width: 38px; height: 36px; font-size: 1rem; cursor: pointer; transition: all 0.2s; display:flex; align-items:center; justify-content:center; }
+.dark-toggle { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); color: rgba(255,255,255,.9); border-radius: 8px; width: 40px; height: 40px; font-size: 1.1rem; cursor: pointer; transition: all 0.2s; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
 .dark-toggle:hover { background: rgba(255,255,255,.15); }
 .hdr-actions { display: flex; gap: 8px; align-items: center; }
-.io-btn { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); color: rgba(255,255,255,.9); border-radius: 8px; padding: 0 12px; height: 36px; font-family:'Heebo',sans-serif; font-size:.72rem; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:5px; transition:all 0.2s; white-space:nowrap; }
-.io-btn:hover { background: rgba(255,255,255,.15); }
-@media(max-width: 640px) {
-  .io-lbl { display: none; }
-  .io-btn { padding: 0 8px; min-width: 36px; justify-content: center; }
-  .hdr-actions { gap: 4px; }
-  #hdr-back-txt { display: none; }
-  .hdr-back { padding: 8px 10px; }
-  .hdr-back::after { content: '⏻'; font-size: 1rem; }
-}
+.hdr-menu-wrap { position: relative; }
+.hdr-menu-btn { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); color: rgba(255,255,255,.9); border-radius: 8px; width: 40px; height: 40px; font-size: 1.4rem; cursor: pointer; display:flex; align-items:center; justify-content:center; transition: all 0.2s; flex-shrink:0; line-height:1; padding-bottom:4px; }
+.hdr-menu-btn:hover { background: rgba(255,255,255,.15); }
+.hdr-dropdown { position: absolute; top: calc(100% + 10px); left: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 12px 32px rgba(0,0,0,0.18); padding: 6px; min-width: 170px; z-index: 400; display: none; flex-direction: column; gap: 2px; }
+.hdr-dropdown.open { display: flex; }
+.hdr-dd-item { background: transparent; border: none; color: var(--ink); font-family: 'Heebo', sans-serif; font-size: .9rem; font-weight: 600; padding: 11px 14px; border-radius: 9px; cursor: pointer; text-align: right; display: flex; align-items: center; gap: 10px; transition: background 0.15s; width: 100%; white-space: nowrap; }
+.hdr-dd-item:hover { background: var(--bg); }
+[data-theme="dark"] .hdr-dropdown { box-shadow: 0 12px 32px rgba(0,0,0,0.4); }
 .share-modal-overlay { position:fixed; inset:0; z-index:600; background:rgba(0,0,0,0.55); display:flex; align-items:center; justify-content:center; padding:20px; }
 .share-modal-box { background:var(--surface); border-radius:var(--r); padding:28px 24px; width:100%; max-width:480px; box-shadow:0 32px 80px rgba(0,0,0,0.3); }
 .share-modal-title { font-size:1.1rem; font-weight:900; color:var(--ink); margin-bottom:6px; }
@@ -315,11 +313,16 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
       </div>
     </div>
     <div class="hdr-actions print-hide">
-      <button class="io-btn" onclick="openShareModal()" title="Share">🔗<span class="io-lbl"> שתף</span></button>
-      <button class="io-btn" onclick="exportJSON()" title="Export session">💾<span class="io-lbl"> ייצוא</span></button>
-      <label class="io-btn" title="Import session" style="cursor:pointer;">📂<span class="io-lbl"> ייבוא</span><input type="file" accept=".json" style="display:none" onchange="importJSON(this)"></label>
+      <div class="hdr-menu-wrap" id="hdrMenuWrap">
+        <button class="hdr-menu-btn" onclick="toggleHdrMenu()" title="תפריט">⋮</button>
+        <div class="hdr-dropdown" id="hdrDropdown">
+          <button class="hdr-dd-item" onclick="openShareModal();closeHdrMenu()">🔗 שתף</button>
+          <button class="hdr-dd-item" onclick="exportJSON();closeHdrMenu()">💾 ייצוא</button>
+          <label class="hdr-dd-item" style="cursor:pointer;">📂 ייבוא<input type="file" accept=".json" style="display:none" onchange="importJSON(this);closeHdrMenu()"></label>
+        </div>
+      </div>
       <button class="dark-toggle" id="darkToggle" onclick="toggleDark()" title="Dark / Light mode">🌙</button>
-      <button class="hdr-back" onclick="logoutSession()"><span id="hdr-back-txt">התנתקות מהמערכת</span></button>
+      <button class="hdr-back" onclick="logoutSession()">התנתקות</button>
     </div>
   </div>
 </div>
@@ -1379,6 +1382,17 @@ function resetCurrentProp(){ if(!confirm('למחוק את נתוני הנכס ה
 function validateMailInput(el){ const v=el.value.trim(); const ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); el.classList.toggle('invalid',v.length>0&&!ok); el.classList.toggle('valid',ok); if(ok) document.getElementById('gateErr').style.display='none'; }
 window.resetCurrentProp = resetCurrentProp; window.openCompare = openCompare;
 document.addEventListener('DOMContentLoaded',function(){ loadState(); renderTabs(); loadPropToUI(); if(checkSession()){ loadSharedStateIfAny(); } calc(); });
+
+function toggleHdrMenu(){
+  document.getElementById('hdrDropdown').classList.toggle('open');
+}
+function closeHdrMenu(){
+  document.getElementById('hdrDropdown').classList.remove('open');
+}
+document.addEventListener('click', function(e){
+  const wrap = document.getElementById('hdrMenuWrap');
+  if(wrap && !wrap.contains(e.target)) closeHdrMenu();
+});
 
 function toggleDark(){
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
