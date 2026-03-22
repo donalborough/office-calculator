@@ -313,16 +313,17 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
       </div>
     </div>
     <div class="hdr-actions print-hide">
+      <button class="dark-toggle" id="darkToggle" onclick="toggleDark()" title="Dark / Light mode">🌙</button>
       <div class="hdr-menu-wrap" id="hdrMenuWrap">
         <button class="hdr-menu-btn" onclick="toggleHdrMenu()" title="תפריט">⋮</button>
         <div class="hdr-dropdown" id="hdrDropdown">
           <button class="hdr-dd-item" onclick="openShareModal();closeHdrMenu()">🔗 שתף</button>
           <button class="hdr-dd-item" onclick="exportJSON();closeHdrMenu()">💾 ייצוא</button>
           <label class="hdr-dd-item" style="cursor:pointer;">📂 ייבוא<input type="file" accept=".json" style="display:none" onchange="importJSON(this);closeHdrMenu()"></label>
+          <div style="height:1px;background:var(--border);margin:4px 6px;"></div>
+          <button class="hdr-dd-item" onclick="logoutSession();closeHdrMenu()" style="color:var(--rose);">🚪 התנתקות</button>
         </div>
       </div>
-      <button class="dark-toggle" id="darkToggle" onclick="toggleDark()" title="Dark / Light mode">🌙</button>
-      <button class="hdr-back" onclick="logoutSession()">התנתקות</button>
     </div>
   </div>
 </div>
