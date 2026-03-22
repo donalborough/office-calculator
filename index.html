@@ -192,9 +192,12 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .cmp-th:last-child { border-left:none; }
 .cmp-td { padding:12px 16px; border-bottom:1px solid #f1f5f9; border-left:1px solid #f8fafc; }
 .cmp-td:last-child { border-left:none; }
-.sticky-col { position: sticky; right: 0; background: inherit; z-index: 5; box-shadow: -2px 0 5px rgba(0,0,0,0.03); text-align:right; }
+.sticky-col { position: sticky; right: 0; background: var(--card); z-index: 5; box-shadow: -2px 0 5px rgba(0,0,0,0.06); text-align:right; }
 .cmp-th.sticky-col { z-index: 15; background-color: var(--navy); border-left: 1px solid rgba(255,255,255,0.1); }
-.cmp-td.sticky-col { border-left: 1px solid #e2e8f0; }
+.cmp-td.sticky-col { border-left: 1px solid #e2e8f0; background: var(--card); }
+.cmp-row-even .cmp-td.sticky-col { background: #f8fafc; }
+[data-theme="dark"] .cmp-row-even .cmp-td.sticky-col { background: #162032; }
+.cmp-rank-row .cmp-td.sticky-col { background: var(--navy) !important; }
 .cmp-save-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;max-width:300px;padding:14px;background:var(--card);color:var(--ink);border:1px solid var(--border);border-radius:12px;font-family:'Heebo',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:all 0.2s ease;box-shadow:0 4px 12px rgba(0,0,0,0.05);}
 .cmp-save-btn:hover{background:#f8fafc;}
 .cmp-save-btn:active{transform:scale(0.98);}
@@ -217,6 +220,14 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .hdr-actions { display: flex; gap: 8px; align-items: center; }
 .io-btn { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); color: rgba(255,255,255,.9); border-radius: 8px; padding: 0 12px; height: 36px; font-family:'Heebo',sans-serif; font-size:.72rem; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:5px; transition:all 0.2s; white-space:nowrap; }
 .io-btn:hover { background: rgba(255,255,255,.15); }
+@media(max-width: 640px) {
+  .io-lbl { display: none; }
+  .io-btn { padding: 0 8px; min-width: 36px; justify-content: center; }
+  .hdr-actions { gap: 4px; }
+  #hdr-back-txt { display: none; }
+  .hdr-back { padding: 8px 10px; }
+  .hdr-back::after { content: '⏻'; font-size: 1rem; }
+}
 .share-modal-overlay { position:fixed; inset:0; z-index:600; background:rgba(0,0,0,0.55); display:flex; align-items:center; justify-content:center; padding:20px; }
 .share-modal-box { background:var(--surface); border-radius:var(--r); padding:28px 24px; width:100%; max-width:480px; box-shadow:0 32px 80px rgba(0,0,0,0.3); }
 .share-modal-title { font-size:1.1rem; font-weight:900; color:var(--ink); margin-bottom:6px; }
@@ -304,9 +315,9 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
       </div>
     </div>
     <div class="hdr-actions print-hide">
-      <button class="io-btn" onclick="openShareModal()" title="Share">🔗 שתף</button>
-      <button class="io-btn" onclick="exportJSON()" title="Export session">💾 ייצוא</button>
-      <label class="io-btn" title="Import session" style="cursor:pointer;">📂 ייבוא<input type="file" accept=".json" style="display:none" onchange="importJSON(this)"></label>
+      <button class="io-btn" onclick="openShareModal()" title="Share">🔗<span class="io-lbl"> שתף</span></button>
+      <button class="io-btn" onclick="exportJSON()" title="Export session">💾<span class="io-lbl"> ייצוא</span></button>
+      <label class="io-btn" title="Import session" style="cursor:pointer;">📂<span class="io-lbl"> ייבוא</span><input type="file" accept=".json" style="display:none" onchange="importJSON(this)"></label>
       <button class="dark-toggle" id="darkToggle" onclick="toggleDark()" title="Dark / Light mode">🌙</button>
       <button class="hdr-back" onclick="logoutSession()"><span id="hdr-back-txt">התנתקות מהמערכת</span></button>
     </div>
@@ -988,7 +999,7 @@ function generateCompareTable(forPrint = false, subsetProps) {
 
   const propNames = ['נכס א׳','נכס ב׳','נכס ג׳','נכס ד׳','נכס ה׳','נכס ו׳','נכס ז׳','נכס ח׳','נכס ט׳','נכס י׳'];
 
-  let html = `<thead style="${!forPrint ? 'position:sticky;top:0;z-index:20;box-shadow:0 2px 4px rgba(0,0,0,.1);' : ''}"><tr>`;
+  let html = `<thead><tr>`;
   html += `<th class="cmp-th ${!forPrint ? 'sticky-col' : ''}" style="text-align:right; border-right:none; width:140px; ${!forPrint ? 'z-index:21;' : ''}">קריטריון</th>`;
   results.forEach(({p},i)=>{
     const origIndex = subsetProps ? props.indexOf(p) : i;
