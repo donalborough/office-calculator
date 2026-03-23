@@ -787,10 +787,14 @@ function addProperty(){
 function updatePropName(val){ S().name = val; renderTabs(); saveState(); maybeSendPropUpdate(); }
 function updatePropDesc(val){ S().desc = val.slice(0,200); saveState(); }
 
+function isPropEmpty(p){
+  const d = defaultProp();
+  return !p.name && !p.desc && p.sqm===d.sqm && p.rent===d.rent && p.furniture===0 && p.renovation===0 && p.parkingSpots===0;
+}
 function deleteProp(i, e) {
   e.stopPropagation();
-  if(props.length <= 1) return; 
-  if(!confirm('האם למחוק נכס זה?')) return;
+  if(props.length <= 1) return;
+  if(!isPropEmpty(props[i]) && !confirm('האם למחוק נכס זה?')) return;
   props.splice(i, 1);
   curProp = Math.max(0, curProp - 1);
   saveState(); renderTabs(); loadPropToUI(); calc();
