@@ -931,7 +931,7 @@ function setExtraMode(mode){ S().extraMode=mode; S().extra=0; document.getElemen
 function adjExtra(d){ const step=S().extraMode==='sqm'?1:50; S().extra=Math.max(0,S().extra+d*step); document.getElementById('extraInp').value=S().extra; calc(); }
 function onInputExtra(el){ const v=parseInt(el.value); if(!isNaN(v)&&v>=0){S().extra=v;calc();} }
 function adjMonths(d){ S().months = Math.max(1, Math.min(120, S().months + d)); document.getElementById('monthsInp').value = S().months; calc(); }
-function onInputMonths(el){ const v = parseInt(el.value); if(!isNaN(v) && v >= 6) { S().months = v; calc(); } }
+function onInputMonths(el){ const v = parseInt(el.value); if(!isNaN(v) && v >= 1) { S().months = v; calc(); } }
 function adjFurniture(d){ S().furniture = Math.max(0, S().furniture + d); document.getElementById('furnitureInp').value = S().furniture; calc(); }
 function onInputFurniture(el){ const v = parseInt(el.value); if(!isNaN(v) && v >= 0) { S().furniture = v; calc(); } }
 function adjRenovation(d){ S().renovation = Math.max(0, S().renovation + d); document.getElementById('renovationInp').value = S().renovation; calc(); }
