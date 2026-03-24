@@ -942,11 +942,15 @@ function calcProp(p){
   const _ir=window._irrelRows||new Set();
   const arnRaw=p.arnMode==='manual'?p.arnManual:(p.arn?17:34);
   const arn=_ir.has('row-arn')?0:arnRaw;
+  const mgmt=_ir.has('row-mgmt')?0:p.mgmt;
+  const clean=_ir.has('row-clean')?0:p.clean;
+  const utils=_ir.has('row-utils')?0:p.utils;
+  const parkingSpots=_ir.has('row-parking')?0:p.parkingSpots;
   const extraPerSqm=p.extraMode==='sqm'?p.extra:(p.extra>0?Math.round(p.extra/bruto):0);
-  const rows=[ {l:'שכירות בסיס',v:p.rent}, ...(arn>0?[{l:'ארנונה',v:arn}]:[]), ...(p.mgmt>0?[{l:'דמי ניהול',v:p.mgmt}]:[]), ...(p.clean>0?[{l:'שירותי ניקיון',v:p.clean}]:[]), ...(p.utils>0?[{l:'חשמל, אינטרנט, מים',v:p.utils}]:[]), ...(p.extra>0&&!_ir.has('row-extra')?[{l:'עלויות נוספות',v:extraPerSqm}]:[]), ];
+  const rows=[ {l:'שכירות בסיס',v:p.rent}, ...(arn>0?[{l:'ארנונה',v:arn}]:[]), ...(mgmt>0?[{l:'דמי ניהול',v:mgmt}]:[]), ...(clean>0?[{l:'שירותי ניקיון',v:clean}]:[]), ...(utils>0?[{l:'חשמל, אינטרנט, מים',v:utils}]:[]), ...(p.extra>0&&!_ir.has('row-extra')?[{l:'עלויות נוספות',v:extraPerSqm}]:[]), ];
   const perSqm=rows.reduce((s,r)=>s+r.v,0);
   const monthly=perSqm*bruto;
-  const parkingMonthly = p.parkingSpots * p.parkingPrice;
+  const parkingMonthly = parkingSpots * p.parkingPrice;
   const parkingPerSqm = parkingMonthly > 0 ? parkingMonthly / bruto : 0;
   const furniturePerSqmMonth = p.furniture > 0 ? p.furniture / bruto / p.months : 0;
   const furnitureMonthly = p.furniture > 0 ? Math.round(p.furniture / p.months) : 0;
@@ -1083,15 +1087,16 @@ function generateCompareTable(forPrint = false, subsetProps) {
     return r;
   };
 
+  const _ir = window._irrelRows||new Set();
   // Section: עלויות בסיס
   html += row('שטח ברוטו', results.map(({p})=>fmt(p.sqm)+' מ"ר'), {bold:true});
   html += row('שכירות בסיס', results.map(({p})=>p.rent+' ₪/מ"ר'), {
     numericVals: rentPerSqms, highlightMin: true, highlightMax: true
   });
-  html += row('ארנונה', results.map(({p})=>{ return (p.arnMode==='manual'?p.arnManual:(p.arn?17:34))+' ₪/מ"ר'; }));
-  html += row('דמי ניהול', results.map(({p})=>p.mgmt+' ₪/מ"ר'));
-  html += row('ניקיון', results.map(({p})=>p.clean+' ₪/מ"ר'));
-  html += row('חשמל, אינטרנט, מים', results.map(({p})=>p.utils+' ₪/מ"ר'));
+  if(!_ir.has('row-arn')) html += row('ארנונה', results.map(({p})=>{ return (p.arnMode==='manual'?p.arnManual:(p.arn?17:34))+' ₪/מ"ר'; }));
+  if(!_ir.has('row-mgmt')) html += row('דמי ניהול', results.map(({p})=>p.mgmt+' ₪/מ"ר'));
+  if(!_ir.has('row-clean')) html += row('ניקיון', results.map(({p})=>p.clean+' ₪/מ"ר'));
+  if(!_ir.has('row-utils')) html += row('חשמל, אינטרנט, מים', results.map(({p})=>p.utils+' ₪/מ"ר'));
   html += row('עלות למ"ר', results.map(({p,r})=>r.perSqm+' ₪/מ"ר'), {
     bold:true, sectionDivider:true,
     numericVals: perSqms, highlightMin: true, highlightMax: true
