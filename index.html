@@ -259,7 +259,8 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
   body.printing-compare .compare-sheet { position: static !important; max-height: none !important; overflow: visible !important; border-radius: 0 !important; box-shadow: none !important; animation: none !important; padding: 0 !important; }
   body.printing-compare .cmp-table-wrapper { max-height: none !important; overflow: visible !important; padding: 0 !important; }
   body.printing-compare .print-only { display: block !important; margin-bottom: 4px !important; padding-top: 0 !important; }
-  body.printing-compare #cmpTable { width: 100%; margin: 0; padding: 0; page-break-inside: avoid; border: 1px solid #ccc; }
+  body.printing-compare #cmpTable { width: 100% !important; table-layout: fixed !important; margin: 0; padding: 0; page-break-inside: avoid; border: 1px solid #ccc; }
+  body.printing-compare .cmp-th, body.printing-compare .cmp-td { overflow:hidden; text-overflow:ellipsis; word-break:break-word; }
   body.printing-compare .cmp-th { background-color: #202020 !important; color: #C5E085 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 4px !important; font-size: 0.7rem !important; line-height: 1.1 !important; border-bottom: 1px solid #000 !important; }
   body.printing-compare .cmp-td { padding: 3px !important; font-size: 0.65rem !important; line-height: 1.1 !important; border-bottom: 1px solid #eee !important; border-left: 1px solid #eee !important; color: #000 !important;}
   body.printing-compare .print-only h1 { font-size: 1.1rem !important; margin: 4px 0 !important; }
@@ -1053,9 +1054,9 @@ function generateCompareTable(forPrint = false, subsetProps) {
 
   const propNames = ['נכס א׳','נכס ב׳','נכס ג׳','נכס ד׳','נכס ה׳','נכס ו׳','נכס ז׳','נכס ח׳','נכס ט׳','נכס י׳'];
 
-  const labelW=140; const colW=Math.max(120,Math.floor((100*(1-labelW/(forPrint?700:900)))/results.length));
-  let html=`<colgroup><col style="width:${labelW}px">` + results.map(()=>`<col style="width:${colW}%">`).join('') + `</colgroup><thead><tr>`;
-  html += `<th class="cmp-th ${!forPrint ? 'sticky-col' : ''}" style="text-align:right; border-right:none; width:${labelW}px; ${!forPrint ? 'z-index:21;' : ''}">קריטריון</th>`;
+  const labelPct=16; const propPct=((100-labelPct)/results.length).toFixed(2);
+  let html=`<colgroup><col style="width:${labelPct}%">` + results.map(()=>`<col style="width:${propPct}%">`).join('') + `</colgroup><thead><tr>`;
+  html += `<th class="cmp-th ${!forPrint ? 'sticky-col' : ''}" style="text-align:right; border-right:none; width:${labelPct}%; ${!forPrint ? 'z-index:21;' : ''}">קריטריון</th>`;
   results.forEach(({p},i)=>{
     const origIndex = subsetProps ? props.indexOf(p) : i;
     const nameLabel = origIndex >= 0 ? propNames[origIndex] : propNames[i];
