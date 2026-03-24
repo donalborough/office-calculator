@@ -602,7 +602,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
             <div class="row-r">
               <div class="spin">
                 <button class="spin-btn" onclick="adjMonths(-3)">−</button>
-                <input class="spin-inp" id="monthsInp" type="number" value="24" min="6" max="120" inputmode="numeric" oninput="onInputMonths(this)">
+                <input class="spin-inp" id="monthsInp" type="number" value="24" min="1" max="120" inputmode="numeric" oninput="onInputMonths(this)">
                 <span class="spin-unit" id="unit-months">חודש</span>
                 <button class="spin-btn" onclick="adjMonths(+3)">+</button>
               </div>
@@ -930,7 +930,7 @@ function setExtraModeUI(mode){ document.getElementById('extraModePerSqm').classL
 function setExtraMode(mode){ S().extraMode=mode; S().extra=0; document.getElementById('extraInp').value=0; setExtraModeUI(mode); calc(); }
 function adjExtra(d){ const step=S().extraMode==='sqm'?1:50; S().extra=Math.max(0,S().extra+d*step); document.getElementById('extraInp').value=S().extra; calc(); }
 function onInputExtra(el){ const v=parseInt(el.value); if(!isNaN(v)&&v>=0){S().extra=v;calc();} }
-function adjMonths(d){ S().months = Math.max(6, Math.min(120, S().months + d)); document.getElementById('monthsInp').value = S().months; calc(); }
+function adjMonths(d){ S().months = Math.max(1, Math.min(120, S().months + d)); document.getElementById('monthsInp').value = S().months; calc(); }
 function onInputMonths(el){ const v = parseInt(el.value); if(!isNaN(v) && v >= 6) { S().months = v; calc(); } }
 function adjFurniture(d){ S().furniture = Math.max(0, S().furniture + d); document.getElementById('furnitureInp').value = S().furniture; calc(); }
 function onInputFurniture(el){ const v = parseInt(el.value); if(!isNaN(v) && v >= 0) { S().furniture = v; calc(); } }
@@ -1003,9 +1003,9 @@ function calc(){
     if(periodCell) periodCell.style.display='none';
     if(yearCell) yearCell.style.display='none';
   } else {
+    if(yearCell) yearCell.style.display = p.months>=12 ? '' : 'none';
+    if(p.months>=12) document.getElementById('rYear').textContent=fmt(r.totalMonthly*12)+' ₪';
     if(periodCell) periodCell.style.display='';
-    if(yearCell) yearCell.style.display='';
-    document.getElementById('rYear').textContent=fmt(r.totalMonthly*12)+' ₪';
     const periodDisplay = p.grace>0 ? r.effectiveMonthly*p.months : r.totalMonthly*p.months;
     document.getElementById('rPeriod').textContent=fmt(periodDisplay)+' ₪';
     document.getElementById('rPeriodLbl').textContent=(p.grace>0?'₪ אפקטיבי ל-':'₪ ל-')+p.months+' חודשים';
