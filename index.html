@@ -98,9 +98,14 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow-m);overflow:hidden;border:1px solid var(--border);}
 .card-note{padding:12px 18px;font-size:.72rem;color:var(--ink3);line-height:1.7;border-top:1px solid var(--border);background:#fcfcfc;}
 .card-note strong{color:var(--ink2);}
-.row{display:flex;align-items:center;padding:16px 20px;gap:12px;border-bottom:1px solid var(--border);min-height:60px;}
+.row{display:flex;align-items:center;padding:16px 20px;gap:12px;border-bottom:1px solid var(--border);min-height:60px;position:relative;}
 .row:last-child{border-bottom:none;}
 .row-l{flex:1;min-width:0;}
+.row-hide-btn{opacity:0;transition:opacity .15s;background:none;border:1px solid transparent;border-radius:5px;cursor:pointer;font-size:.68rem;color:var(--ink3);padding:2px 7px;margin-top:4px;font-family:'Heebo',sans-serif;display:inline-flex;align-items:center;gap:3px;}
+.row:hover .row-hide-btn{opacity:1;}
+.row-hide-btn:hover{background:var(--rose-l);color:var(--rose);border-color:var(--rose);}
+.hidden-rows-notice{display:none;padding:10px 20px;font-size:.72rem;color:var(--ink3);cursor:pointer;align-items:center;gap:6px;border-top:1px solid var(--border);transition:color .15s;}
+.hidden-rows-notice:hover{color:var(--ink2);}
 .row-label{font-size:.88rem;font-weight:700;line-height:1.3;}
 .row-sub{font-size:.68rem;color:var(--ink3);margin-top:3px;line-height:1.4;}
 .row-r{display:flex;align-items:center;flex-shrink:0;}
@@ -393,10 +398,11 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
               </div>
             </div>
           </div>
-          <div class="row">
+          <div class="row" id="row-emp">
             <div class="row-l">
               <div class="row-label" id="lbl-emp">מס' עמדות עבודה</div>
               <div class="row-sub" id="sqmPerEmpInline">—</div>
+              <button class="row-hide-btn" onclick="hideRow('row-emp')">✕ הסתר</button>
             </div>
             <div class="row-r">
               <div class="spin">
@@ -438,11 +444,12 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
         <div class="sec-hd"><div class="sec-num">3</div><div class="sec-title" id="step3-title">עלויות נלוות</div></div>
         <div class="card">
           
-          <div style="padding: 16px 20px; border-bottom: 1px solid var(--border);">
+          <div id="row-arn" style="padding: 16px 20px; border-bottom: 1px solid var(--border);">
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
               <div class="row-l" style="min-width: 100px;">
                 <div class="row-label" id="lbl-arn">ארנונה</div>
                 <div class="row-sub" id="arnSub">34 ₪/מ"ר — ללא הנחה</div>
+                <button class="row-hide-btn" onclick="hideRow('row-arn')">✕ הסתר</button>
               </div>
               <div class="row-r" style="gap:12px; flex-wrap:wrap; justify-content:flex-end;">
                 <div class="tog-wrap">
@@ -466,8 +473,8 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
             </div>
           </div>
 
-          <div class="row" style="border-top:1px solid var(--border)">
-            <div class="row-l"><div class="row-label" id="lbl-mgmt">דמי ניהול</div><div class="row-sub" id="sub-mgmt">אחזקה + שירותים משותפים</div></div>
+          <div class="row" id="row-mgmt" style="border-top:1px solid var(--border)">
+            <div class="row-l"><div class="row-label" id="lbl-mgmt">דמי ניהול</div><div class="row-sub" id="sub-mgmt">אחזקה + שירותים משותפים</div><button class="row-hide-btn" onclick="hideRow('row-mgmt')">✕ הסתר</button></div>
             <div class="row-r"><div class="spin">
               <button class="spin-btn" onclick="adj('mgmt',-1)">−</button>
               <input class="spin-inp" id="mgmtInp" type="number" value="20" min="0" max="100" inputmode="numeric" oninput="onInput('mgmt',this)">
@@ -475,8 +482,8 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
               <button class="spin-btn" onclick="adj('mgmt',+1)">+</button>
             </div></div>
           </div>
-          <div class="row">
-            <div class="row-l"><div class="row-label" id="lbl-clean">שירותי ניקיון</div></div>
+          <div class="row" id="row-clean">
+            <div class="row-l"><div class="row-label" id="lbl-clean">שירותי ניקיון</div><button class="row-hide-btn" onclick="hideRow('row-clean')">✕ הסתר</button></div>
             <div class="row-r"><div class="spin">
               <button class="spin-btn" onclick="adj('clean',-1)">−</button>
               <input class="spin-inp" id="cleanInp" type="number" value="8" min="0" max="60" inputmode="numeric" oninput="onInput('clean',this)">
@@ -484,8 +491,8 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
               <button class="spin-btn" onclick="adj('clean',+1)">+</button>
             </div></div>
           </div>
-          <div class="row">
-            <div class="row-l"><div class="row-label" id="lbl-utils">חשמל, אינטרנט, מים</div></div>
+          <div class="row" id="row-utils">
+            <div class="row-l"><div class="row-label" id="lbl-utils">חשמל, אינטרנט, מים</div><button class="row-hide-btn" onclick="hideRow('row-utils')">✕ הסתר</button></div>
             <div class="row-r"><div class="spin">
               <button class="spin-btn" onclick="adj('utils',-1)">−</button>
               <input class="spin-inp" id="utilsInp" type="number" value="12" min="0" max="60" inputmode="numeric" oninput="onInput('utils',this)">
@@ -494,10 +501,11 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
             </div></div>
           </div>
           
-          <div class="row" style="border-top:1px solid var(--border)">
+          <div class="row" id="row-parking" style="border-top:1px solid var(--border)">
             <div class="row-l">
               <div class="row-label" id="lbl-parking">מספר חניות</div>
               <div class="row-sub" id="sub-parking">חניות חודשיות קבועות</div>
+              <button class="row-hide-btn" onclick="hideRow('row-parking');hideRow('row-parking-price')">✕ הסתר</button>
             </div>
             <div class="row-r">
               <div class="spin">
@@ -508,7 +516,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
               </div>
             </div>
           </div>
-          <div class="row">
+          <div class="row" id="row-parking-price">
             <div class="row-l">
               <div class="row-label" id="lbl-parking-price">מחיר חניה</div>
               <div class="row-sub" id="parkingSub"></div>
@@ -523,10 +531,11 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
             </div>
           </div>
 
-          <div class="row" style="border-top:1px solid var(--border)">
+          <div class="row" id="row-furniture" style="border-top:1px solid var(--border)">
             <div class="row-l">
               <div class="row-label" id="lbl-furniture">עלות רכישת ריהוט</div>
               <div class="row-sub" id="furnitureSub"></div>
+              <button class="row-hide-btn" onclick="hideRow('row-furniture')">✕ הסתר</button>
             </div>
             <div class="row-r">
               <div class="spin">
@@ -538,10 +547,11 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
             </div>
           </div>
 
-          <div class="row">
+          <div class="row" id="row-renovation">
             <div class="row-l">
               <div class="row-label" id="lbl-renovation">עלות שיפוץ / התאמות</div>
               <div class="row-sub" id="renovationSub"></div>
+              <button class="row-hide-btn" onclick="hideRow('row-renovation')">✕ הסתר</button>
             </div>
             <div class="row-r">
               <div class="spin">
@@ -553,11 +563,12 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
             </div>
           </div>
 
-          <div style="border-top:1px solid var(--border); padding: 16px 20px;">
+          <div id="row-extra" style="border-top:1px solid var(--border); padding: 16px 20px;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
               <div class="row-l">
                 <div class="row-label" id="lbl-extra">עלויות נוספות</div>
                 <div class="row-sub" id="sub-extra">ביטוח, ציוד משרדי, שונות</div>
+                <button class="row-hide-btn" onclick="hideRow('row-extra')">✕ הסתר</button>
               </div>
               <div class="row-r">
                 <div class="spin">
@@ -575,6 +586,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
               </div>
             </div>
           </div>
+          <div class="hidden-rows-notice" id="hiddenRowsNotice" onclick="showAllRows()">↩ הצג שדות מוסתרים</div>
         </div>
       </div>
 
@@ -883,14 +895,14 @@ function syncRentAfterSqmChange() {
   else S().rentTotal = Math.round(S().rent * S().sqm);
 }
 
-function onInput(key,el){ 
-  const v=parseInt(el.value); 
-  if(!isNaN(v)&&v>0){ 
-    S()[key]=v; 
+function onInput(key,el){
+  const v=parseInt(el.value);
+  if(!isNaN(v)&&v>=0){
+    S()[key]=v;
     if(key==='sqm') syncRentAfterSqmChange();
-    calc(); 
-    if(key==='sqm') maybeSendPropUpdate(); 
-  } 
+    calc();
+    if(key==='sqm') maybeSendPropUpdate();
+  }
 }
 function adj(key,d){ 
   const lim={sqm:[50,9999],emp:[1,2000],mgmt:[0,100],clean:[0,60],utils:[0,60],customPct:[5,50],parkingSpots:[0,200],parkingPrice:[0,99999],grace:[0,24]}; 
