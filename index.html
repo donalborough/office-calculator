@@ -593,10 +593,11 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
       <div class="sec">
         <div class="sec-hd"><div class="sec-num">4</div><div class="sec-title" id="step4-title">תקופת הסכם וגרייס</div></div>
         <div class="card">
-          <div class="row">
+          <div class="row" id="row-months">
             <div class="row-l">
               <div class="row-label" id="lbl-months">משך ההסכם</div>
               <div class="row-sub" id="sub-months">תקופה בטוחה בלבד, ללא אופציה</div>
+              <button class="row-irrel-btn" onclick="toggleIrrelevant('row-months')" id="irrel-row-months">הוצא מחישוב</button>
             </div>
             <div class="row-r">
               <div class="spin">
@@ -607,10 +608,11 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
               </div>
             </div>
           </div>
-          <div class="row">
+          <div class="row" id="row-grace">
             <div class="row-l">
               <div class="row-label" id="lbl-grace">חודשי גרייס</div>
               <div class="row-sub" id="sub-grace">הזן רק אם סוכם במו"מ</div>
+              <button class="row-irrel-btn" onclick="toggleIrrelevant('row-grace')" id="irrel-row-grace">הוצא מחישוב</button>
             </div>
             <div class="row-r">
               <div class="spin">
@@ -957,8 +959,9 @@ function calcProp(p){
   const renovationPerSqmMonth = p.renovation > 0 ? p.renovation / bruto / p.months : 0;
   const renovationMonthly = p.renovation > 0 ? Math.round(p.renovation / p.months) : 0;
   const totalMonthly=monthly+furnitureMonthly+parkingMonthly+renovationMonthly;
-  const effectiveMonthly = p.grace>0 ? Math.round(totalMonthly*(p.months-p.grace)/p.months) : totalMonthly;
-  const gracePct = p.grace>0 ? (p.grace/p.months*100).toFixed(1) : 0;
+  const grace = _ir.has('row-grace') ? 0 : p.grace;
+  const effectiveMonthly = grace>0 ? Math.round(totalMonthly*(p.months-grace)/p.months) : totalMonthly;
+  const gracePct = grace>0 ? (grace/p.months*100).toFixed(1) : 0;
   const graceSaving = totalMonthly - effectiveMonthly;
   return {bruto,net,effectiveRatio,rows,perSqm,monthly,yearly:monthly*12,perEmp:Math.round(monthly/p.emp),sqmPerEmp:bruto/p.emp,pct:Math.round((effectiveRatio-1)*100),furniturePerSqmMonth,furnitureMonthly,renovationPerSqmMonth,renovationMonthly,parkingMonthly,parkingPerSqm,totalMonthly,effectiveMonthly,gracePct,graceSaving};
 }
@@ -1116,9 +1119,11 @@ function generateCompareTable(forPrint = false, subsetProps) {
   }
 
   // Section: תקופה
-  html += row('תקופת הסכם', results.map(({p})=>p.months+' חודשים'), {sectionDivider:true});
-  if(hasGrace){
-    html += row('חודשי גרייס', results.map(({p})=>p.grace>0?p.grace+' חודשים':'ללא'));
+  if(!_ir.has('row-months')){
+    html += row('תקופת הסכם', results.map(({p})=>p.months+' חודשים'), {sectionDivider:true});
+    if(hasGrace && !_ir.has('row-grace')){
+      html += row('חודשי גרייס', results.map(({p})=>p.grace>0?p.grace+' חודשים':'ללא'));
+    }
   }
 
   // Section: סיכום
@@ -1126,16 +1131,18 @@ function generateCompareTable(forPrint = false, subsetProps) {
     bold:true, sectionDivider:true,
     numericVals: totalMonthlies, highlightMin: true, highlightMax: true
   });
-  if(hasGrace){
+  if(hasGrace && !_ir.has('row-grace')){
     html += row('עלות אפקטיבית', results.map(({p,r})=>fmt(r.effectiveMonthly)+' ₪'), {
       bold:true, subLabel:'לחודש אחרי גרייס', sectionDivider:true,
       numericVals: results.map(({r})=>r.effectiveMonthly), highlightMin: true, highlightMax: true
     });
   }
-  html += row('סה"כ לתקופה', results.map(({p,r})=>fmt(r.effectiveMonthly*p.months)+' ₪'), {
-    subLabel: hasGrace ? 'כולל חיסכון מגרייס' : null,
-    numericVals: results.map(({p,r})=>r.effectiveMonthly*p.months), highlightMin: true, highlightMax: true
-  });
+  if(!_ir.has('row-months')){
+    html += row('סה"כ לתקופה', results.map(({p,r})=>fmt(r.effectiveMonthly*p.months)+' ₪'), {
+      subLabel: (hasGrace && !_ir.has('row-grace')) ? 'כולל חיסכון מגרייס' : null,
+      numericVals: results.map(({p,r})=>r.effectiveMonthly*p.months), highlightMin: true, highlightMax: true
+    });
+  }
 
   // Rank row
   if(results.length > 1) {
@@ -1424,7 +1431,7 @@ function validateMailInput(el){ const v=el.value.trim(); const ok=/^[^\s@]+@[^\s
 window.resetCurrentProp = resetCurrentProp; window.openCompare = openCompare;
 const IRREL_KEY='irrelRows_v1';
 window._irrelRows=new Set();
-const ROW_KEY_MAP={'row-mgmt':[{inp:'mgmtInp',key:'mgmt'}],'row-clean':[{inp:'cleanInp',key:'clean'}],'row-utils':[{inp:'utilsInp',key:'utils'}],'row-parking':[{inp:'parkingSpotsInp',key:'parkingSpots'},{inp:'parkingPriceInp',key:'parkingPrice',also:'row-parking-price'}],'row-furniture':[{inp:'furnitureInp',key:'furniture'}],'row-renovation':[{inp:'renovationInp',key:'renovation'}],'row-extra':[{inp:'extraInp',key:'extra'}],'row-emp':[],'row-arn':[]};
+const ROW_KEY_MAP={'row-mgmt':[{inp:'mgmtInp',key:'mgmt'}],'row-clean':[{inp:'cleanInp',key:'clean'}],'row-utils':[{inp:'utilsInp',key:'utils'}],'row-parking':[{inp:'parkingSpotsInp',key:'parkingSpots'},{inp:'parkingPriceInp',key:'parkingPrice',also:'row-parking-price'}],'row-furniture':[{inp:'furnitureInp',key:'furniture'}],'row-renovation':[{inp:'renovationInp',key:'renovation'}],'row-extra':[{inp:'extraInp',key:'extra'}],'row-emp':[],'row-arn':[],'row-grace':[{inp:'graceInp',key:'grace'}],'row-months':[]};
 function toggleIrrelevant(rowId){
   const row=document.getElementById(rowId); if(!row) return;
   const isExcl=row.classList.contains('row-excluded');
