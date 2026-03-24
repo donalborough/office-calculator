@@ -101,11 +101,12 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .row{display:flex;align-items:center;padding:16px 20px;gap:12px;border-bottom:1px solid var(--border);min-height:60px;position:relative;}
 .row:last-child{border-bottom:none;}
 .row-l{flex:1;min-width:0;}
-.row-hide-btn{opacity:0;transition:opacity .15s;background:none;border:1px solid transparent;border-radius:5px;cursor:pointer;font-size:.68rem;color:var(--ink3);padding:2px 7px;margin-top:4px;font-family:'Heebo',sans-serif;display:inline-flex;align-items:center;gap:3px;}
-.row:hover .row-hide-btn{opacity:1;}
-.row-hide-btn:hover{background:var(--rose-l);color:var(--rose);border-color:var(--rose);}
-.hidden-rows-notice{display:none;padding:10px 20px;font-size:.72rem;color:var(--ink3);cursor:pointer;align-items:center;gap:6px;border-top:1px solid var(--border);transition:color .15s;}
-.hidden-rows-notice:hover{color:var(--ink2);}
+.row-irrel-btn{font-size:.63rem;font-family:'Heebo',sans-serif;background:none;border:1px solid var(--border2);border-radius:20px;padding:2px 9px;cursor:pointer;color:var(--ink3);transition:all .15s;white-space:nowrap;margin-top:5px;display:inline-block;line-height:1.6;}
+.row-irrel-btn:hover{border-color:var(--rose);color:var(--rose);background:var(--rose-l);}
+.row-excluded>.row-irrel-btn,.row-excluded .row-irrel-btn{border-color:var(--green);color:var(--green);background:#f0fdf4;}
+.row-excluded .row-irrel-btn:hover{background:#dcfce7;}
+.row-excluded{opacity:.45;transition:opacity .2s;}
+.row-excluded .spin-btn,.row-excluded .tog-wrap,.row-excluded .mode-btns{pointer-events:none;}
 .row-label{font-size:.88rem;font-weight:700;line-height:1.3;}
 .row-sub{font-size:.68rem;color:var(--ink3);margin-top:3px;line-height:1.4;}
 .row-r{display:flex;align-items:center;flex-shrink:0;}
@@ -402,7 +403,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
             <div class="row-l">
               <div class="row-label" id="lbl-emp">מס' עמדות עבודה</div>
               <div class="row-sub" id="sqmPerEmpInline">—</div>
-              <button class="row-hide-btn" onclick="hideRow('row-emp')">✕ הסתר</button>
+              <button class="row-irrel-btn" onclick="toggleIrrelevant('row-emp')" id="irrel-row-emp">הוצא מחישוב</button>
             </div>
             <div class="row-r">
               <div class="spin">
@@ -423,7 +424,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
               <div class="row-r">
                 <div class="spin">
                   <button class="spin-btn" onclick="adjRent(-5)">−</button>
-                  <input class="spin-inp" id="rentInp" type="number" value="100" min="0" max="9999999" inputmode="numeric" oninput="onInputRent(this)" style="width:72px">
+                  <input class="spin-inp" id="rentInp" type="number" value="100" min="0" max="9999999" step="0.5" inputmode="decimal" oninput="onInputRent(this)" style="width:72px">
                   <span class="spin-unit" id="rentUnit">₪/מ"ר</span>
                   <button class="spin-btn" onclick="adjRent(+5)">+</button>
                 </div>
@@ -449,7 +450,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
               <div class="row-l" style="min-width: 100px;">
                 <div class="row-label" id="lbl-arn">ארנונה</div>
                 <div class="row-sub" id="arnSub">34 ₪/מ"ר — ללא הנחה</div>
-                <button class="row-hide-btn" onclick="hideRow('row-arn')">✕ הסתר</button>
+                <button class="row-irrel-btn" onclick="toggleIrrelevant('row-arn')" id="irrel-row-arn">הוצא מחישוב</button>
               </div>
               <div class="row-r" style="gap:12px; flex-wrap:wrap; justify-content:flex-end;">
                 <div class="tog-wrap">
@@ -474,7 +475,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
           </div>
 
           <div class="row" id="row-mgmt" style="border-top:1px solid var(--border)">
-            <div class="row-l"><div class="row-label" id="lbl-mgmt">דמי ניהול</div><div class="row-sub" id="sub-mgmt">אחזקה + שירותים משותפים</div><button class="row-hide-btn" onclick="hideRow('row-mgmt')">✕ הסתר</button></div>
+            <div class="row-l"><div class="row-label" id="lbl-mgmt">דמי ניהול</div><div class="row-sub" id="sub-mgmt">אחזקה + שירותים משותפים</div><button class="row-irrel-btn" onclick="toggleIrrelevant('row-mgmt')" id="irrel-row-mgmt">הוצא מחישוב</button></div>
             <div class="row-r"><div class="spin">
               <button class="spin-btn" onclick="adj('mgmt',-1)">−</button>
               <input class="spin-inp" id="mgmtInp" type="number" value="20" min="0" max="100" inputmode="numeric" oninput="onInput('mgmt',this)">
@@ -483,7 +484,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
             </div></div>
           </div>
           <div class="row" id="row-clean">
-            <div class="row-l"><div class="row-label" id="lbl-clean">שירותי ניקיון</div><button class="row-hide-btn" onclick="hideRow('row-clean')">✕ הסתר</button></div>
+            <div class="row-l"><div class="row-label" id="lbl-clean">שירותי ניקיון</div><button class="row-irrel-btn" onclick="toggleIrrelevant('row-clean')" id="irrel-row-clean">הוצא מחישוב</button></div>
             <div class="row-r"><div class="spin">
               <button class="spin-btn" onclick="adj('clean',-1)">−</button>
               <input class="spin-inp" id="cleanInp" type="number" value="8" min="0" max="60" inputmode="numeric" oninput="onInput('clean',this)">
@@ -492,7 +493,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
             </div></div>
           </div>
           <div class="row" id="row-utils">
-            <div class="row-l"><div class="row-label" id="lbl-utils">חשמל, אינטרנט, מים</div><button class="row-hide-btn" onclick="hideRow('row-utils')">✕ הסתר</button></div>
+            <div class="row-l"><div class="row-label" id="lbl-utils">חשמל, אינטרנט, מים</div><button class="row-irrel-btn" onclick="toggleIrrelevant('row-utils')" id="irrel-row-utils">הוצא מחישוב</button></div>
             <div class="row-r"><div class="spin">
               <button class="spin-btn" onclick="adj('utils',-1)">−</button>
               <input class="spin-inp" id="utilsInp" type="number" value="12" min="0" max="60" inputmode="numeric" oninput="onInput('utils',this)">
@@ -505,7 +506,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
             <div class="row-l">
               <div class="row-label" id="lbl-parking">מספר חניות</div>
               <div class="row-sub" id="sub-parking">חניות חודשיות קבועות</div>
-              <button class="row-hide-btn" onclick="hideRow('row-parking');hideRow('row-parking-price')">✕ הסתר</button>
+              <button class="row-irrel-btn" onclick="toggleIrrelevant('row-parking')" id="irrel-row-parking">הוצא מחישוב</button>
             </div>
             <div class="row-r">
               <div class="spin">
@@ -535,7 +536,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
             <div class="row-l">
               <div class="row-label" id="lbl-furniture">עלות רכישת ריהוט</div>
               <div class="row-sub" id="furnitureSub"></div>
-              <button class="row-hide-btn" onclick="hideRow('row-furniture')">✕ הסתר</button>
+              <button class="row-irrel-btn" onclick="toggleIrrelevant('row-furniture')" id="irrel-row-furniture">הוצא מחישוב</button>
             </div>
             <div class="row-r">
               <div class="spin">
@@ -551,7 +552,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
             <div class="row-l">
               <div class="row-label" id="lbl-renovation">עלות שיפוץ / התאמות</div>
               <div class="row-sub" id="renovationSub"></div>
-              <button class="row-hide-btn" onclick="hideRow('row-renovation')">✕ הסתר</button>
+              <button class="row-irrel-btn" onclick="toggleIrrelevant('row-renovation')" id="irrel-row-renovation">הוצא מחישוב</button>
             </div>
             <div class="row-r">
               <div class="spin">
@@ -568,7 +569,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
               <div class="row-l">
                 <div class="row-label" id="lbl-extra">עלויות נוספות</div>
                 <div class="row-sub" id="sub-extra">ביטוח, ציוד משרדי, שונות</div>
-                <button class="row-hide-btn" onclick="hideRow('row-extra')">✕ הסתר</button>
+                <button class="row-irrel-btn" onclick="toggleIrrelevant('row-extra')" id="irrel-row-extra">הוצא מחישוב</button>
               </div>
               <div class="row-r">
                 <div class="spin">
@@ -586,7 +587,6 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
               </div>
             </div>
           </div>
-          <div class="hidden-rows-notice" id="hiddenRowsNotice" onclick="showAllRows()">↩ הצג שדות מוסתרים</div>
         </div>
       </div>
 
@@ -614,10 +614,10 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
             </div>
             <div class="row-r">
               <div class="spin">
-                <button class="spin-btn" onclick="adj('grace',-1)">−</button>
-                <input class="spin-inp" id="graceInp" type="number" value="0" min="0" max="24" inputmode="numeric" oninput="onInput('grace',this)">
+                <button class="spin-btn" onclick="adjGrace(-0.5)">−</button>
+                <input class="spin-inp" id="graceInp" type="number" value="0" min="0" max="24" step="0.5" inputmode="decimal" oninput="onInputGrace(this)">
                 <span class="spin-unit" id="unit-grace">חודש</span>
-                <button class="spin-btn" onclick="adj('grace',+1)">+</button>
+                <button class="spin-btn" onclick="adjGrace(+0.5)">+</button>
               </div>
             </div>
           </div>
@@ -883,13 +883,15 @@ function adjRent(d){
   calc(); maybeSendPropUpdate(); saveState();
 }
 function onInputRent(el){
-  const v = parseInt(el.value);
+  const v = parseFloat(el.value);
   if(!isNaN(v) && v >= 0) {
-    if(S().rentMode === 'sqm') { S().rent = v; S().rentTotal = Math.round(v * S().sqm); } 
-    else { S().rentTotal = v; S().rent = Math.round(v / S().sqm); }
+    if(S().rentMode === 'sqm') { S().rent = v; S().rentTotal = Math.round(v * S().sqm); }
+    else { S().rentTotal = v; S().rent = parseFloat((v / S().sqm).toFixed(2)); }
     calc(); maybeSendPropUpdate();
   }
 }
+function adjGrace(d){ S().grace = Math.max(0, Math.min(24, Math.round((S().grace + d) * 2) / 2)); document.getElementById('graceInp').value = S().grace; calc(); saveState(); }
+function onInputGrace(el){ const v = parseFloat(el.value); if(!isNaN(v) && v >= 0) { S().grace = v; calc(); saveState(); } }
 function syncRentAfterSqmChange() {
   if (S().rentMode === 'total') S().rent = Math.round(S().rentTotal / S().sqm);
   else S().rentTotal = Math.round(S().rent * S().sqm);
@@ -1409,7 +1411,30 @@ function loadState(){
 function resetCurrentProp(){ if(!confirm('למחוק את נתוני הנכס הנוכחי ולהתחיל מחדש?')) return; props[curProp]=defaultProp(); saveState(); loadPropToUI(); renderTabs(); }
 function validateMailInput(el){ const v=el.value.trim(); const ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); el.classList.toggle('invalid',v.length>0&&!ok); el.classList.toggle('valid',ok); if(ok) document.getElementById('gateErr').style.display='none'; }
 window.resetCurrentProp = resetCurrentProp; window.openCompare = openCompare;
-document.addEventListener('DOMContentLoaded',function(){ loadState(); renderTabs(); loadPropToUI(); if(checkSession()){ loadSharedStateIfAny(); } calc(); });
+const IRREL_KEY='irrelRows_v1';
+const ROW_KEY_MAP={'row-mgmt':[{inp:'mgmtInp',key:'mgmt'}],'row-clean':[{inp:'cleanInp',key:'clean'}],'row-utils':[{inp:'utilsInp',key:'utils'}],'row-parking':[{inp:'parkingSpotsInp',key:'parkingSpots'},{inp:'parkingPriceInp',key:'parkingPrice',also:'row-parking-price'}],'row-furniture':[{inp:'furnitureInp',key:'furniture'}],'row-renovation':[{inp:'renovationInp',key:'renovation'}],'row-extra':[{inp:'extraInp',key:'extra'}],'row-emp':[],'row-arn':[]};
+function toggleIrrelevant(rowId){
+  const row=document.getElementById(rowId); if(!row) return;
+  const isExcl=row.classList.contains('row-excluded');
+  const cfg=ROW_KEY_MAP[rowId]||[];
+  if(isExcl){
+    cfg.forEach(({inp,key,also})=>{ const el=document.getElementById(inp); if(!el) return; const orig=parseFloat(el.dataset.orig||0); el.value=orig; S()[key]=orig; if(also){ const r2=document.getElementById(also); if(r2){r2.classList.remove('row-excluded');} } });
+    row.classList.remove('row-excluded');
+    document.getElementById('irrel-'+rowId).textContent='הוצא מחישוב';
+  } else {
+    cfg.forEach(({inp,key,also})=>{ const el=document.getElementById(inp); if(!el) return; el.dataset.orig=el.value; el.value=0; S()[key]=0; if(also){ const r2=document.getElementById(also); if(r2){r2.classList.add('row-excluded');} } });
+    row.classList.add('row-excluded');
+    document.getElementById('irrel-'+rowId).textContent='כלול בחישוב ↩';
+  }
+  const excl=[...document.querySelectorAll('.row-excluded')].map(r=>r.id);
+  localStorage.setItem(IRREL_KEY,JSON.stringify(excl));
+  calc(); saveState();
+}
+function loadIrrelevantRows(){
+  const excl=JSON.parse(localStorage.getItem(IRREL_KEY)||'[]');
+  excl.forEach(id=>{ const row=document.getElementById(id); if(row&&!row.classList.contains('row-excluded')){toggleIrrelevant(id);} });
+}
+document.addEventListener('DOMContentLoaded',function(){ loadState(); renderTabs(); loadPropToUI(); if(checkSession()){ loadSharedStateIfAny(); } loadIrrelevantRows(); calc(); });
 
 function toggleHdrMenu(){
   document.getElementById('hdrDropdown').classList.toggle('open');
