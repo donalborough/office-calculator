@@ -994,13 +994,17 @@ function calc(){
   document.getElementById('rPeriod').textContent=fmt(periodDisplay)+' ₪';
   document.getElementById('rPeriodLbl').textContent=(p.grace>0?'₪ אפקטיבי ל-':'₪ ל-')+p.months+' חודשים';
 
-  const bpe=r.sqmPerEmp; const idealBruto=Math.ceil(p.emp*IDEAL_MIN/50)*50; const maxBruto=Math.floor(p.emp*IDEAL_MAX/50)*50;
-  let nh='';
-  if(bpe<IDEAL_MIN) nh=`<div class="notice bad"><span class="notice-icon">⚠️</span><div class="notice-text"><strong>צפוף מדי — ${bpe.toFixed(1)} מ"ר/עמדה</strong>מינימום מומלץ ${IDEAL_MIN} מ"ר. שקול לשדרג לכ-${idealBruto} מ"ר.</div></div>`;
-  else if(bpe<=IDEAL_MAX) nh=`<div class="notice ok"><span class="notice-icon">✅</span><div class="notice-text"><strong>שטח אידאלי — ${bpe.toFixed(1)} מ"ר/עמדה</strong>בדיוק בטווח המומלץ (${IDEAL_MIN}–${IDEAL_MAX} מ"ר לעמדה).</div></div>`;
-  else if(bpe<=IDEAL_WARN) nh=`<div class="notice warn"><span class="notice-icon">💡</span><div class="notice-text"><strong>קצת גדול — ${bpe.toFixed(1)} מ"ר/עמדה</strong>הטווח האידאלי ${IDEAL_MIN}–${IDEAL_MAX} מ"ר. שווה לבחון כ-${maxBruto} מ"ר.</div></div>`;
-  else nh=`<div class="notice warn"><span class="notice-icon">💡</span><div class="notice-text"><strong>שטח גדול משמעותית — ${bpe.toFixed(1)} מ"ר/עמדה</strong>יש מרווח לצמיחה משמעותית.</div></div>`;
-  document.getElementById('spaceNotice').innerHTML=nh;
+  const spaceNoticeEl=document.getElementById('spaceNotice');
+  if((window._irrelRows||new Set()).has('row-emp')){ spaceNoticeEl.innerHTML=''; }
+  else {
+    const bpe=r.sqmPerEmp; const idealBruto=Math.ceil(p.emp*IDEAL_MIN/50)*50; const maxBruto=Math.floor(p.emp*IDEAL_MAX/50)*50;
+    let nh='';
+    if(bpe<IDEAL_MIN) nh=`<div class="notice bad"><span class="notice-icon">⚠️</span><div class="notice-text"><strong>צפוף מדי — ${bpe.toFixed(1)} מ"ר/עמדה</strong>מינימום מומלץ ${IDEAL_MIN} מ"ר. שקול לשדרג לכ-${idealBruto} מ"ר.</div></div>`;
+    else if(bpe<=IDEAL_MAX) nh=`<div class="notice ok"><span class="notice-icon">✅</span><div class="notice-text"><strong>שטח אידאלי — ${bpe.toFixed(1)} מ"ר/עמדה</strong>בדיוק בטווח המומלץ (${IDEAL_MIN}–${IDEAL_MAX} מ"ר לעמדה).</div></div>`;
+    else if(bpe<=IDEAL_WARN) nh=`<div class="notice warn"><span class="notice-icon">💡</span><div class="notice-text"><strong>קצת גדול — ${bpe.toFixed(1)} מ"ר/עמדה</strong>הטווח האידאלי ${IDEAL_MIN}–${IDEAL_MAX} מ"ר. שווה לבחון כ-${maxBruto} מ"ר.</div></div>`;
+    else nh=`<div class="notice warn"><span class="notice-icon">💡</span><div class="notice-text"><strong>שטח גדול משמעותית — ${bpe.toFixed(1)} מ"ר/עמדה</strong>יש מרווח לצמיחה משמעותית.</div></div>`;
+    spaceNoticeEl.innerHTML=nh;
+  }
 
   if(p.arnMode==='manual') document.getElementById('arnSub').textContent=p.arnManual+' ₪/מ"ר — הזנה ידנית'; else document.getElementById('arnSub').textContent=p.arn?'17 ₪/מ"ר — הנחת עסקי תוכנה':'34 ₪/מ"ר — ללא הנחה';
 }
