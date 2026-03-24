@@ -423,10 +423,10 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
               </div>
               <div class="row-r">
                 <div class="spin">
-                  <button class="spin-btn" onclick="adjRent(-5)">−</button>
+                  <button class="spin-btn" onclick="adjRent(-0.5)">−</button>
                   <input class="spin-inp" id="rentInp" type="number" value="100" min="0" max="9999999" step="0.5" inputmode="decimal" oninput="onInputRent(this)" style="width:72px">
                   <span class="spin-unit" id="rentUnit">₪/מ"ר</span>
-                  <button class="spin-btn" onclick="adjRent(+5)">+</button>
+                  <button class="spin-btn" onclick="adjRent(+0.5)">+</button>
                 </div>
               </div>
             </div>
@@ -477,28 +477,28 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
           <div class="row" id="row-mgmt" style="border-top:1px solid var(--border)">
             <div class="row-l"><div class="row-label" id="lbl-mgmt">דמי ניהול</div><div class="row-sub" id="sub-mgmt">אחזקה + שירותים משותפים</div><button class="row-irrel-btn" onclick="toggleIrrelevant('row-mgmt')" id="irrel-row-mgmt">הוצא מחישוב</button></div>
             <div class="row-r"><div class="spin">
-              <button class="spin-btn" onclick="adj('mgmt',-1)">−</button>
-              <input class="spin-inp" id="mgmtInp" type="number" value="20" min="0" max="100" inputmode="numeric" oninput="onInput('mgmt',this)">
+              <button class="spin-btn" onclick="adj('mgmt',-0.5)">−</button>
+              <input class="spin-inp" id="mgmtInp" type="number" value="20" min="0" max="100" step="0.5" inputmode="decimal" oninput="onInput('mgmt',this)">
               <span class="spin-unit" id="unit-mgmt">₪/מ"ר</span>
-              <button class="spin-btn" onclick="adj('mgmt',+1)">+</button>
+              <button class="spin-btn" onclick="adj('mgmt',+0.5)">+</button>
             </div></div>
           </div>
           <div class="row" id="row-clean">
             <div class="row-l"><div class="row-label" id="lbl-clean">שירותי ניקיון</div><button class="row-irrel-btn" onclick="toggleIrrelevant('row-clean')" id="irrel-row-clean">הוצא מחישוב</button></div>
             <div class="row-r"><div class="spin">
-              <button class="spin-btn" onclick="adj('clean',-1)">−</button>
-              <input class="spin-inp" id="cleanInp" type="number" value="8" min="0" max="60" inputmode="numeric" oninput="onInput('clean',this)">
+              <button class="spin-btn" onclick="adj('clean',-0.5)">−</button>
+              <input class="spin-inp" id="cleanInp" type="number" value="8" min="0" max="60" step="0.5" inputmode="decimal" oninput="onInput('clean',this)">
               <span class="spin-unit" id="unit-clean">₪/מ"ר</span>
-              <button class="spin-btn" onclick="adj('clean',+1)">+</button>
+              <button class="spin-btn" onclick="adj('clean',+0.5)">+</button>
             </div></div>
           </div>
           <div class="row" id="row-utils">
             <div class="row-l"><div class="row-label" id="lbl-utils">חשמל, אינטרנט, מים</div><button class="row-irrel-btn" onclick="toggleIrrelevant('row-utils')" id="irrel-row-utils">הוצא מחישוב</button></div>
             <div class="row-r"><div class="spin">
-              <button class="spin-btn" onclick="adj('utils',-1)">−</button>
-              <input class="spin-inp" id="utilsInp" type="number" value="12" min="0" max="60" inputmode="numeric" oninput="onInput('utils',this)">
+              <button class="spin-btn" onclick="adj('utils',-0.5)">−</button>
+              <input class="spin-inp" id="utilsInp" type="number" value="12" min="0" max="60" step="0.5" inputmode="decimal" oninput="onInput('utils',this)">
               <span class="spin-unit" id="unit-utils">₪/מ"ר</span>
-              <button class="spin-btn" onclick="adj('utils',+1)">+</button>
+              <button class="spin-btn" onclick="adj('utils',+0.5)">+</button>
             </div></div>
           </div>
           
@@ -898,7 +898,7 @@ function syncRentAfterSqmChange() {
 }
 
 function onInput(key,el){
-  const v=parseInt(el.value);
+  const v=parseFloat(el.value);
   if(!isNaN(v)&&v>=0){
     S()[key]=v;
     if(key==='sqm') syncRentAfterSqmChange();
@@ -939,9 +939,11 @@ function calcProp(p){
   const bruto=p.sqm;
   const effectiveRatio=p.useCustomRatio?(1+p.customPct/100):p.grossRatio;
   const net=Math.round(bruto/effectiveRatio);
-  const arn=p.arnMode==='manual'?p.arnManual:(p.arn?17:34);
+  const _ir=window._irrelRows||new Set();
+  const arnRaw=p.arnMode==='manual'?p.arnManual:(p.arn?17:34);
+  const arn=_ir.has('row-arn')?0:arnRaw;
   const extraPerSqm=p.extraMode==='sqm'?p.extra:(p.extra>0?Math.round(p.extra/bruto):0);
-  const rows=[ {l:'שכירות בסיס',v:p.rent}, {l:'ארנונה',v:arn}, {l:'דמי ניהול',v:p.mgmt}, {l:'שירותי ניקיון',v:p.clean}, {l:'חשמל, אינטרנט, מים',v:p.utils}, ...(p.extra>0?[{l:'עלויות נוספות',v:extraPerSqm}]:[]), ];
+  const rows=[ {l:'שכירות בסיס',v:p.rent}, ...(arn>0?[{l:'ארנונה',v:arn}]:[]), ...(p.mgmt>0?[{l:'דמי ניהול',v:p.mgmt}]:[]), ...(p.clean>0?[{l:'שירותי ניקיון',v:p.clean}]:[]), ...(p.utils>0?[{l:'חשמל, אינטרנט, מים',v:p.utils}]:[]), ...(p.extra>0&&!_ir.has('row-extra')?[{l:'עלויות נוספות',v:extraPerSqm}]:[]), ];
   const perSqm=rows.reduce((s,r)=>s+r.v,0);
   const monthly=perSqm*bruto;
   const parkingMonthly = p.parkingSpots * p.parkingPrice;
@@ -1412,6 +1414,7 @@ function resetCurrentProp(){ if(!confirm('למחוק את נתוני הנכס ה
 function validateMailInput(el){ const v=el.value.trim(); const ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); el.classList.toggle('invalid',v.length>0&&!ok); el.classList.toggle('valid',ok); if(ok) document.getElementById('gateErr').style.display='none'; }
 window.resetCurrentProp = resetCurrentProp; window.openCompare = openCompare;
 const IRREL_KEY='irrelRows_v1';
+window._irrelRows=new Set();
 const ROW_KEY_MAP={'row-mgmt':[{inp:'mgmtInp',key:'mgmt'}],'row-clean':[{inp:'cleanInp',key:'clean'}],'row-utils':[{inp:'utilsInp',key:'utils'}],'row-parking':[{inp:'parkingSpotsInp',key:'parkingSpots'},{inp:'parkingPriceInp',key:'parkingPrice',also:'row-parking-price'}],'row-furniture':[{inp:'furnitureInp',key:'furniture'}],'row-renovation':[{inp:'renovationInp',key:'renovation'}],'row-extra':[{inp:'extraInp',key:'extra'}],'row-emp':[],'row-arn':[]};
 function toggleIrrelevant(rowId){
   const row=document.getElementById(rowId); if(!row) return;
@@ -1428,10 +1431,12 @@ function toggleIrrelevant(rowId){
   }
   const excl=[...document.querySelectorAll('.row-excluded')].map(r=>r.id);
   localStorage.setItem(IRREL_KEY,JSON.stringify(excl));
+  window._irrelRows=new Set(excl);
   calc(); saveState();
 }
 function loadIrrelevantRows(){
   const excl=JSON.parse(localStorage.getItem(IRREL_KEY)||'[]');
+  window._irrelRows=new Set(excl);
   excl.forEach(id=>{ const row=document.getElementById(id); if(row&&!row.classList.contains('row-excluded')){toggleIrrelevant(id);} });
 }
 document.addEventListener('DOMContentLoaded',function(){ loadState(); renderTabs(); loadPropToUI(); if(checkSession()){ loadSharedStateIfAny(); } loadIrrelevantRows(); calc(); });
