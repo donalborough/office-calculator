@@ -996,10 +996,20 @@ function calc(){
   document.getElementById('rSub').textContent=fmt(r.bruto)+' מ"ר ברוטו';
   document.getElementById('rPerSqm').textContent=fmt(r.totalMonthly)+' ₪';
   document.getElementById('rPerSqmVal').textContent = totalPerSqm + ' ₪';
-  document.getElementById('rYear').textContent=fmt(r.totalMonthly*12)+' ₪';
-  const periodDisplay = p.grace>0 ? r.effectiveMonthly*p.months : r.totalMonthly*p.months;
-  document.getElementById('rPeriod').textContent=fmt(periodDisplay)+' ₪';
-  document.getElementById('rPeriodLbl').textContent=(p.grace>0?'₪ אפקטיבי ל-':'₪ ל-')+p.months+' חודשים';
+  const _irC=window._irrelRows||new Set();
+  const periodCell=document.getElementById('rPeriod').closest('.rtb-cell');
+  const yearCell=document.getElementById('rYear').closest('.rtb-cell');
+  if(_irC.has('row-months')){
+    if(periodCell) periodCell.style.display='none';
+    if(yearCell) yearCell.style.display='none';
+  } else {
+    if(periodCell) periodCell.style.display='';
+    if(yearCell) yearCell.style.display='';
+    document.getElementById('rYear').textContent=fmt(r.totalMonthly*12)+' ₪';
+    const periodDisplay = p.grace>0 ? r.effectiveMonthly*p.months : r.totalMonthly*p.months;
+    document.getElementById('rPeriod').textContent=fmt(periodDisplay)+' ₪';
+    document.getElementById('rPeriodLbl').textContent=(p.grace>0?'₪ אפקטיבי ל-':'₪ ל-')+p.months+' חודשים';
+  }
 
   const spaceNoticeEl=document.getElementById('spaceNotice');
   if((window._irrelRows||new Set()).has('row-emp')){ spaceNoticeEl.innerHTML=''; }
