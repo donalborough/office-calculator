@@ -253,6 +253,14 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .share-copy-btn.copied { background:#10b981; color:#fff; }
 .share-close-btn { width:100%; padding:10px; background:transparent; color:var(--ink3); border:1px solid var(--border); border-radius:10px; font-family:'Heebo',sans-serif; font-size:.85rem; font-weight:600; cursor:pointer; margin-top:8px; transition:all 0.2s; }
 .share-close-btn:hover { background:var(--bg); }
+/* ── Sticky summary bar (mobile only) ── */
+@media(min-width:768px){ .sticky-bar { display:none !important; } }
+.sticky-bar { position:fixed; bottom:0; left:0; right:0; z-index:200; background:var(--navy); display:flex; align-items:center; justify-content:center; gap:0; padding:12px 20px; box-shadow:0 -4px 20px rgba(0,0,0,0.25); transition:transform .3s ease, opacity .3s ease; }
+.sticky-bar.sb-hidden { transform:translateY(100%); opacity:0; pointer-events:none; }
+.sb-item { display:flex; flex-direction:column; align-items:center; gap:2px; flex:1; }
+.sb-lbl { font-size:.65rem; font-weight:700; color:rgba(255,255,255,0.6); letter-spacing:.6px; text-transform:uppercase; }
+.sb-val { font-size:1.1rem; font-weight:900; color:var(--lime); line-height:1; }
+.sb-div { width:1px; height:32px; background:rgba(255,255,255,0.2); margin:0 16px; }
 @media print {
   @page { size: A4 portrait; margin: 15mm; }
   body { background: #fff !important; }
@@ -1480,7 +1488,21 @@ function loadIrrelevantRows(){
   window._irrelRows=new Set(excl);
   excl.forEach(id=>{ const row=document.getElementById(id); if(row&&!row.classList.contains('row-excluded')){toggleIrrelevant(id);} });
 }
-document.addEventListener('DOMContentLoaded',function(){ loadState(); renderTabs(); loadPropToUI(); if(checkSession()){ loadSharedStateIfAny(); } loadIrrelevantRows(); calc(); });
+document.addEventListener('DOMContentLoaded',function(){ loadState(); renderTabs(); loadPropToUI(); if(checkSession()){ loadSharedStateIfAny(); } loadIrrelevantRows(); calc(); initStickyBar(); });
+
+function initStickyBar(){
+  const bar = document.getElementById('stickyBar');
+  const target = document.querySelector('.results-total-box');
+  if(!bar || !target) return;
+  function updateBar(){
+    const rect = target.getBoundingClientRect();
+    const visible = rect.top < window.innerHeight && rect.bottom > 0;
+    if(visible){ bar.classList.add('sb-hidden'); }
+    else { bar.classList.remove('sb-hidden'); }
+  }
+  window.addEventListener('scroll', updateBar, {passive:true});
+  updateBar();
+}
 
 function toggleHdrMenu(){
   document.getElementById('hdrDropdown').classList.toggle('open');
