@@ -255,12 +255,15 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .share-close-btn:hover { background:var(--bg); }
 /* ── Sticky summary bar (mobile only) ── */
 @media(min-width:768px){ .sticky-bar { display:none !important; } }
-.sticky-bar { position:fixed; bottom:0; left:0; right:0; z-index:200; background:var(--navy); display:flex; align-items:center; justify-content:center; gap:0; padding:12px 20px; box-shadow:0 -4px 20px rgba(0,0,0,0.25); transition:transform .3s ease, opacity .3s ease; }
+.sticky-bar { position:fixed; bottom:0; left:0; right:0; z-index:200; background:var(--navy); display:flex; align-items:center; justify-content:center; gap:0; padding:8px 16px; box-shadow:0 -3px 16px rgba(0,0,0,0.2); transition:transform .3s ease, opacity .3s ease; }
 .sticky-bar.sb-hidden { transform:translateY(100%); opacity:0; pointer-events:none; }
-.sb-item { display:flex; flex-direction:column; align-items:center; gap:2px; flex:1; }
-.sb-lbl { font-size:.65rem; font-weight:700; color:rgba(255,255,255,0.6); letter-spacing:.6px; text-transform:uppercase; }
-.sb-val { font-size:1.1rem; font-weight:900; color:var(--lime); line-height:1; }
-.sb-div { width:1px; height:32px; background:rgba(255,255,255,0.2); margin:0 16px; }
+.sb-item { display:flex; flex-direction:column; align-items:center; gap:1px; flex:1; }
+.sb-lbl { font-size:.6rem; font-weight:700; color:rgba(255,255,255,0.55); letter-spacing:.5px; text-transform:uppercase; }
+.sb-val { font-size:.95rem; font-weight:900; color:var(--lime); line-height:1; }
+.sb-div { width:1px; height:26px; background:rgba(255,255,255,0.15); margin:0 12px; }
+.sb-cmp-btn { background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; font-family:'Heebo',sans-serif; font-size:.75rem; font-weight:700; padding:5px 12px; border-radius:20px; cursor:pointer; white-space:nowrap; transition:all .2s; }
+.sb-cmp-btn:hover:not(:disabled) { background:rgba(255,255,255,0.2); }
+.sb-cmp-btn:disabled { opacity:0.35; cursor:default; }
 @media print {
   @page { size: A4 portrait; margin: 15mm; }
   body { background: #fff !important; }
@@ -401,6 +404,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 
       <div class="sec">
         <div class="sec-hd"><div class="sec-num">2</div><div class="sec-title" id="step2-title">נתוני בסיס: שטח ושכירות</div></div>
+        <div id="exampleHint" style="font-size:.72rem;color:var(--ink3);text-align:center;margin:-8px 0 12px;letter-spacing:.2px;">ערכים לדוגמה — עדכן לפי העסקה שלך</div>
         <div class="card">
           <div class="row">
             <div class="row-l">
@@ -805,6 +809,8 @@ function renderTabs(){
   const multi = props.length > 1;
   const cmpBtn = document.getElementById('compareBtn');
   if(cmpBtn){ cmpBtn.disabled = !multi; }
+  const sbCmpBtn = document.getElementById('sbCmpBtn');
+  if(sbCmpBtn){ sbCmpBtn.disabled = !multi; }
 }
 
 function switchProp(i){ curProp = i; loadPropToUI(); renderTabs(); }
@@ -815,7 +821,8 @@ function addProperty(){
   renderTabs(); loadPropToUI();
   window.scrollTo({top:0, behavior:'smooth'}); saveState();
 }
-function updatePropName(val){ S().name = val; renderTabs(); saveState(); maybeSendPropUpdate(); }
+function hideExampleHint(){ const h=document.getElementById('exampleHint'); if(h) h.style.display='none'; }
+function updatePropName(val){ S().name = val; renderTabs(); saveState(); maybeSendPropUpdate(); hideExampleHint(); }
 function updatePropDesc(val){ S().desc = val.slice(0,200); saveState(); }
 
 function isPropEmpty(p){
@@ -925,10 +932,11 @@ function onInput(key,el){
     if(key==='sqm') maybeSendPropUpdate();
   }
 }
-function adj(key,d){ 
-  const lim={sqm:[50,9999],emp:[1,2000],mgmt:[0,100],clean:[0,60],utils:[0,60],customPct:[5,50],parkingSpots:[0,200],parkingPrice:[0,99999],grace:[0,24]}; 
-  S()[key]=clamp(S()[key]+d,lim[key][0],lim[key][1]); 
-  document.getElementById(key+'Inp').value=S()[key]; 
+function adj(key,d){
+  hideExampleHint();
+  const lim={sqm:[50,9999],emp:[1,2000],mgmt:[0,100],clean:[0,60],utils:[0,60],customPct:[5,50],parkingSpots:[0,200],parkingPrice:[0,99999],grace:[0,24]};
+  S()[key]=clamp(S()[key]+d,lim[key][0],lim[key][1]);
+  document.getElementById(key+'Inp').value=S()[key];
   if(key==='sqm') syncRentAfterSqmChange();
   calc(); 
   if(key==='sqm') maybeSendPropUpdate(); 
@@ -1666,6 +1674,8 @@ function loadSharedStateIfAny(){
     <div class="sb-lbl">₪ למ"ר</div>
     <div class="sb-val" id="sbPerSqm">—</div>
   </div>
+  <div class="sb-div"></div>
+  <button class="sb-cmp-btn" id="sbCmpBtn" onclick="openCompare()" disabled>השווה</button>
 </div>
 </body>
 </html>
