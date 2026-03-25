@@ -226,8 +226,11 @@ body { background-image: linear-gradient(rgba(32,32,32,0.04) 1px, transparent 1p
 .cmp-view-toggle{display:flex;gap:6px;}
 .cmp-view-btn{padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--ink3);font-family:'Heebo',sans-serif;font-size:.75rem;font-weight:700;cursor:pointer;transition:all .15s;}
 .cmp-view-btn.active{background:var(--navy);color:var(--lime);border-color:var(--navy);}
-.cmp-map-wrap{height:460px;position:relative;overflow:hidden;}
-#cmpMap{height:100%;width:100%;}
+.cmp-map-wrap{height:460px;position:relative;overflow:hidden;display:flex;flex-direction:column;}
+#cmpMap{flex:1;width:100%;}
+.cmp-map-gmaps-bar{flex-shrink:0;padding:10px 16px;background:var(--bg);border-top:1px solid var(--border);display:flex;justify-content:center;}
+.cmp-gmaps-btn{padding:8px 22px;border-radius:10px;border:none;background:var(--navy);color:var(--lime);font-family:'Heebo',sans-serif;font-size:.82rem;font-weight:800;cursor:pointer;transition:all .2s;letter-spacing:.3px;}
+.cmp-gmaps-btn:hover{filter:brightness(1.15);}
 .cmp-map-loading{position:absolute;inset:0;background:rgba(255,255,255,.85);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;font-family:'Heebo',sans-serif;font-size:.82rem;color:var(--ink3);z-index:500;}
 .cmp-map-loading-spinner{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--navy);border-radius:50%;animation:spin .7s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -403,9 +406,13 @@ body { background-image: linear-gradient(rgba(32,32,32,0.04) 1px, transparent 1p
     <div class="layout-right">
 
       <div class="prop-name-row print-hide" style="flex-direction:column;align-items:stretch;padding:0;gap:0;">
-        <div style="display:flex;align-items:center;gap:12px;padding:14px 20px;">
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 20px 10px;">
           <span class="prop-name-label" id="prop-name-label">🏢 <span id="prop-name-lbl-txt">שם הנכס</span>:</span>
           <input class="prop-name-inp" id="propNameInp" type="text" placeholder='למשל: מגדל עזריאלי קומה 20' oninput="updatePropName(this.value)" onblur="onPropNameBlur(this.value)">
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:0 20px 12px;">
+          <span class="prop-name-label" style="white-space:nowrap;">📍 כתובת:</span>
+          <input class="prop-name-inp" id="propAddrInp" type="text" placeholder='למשל: מנחם בגין 132, תל אביב' style="font-size:.82rem;font-weight:500;" oninput="updatePropAddress(this.value)">
         </div>
         <textarea class="prop-desc-inp" id="propDescInp" maxlength="200" placeholder="תיאור חופשי — למשל: קומות 2+3 זמינות, גג, קומת פרטר אפשרית..." oninput="updatePropDesc(this.value)" rows="2"></textarea>
       </div>
@@ -806,6 +813,9 @@ body { background-image: linear-gradient(rgba(32,32,32,0.04) 1px, transparent 1p
         <div class="cmp-map-loading-spinner"></div>
         <span>מאתר את הנכסים על המפה...</span>
       </div>
+      <div class="cmp-map-gmaps-bar print-hide">
+        <button class="cmp-gmaps-btn" onclick="openAllInGoogleMaps()">🗺️ פתח במפת גוגל</button>
+      </div>
     </div>
     
     <div class="landscape-hint print-hide">
@@ -834,7 +844,7 @@ function sendToSheet(data) {
 }
 
 const defaultProp = () => ({
-  name:'',desc:'',sqm:480,emp:40,rent:100,rentMode:'sqm',rentTotal:48000,
+  name:'',desc:'',address:'',sqm:480,emp:40,rent:100,rentMode:'sqm',rentTotal:48000,
   arn:false,arnMode:'auto',arnManual:34,
   mgmt:20,clean:8,utils:12,extra:0,extraMode:'sqm',
   grossRatio:1.30,useCustomRatio:false,customPct:25,
@@ -868,7 +878,7 @@ function renderTabs(){
         <span class="tab-name"></span>
       </div>
     `;
-    t.querySelector('.tab-name').textContent = p.name || 'ללא שם';
+    t.querySelector('.tab-name').textContent = p.name || p.address || 'ללא שם';
     wrap.appendChild(t);
   });
   if(props.length < 10){
@@ -911,7 +921,15 @@ function updateMap(address) {
     if (placeholder) placeholder.style.display = 'none';
   }, 700);
 }
-function updatePropName(val){ S().name = val; renderTabs(); saveState(); maybeSendPropUpdate(); hideExampleHint(); updateMap(val); }
+function updatePropName(val){
+  S().name = val;
+  renderTabs(); saveState(); maybeSendPropUpdate(); hideExampleHint();
+  updateMap(S().address || val);
+}
+function updatePropAddress(val){
+  S().address = val.slice(0,200); saveState();
+  updateMap(val || S().name);
+}
 function updatePropDesc(val){ S().desc = val.slice(0,200); saveState(); }
 
 function isPropEmpty(p){
@@ -940,8 +958,9 @@ function onPropNameBlur(val){
 function loadPropToUI(){
   const p = S();
   document.getElementById('propNameInp').value = p.name;
+  document.getElementById('propAddrInp').value = p.address || '';
   document.getElementById('propDescInp').value = p.desc || '';
-  updateMap(p.name);
+  updateMap(p.address || p.name);
   document.getElementById('sqmInp').value = p.sqm;
   document.getElementById('empInp').value = p.emp;
   document.getElementById('mgmtInp').value = p.mgmt;
@@ -1387,9 +1406,10 @@ async function showCmpMap(){
   const bounds=[];
   for(let i=0;i<props.length;i++){
     const p=props[i];
-    if(!p.name||p.name.trim().length<2) continue;
+    const searchQuery = (p.address||'').trim() || (p.name||'').trim();
+    if(!searchQuery||searchQuery.length<2) continue;
     try{
-      const url='https://nominatim.openstreetmap.org/search?q='+encodeURIComponent(p.name+' ישראל')+'&format=json&limit=1';
+      const url='https://nominatim.openstreetmap.org/search?q='+encodeURIComponent(searchQuery+' ישראל')+'&format=json&limit=1';
       const res=await fetch(url,{headers:{'Accept-Language':'he'}});
       const data=await res.json();
       if(!data.length) continue;
@@ -1398,9 +1418,10 @@ async function showCmpMap(){
       const r=calcProp(p);
       const letter=String.fromCharCode(0x05D0+i);
       const color=CMP_COLORS[i%CMP_COLORS.length];
+      const displayName = p.name || p.address || ('נכס '+letter);
       const icon=L.divIcon({className:'cmp-pin',html:`<div class="cmp-pin-inner" style="background:${color}">נכס ${letter}</div>`,iconAnchor:[30,14]});
       const marker=L.marker([lat,lng],{icon})
-        .bindPopup(`<div style="font-family:Heebo,sans-serif;direction:rtl;min-width:150px"><b>${p.name}</b><br><span style="color:#64748b;font-size:.8rem">₪ ${fmt(r.totalMonthly)} / חודש</span></div>`)
+        .bindPopup(`<div style="font-family:Heebo,sans-serif;direction:rtl;min-width:150px"><b>${displayName}</b><br><span style="color:#64748b;font-size:.8rem">₪ ${fmt(r.totalMonthly)} / חודש</span></div>`)
         .addTo(_cmpMap);
       _cmpMarkers.push(marker);
     }catch(e){}
@@ -1410,6 +1431,24 @@ async function showCmpMap(){
   if(bounds.length>1) _cmpMap.fitBounds(bounds,{padding:[60,60]});
   else if(bounds.length===1) _cmpMap.setView(bounds[0],15);
   setTimeout(()=>_cmpMap.invalidateSize(),150);
+}
+
+function openAllInGoogleMaps(){
+  const addresses = props
+    .map(p => (p.address||'').trim() || (p.name||'').trim())
+    .filter(q => q.length > 1);
+  if(!addresses.length) return;
+  let url;
+  if(addresses.length === 1){
+    url = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(addresses[0]);
+  } else {
+    // Multiple: use directions with waypoints (up to ~8 stops)
+    const origin = encodeURIComponent(addresses[0]);
+    const dest   = encodeURIComponent(addresses[addresses.length-1]);
+    const waypts = addresses.slice(1,-1).map(encodeURIComponent).join('|');
+    url = 'https://www.google.com/maps/dir/' + addresses.map(encodeURIComponent).join('/');
+  }
+  window.open(url, '_blank', 'noopener');
 }
 
 function checkSession(){
@@ -1581,7 +1620,8 @@ function shareWhatsApp(){
   if(r.furnitureMonthly>0) msg+=`*ריהוט (פרוס):* ${fmt(r.furnitureMonthly)} ₪ לחודש\n`;
   if(r.renovationMonthly>0) msg+=`*שיפוץ / התאמות (פרוס):* ${fmt(r.renovationMonthly)} ₪ לחודש\n`;
   if(p.grace>0){ msg+=`\n*אחרי גרייס:*\n\u200F• עלות אפקטיבית: ${fmt(r.effectiveMonthly)} ₪/חודש\n\u200F• חיסכון לתקופה: ${fmt(r.graceSaving*p.months)} ₪\n`; }
-  if(p.name&&p.name.trim().length>2) msg+=`\n📍 מפה: https://maps.google.com/?q=${encodeURIComponent(p.name)}`;
+  const mapQuery = (p.address||'').trim() || (p.name||'').trim();
+  if(mapQuery.length>2) msg+=`\n📍 מפה: https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}`;
   msg+=`\nהופק באמצעות השורה התחתונה — דון אלבורו`;
   
   // שימוש ב-API הרשמי של וואטסאפ לפתרון בעיות בדפדפנים של לינקדין/פייסבוק ו-iOS
