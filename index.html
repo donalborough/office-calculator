@@ -7,6 +7,8 @@
 <title>השורה התחתונה | דון אלבורו</title>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js" integrity="sha384-0d+Gr7vM4Drod8E3hXKgciWJSWbjD/opKLLygI9ktiWbuvlDwQLzU46wJ9s5gsp7" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css" integrity="sha384-b8ANgTJvdlAnWM5YGMpKn7Kodm+1k7NYNG9zdjTCcZcKatzYHwZ0RLdWarbJJVzU" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js" integrity="sha384-u5N8qJeJOO2iqNjIKTdl6KeKsEikMAmCUBPc6sC6uGpgL34aPJ4VgNhuhumedpEk" crossorigin="anonymous"></script>
 <style>
 :root { color-scheme: light only; --bg: #F4EFEB; --surface: #ffffff; --card: #ffffff; --ink: #202020; --ink2: #334155; --ink3: #64748b; --border: #e2e8f0; --border2: #cbd5e1; --lime: #C5E085; --deep-black: #000000; --rose: #e11d48; --rose-l: #fff1f2; --navy: #202020; --green: #10b981; --shadow-s: 0 2px 4px rgba(0, 0, 0, 0.04); --shadow-m: 0 8px 24px rgba(0, 0, 0, 0.06); --shadow-l: 0 16px 40px rgba(0, 0, 0, 0.08); --r: 16px; --r-sm: 10px; }
 [data-theme="dark"] {
@@ -157,6 +159,10 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .donut-legend-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
 .donut-legend-label { font-size:.7rem; color:rgba(255,255,255,0.7); font-weight:500; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-family:'Heebo',sans-serif; }
 .donut-legend-pct { font-size:.7rem; color:rgba(255,255,255,0.45); font-weight:700; font-family:'Heebo',sans-serif; flex-shrink:0; }
+/* Map card */
+.map-card { background:var(--card); border-radius:var(--r); box-shadow:var(--shadow-m); border:1px solid var(--border); overflow:hidden; margin-bottom:16px; height:210px; }
+.map-placeholder { height:210px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; color:var(--ink3); font-size:.78rem; font-weight:500; font-family:'Heebo',sans-serif; }
+.prop-map { width:100%; height:210px; display:block; border:none; }
 /* background grid */
 body { background-image: linear-gradient(rgba(32,32,32,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(32,32,32,0.04) 1px, transparent 1px); background-size:44px 44px; }
 [data-theme="dark"] body { background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size:44px 44px; }
@@ -217,6 +223,17 @@ body { background-image: linear-gradient(rgba(32,32,32,0.04) 1px, transparent 1p
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .compare-hd{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:#fff;}
 .compare-hd-title{font-size:1.1rem;font-weight:900;color:var(--navy);}
+.cmp-view-toggle{display:flex;gap:6px;}
+.cmp-view-btn{padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--ink3);font-family:'Heebo',sans-serif;font-size:.75rem;font-weight:700;cursor:pointer;transition:all .15s;}
+.cmp-view-btn.active{background:var(--navy);color:var(--lime);border-color:var(--navy);}
+.cmp-map-wrap{height:460px;position:relative;overflow:hidden;}
+#cmpMap{height:100%;width:100%;}
+.cmp-map-loading{position:absolute;inset:0;background:rgba(255,255,255,.85);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;font-family:'Heebo',sans-serif;font-size:.82rem;color:var(--ink3);z-index:500;}
+.cmp-map-loading-spinner{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--navy);border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.cmp-pin{background:transparent !important;border:none !important;}
+.cmp-pin-inner{padding:5px 12px;border-radius:20px;font-family:'Heebo',sans-serif;font-weight:900;font-size:.72rem;color:#202020;box-shadow:0 3px 12px rgba(0,0,0,0.3);white-space:nowrap;cursor:pointer;}
+.leaflet-popup-content-wrapper{font-family:'Heebo',sans-serif !important;direction:rtl;text-align:right;}
 .compare-close{width:36px;height:36px;border-radius:10px;background:var(--bg);border:none;font-size:1.2rem;color:var(--ink2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s ease;}
 .compare-close:active{transform:scale(0.9);}
 .cmp-table-wrapper { flex:1; overflow-y:auto; overflow-x:auto; max-height: 65vh; padding: 0; }
@@ -381,18 +398,18 @@ body { background-image: linear-gradient(rgba(32,32,32,0.04) 1px, transparent 1p
     <div class="prop-tabs" id="propTabs"></div>
   </div>
 
-  <div class="prop-name-row print-hide" style="flex-direction:column;align-items:stretch;padding:0;gap:0;">
-    <div style="display:flex;align-items:center;gap:12px;padding:14px 20px;">
-      <span class="prop-name-label" id="prop-name-label">🏢 <span id="prop-name-lbl-txt">שם הנכס</span>:</span>
-      <input class="prop-name-inp" id="propNameInp" type="text" placeholder='למשל: מגדל עזריאלי קומה 20' oninput="updatePropName(this.value)" onblur="onPropNameBlur(this.value)">
-    </div>
-    <textarea class="prop-desc-inp" id="propDescInp" maxlength="200" placeholder="תיאור חופשי — למשל: קומות 2+3 זמינות, גג, קומת פרטר אפשרית..." oninput="updatePropDesc(this.value)" rows="2"></textarea>
-  </div>
-
   <div class="main-layout-grid print-hide">
     
     <div class="layout-right">
-      
+
+      <div class="prop-name-row print-hide" style="flex-direction:column;align-items:stretch;padding:0;gap:0;">
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 20px;">
+          <span class="prop-name-label" id="prop-name-label">🏢 <span id="prop-name-lbl-txt">שם הנכס</span>:</span>
+          <input class="prop-name-inp" id="propNameInp" type="text" placeholder='למשל: מגדל עזריאלי קומה 20' oninput="updatePropName(this.value)" onblur="onPropNameBlur(this.value)">
+        </div>
+        <textarea class="prop-desc-inp" id="propDescInp" maxlength="200" placeholder="תיאור חופשי — למשל: קומות 2+3 זמינות, גג, קומת פרטר אפשרית..." oninput="updatePropDesc(this.value)" rows="2"></textarea>
+      </div>
+
       <div class="sec">
         <div class="sec-hd"><div class="sec-num">1</div><div class="sec-title" id="step1-title">סוג הבניין</div></div>
         <div class="card">
@@ -667,7 +684,15 @@ body { background-image: linear-gradient(rgba(32,32,32,0.04) 1px, transparent 1p
       </div>
 
     </div> <div class="layout-left">
-      
+
+      <div class="map-card print-hide" id="mapCard">
+        <div class="map-placeholder" id="mapPlaceholder">
+          <span style="font-size:1.8rem;">📍</span>
+          <span>הזן שם נכס / כתובת לצפייה במפה</span>
+        </div>
+        <iframe id="propMap" class="prop-map" frameborder="0" allowfullscreen loading="lazy" style="display:none;"></iframe>
+      </div>
+
       <div class="sec">
         <div class="sec-hd"><div class="sec-num" style="background:var(--neon);color:var(--navy);">✓</div><div class="sec-title" id="summary-title-txt">סיכום פרטים</div></div>
         <div class="card" style="padding:0; overflow:hidden; margin-bottom:16px;">
@@ -764,11 +789,23 @@ body { background-image: linear-gradient(rgba(32,32,32,0.04) 1px, transparent 1p
   <div class="compare-sheet">
     <div class="compare-hd print-hide">
       <div class="compare-hd-title">השוואת נכסים</div>
+      <div class="cmp-view-toggle">
+        <button class="cmp-view-btn active" id="btnTableView" onclick="showCmpTable()">📋 טבלה</button>
+        <button class="cmp-view-btn" id="btnMapView" onclick="showCmpMap()">🗺️ מפה</button>
+      </div>
       <button class="compare-close" onclick="closeCompare()">✕</button>
     </div>
-    
+
     <div class="cmp-table-wrapper" id="cmpTableWrapper">
       <table class="cmp-table" id="cmpTable"></table>
+    </div>
+
+    <div class="cmp-map-wrap" id="cmpMapWrapper" style="display:none;">
+      <div id="cmpMap"></div>
+      <div class="cmp-map-loading" id="cmpMapLoading" style="display:none;">
+        <div class="cmp-map-loading-spinner"></div>
+        <span>מאתר את הנכסים על המפה...</span>
+      </div>
     </div>
     
     <div class="landscape-hint print-hide">
@@ -857,7 +894,24 @@ function addProperty(){
   window.scrollTo({top:0, behavior:'smooth'}); saveState();
 }
 function hideExampleHint(){ const h=document.getElementById('exampleHint'); if(h) h.style.display='none'; }
-function updatePropName(val){ S().name = val; renderTabs(); saveState(); maybeSendPropUpdate(); hideExampleHint(); }
+let _mapTimer;
+function updateMap(address) {
+  const iframe = document.getElementById('propMap');
+  const placeholder = document.getElementById('mapPlaceholder');
+  if (!iframe) return;
+  clearTimeout(_mapTimer);
+  if (!address || address.trim().length < 3) {
+    iframe.style.display = 'none';
+    if (placeholder) placeholder.style.display = 'flex';
+    return;
+  }
+  _mapTimer = setTimeout(function() {
+    iframe.src = 'https://maps.google.com/maps?q=' + encodeURIComponent(address) + '&output=embed&hl=he&z=15';
+    iframe.style.display = 'block';
+    if (placeholder) placeholder.style.display = 'none';
+  }, 700);
+}
+function updatePropName(val){ S().name = val; renderTabs(); saveState(); maybeSendPropUpdate(); hideExampleHint(); updateMap(val); }
 function updatePropDesc(val){ S().desc = val.slice(0,200); saveState(); }
 
 function isPropEmpty(p){
@@ -887,6 +941,7 @@ function loadPropToUI(){
   const p = S();
   document.getElementById('propNameInp').value = p.name;
   document.getElementById('propDescInp').value = p.desc || '';
+  updateMap(p.name);
   document.getElementById('sqmInp').value = p.sqm;
   document.getElementById('empInp').value = p.emp;
   document.getElementById('mgmtInp').value = p.mgmt;
@@ -1295,7 +1350,67 @@ function openCompare(){
   document.getElementById('compareModal').classList.add('open');
 }
 
-function closeCompare(){ document.getElementById('compareModal').classList.remove('open'); }
+function closeCompare(){
+  document.getElementById('compareModal').classList.remove('open');
+  showCmpTable(); // reset to table view on close
+}
+
+// ══ COMPARE MAP ══
+let _cmpMap = null;
+let _cmpMarkers = [];
+const CMP_COLORS = ['#C5E085','#86efac','#67e8f9','#93c5fd','#fda4af','#fde68a','#f9a8d4'];
+
+function showCmpTable(){
+  document.getElementById('cmpTableWrapper').style.display='';
+  document.getElementById('cmpMapWrapper').style.display='none';
+  document.getElementById('btnTableView').classList.add('active');
+  document.getElementById('btnMapView').classList.remove('active');
+}
+
+async function showCmpMap(){
+  document.getElementById('cmpTableWrapper').style.display='none';
+  document.getElementById('cmpMapWrapper').style.display='block';
+  document.getElementById('btnTableView').classList.remove('active');
+  document.getElementById('btnMapView').classList.add('active');
+
+  if(!_cmpMap){
+    _cmpMap = L.map('cmpMap',{zoomControl:true}).setView([32.08,34.78],11);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+      attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(_cmpMap);
+  }
+
+  _cmpMarkers.forEach(m=>_cmpMap.removeLayer(m));
+  _cmpMarkers=[];
+  document.getElementById('cmpMapLoading').style.display='flex';
+
+  const bounds=[];
+  for(let i=0;i<props.length;i++){
+    const p=props[i];
+    if(!p.name||p.name.trim().length<2) continue;
+    try{
+      const url='https://nominatim.openstreetmap.org/search?q='+encodeURIComponent(p.name+' ישראל')+'&format=json&limit=1';
+      const res=await fetch(url,{headers:{'Accept-Language':'he'}});
+      const data=await res.json();
+      if(!data.length) continue;
+      const lat=parseFloat(data[0].lat), lng=parseFloat(data[0].lon);
+      bounds.push([lat,lng]);
+      const r=calcProp(p);
+      const letter=String.fromCharCode(0x05D0+i);
+      const color=CMP_COLORS[i%CMP_COLORS.length];
+      const icon=L.divIcon({className:'cmp-pin',html:`<div class="cmp-pin-inner" style="background:${color}">נכס ${letter}</div>`,iconAnchor:[30,14]});
+      const marker=L.marker([lat,lng],{icon})
+        .bindPopup(`<div style="font-family:Heebo,sans-serif;direction:rtl;min-width:150px"><b>${p.name}</b><br><span style="color:#64748b;font-size:.8rem">₪ ${fmt(r.totalMonthly)} / חודש</span></div>`)
+        .addTo(_cmpMap);
+      _cmpMarkers.push(marker);
+    }catch(e){}
+  }
+
+  document.getElementById('cmpMapLoading').style.display='none';
+  if(bounds.length>1) _cmpMap.fitBounds(bounds,{padding:[60,60]});
+  else if(bounds.length===1) _cmpMap.setView(bounds[0],15);
+  setTimeout(()=>_cmpMap.invalidateSize(),150);
+}
 
 function checkSession(){
   try{
@@ -1466,6 +1581,7 @@ function shareWhatsApp(){
   if(r.furnitureMonthly>0) msg+=`*ריהוט (פרוס):* ${fmt(r.furnitureMonthly)} ₪ לחודש\n`;
   if(r.renovationMonthly>0) msg+=`*שיפוץ / התאמות (פרוס):* ${fmt(r.renovationMonthly)} ₪ לחודש\n`;
   if(p.grace>0){ msg+=`\n*אחרי גרייס:*\n\u200F• עלות אפקטיבית: ${fmt(r.effectiveMonthly)} ₪/חודש\n\u200F• חיסכון לתקופה: ${fmt(r.graceSaving*p.months)} ₪\n`; }
+  if(p.name&&p.name.trim().length>2) msg+=`\n📍 מפה: https://maps.google.com/?q=${encodeURIComponent(p.name)}`;
   msg+=`\nהופק באמצעות השורה התחתונה — דון אלבורו`;
   
   // שימוש ב-API הרשמי של וואטסאפ לפתרון בעיות בדפדפנים של לינקדין/פייסבוק ו-iOS
