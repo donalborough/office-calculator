@@ -30,6 +30,8 @@
 [data-theme="dark"] .action-clear { background: #1e293b; color: var(--ink3); border-color: var(--border); }
 [data-theme="dark"] .prop-tab { background: #1e293b; color: var(--ink3); }
 [data-theme="dark"] .card-note { background: #162032; }
+[data-theme="dark"] .chart-section { border-top-color: rgba(255,255,255,0.05); }
+[data-theme="dark"] #lbl-breakdown-hdr { color: var(--ink3) !important; }
 [data-theme="dark"] .cmp-save-btn { background: #1e293b; color: var(--ink); border-color: var(--border); }
 [data-theme="dark"] .compare-sheet { color: var(--ink); }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -56,7 +58,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .gate-privacy{font-size:.67rem;color:#94a3b8;text-align:center;margin-top:16px;line-height:1.6;}
 #gateSuccess {display:none;text-align:center;padding:40px 20px;flex-direction:column;align-items:center;justify-content:center;background:#fff;border-radius:20px;}
 .hdr{background:var(--navy);padding:12px 20px;padding-top:max(12px,env(safe-area-inset-top));position:sticky;top:0;z-index:100;}
-.hdr-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.hdr-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;}
 .hdr-title{display:flex;align-items:center;gap:12px;}
 .hdr-title svg{height:42px;width:auto;color:var(--lime);}
 .logo-wrap{display:inline-flex;flex-direction:column;align-items:flex-start;line-height:1.15;}
@@ -66,9 +68,9 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .hdr-back{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.9);border-radius:8px;padding:8px 14px;font-family:'Heebo',sans-serif;font-size:.75rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all 0.2s ease;}
 .hdr-back:hover{background:rgba(255,255,255,.15);}
 .hdr-back:active{transform:scale(0.96);}
-.page-container { max-width: 1100px; margin: 0 auto; padding: 20px 16px 120px; }
+.page-container { max-width: 1400px; margin: 0 auto; padding: 20px 16px 120px; }
 .main-layout-grid { display: flex; flex-direction: column; gap: 20px; }
-@media(min-width: 992px) { .page-container { padding: 32px 24px 120px; } .main-layout-grid { flex-direction: row; gap: 32px; align-items: start; } .layout-right { flex: 1.4; min-width: 0; } .layout-left { flex: 1; min-width: 0; position: sticky; top: 90px; } }
+@media(min-width: 992px) { .page-container { padding: 32px 24px 120px; } .main-layout-grid { flex-direction: row; gap: 32px; align-items: start; } .layout-right { flex: 1.6; min-width: 0; } .layout-left { flex: 1; min-width: 320px; position: sticky; top: 90px; } }
 .prop-tabs-wrap{margin-bottom:20px; width: 100%;}
 .prop-tabs{display:flex;gap:10px;align-items:center;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;padding-bottom:4px;}
 .prop-tabs::-webkit-scrollbar { display: none; }
@@ -140,10 +142,25 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .brow:last-child{border-bottom:none;}
 .brow-lbl{color:var(--ink2);font-weight:500;}
 .brow-val{font-weight:800;flex-shrink:0;color:var(--ink);}
-.results-total-box { background: var(--navy); padding: 24px 20px; border-radius: 0 0 var(--r) var(--r); position: relative; overflow: hidden; }
-.results-total-box::before { content:''; position:absolute; top:-50px; right:-50px; width:150px; height:150px; border-radius:50%; background:radial-gradient(circle, rgba(197,224,133,0.1) 0%, transparent 70%); pointer-events:none; }
-.rtb-header {font-size:.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#ffffff;margin-bottom:6px;}
-.rtb-amount {font-size:2.4rem;font-weight:900;color:var(--lime);line-height:1;}
+.results-total-box { background: var(--navy); padding: 28px 24px 22px; border-radius: 0; position: relative; overflow: hidden; }
+.results-total-box::before { content:''; position:absolute; top:-60px; right:-60px; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle, rgba(197,224,133,0.12) 0%, transparent 65%); pointer-events:none; }
+.results-total-box::after { content:''; position:absolute; bottom:-40px; left:-40px; width:140px; height:140px; border-radius:50%; background:radial-gradient(circle, rgba(197,224,133,0.06) 0%, transparent 70%); pointer-events:none; }
+.rtb-header {font-size:.7rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:8px;}
+.rtb-amount {font-size:3.4rem;font-weight:900;color:var(--lime);line-height:1;letter-spacing:-1px;text-shadow:0 0 48px rgba(197,224,133,0.25);}
+/* Donut chart section */
+.chart-section { background:var(--navy); border-top:1px solid rgba(255,255,255,0.07); padding:20px 24px; display:flex; align-items:center; gap:20px; }
+.donut-svg { flex-shrink:0; overflow:visible; }
+.donut-center-lbl { font-size:9px; fill:rgba(255,255,255,0.45); font-family:'Heebo',sans-serif; font-weight:700; letter-spacing:0.5px; }
+.donut-center-val { font-size:20px; fill:#C5E085; font-family:'Heebo',sans-serif; font-weight:900; }
+.donut-legend { display:flex; flex-direction:column; gap:7px; flex:1; min-width:0; }
+.donut-legend-item { display:flex; align-items:center; gap:8px; }
+.donut-legend-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+.donut-legend-label { font-size:.7rem; color:rgba(255,255,255,0.7); font-weight:500; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-family:'Heebo',sans-serif; }
+.donut-legend-pct { font-size:.7rem; color:rgba(255,255,255,0.45); font-weight:700; font-family:'Heebo',sans-serif; flex-shrink:0; }
+/* background grid */
+body { background-image: linear-gradient(rgba(32,32,32,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(32,32,32,0.04) 1px, transparent 1px); background-size:44px 44px; }
+[data-theme="dark"] body { background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size:44px 44px; }
+@media print { body { background-image:none !important; } }
 .sticky-bar{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--navy);z-index:250;padding:10px 24px 14px;flex-direction:row;align-items:center;justify-content:center;gap:24px;box-shadow:0 -4px 24px rgba(0,0,0,0.18);border-top:2px solid rgba(197,224,133,0.3);transition:transform .3s ease,opacity .3s ease;}
 .sticky-bar.sb-hidden{transform:translateY(100%);opacity:0;pointer-events:none;}
 .sb-item{text-align:center;}
@@ -655,11 +672,6 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
         <div class="sec-hd"><div class="sec-num" style="background:var(--neon);color:var(--navy);">✓</div><div class="sec-title" id="summary-title-txt">סיכום פרטים</div></div>
         <div class="card" style="padding:0; overflow:hidden; margin-bottom:16px;">
 
-          <div class="brow" style="background:#f8fafc;border-bottom:1px solid var(--border);">
-            <span class="brow-lbl" style="font-weight:800;font-size:.7rem;letter-spacing:.8px;text-transform:uppercase;color:var(--ink2)" id="lbl-breakdown-hdr">פירוט עלויות חודשיות</span>
-          </div>
-          <div id="breakdown"></div>
-
           <div class="results-total-box">
             <div class="rtb-header" id="lbl-total-monthly">סה"כ עלויות חודשיות</div>
             <div class="rtb-amount" id="rMain">—</div>
@@ -690,6 +702,24 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
               </div>
             </div>
           </div>
+
+          <!-- Donut chart section -->
+          <div class="chart-section">
+            <svg class="donut-svg" viewBox="0 0 200 200" width="130" height="130" aria-hidden="true">
+              <circle cx="100" cy="100" r="70" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="28"/>
+              <g id="donutSegments"></g>
+              <text x="100" y="94" text-anchor="middle" class="donut-center-lbl">₪ / מ"ר</text>
+              <text x="100" y="118" text-anchor="middle" id="donutCenterVal" class="donut-center-val">—</text>
+            </svg>
+            <div class="donut-legend" id="donutLegend"></div>
+          </div>
+
+          <!-- Breakdown rows -->
+          <div class="brow" style="background:#f8fafc;border-bottom:1px solid var(--border);border-top:1px solid var(--border);">
+            <span class="brow-lbl" style="font-weight:800;font-size:.7rem;letter-spacing:.8px;text-transform:uppercase;color:var(--ink2)" id="lbl-breakdown-hdr">פירוט עלויות חודשיות</span>
+          </div>
+          <div id="breakdown"></div>
+
         </div>
       </div>
 
@@ -996,6 +1026,58 @@ function calcProp(p){
   return {bruto,net,effectiveRatio,rows,perSqm,monthly,yearly:monthly*12,perEmp:Math.round(monthly/p.emp),sqmPerEmp:bruto/p.emp,pct:Math.round((effectiveRatio-1)*100),furniturePerSqmMonth,furnitureMonthly,renovationPerSqmMonth,renovationMonthly,parkingMonthly,parkingPerSqm,totalMonthly,effectiveMonthly,gracePct,graceSaving};
 }
 
+const CHART_COLORS = ['#C5E085','#86efac','#67e8f9','#93c5fd','#c4b5fd','#fda4af','#fde68a'];
+
+function renderDonutChart(r, p) {
+  const segEl = document.getElementById('donutSegments');
+  const legendEl = document.getElementById('donutLegend');
+  const centerVal = document.getElementById('donutCenterVal');
+  if (!segEl || !legendEl) return;
+
+  // Build segments
+  const segs = [];
+  r.rows.forEach(row => { if (row.v > 0) segs.push({ label: row.l, val: row.v * r.bruto }); });
+  if (r.parkingMonthly  > 0) segs.push({ label: 'חניות',  val: r.parkingMonthly });
+  if (r.furnitureMonthly > 0) segs.push({ label: 'ריהוט',  val: r.furnitureMonthly });
+  if (r.renovationMonthly > 0) segs.push({ label: 'שיפוץ',  val: r.renovationMonthly });
+
+  const total = segs.reduce((s, g) => s + g.val, 0);
+  if (total === 0) { segEl.innerHTML = ''; legendEl.innerHTML = ''; return; }
+
+  const R = 70, CIRC = 2 * Math.PI * R;
+  segEl.innerHTML = '';
+  legendEl.innerHTML = '';
+
+  let cum = 0;
+  segs.forEach((seg, i) => {
+    const pct = seg.val / total;
+    const dash = pct * CIRC;
+    const gap  = CIRC - dash;
+    const offset = CIRC / 4 - cum;
+    const color = CHART_COLORS[i % CHART_COLORS.length];
+
+    const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx','100'); c.setAttribute('cy','100'); c.setAttribute('r', R);
+    c.setAttribute('fill','none'); c.setAttribute('stroke', color);
+    c.setAttribute('stroke-width','26');
+    c.setAttribute('stroke-dasharray', `${dash} ${gap}`);
+    c.setAttribute('stroke-dashoffset', offset);
+    segEl.appendChild(c);
+
+    const item = document.createElement('div');
+    item.className = 'donut-legend-item';
+    const dot   = document.createElement('span'); dot.className = 'donut-legend-dot'; dot.style.background = color;
+    const lbl   = document.createElement('span'); lbl.className = 'donut-legend-label'; lbl.textContent = seg.label;
+    const pctEl = document.createElement('span'); pctEl.className = 'donut-legend-pct'; pctEl.textContent = Math.round(pct * 100) + '%';
+    item.appendChild(dot); item.appendChild(lbl); item.appendChild(pctEl);
+    legendEl.appendChild(item);
+
+    cum += dash;
+  });
+
+  if (centerVal) centerVal.textContent = (total / r.bruto).toFixed(0);
+}
+
 function calc(){
   const p=S(); const r=calcProp(p);
   document.getElementById('netNote').textContent='≈ '+r.net+' מ"ר נטו בפועל';
@@ -1026,6 +1108,7 @@ function calc(){
   document.getElementById('rSub').textContent=fmt(r.bruto)+' מ"ר ברוטו';
   document.getElementById('rPerSqm').textContent=fmt(r.totalMonthly)+' ₪';
   document.getElementById('rPerSqmVal').textContent = totalPerSqm + ' ₪';
+  renderDonutChart(r, p);
   // update sticky bar
   const sbTotal = document.getElementById('sbTotal');
   const sbPerSqm = document.getElementById('sbPerSqm');
