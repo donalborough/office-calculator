@@ -144,6 +144,13 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .results-total-box::before { content:''; position:absolute; top:-50px; right:-50px; width:150px; height:150px; border-radius:50%; background:radial-gradient(circle, rgba(197,224,133,0.1) 0%, transparent 70%); pointer-events:none; }
 .rtb-header {font-size:.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#ffffff;margin-bottom:6px;}
 .rtb-amount {font-size:2.4rem;font-weight:900;color:var(--lime);line-height:1;}
+.sticky-bar{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--navy);z-index:250;padding:10px 24px 14px;flex-direction:row;align-items:center;justify-content:center;gap:24px;box-shadow:0 -4px 24px rgba(0,0,0,0.18);border-top:2px solid rgba(197,224,133,0.3);transition:transform .3s ease,opacity .3s ease;}
+.sticky-bar.sb-hidden{transform:translateY(100%);opacity:0;pointer-events:none;}
+.sb-item{text-align:center;}
+.sb-lbl{font-size:.58rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:2px;}
+.sb-val{font-size:1.05rem;font-weight:900;color:var(--lime);line-height:1;}
+.sb-div{width:1px;height:34px;background:rgba(255,255,255,0.15);}
+@media(max-width:767px){.sticky-bar{display:flex;}}
 .rtb-sub {font-size:.75rem;color:rgba(255,255,255,.6);margin-top:6px;margin-bottom:16px;}
 .rtb-grid {display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .rtb-cell {background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.05);border-radius:12px;padding:12px}
@@ -998,6 +1005,11 @@ function calc(){
   document.getElementById('rSub').textContent=fmt(r.bruto)+' מ"ר ברוטו';
   document.getElementById('rPerSqm').textContent=fmt(r.totalMonthly)+' ₪';
   document.getElementById('rPerSqmVal').textContent = totalPerSqm + ' ₪';
+  // update sticky bar
+  const sbTotal = document.getElementById('sbTotal');
+  const sbPerSqm = document.getElementById('sbPerSqm');
+  if(sbTotal) sbTotal.textContent = fmt(r.totalMonthly) + ' ₪';
+  if(sbPerSqm) sbPerSqm.textContent = totalPerSqm + ' ₪';
   const _irC=window._irrelRows||new Set();
   const periodCell=document.getElementById('rPeriod').closest('.rtb-cell');
   const yearCell=document.getElementById('rYear').closest('.rtb-cell');
@@ -1593,6 +1605,23 @@ function loadSharedStateIfAny(){
     history.replaceState(null, '', location.pathname);
   } catch(e) {}
 })();
+
+// ── Sticky summary bar ──────────────────────────────────────
+(function(){
+  const bar = document.getElementById('stickyBar');
+  const summaryBox = document.querySelector('.results-total-box');
+  if(!bar || !summaryBox || !('IntersectionObserver' in window)) return;
+  const observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        bar.classList.add('sb-hidden');
+      } else {
+        bar.classList.remove('sb-hidden');
+      }
+    });
+  }, { threshold: 0.2 });
+  observer.observe(summaryBox);
+})();
 </script>
 
 <div class="share-modal-overlay" id="shareModal" style="display:none;" onclick="if(event.target===this)closeShareModal()">
@@ -1602,6 +1631,18 @@ function loadSharedStateIfAny(){
     <div class="share-url-box" id="shareUrlDisplay"></div>
     <button class="share-copy-btn" id="shareCopyBtn" onclick="copyShareLink()">העתק קישור</button>
     <button class="share-close-btn" onclick="closeShareModal()">סגור</button>
+  </div>
+</div>
+
+<div class="sticky-bar sb-hidden print-hide" id="stickyBar">
+  <div class="sb-item">
+    <div class="sb-lbl">סה"כ חודשי</div>
+    <div class="sb-val" id="sbTotal">—</div>
+  </div>
+  <div class="sb-div"></div>
+  <div class="sb-item">
+    <div class="sb-lbl">₪ למ"ר</div>
+    <div class="sb-val" id="sbPerSqm">—</div>
   </div>
 </div>
 </body>
