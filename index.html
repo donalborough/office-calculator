@@ -120,6 +120,11 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .spin-inp{width:56px;text-align:center;border:none;background:transparent;font-size:.95rem;font-weight:800;font-family:'Heebo',sans-serif;color:var(--ink);padding:0;height:100%;-moz-appearance:textfield;}
 .spin-inp:focus{outline:none;background:var(--bg);}
 .spin-unit{font-size:.6rem;font-weight:600;color:var(--ink3);padding-left:8px;padding-right:2px;white-space:nowrap;}
+.spin-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:2px;}
+.spin-monthly-lbl{font-size:.58rem;font-weight:800;color:#10b981;font-family:'Heebo',sans-serif;opacity:.9;text-align:left;min-width:60px;}
+.spin.spin-auto{background:var(--bg);}
+.spin.spin-auto .spin-inp{color:var(--ink3);}
+.spin.spin-auto .spin-btn{opacity:.3;pointer-events:none;}
 .chips{display:flex;flex-wrap:wrap;gap:8px;padding:16px 20px;}
 .chip{padding:10px 16px;border-radius:12px;border:1px solid var(--border);background:#fff;color:var(--ink2);font-size:.78rem;font-family:'Heebo',sans-serif;cursor:pointer;transition:all .2s;font-weight:600;line-height:1.3;text-align:center;}
 .chip .cs{font-size:.6rem;opacity:.7;display:block;margin-top:3px;font-weight:400;}
@@ -523,61 +528,61 @@ body { background-image: linear-gradient(rgba(32,32,32,0.04) 1px, transparent 1p
         <div class="sec-hd"><div class="sec-num">3</div><div class="sec-title" id="step3-title">עלויות נלוות</div></div>
         <div class="card">
           
-          <div id="row-arn" style="padding: 16px 20px; border-bottom: 1px solid var(--border);">
-            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
-              <div class="row-l" style="min-width: 100px;">
-                <div class="row-label" id="lbl-arn">ארנונה</div>
-                <div class="row-sub" id="arnSub">34 ₪/מ"ר — ללא הנחה</div>
-                <button class="row-irrel-btn" onclick="toggleIrrelevant('row-arn')" id="irrel-row-arn">הוצא מחישוב</button>
-              </div>
-              <div class="row-r" style="gap:12px; flex-wrap:wrap; justify-content:flex-end;">
-                <div class="tog-wrap">
-                  <div class="tog" id="arnTog" onclick="toggleArn()"></div>
-                  <span class="tog-lbl" id="arn-software-lbl">הנחת תוכנה</span>
-                </div>
+          <div class="row" id="row-arn" style="border-bottom:1px solid var(--border);">
+            <div class="row-l">
+              <div class="row-label" id="lbl-arn">ארנונה</div>
+              <div class="row-sub" id="arnSub">34 ₪/מ"ר — ללא הנחה</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap;">
                 <div class="mode-btns">
                   <button class="mode-btn active" id="arnModeAuto" onclick="setArnMode('auto')">אוטו</button>
                   <button class="mode-btn" id="arnModeManual" onclick="setArnMode('manual')">ידני</button>
                 </div>
+                <div class="tog-wrap">
+                  <div class="tog" id="arnTog" onclick="toggleArn()"></div>
+                  <span class="tog-lbl" id="arn-software-lbl">הנחת תוכנה</span>
+                </div>
               </div>
+              <button class="row-irrel-btn" onclick="toggleIrrelevant('row-arn')" id="irrel-row-arn">הוצא מחישוב</button>
             </div>
-            
-            <div id="arnManualRow" style="display:none; justify-content:flex-end; margin-top:12px;">
-                 <div class="spin">
-                   <button class="spin-btn" onclick="adjArn(-1)">−</button>
-                   <input class="spin-inp" id="arnManualInp" type="number" value="34" min="0" max="500" inputmode="numeric" oninput="onInputArn(this)">
-                   <span class="spin-unit" id="unit-arn">₪/מ"ר</span>
-                   <button class="spin-btn" onclick="adjArn(+1)">+</button>
-                 </div>
+            <div class="row-r">
+              <div class="spin-wrap">
+                <div class="spin spin-auto" id="arnSpinBox">
+                  <button class="spin-btn" onclick="adjArn(-1)">−</button>
+                  <input class="spin-inp" id="arnManualInp" type="number" value="34" min="0" max="500" inputmode="numeric" oninput="onInputArn(this)" readonly>
+                  <span class="spin-unit" id="unit-arn">₪/מ"ר</span>
+                  <button class="spin-btn" onclick="adjArn(+1)">+</button>
+                </div>
+                <span class="spin-monthly-lbl" id="smo-arn">—</span>
+              </div>
             </div>
           </div>
 
           <div class="row" id="row-mgmt" style="border-top:1px solid var(--border)">
             <div class="row-l"><div class="row-label" id="lbl-mgmt">דמי ניהול</div><div class="row-sub" id="sub-mgmt">אחזקה + שירותים משותפים</div><button class="row-irrel-btn" onclick="toggleIrrelevant('row-mgmt')" id="irrel-row-mgmt">הוצא מחישוב</button></div>
-            <div class="row-r"><div class="spin">
+            <div class="row-r"><div class="spin-wrap"><div class="spin">
               <button class="spin-btn" onclick="adj('mgmt',-0.5)">−</button>
               <input class="spin-inp" id="mgmtInp" type="number" value="20" min="0" max="100" step="0.5" inputmode="decimal" oninput="onInput('mgmt',this)">
               <span class="spin-unit" id="unit-mgmt">₪/מ"ר</span>
               <button class="spin-btn" onclick="adj('mgmt',+0.5)">+</button>
-            </div></div>
+            </div><span class="spin-monthly-lbl" id="smo-mgmt">—</span></div></div>
           </div>
           <div class="row" id="row-clean">
             <div class="row-l"><div class="row-label" id="lbl-clean">שירותי ניקיון</div><button class="row-irrel-btn" onclick="toggleIrrelevant('row-clean')" id="irrel-row-clean">הוצא מחישוב</button></div>
-            <div class="row-r"><div class="spin">
+            <div class="row-r"><div class="spin-wrap"><div class="spin">
               <button class="spin-btn" onclick="adj('clean',-0.5)">−</button>
               <input class="spin-inp" id="cleanInp" type="number" value="8" min="0" max="60" step="0.5" inputmode="decimal" oninput="onInput('clean',this)">
               <span class="spin-unit" id="unit-clean">₪/מ"ר</span>
               <button class="spin-btn" onclick="adj('clean',+0.5)">+</button>
-            </div></div>
+            </div><span class="spin-monthly-lbl" id="smo-clean">—</span></div></div>
           </div>
           <div class="row" id="row-utils">
             <div class="row-l"><div class="row-label" id="lbl-utils">חשמל, אינטרנט, מים</div><button class="row-irrel-btn" onclick="toggleIrrelevant('row-utils')" id="irrel-row-utils">הוצא מחישוב</button></div>
-            <div class="row-r"><div class="spin">
+            <div class="row-r"><div class="spin-wrap"><div class="spin">
               <button class="spin-btn" onclick="adj('utils',-0.5)">−</button>
               <input class="spin-inp" id="utilsInp" type="number" value="12" min="0" max="60" step="0.5" inputmode="decimal" oninput="onInput('utils',this)">
               <span class="spin-unit" id="unit-utils">₪/מ"ר</span>
               <button class="spin-btn" onclick="adj('utils',+0.5)">+</button>
-            </div></div>
+            </div><span class="spin-monthly-lbl" id="smo-utils">—</span></div></div>
           </div>
           
           <div class="row" id="row-parking" style="border-top:1px solid var(--border)">
@@ -1001,7 +1006,6 @@ function loadPropToUI(){
   document.getElementById('parkingPriceInp').value = p.parkingPrice;
   document.getElementById('arnTog').classList.toggle('on', p.arn);
   setArnModeUI(p.arnMode);
-  document.getElementById('arnManualRow').style.display = p.arnMode==='manual' ? 'flex' : 'none';
   setExtraModeUI(p.extraMode);
   calc();
 }
@@ -1070,7 +1074,14 @@ function adj(key,d){
 function toggleCustomRatio(){ S().useCustomRatio=!S().useCustomRatio; document.getElementById('customRatioTog').classList.toggle('on',S().useCustomRatio); document.getElementById('customRatioSpin').style.display=S().useCustomRatio?'flex':'none'; document.querySelectorAll('#bldgChips .chip').forEach(c=>c.classList.toggle('sel',!S().useCustomRatio&&parseFloat(c.dataset.ratio)===S().grossRatio)); calc(); }
 function setBldg(el,ratio){ S().useCustomRatio=false; document.getElementById('customRatioTog').classList.remove('on'); document.getElementById('customRatioSpin').style.display='none'; document.querySelectorAll('#bldgChips .chip').forEach(c=>c.classList.remove('sel')); el.classList.add('sel'); S().grossRatio=ratio; calc(); saveState(); }
 function toggleArn(){ S().arn=!S().arn; document.getElementById('arnTog').classList.toggle('on',S().arn); updateArnSub(); calc(); saveState(); }
-function setArnModeUI(mode){ document.getElementById('arnModeAuto').classList.toggle('active', mode==='auto'); document.getElementById('arnModeManual').classList.toggle('active', mode==='manual'); const amr=document.getElementById('arnManualRow'); if(amr) amr.style.display=mode==='manual'?'flex':'none'; }
+function setArnModeUI(mode){
+  document.getElementById('arnModeAuto').classList.toggle('active', mode==='auto');
+  document.getElementById('arnModeManual').classList.toggle('active', mode==='manual');
+  const box = document.getElementById('arnSpinBox');
+  const inp = document.getElementById('arnManualInp');
+  if(box){ box.classList.toggle('spin-auto', mode==='auto'); }
+  if(inp){ inp.readOnly = (mode==='auto'); }
+}
 function setArnMode(mode){ S().arnMode=mode; setArnModeUI(mode); updateArnSub(); calc(); saveState(); }
 function adjArn(d){ S().arnManual=Math.max(0,S().arnManual+d); document.getElementById('arnManualInp').value=S().arnManual; calc(); }
 function onInputArn(el){ const v=parseInt(el.value); if(!isNaN(v)&&v>=0){S().arnManual=v;calc();} }
@@ -1231,6 +1242,19 @@ function calc(){
   }
 
   if(p.arnMode==='manual') document.getElementById('arnSub').textContent=p.arnManual+' ₪/מ"ר — הזנה ידנית'; else document.getElementById('arnSub').textContent=p.arn?'17 ₪/מ"ר — הנחת עסקי תוכנה':'34 ₪/מ"ר — ללא הנחה';
+
+  // Update per-sqm monthly labels
+  (function(){
+    const _p=S();
+    function _smo(id,val){ const el=document.getElementById(id); if(el) el.textContent=val>0?'₪\u202F'+val.toLocaleString('he-IL'):'—'; }
+    _smo('smo-mgmt', Math.round(_p.mgmt*_p.sqm));
+    _smo('smo-clean', Math.round(_p.clean*_p.sqm));
+    _smo('smo-utils', Math.round(_p.utils*_p.sqm));
+    const _arnRate=_p.arnMode==='manual'?_p.arnManual:(_p.arn?17:34);
+    _smo('smo-arn', Math.round(_arnRate*_p.sqm));
+    // keep arnManualInp value in sync with auto rate
+    if(_p.arnMode==='auto'){ const inp=document.getElementById('arnManualInp'); if(inp) inp.value=_arnRate; }
+  })();
 }
 
 function generateCompareTable(forPrint = false, subsetProps) {
