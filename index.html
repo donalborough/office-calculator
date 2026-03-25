@@ -121,10 +121,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .spin-inp:focus{outline:none;background:var(--bg);}
 .spin-unit{font-size:.6rem;font-weight:600;color:var(--ink3);padding-left:8px;padding-right:2px;white-space:nowrap;}
 .spin-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:2px;}
-.spin-monthly-lbl{font-size:.58rem;font-weight:800;color:#10b981;font-family:'Heebo',sans-serif;opacity:.9;text-align:left;min-width:60px;}
-.spin.spin-auto{background:var(--bg);}
-.spin.spin-auto .spin-inp{color:var(--ink3);}
-.spin.spin-auto .spin-btn{opacity:.3;pointer-events:none;}
+.spin-monthly-lbl{font-size:.65rem;font-weight:700;color:var(--ink2);font-family:'Heebo',sans-serif;opacity:.85;text-align:left;min-width:60px;}
 .chips{display:flex;flex-wrap:wrap;gap:8px;padding:16px 20px;}
 .chip{padding:10px 16px;border-radius:12px;border:1px solid var(--border);background:#fff;color:var(--ink2);font-size:.78rem;font-family:'Heebo',sans-serif;cursor:pointer;transition:all .2s;font-weight:600;line-height:1.3;text-align:center;}
 .chip .cs{font-size:.6rem;opacity:.7;display:block;margin-top:3px;font-weight:400;}
@@ -532,23 +529,19 @@ body { background-image: linear-gradient(rgba(32,32,32,0.04) 1px, transparent 1p
             <div class="row-l">
               <div class="row-label" id="lbl-arn">ארנונה</div>
               <div class="row-sub" id="arnSub">34 ₪/מ"ר — ללא הנחה</div>
-              <div style="display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap;">
-                <div class="mode-btns">
-                  <button class="mode-btn active" id="arnModeAuto" onclick="setArnMode('auto')">אוטו</button>
-                  <button class="mode-btn" id="arnModeManual" onclick="setArnMode('manual')">ידני</button>
-                </div>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
                 <div class="tog-wrap">
                   <div class="tog" id="arnTog" onclick="toggleArn()"></div>
-                  <span class="tog-lbl" id="arn-software-lbl">הנחת תוכנה</span>
+                  <span class="tog-lbl" id="arn-software-lbl">הנחת תוכנה (17 ₪)</span>
                 </div>
               </div>
               <button class="row-irrel-btn" onclick="toggleIrrelevant('row-arn')" id="irrel-row-arn">הוצא מחישוב</button>
             </div>
             <div class="row-r">
               <div class="spin-wrap">
-                <div class="spin spin-auto" id="arnSpinBox">
+                <div class="spin" id="arnSpinBox">
                   <button class="spin-btn" onclick="adjArn(-1)">−</button>
-                  <input class="spin-inp" id="arnManualInp" type="number" value="34" min="0" max="500" inputmode="numeric" oninput="onInputArn(this)" readonly>
+                  <input class="spin-inp" id="arnManualInp" type="number" value="34" min="0" max="500" inputmode="numeric" oninput="onInputArn(this)">
                   <span class="spin-unit" id="unit-arn">₪/מ"ר</span>
                   <button class="spin-btn" onclick="adjArn(+1)">+</button>
                 </div>
@@ -865,7 +858,7 @@ function sendToSheet(data) {
 
 const defaultProp = () => ({
   name:'',desc:'',address:'',sqm:480,emp:40,rent:100,rentMode:'sqm',rentTotal:48000,
-  arn:false,arnMode:'auto',arnManual:34,
+  arn:false,arnManual:34,
   mgmt:20,clean:8,utils:12,extra:0,extraMode:'sqm',
   grossRatio:1.30,useCustomRatio:false,customPct:25,
   months:24,furniture:0,renovation:0,
@@ -1005,7 +998,6 @@ function loadPropToUI(){
   document.getElementById('parkingSpotsInp').value = p.parkingSpots;
   document.getElementById('parkingPriceInp').value = p.parkingPrice;
   document.getElementById('arnTog').classList.toggle('on', p.arn);
-  setArnModeUI(p.arnMode);
   setExtraModeUI(p.extraMode);
   calc();
 }
@@ -1073,19 +1065,16 @@ function adj(key,d){
 
 function toggleCustomRatio(){ S().useCustomRatio=!S().useCustomRatio; document.getElementById('customRatioTog').classList.toggle('on',S().useCustomRatio); document.getElementById('customRatioSpin').style.display=S().useCustomRatio?'flex':'none'; document.querySelectorAll('#bldgChips .chip').forEach(c=>c.classList.toggle('sel',!S().useCustomRatio&&parseFloat(c.dataset.ratio)===S().grossRatio)); calc(); }
 function setBldg(el,ratio){ S().useCustomRatio=false; document.getElementById('customRatioTog').classList.remove('on'); document.getElementById('customRatioSpin').style.display='none'; document.querySelectorAll('#bldgChips .chip').forEach(c=>c.classList.remove('sel')); el.classList.add('sel'); S().grossRatio=ratio; calc(); saveState(); }
-function toggleArn(){ S().arn=!S().arn; document.getElementById('arnTog').classList.toggle('on',S().arn); updateArnSub(); calc(); saveState(); }
-function setArnModeUI(mode){
-  document.getElementById('arnModeAuto').classList.toggle('active', mode==='auto');
-  document.getElementById('arnModeManual').classList.toggle('active', mode==='manual');
-  const box = document.getElementById('arnSpinBox');
-  const inp = document.getElementById('arnManualInp');
-  if(box){ box.classList.toggle('spin-auto', mode==='auto'); }
-  if(inp){ inp.readOnly = (mode==='auto'); }
+function toggleArn(){
+  const p=S(); p.arn=!p.arn;
+  if(p.arn){ p.arnManual=17; } else { p.arnManual=34; }
+  document.getElementById('arnTog').classList.toggle('on',p.arn);
+  document.getElementById('arnManualInp').value=p.arnManual;
+  updateArnSub(); calc(); saveState();
 }
-function setArnMode(mode){ S().arnMode=mode; setArnModeUI(mode); updateArnSub(); calc(); saveState(); }
-function adjArn(d){ S().arnManual=Math.max(0,S().arnManual+d); document.getElementById('arnManualInp').value=S().arnManual; calc(); }
-function onInputArn(el){ const v=parseInt(el.value); if(!isNaN(v)&&v>=0){S().arnManual=v;calc();} }
-function updateArnSub(){ const p=S(); if(p.arnMode==='manual') document.getElementById('arnSub').textContent=p.arnManual+' ₪/מ"ר — הזנה ידנית'; else document.getElementById('arnSub').textContent=p.arn?'17 ₪/מ"ר — הנחת עסקי תוכנה':'34 ₪/מ"ר — ללא הנחה'; }
+function adjArn(d){ const p=S(); p.arnManual=Math.max(0,p.arnManual+d); document.getElementById('arnManualInp').value=p.arnManual; updateArnSub(); calc(); saveState(); }
+function onInputArn(el){ const v=parseInt(el.value); if(!isNaN(v)&&v>=0){S().arnManual=v; updateArnSub(); calc(); saveState();} }
+function updateArnSub(){ const p=S(); document.getElementById('arnSub').textContent=p.arnManual+' ₪/מ"ר'+(p.arn?' — הנחת עסקי תוכנה':''); }
 function setExtraModeUI(mode){ document.getElementById('extraModePerSqm').classList.toggle('active', mode==='sqm'); document.getElementById('extraModeTotal').classList.toggle('active', mode==='total'); document.getElementById('extraUnit').textContent = mode==='sqm'?'₪/מ"ר':'₪/חודש'; }
 function setExtraMode(mode){ S().extraMode=mode; S().extra=0; document.getElementById('extraInp').value=0; setExtraModeUI(mode); calc(); }
 function adjExtra(d){ const step=S().extraMode==='sqm'?1:50; S().extra=Math.max(0,S().extra+d*step); document.getElementById('extraInp').value=S().extra; calc(); }
@@ -1102,7 +1091,7 @@ function calcProp(p){
   const effectiveRatio=p.useCustomRatio?(1+p.customPct/100):p.grossRatio;
   const net=Math.round(bruto/effectiveRatio);
   const _ir=window._irrelRows||new Set();
-  const arnRaw=p.arnMode==='manual'?p.arnManual:(p.arn?17:34);
+  const arnRaw=p.arnManual;
   const arn=_ir.has('row-arn')?0:arnRaw;
   const mgmt=_ir.has('row-mgmt')?0:p.mgmt;
   const clean=_ir.has('row-clean')?0:p.clean;
@@ -1241,19 +1230,16 @@ function calc(){
     spaceNoticeEl.innerHTML=nh;
   }
 
-  if(p.arnMode==='manual') document.getElementById('arnSub').textContent=p.arnManual+' ₪/מ"ר — הזנה ידנית'; else document.getElementById('arnSub').textContent=p.arn?'17 ₪/מ"ר — הנחת עסקי תוכנה':'34 ₪/מ"ר — ללא הנחה';
+  updateArnSub();
 
   // Update per-sqm monthly labels
   (function(){
     const _p=S();
-    function _smo(id,val){ const el=document.getElementById(id); if(el) el.textContent=val>0?'₪\u202F'+val.toLocaleString('he-IL'):'—'; }
+    function _smo(id,val){ const el=document.getElementById(id); if(el) el.textContent=val>0?'(₪\u202F'+val.toLocaleString('he-IL')+')':'—'; }
     _smo('smo-mgmt', Math.round(_p.mgmt*_p.sqm));
     _smo('smo-clean', Math.round(_p.clean*_p.sqm));
     _smo('smo-utils', Math.round(_p.utils*_p.sqm));
-    const _arnRate=_p.arnMode==='manual'?_p.arnManual:(_p.arn?17:34);
-    _smo('smo-arn', Math.round(_arnRate*_p.sqm));
-    // keep arnManualInp value in sync with auto rate
-    if(_p.arnMode==='auto'){ const inp=document.getElementById('arnManualInp'); if(inp) inp.value=_arnRate; }
+    _smo('smo-arn', Math.round(_p.arnManual*_p.sqm));
   })();
 }
 
@@ -1338,7 +1324,7 @@ function generateCompareTable(forPrint = false, subsetProps) {
   html += row('שכירות בסיס', results.map(({p})=>p.rent+' ₪/מ"ר'), {
     numericVals: rentPerSqms, highlightMin: true, highlightMax: true
   });
-  if(!_ir.has('row-arn')) html += row('ארנונה', results.map(({p})=>{ return (p.arnMode==='manual'?p.arnManual:(p.arn?17:34))+' ₪/מ"ר'; }));
+  if(!_ir.has('row-arn')) html += row('ארנונה', results.map(({p})=>{ return p.arnManual+' ₪/מ"ר'; }));
   if(!_ir.has('row-mgmt')) html += row('דמי ניהול', results.map(({p})=>p.mgmt+' ₪/מ"ר'));
   if(!_ir.has('row-clean')) html += row('ניקיון', results.map(({p})=>p.clean+' ₪/מ"ר'));
   if(!_ir.has('row-utils')) html += row('חשמל, אינטרנט, מים', results.map(({p})=>p.utils+' ₪/מ"ר'));
@@ -1564,7 +1550,7 @@ function maybeSendPropUpdate(){
 }
 
 function buildSummaryHTML(p, r){
-  const arn = p.arnMode==='manual'?p.arnManual:(p.arn?17:34);
+  const arn = p.arnManual;
   const rows = [ {l:'שכירות בסיס', v:p.rent}, {l:'ארנונה', v:arn}, {l:'דמי ניהול', v:p.mgmt}, {l:'שירותי ניקיון', v:p.clean}, {l:'חשמל, אינטרנט, מים', v:p.utils} ];
   if(p.extra>0){ const ep = p.extraMode==='sqm'?p.extra:Math.round(p.extra/p.sqm); rows.push({l:'עלויות נוספות', v:ep}); }
   const rowsHTML = rows.map(row=>`<tr><td>${row.l}</td><td style="text-align:left;font-weight:700">${row.v} ₪/מ"ר</td><td style="text-align:left;font-weight:800">${fmt(row.v*p.sqm)} ₪</td></tr>`).join('');
@@ -1647,7 +1633,7 @@ function buildSummaryHTML(p, r){
 
 function shareWhatsApp(){
   const p=S(), r=calcProp(p);
-  const arn=p.arnMode==='manual'?p.arnManual:(p.arn?17:34);
+  const arn=p.arnManual;
   const totalPerSqm=(r.totalMonthly/p.sqm).toFixed(0);
   let msg = '';
   const nameText = (p.name||'').trim();
@@ -1656,7 +1642,7 @@ function shareWhatsApp(){
   if (addrText) msg += `📍 ${addrText}\n`;
   if (!nameText && !addrText) msg += '';
   msg += `\u200Fשטח: ${fmt(p.sqm)} מ"ר ברוטו\n\u200Fתקופה: ${p.months} חודשים\n\n*פירוט עלויות למ"ר:*\n`;
-  msg += `\u200F• שכירות בסיס: ${p.rent} ₪\n\u200F• ארנונה: ${arn} ₪${(p.arn&&p.arnMode!=='manual')?' (הנחת תוכנה)':''}\n`;
+  msg += `\u200F• שכירות בסיס: ${p.rent} ₪\n\u200F• ארנונה: ${arn} ₪${p.arn?' (הנחת תוכנה)':''}\n`;
   msg += `\u200F• ניהול: ${p.mgmt} ₪\n\u200F• ניקיון: ${p.clean} ₪\n\u200F• חשמל, אינטרנט, מים: ${p.utils} ₪\n`;
   if(p.extra>0){ const ep=p.extraMode==='sqm'?p.extra:Math.round(p.extra/p.sqm); msg+=`\u200F• עלויות נוספות: ${ep} ₪\n`; }
   msg += `\n*סה"כ למ"ר: ${totalPerSqm} ₪*\n\n*עלויות:*\n\u200F• חודשי: ${fmt(r.totalMonthly)} ₪\n\u200F• שנתי: ${fmt(r.totalMonthly*12)} ₪\n\u200F• ${p.months} חודשים: ${fmt(r.totalMonthly*p.months)} ₪\n`;
