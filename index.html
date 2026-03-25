@@ -173,6 +173,10 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
   .prop-map { height:180px; }
   .map-placeholder { height:180px; }
   .cmp-map-wrap #cmpMap { height:340px; }
+  /* Building type chips — 3 in one row */
+  #bldgChips { gap:6px; padding:12px 12px; }
+  #bldgChips .chip { flex:1; padding:8px 6px; font-size:.68rem; }
+  #bldgChips .chip .cs { font-size:.56rem; }
 }
 /* background grid */
 body { background-image: linear-gradient(rgba(32,32,32,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(32,32,32,0.04) 1px, transparent 1px); background-size:44px 44px; }
@@ -1622,7 +1626,11 @@ function shareWhatsApp(){
   const arn=p.arnMode==='manual'?p.arnManual:(p.arn?17:34);
   const totalPerSqm=(r.totalMonthly/p.sqm).toFixed(0);
   let msg = '';
-  if (p.name) msg += `*${p.name}*\n`;
+  const nameText = (p.name||'').trim();
+  const addrText = (p.address||'').trim();
+  if (nameText) msg += `*${nameText}*\n`;
+  if (addrText) msg += `📍 ${addrText}\n`;
+  if (!nameText && !addrText) msg += '';
   msg += `\u200Fשטח: ${fmt(p.sqm)} מ"ר ברוטו\n\u200Fתקופה: ${p.months} חודשים\n\n*פירוט עלויות למ"ר:*\n`;
   msg += `\u200F• שכירות בסיס: ${p.rent} ₪\n\u200F• ארנונה: ${arn} ₪${(p.arn&&p.arnMode!=='manual')?' (הנחת תוכנה)':''}\n`;
   msg += `\u200F• ניהול: ${p.mgmt} ₪\n\u200F• ניקיון: ${p.clean} ₪\n\u200F• חשמל, אינטרנט, מים: ${p.utils} ₪\n`;
