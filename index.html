@@ -255,6 +255,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .share-close-btn:hover { background:var(--bg); }
 /* ── Sticky summary bar (mobile only) ── */
 @media(min-width:768px){ .sticky-bar { display:none !important; } }
+@media(max-width:767px){ .compare-bar.cb-hidden { display:none !important; } }
 .sticky-bar { position:fixed; bottom:0; left:0; right:0; z-index:200; background:var(--navy); display:flex; align-items:center; justify-content:center; gap:0; padding:8px 16px; box-shadow:0 -3px 16px rgba(0,0,0,0.2); transition:transform .3s ease, opacity .3s ease; }
 .sticky-bar.sb-hidden { transform:translateY(100%); opacity:0; pointer-events:none; }
 .sb-item { display:flex; flex-direction:column; align-items:center; gap:1px; flex:1; }
@@ -404,7 +405,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 
       <div class="sec">
         <div class="sec-hd"><div class="sec-num">2</div><div class="sec-title" id="step2-title">נתוני בסיס: שטח ושכירות</div></div>
-        <div id="exampleHint" style="font-size:.72rem;color:var(--ink3);text-align:center;margin:-8px 0 12px;letter-spacing:.2px;">ערכים לדוגמה — עדכן לפי העסקה שלך</div>
+        <div id="exampleHint" style="font-size:.72rem;color:var(--ink3);text-align:right;margin:-8px 0 12px;letter-spacing:.2px;">ערכים לדוגמה — עדכן לפי העסקה שלך</div>
         <div class="card">
           <div class="row">
             <div class="row-l">
@@ -1500,15 +1501,31 @@ document.addEventListener('DOMContentLoaded',function(){ loadState(); renderTabs
 
 function initStickyBar(){
   const bar = document.getElementById('stickyBar');
+  const cmpBar = document.querySelector('.compare-bar');
   const target = document.querySelector('.results-total-box');
   if(!bar || !target) return;
   function updateBar(){
+    const isMobile = window.innerWidth < 768;
     const rect = target.getBoundingClientRect();
     const visible = rect.top < window.innerHeight && rect.bottom > 0;
-    if(visible){ bar.classList.add('sb-hidden'); }
-    else { bar.classList.remove('sb-hidden'); }
+    if(visible){
+      // Results section in view → show compare bar, hide sticky summary
+      bar.classList.add('sb-hidden');
+      if(cmpBar) cmpBar.classList.remove('cb-hidden');
+    } else {
+      if(isMobile){
+        // Scrolling through inputs → show sticky summary, hide compare bar
+        bar.classList.remove('sb-hidden');
+        if(cmpBar) cmpBar.classList.add('cb-hidden');
+      } else {
+        // Desktop: sticky summary never shows, compare bar always visible
+        bar.classList.add('sb-hidden');
+        if(cmpBar) cmpBar.classList.remove('cb-hidden');
+      }
+    }
   }
   window.addEventListener('scroll', updateBar, {passive:true});
+  window.addEventListener('resize', updateBar, {passive:true});
   updateBar();
 }
 
