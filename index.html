@@ -1419,7 +1419,8 @@ async function showCmpMap(){
       const letter=String.fromCharCode(0x05D0+i);
       const color=CMP_COLORS[i%CMP_COLORS.length];
       const displayName = p.name || p.address || ('נכס '+letter);
-      const icon=L.divIcon({className:'cmp-pin',html:`<div class="cmp-pin-inner" style="background:${color}">נכס ${letter}</div>`,iconAnchor:[30,14]});
+      const pinLabel = displayName.length > 14 ? displayName.slice(0,13)+'…' : displayName;
+      const icon=L.divIcon({className:'cmp-pin',html:`<div class="cmp-pin-inner" style="background:${color}">${pinLabel}</div>`,iconAnchor:[30,14]});
       const marker=L.marker([lat,lng],{icon})
         .bindPopup(`<div style="font-family:Heebo,sans-serif;direction:rtl;min-width:150px"><b>${displayName}</b><br><span style="color:#64748b;font-size:.8rem">₪ ${fmt(r.totalMonthly)} / חודש</span></div>`)
         .addTo(_cmpMap);
