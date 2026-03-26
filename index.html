@@ -907,8 +907,8 @@ const fmt = n => Math.round(n).toLocaleString('he');
 const clamp = (v,mn,mx) => Math.max(mn,Math.min(mx,v));
 const IDEAL_MIN=10, IDEAL_MAX=15, IDEAL_WARN=18;
 const S = () => props[curProp];
-const _sentProps = new Set();
-const _sentPropsFinal = new Map();
+let _saveTimer = null;
+let _saveName  = '';   // שם הנכס שאנחנו סופרים עבורו כרגע
 
 function renderTabs(){
   const wrap = document.getElementById('propTabs');
@@ -970,14 +970,15 @@ function updateMap(address) {
 }
 function updatePropName(val){
   S().name = val;
-  renderTabs(); saveState(); maybeSendPropUpdate(); hideExampleHint();
+  renderTabs(); saveState(); schedulePropSave(); hideExampleHint();
   updateMap(S().address || val);
 }
 function updatePropAddress(val){
   S().address = val.slice(0,200); saveState();
   updateMap(val || S().name);
+  schedulePropSave();
 }
-function updatePropDesc(val){ S().desc = val.slice(0,200); saveState(); }
+function updatePropDesc(val){ S().desc = val.slice(0,200); saveState(); schedulePropSave(); }
 
 function isPropEmpty(p){
   const d = defaultProp();
@@ -993,13 +994,7 @@ function deleteProp(i, e) {
 }
 
 function onPropNameBlur(val){
-  const trimmed=val.trim();
-  if(!trimmed) return;
-  if(_sentProps.has(trimmed)) return;
-  _sentProps.add(trimmed);
-  let userName='', userMail='';
-  try{const s=JSON.parse(localStorage.getItem('office_session')||'null'); if(s){userName=s.name||'';userMail=s.mail||'';}}catch(e){}
-  sendToSheet({ sheet: 'נכסים', name: userName, mail: userMail, propName: trimmed, address: (S().address||'').trim()||trimmed, desc: S().desc||'', sqm: '', rent: '', totalMonthly: '', months: '', grace: 0 });
+  if(val.trim()) schedulePropSave();
 }
 
 function loadPropToUI(){
@@ -1060,14 +1055,14 @@ function adjRent(d){
     S().rent = Math.round(S().rentTotal / S().sqm);
     document.getElementById('rentInp').value = S().rentTotal;
   }
-  calc(); maybeSendPropUpdate(); saveState();
+  calc(); schedulePropSave(); saveState();
 }
 function onInputRent(el){
   const v = parseFloat(el.value);
   if(!isNaN(v) && v >= 0) {
     if(S().rentMode === 'sqm') { S().rent = v; S().rentTotal = Math.round(v * S().sqm); }
     else { S().rentTotal = v; S().rent = parseFloat((v / S().sqm).toFixed(2)); }
-    calc(); maybeSendPropUpdate();
+    calc(); schedulePropSave();
   }
 }
 function adjGrace(d){ S().grace = Math.max(0, Math.min(24, Math.round((S().grace + d) * 2) / 2)); document.getElementById('graceInp').value = S().grace; calc(); saveState(); }
@@ -1083,7 +1078,7 @@ function onInput(key,el){
     S()[key]=v;
     if(key==='sqm') syncRentAfterSqmChange();
     calc();
-    if(key==='sqm') maybeSendPropUpdate();
+    if(key==='sqm') schedulePropSave();
   }
 }
 function adj(key,d){
@@ -1093,7 +1088,7 @@ function adj(key,d){
   document.getElementById(key+'Inp').value=S()[key];
   if(key==='sqm') syncRentAfterSqmChange();
   calc(); 
-  if(key==='sqm') maybeSendPropUpdate(); 
+  if(key==='sqm') schedulePropSave(); 
   saveState(); 
 }
 
@@ -1570,25 +1565,44 @@ function logoutSession() {
   saveState(); renderTabs(); loadPropToUI();
 }
 
-let sendTimeout;
-function maybeSendPropUpdate(){
-  clearTimeout(sendTimeout);
-  sendTimeout = setTimeout(() => {
-    const p = S();
-    const trimmed = (p.name||'').trim();
-    if(!trimmed) return;
-    if(p.sqm === 480 && p.rent === 100) return; 
-    
-    const prev = _sentPropsFinal.get(trimmed);
-    if(prev && prev.sqm === p.sqm && prev.rent === p.rent) return;
-    _sentPropsFinal.set(trimmed, {sqm: p.sqm, rent: p.rent});
-    
-    const r = calcProp(p);
-    let userName='', userMail='';
-    try{const s=JSON.parse(localStorage.getItem('office_session')||'null'); if(s){userName=s.name||'';userMail=s.mail||'';}}catch(e){}
-    sendToSheet({ sheet: 'נכסים', name: userName, mail: userMail, propName: trimmed, address: (p.address||'').trim()||trimmed, desc: p.desc||'', sqm: p.sqm, rent: p.rent, totalMonthly: r.totalMonthly, months: p.months, grace: p.grace });
-  }, 2500);
+// ── Sheet save: 20 שניות debounce, flush מיידי אם שם נכס משתנה, שמירה בסגירת עמוד ──
+function _buildPropPayload(){
+  const p = S();
+  const trimmed = (p.name||'').trim();
+  if(!trimmed) return null;
+  if(p.sqm === 480 && p.rent === 100) return null;
+  const r = calcProp(p);
+  let userName='', userMail='';
+  try{const s=JSON.parse(localStorage.getItem('office_session')||'null'); if(s){userName=s.name||'';userMail=s.mail||'';}}catch(e){}
+  return { sheet:'נכסים', name:userName, mail:userMail, propName:trimmed,
+           address:(p.address||'').trim()||trimmed, desc:p.desc||'',
+           sqm:p.sqm, rent:p.rent, totalMonthly:r.totalMonthly, months:p.months, grace:p.grace };
 }
+
+function _flushSave(){
+  if(!_saveTimer) return;
+  clearTimeout(_saveTimer);
+  _saveTimer = null;
+  const payload = _buildPropPayload();
+  if(payload) sendToSheet(payload);
+}
+
+function schedulePropSave(){
+  const trimmed = (S().name||'').trim();
+  if(!trimmed) return;
+  if(_saveName && _saveName !== trimmed){ _flushSave(); }
+  _saveName = trimmed;
+  clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(() => { _saveTimer = null; const p = _buildPropPayload(); if(p) sendToSheet(p); }, 20000);
+}
+
+window.addEventListener('beforeunload', () => {
+  const payload = _buildPropPayload();
+  if(!payload) return;
+  const body = JSON.stringify(normalizeSheetPayload(payload));
+  if(typeof navigator.sendBeacon === 'function'){ navigator.sendBeacon(SCRIPT_URL, new Blob([body],{type:'application/json'})); }
+  else { sendToSheet(payload); }
+});
 
 function buildSummaryHTML(p, r){
   const arn = p.arnManual;
