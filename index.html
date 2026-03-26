@@ -845,15 +845,50 @@ body { background-image: linear-gradient(rgba(32,32,32,0.04) 1px, transparent 1p
 // ══ API CONNECTION ══
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyivyw8rHoib5Rhz-NUsbqYf_7O1bmINHZfhPQR3sFk2P5QTiec4lKuyWQYXnZPhMWJ_A/exec';
 
-function getDevice(){ return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)?'mobile':'desktop'; }
+/** Reliable mobile/tablet vs desktop for sheet analytics */
+function getDevice(){
+  try{
+    const ua = navigator.userAgent || '';
+    if (navigator.userAgentData && typeof navigator.userAgentData.mobile === 'boolean') {
+      return navigator.userAgentData.mobile ? 'mobile' : 'desktop';
+    }
+    if (/Tablet|iPad/i.test(ua)) return 'mobile';
+    return /Mobi|Android|iPhone|iPod/i.test(ua) ? 'mobile' : 'desktop';
+  }catch(_){ return 'desktop'; }
+}
+
+/** Fixed strings for Google Sheet (avoid server Date() → mixed cell formats). Asia/Jerusalem. */
+function sheetDateTimeStrings(){
+  const tz = 'Asia/Jerusalem';
+  const now = new Date();
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const parts = new Intl.DateTimeFormat('en-GB', { timeZone: tz, day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(now);
+  const m = {};
+  for (const p of parts) { if (p.type !== 'literal') m[p.type] = p.value; }
+  const day = m.day || '01';
+  const monthNum = parseInt(m.month, 10) || 1;
+  const mon = months[monthNum - 1] || 'Jan';
+  const dateStr = `${day}-${mon}-${m.year || now.getFullYear()}`;
+  const hi = parseInt(m.hour, 10);
+  const mi = parseInt(m.minute, 10);
+  const timeStr = `${String(isNaN(hi) ? 0 : hi).padStart(2, '0')}:${String(isNaN(mi) ? 0 : mi).padStart(2, '0')}`;
+  return { dateStr, timeStr };
+}
+
+function normalizeSheetPayload(data){
+  const { dateStr, timeStr } = sheetDateTimeStrings();
+  const dev = (data && data.device != null && String(data.device).trim() !== '') ? String(data.device).trim() : getDevice();
+  return Object.assign({}, data, { dateStr, timeStr, device: dev });
+}
 
 function sendToSheet(data) {
   try {
+    const payload = normalizeSheetPayload(data);
     fetch(SCRIPT_URL, {
       method: 'POST',
       mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify(data)
+      headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+      body: JSON.stringify(payload)
     });
   } catch(e) {}
 }
@@ -967,7 +1002,7 @@ function onPropNameBlur(val){
   _sentProps.add(trimmed);
   let userName='', userMail='';
   try{const s=JSON.parse(localStorage.getItem('office_session')||'null'); if(s){userName=s.name||'';userMail=s.mail||'';}}catch(e){}
-  sendToSheet({ sheet: 'נכסים', name: userName, mail: userMail, propName: trimmed, address: S().address||'', desc: S().desc||'', sqm: '', rent: '', totalMonthly: '', months: '', grace: 0, device: getDevice() });
+  sendToSheet({ sheet: 'נכסים', name: userName, mail: userMail, propName: trimmed, address: S().address||'', desc: S().desc||'', sqm: '', rent: '', totalMonthly: '', months: '', grace: 0 });
 }
 
 function loadPropToUI(){
@@ -1482,7 +1517,14 @@ function openAllInGoogleMaps(){
 function checkSession(){
   try{
     const s=JSON.parse(localStorage.getItem('office_session')||'null');
-    if(s&&(Date.now()-s.ts)<24*60*60*1000){document.getElementById('gateOv').style.display='none';return true;}
+    if(s&&(Date.now()-s.ts)<24*60*60*1000){
+      document.getElementById('gateOv').style.display='none';
+      if(!sessionStorage.getItem('_dsent')){
+        sessionStorage.setItem('_dsent','1');
+        sendToSheet({ action:'login', name:s.name||'', mail:s.mail||'', device:getDevice() });
+      }
+      return true;
+    }
   }catch(e){}
   return false;
 }
@@ -1504,7 +1546,7 @@ function gateSubmit(){
     localStorage.setItem('office_session',JSON.stringify({name:nameVal,mail:mailVal,ts:Date.now()}));
   }catch(e){}
   
-  sendToSheet({ action: 'login', name: nameVal, mail: mailVal, device: getDevice() });
+  sendToSheet({ action: 'login', name: nameVal, mail: mailVal });
 
   document.querySelectorAll('.gate-card > *:not(#gateSuccess)').forEach(el=>el.style.display='none');
   document.getElementById('gateSuccess').style.display='flex';
@@ -1547,7 +1589,7 @@ function maybeSendPropUpdate(){
     const r = calcProp(p);
     let userName='', userMail='';
     try{const s=JSON.parse(localStorage.getItem('office_session')||'null'); if(s){userName=s.name||'';userMail=s.mail||'';}}catch(e){}
-    sendToSheet({ sheet: 'נכסים', name: userName, mail: userMail, propName: trimmed, address: p.address||'', desc: p.desc||'', sqm: p.sqm, rent: p.rent, totalMonthly: r.totalMonthly, months: p.months, grace: p.grace, device: getDevice() });
+    sendToSheet({ sheet: 'נכסים', name: userName, mail: userMail, propName: trimmed, address: p.address||'', desc: p.desc||'', sqm: p.sqm, rent: p.rent, totalMonthly: r.totalMonthly, months: p.months, grace: p.grace });
   }, 2500);
 }
 
