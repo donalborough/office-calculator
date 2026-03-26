@@ -425,11 +425,11 @@ body { background-image: linear-gradient(rgba(32,32,32,0.04) 1px, transparent 1p
       <div class="prop-name-row print-hide" style="flex-direction:column;align-items:stretch;padding:0;gap:0;">
         <div style="display:flex;align-items:center;gap:12px;padding:14px 20px 10px;">
           <span class="prop-name-label" id="prop-name-label">🏢 <span id="prop-name-lbl-txt">שם הנכס</span>:</span>
-          <input class="prop-name-inp" id="propNameInp" type="text" placeholder='למשל: מגדל עזריאלי קומה 20' oninput="updatePropName(this.value)" onblur="onPropNameBlur(this.value)">
+          <input class="prop-name-inp" id="propNameInp" type="text" placeholder='למשל: מגדל עזריאלי קומה 20' onfocus="onPropIdentityFocus()" oninput="updatePropName(this.value)" onblur="onPropIdentityBlur()">
         </div>
         <div style="display:flex;align-items:center;gap:12px;padding:0 20px 12px;">
           <span class="prop-name-label" style="white-space:nowrap;">📍 כתובת:</span>
-          <input class="prop-name-inp" id="propAddrInp" type="text" placeholder='למשל: מנחם בגין 132, תל אביב' style="font-size:.82rem;font-weight:500;" oninput="updatePropAddress(this.value)">
+          <input class="prop-name-inp" id="propAddrInp" type="text" placeholder='למשל: מנחם בגין 132, תל אביב' style="font-size:.82rem;font-weight:500;" onfocus="onPropIdentityFocus()" oninput="updatePropAddress(this.value)" onblur="onPropIdentityBlur()">
         </div>
         <textarea class="prop-desc-inp" id="propDescInp" maxlength="200" placeholder="תיאור חופשי — למשל: קומות 2+3 זמינות, גג, קומת פרטר אפשרית..." oninput="updatePropDesc(this.value)" rows="2"></textarea>
       </div>
@@ -908,7 +908,15 @@ const clamp = (v,mn,mx) => Math.max(mn,Math.min(mx,v));
 const IDEAL_MIN=10, IDEAL_MAX=15, IDEAL_WARN=18;
 const S = () => props[curProp];
 let _saveTimer = null;
-let _saveName  = '';   // שם הנכס שאנחנו סופרים עבורו כרגע
+let _lastPropPayloadJson = '';
+/** מצב מלא במיקוד שדה שם/כתובת — לשמירת "הזהות הקודמת" לפני שינוי */
+let _identityFocusClone = null;
+
+function cloneProp(p){ return JSON.parse(JSON.stringify(p)); }
+
+function propIdentityKey(p){
+  return ((p.name||'').trim() + '\n' + (p.address||'').trim());
+}
 
 function renderTabs(){
   const wrap = document.getElementById('propTabs');
@@ -993,8 +1001,27 @@ function deleteProp(i, e) {
   saveState(); renderTabs(); loadPropToUI(); calc();
 }
 
-function onPropNameBlur(val){
-  if(val.trim()) schedulePropSave();
+function onPropIdentityFocus(){
+  _identityFocusClone = cloneProp(S());
+}
+
+/**
+ * אם שם או כתובת השתנו ביחס למצב בתחילת המיקוד — שולחים שורה עם המצב הקודם (כתובת/שם ראשונים),
+ * ומתחילים ספירת 20 שניות מחדש על המצב הנוכחי.
+ */
+function onPropIdentityBlur(){
+  if(!_identityFocusClone) return;
+  const before = _identityFocusClone;
+  _identityFocusClone = null;
+  const after = S();
+  if(propIdentityKey(before) === propIdentityKey(after)) return;
+  const pld = _buildPropPayloadFromProp(before);
+  if(pld){
+    clearDebounceTimer();
+    sendToSheet(pld);
+    _lastPropPayloadJson = JSON.stringify(pld);
+  }
+  schedulePropSave();
 }
 
 function loadPropToUI(){
@@ -1042,7 +1069,7 @@ function setRentMode(mode){
   if(mode === 'total') S().rentTotal = Math.round(S().rent * S().sqm);
   else S().rent = Math.round(S().rentTotal / S().sqm);
   setRentModeUI(mode);
-  calc(); saveState();
+  calc(); saveState(); schedulePropSave();
 }
 function adjRent(d){
   if(S().rentMode === 'sqm') {
@@ -1065,8 +1092,8 @@ function onInputRent(el){
     calc(); schedulePropSave();
   }
 }
-function adjGrace(d){ S().grace = Math.max(0, Math.min(24, Math.round((S().grace + d) * 2) / 2)); document.getElementById('graceInp').value = S().grace; calc(); saveState(); }
-function onInputGrace(el){ const v = parseFloat(el.value); if(!isNaN(v) && v >= 0) { S().grace = v; calc(); saveState(); } }
+function adjGrace(d){ S().grace = Math.max(0, Math.min(24, Math.round((S().grace + d) * 2) / 2)); document.getElementById('graceInp').value = S().grace; calc(); saveState(); schedulePropSave(); }
+function onInputGrace(el){ const v = parseFloat(el.value); if(!isNaN(v) && v >= 0) { S().grace = v; calc(); saveState(); schedulePropSave(); } }
 function syncRentAfterSqmChange() {
   if (S().rentMode === 'total') S().rent = Math.round(S().rentTotal / S().sqm);
   else S().rentTotal = Math.round(S().rent * S().sqm);
@@ -1078,7 +1105,7 @@ function onInput(key,el){
     S()[key]=v;
     if(key==='sqm') syncRentAfterSqmChange();
     calc();
-    if(key==='sqm') schedulePropSave();
+    schedulePropSave();
   }
 }
 function adj(key,d){
@@ -1087,33 +1114,33 @@ function adj(key,d){
   S()[key]=clamp(S()[key]+d,lim[key][0],lim[key][1]);
   document.getElementById(key+'Inp').value=S()[key];
   if(key==='sqm') syncRentAfterSqmChange();
-  calc(); 
-  if(key==='sqm') schedulePropSave(); 
+  calc();
+  schedulePropSave();
   saveState(); 
 }
 
-function toggleCustomRatio(){ S().useCustomRatio=!S().useCustomRatio; document.getElementById('customRatioTog').classList.toggle('on',S().useCustomRatio); document.getElementById('customRatioSpin').style.display=S().useCustomRatio?'flex':'none'; document.querySelectorAll('#bldgChips .chip').forEach(c=>c.classList.toggle('sel',!S().useCustomRatio&&parseFloat(c.dataset.ratio)===S().grossRatio)); calc(); }
-function setBldg(el,ratio){ S().useCustomRatio=false; document.getElementById('customRatioTog').classList.remove('on'); document.getElementById('customRatioSpin').style.display='none'; document.querySelectorAll('#bldgChips .chip').forEach(c=>c.classList.remove('sel')); el.classList.add('sel'); S().grossRatio=ratio; calc(); saveState(); }
+function toggleCustomRatio(){ S().useCustomRatio=!S().useCustomRatio; document.getElementById('customRatioTog').classList.toggle('on',S().useCustomRatio); document.getElementById('customRatioSpin').style.display=S().useCustomRatio?'flex':'none'; document.querySelectorAll('#bldgChips .chip').forEach(c=>c.classList.toggle('sel',!S().useCustomRatio&&parseFloat(c.dataset.ratio)===S().grossRatio)); calc(); schedulePropSave(); }
+function setBldg(el,ratio){ S().useCustomRatio=false; document.getElementById('customRatioTog').classList.remove('on'); document.getElementById('customRatioSpin').style.display='none'; document.querySelectorAll('#bldgChips .chip').forEach(c=>c.classList.remove('sel')); el.classList.add('sel'); S().grossRatio=ratio; calc(); saveState(); schedulePropSave(); }
 function toggleArn(){
   const p=S(); p.arn=!p.arn;
   if(p.arn){ p.arnManual=17; } else { p.arnManual=34; }
   document.getElementById('arnTog').classList.toggle('on',p.arn);
   document.getElementById('arnManualInp').value=p.arnManual;
-  updateArnSub(); calc(); saveState();
+  updateArnSub(); calc(); saveState(); schedulePropSave();
 }
-function adjArn(d){ const p=S(); p.arnManual=Math.max(0,p.arnManual+d); document.getElementById('arnManualInp').value=p.arnManual; updateArnSub(); calc(); saveState(); }
-function onInputArn(el){ const v=parseInt(el.value); if(!isNaN(v)&&v>=0){S().arnManual=v; updateArnSub(); calc(); saveState();} }
+function adjArn(d){ const p=S(); p.arnManual=Math.max(0,p.arnManual+d); document.getElementById('arnManualInp').value=p.arnManual; updateArnSub(); calc(); saveState(); schedulePropSave(); }
+function onInputArn(el){ const v=parseInt(el.value); if(!isNaN(v)&&v>=0){S().arnManual=v; updateArnSub(); calc(); saveState(); schedulePropSave();} }
 function updateArnSub(){ const p=S(); document.getElementById('arnSub').textContent=p.arnManual+' ₪/מ"ר'+(p.arn?' — הנחת עסקי תוכנה':''); }
 function setExtraModeUI(mode){ document.getElementById('extraModePerSqm').classList.toggle('active', mode==='sqm'); document.getElementById('extraModeTotal').classList.toggle('active', mode==='total'); document.getElementById('extraUnit').textContent = mode==='sqm'?'₪/מ"ר':'₪/חודש'; }
-function setExtraMode(mode){ S().extraMode=mode; S().extra=0; document.getElementById('extraInp').value=0; setExtraModeUI(mode); calc(); }
-function adjExtra(d){ const step=S().extraMode==='sqm'?1:50; S().extra=Math.max(0,S().extra+d*step); document.getElementById('extraInp').value=S().extra; calc(); }
-function onInputExtra(el){ const v=parseInt(el.value); if(!isNaN(v)&&v>=0){S().extra=v;calc();} }
-function adjMonths(d){ S().months = Math.max(1, Math.min(120, S().months + d)); document.getElementById('monthsInp').value = S().months; calc(); }
-function onInputMonths(el){ const v = parseInt(el.value); if(!isNaN(v) && v >= 1) { S().months = v; calc(); } }
-function adjFurniture(d){ S().furniture = Math.max(0, S().furniture + d); document.getElementById('furnitureInp').value = S().furniture; calc(); }
-function onInputFurniture(el){ const v = parseInt(el.value); if(!isNaN(v) && v >= 0) { S().furniture = v; calc(); } }
-function adjRenovation(d){ S().renovation = Math.max(0, S().renovation + d); document.getElementById('renovationInp').value = S().renovation; calc(); }
-function onInputRenovation(el){ const v = parseInt(el.value); if(!isNaN(v) && v >= 0) { S().renovation = v; calc(); } }
+function setExtraMode(mode){ S().extraMode=mode; S().extra=0; document.getElementById('extraInp').value=0; setExtraModeUI(mode); calc(); schedulePropSave(); }
+function adjExtra(d){ const step=S().extraMode==='sqm'?1:50; S().extra=Math.max(0,S().extra+d*step); document.getElementById('extraInp').value=S().extra; calc(); schedulePropSave(); }
+function onInputExtra(el){ const v=parseInt(el.value); if(!isNaN(v)&&v>=0){S().extra=v;calc(); schedulePropSave();} }
+function adjMonths(d){ S().months = Math.max(1, Math.min(120, S().months + d)); document.getElementById('monthsInp').value = S().months; calc(); schedulePropSave(); }
+function onInputMonths(el){ const v = parseInt(el.value); if(!isNaN(v) && v >= 1) { S().months = v; calc(); schedulePropSave(); } }
+function adjFurniture(d){ S().furniture = Math.max(0, S().furniture + d); document.getElementById('furnitureInp').value = S().furniture; calc(); schedulePropSave(); }
+function onInputFurniture(el){ const v = parseInt(el.value); if(!isNaN(v) && v >= 0) { S().furniture = v; calc(); schedulePropSave(); } }
+function adjRenovation(d){ S().renovation = Math.max(0, S().renovation + d); document.getElementById('renovationInp').value = S().renovation; calc(); schedulePropSave(); }
+function onInputRenovation(el){ const v = parseInt(el.value); if(!isNaN(v) && v >= 0) { S().renovation = v; calc(); schedulePropSave(); } }
 
 function calcProp(p){
   const bruto=p.sqm;
@@ -1513,7 +1540,7 @@ function checkSession(){
       document.getElementById('gateOv').style.display='none';
       if(!sessionStorage.getItem('_dsent')){
         sessionStorage.setItem('_dsent','1');
-        sendToSheet({ action:'login', name:s.name||'', mail:s.mail||'', device:getDevice() });
+        sendToSheet({ action:'login', name:s.name||'', mail:s.mail||'' });
       }
       return true;
     }
@@ -1551,6 +1578,7 @@ function gateSubmit(){
 }
 
 function logoutSession() {
+  clearDebounceTimer();
   localStorage.removeItem('office_session');
   localStorage.removeItem('office_props_v2');
   localStorage.removeItem('offcalc_shared');
@@ -1565,44 +1593,66 @@ function logoutSession() {
   saveState(); renderTabs(); loadPropToUI();
 }
 
-// ── Sheet save: 20 שניות debounce, flush מיידי אם שם נכס משתנה, שמירה בסגירת עמוד ──
-function _buildPropPayload(){
-  const p = S();
-  const trimmed = (p.name||'').trim();
-  if(!trimmed) return null;
-  if(p.sqm === 480 && p.rent === 100) return null;
-  const r = calcProp(p);
+// ── Sheet save: debounce 20s, זהות שם+כתובת — flush במעבר (blur), חירום ביציאה ──
+function sessionUser(){
   let userName='', userMail='';
   try{const s=JSON.parse(localStorage.getItem('office_session')||'null'); if(s){userName=s.name||'';userMail=s.mail||'';}}catch(e){}
+  return { userName, userMail };
+}
+
+function _buildPropPayloadFromProp(p){
+  const trimmed = (p.name||'').trim();
+  if(!trimmed) return null;
+  const d = defaultProp();
+  if(p.sqm === d.sqm && p.rent === d.rent) return null;
+  const r = calcProp(p);
+  const { userName, userMail } = sessionUser();
   return { sheet:'נכסים', name:userName, mail:userMail, propName:trimmed,
            address:(p.address||'').trim()||trimmed, desc:p.desc||'',
            sqm:p.sqm, rent:p.rent, totalMonthly:r.totalMonthly, months:p.months, grace:p.grace };
 }
 
-function _flushSave(){
-  if(!_saveTimer) return;
-  clearTimeout(_saveTimer);
-  _saveTimer = null;
-  const payload = _buildPropPayload();
-  if(payload) sendToSheet(payload);
+function _buildPropPayload(){ return _buildPropPayloadFromProp(S()); }
+
+function clearDebounceTimer(){
+  if(_saveTimer){ clearTimeout(_saveTimer); _saveTimer = null; }
 }
 
+function debouncedPropSaveTick(){
+  _saveTimer = null;
+  const p = _buildPropPayload();
+  if(p){
+    sendToSheet(p);
+    _lastPropPayloadJson = JSON.stringify(p);
+  }
+}
+
+/** 20 שניות מהשינוי הראשון — שומר את המצב האחרון. לא מאפס אם טיימר כבר רץ. */
 function schedulePropSave(){
   const trimmed = (S().name||'').trim();
   if(!trimmed) return;
-  if(_saveName && _saveName !== trimmed){ _flushSave(); }
-  _saveName = trimmed;
-  clearTimeout(_saveTimer);
-  _saveTimer = setTimeout(() => { _saveTimer = null; const p = _buildPropPayload(); if(p) sendToSheet(p); }, 20000);
+  if(_saveTimer) return;  // טיימר כבר פועל — לא מאפסים, פשוט ממתינים לסיומו
+  _saveTimer = setTimeout(debouncedPropSaveTick, 20000);
 }
 
-window.addEventListener('beforeunload', () => {
+let _emergencySheetSent = false;
+function emergencySavePropToSheet(){
+  if(_emergencySheetSent) return;
   const payload = _buildPropPayload();
   if(!payload) return;
+  if(JSON.stringify(payload) === _lastPropPayloadJson) return;
+  _emergencySheetSent = true;
+  _lastPropPayloadJson = JSON.stringify(payload);
   const body = JSON.stringify(normalizeSheetPayload(payload));
-  if(typeof navigator.sendBeacon === 'function'){ navigator.sendBeacon(SCRIPT_URL, new Blob([body],{type:'application/json'})); }
-  else { sendToSheet(payload); }
-});
+  if(typeof navigator.sendBeacon === 'function'){
+    navigator.sendBeacon(SCRIPT_URL, new Blob([body], { type: 'text/plain;charset=UTF-8' }));
+  } else {
+    sendToSheet(payload);
+  }
+}
+
+window.addEventListener('beforeunload', emergencySavePropToSheet);
+window.addEventListener('pagehide', emergencySavePropToSheet);
 
 function buildSummaryHTML(p, r){
   const arn = p.arnManual;
@@ -1967,7 +2017,7 @@ function loadSharedStateIfAny(){
       window._irrelRows = new Set(state.irrelRows);
       localStorage.setItem(IRREL_KEY, JSON.stringify(state.irrelRows));
     }
-    saveState(); renderTabs(); loadPropToUI(props[curProp]); loadIrrelevantRows(); calc();
+    saveState(); renderTabs(); loadPropToUI(); loadIrrelevantRows(); calc();
   } catch(e) {}
 }
 // Detect share hash on load
