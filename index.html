@@ -845,6 +845,8 @@ body { background-image: linear-gradient(rgba(32,32,32,0.04) 1px, transparent 1p
 // ══ API CONNECTION ══
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyivyw8rHoib5Rhz-NUsbqYf_7O1bmINHZfhPQR3sFk2P5QTiec4lKuyWQYXnZPhMWJ_A/exec';
 
+function getDevice(){ return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)?'mobile':'desktop'; }
+
 function sendToSheet(data) {
   try {
     fetch(SCRIPT_URL, {
@@ -965,7 +967,7 @@ function onPropNameBlur(val){
   _sentProps.add(trimmed);
   let userName='', userMail='';
   try{const s=JSON.parse(localStorage.getItem('office_session')||'null'); if(s){userName=s.name||'';userMail=s.mail||'';}}catch(e){}
-  sendToSheet({ sheet: 'נכסים', name: userName, mail: userMail, propName: trimmed, sqm: '', rent: '', totalMonthly: '', months: '', grace: 0 });
+  sendToSheet({ sheet: 'נכסים', name: userName, mail: userMail, propName: trimmed, address: S().address||'', desc: S().desc||'', sqm: '', rent: '', totalMonthly: '', months: '', grace: 0, device: getDevice() });
 }
 
 function loadPropToUI(){
@@ -1502,7 +1504,7 @@ function gateSubmit(){
     localStorage.setItem('office_session',JSON.stringify({name:nameVal,mail:mailVal,ts:Date.now()}));
   }catch(e){}
   
-  sendToSheet({ action: 'login', name: nameVal, mail: mailVal });
+  sendToSheet({ action: 'login', name: nameVal, mail: mailVal, device: getDevice() });
 
   document.querySelectorAll('.gate-card > *:not(#gateSuccess)').forEach(el=>el.style.display='none');
   document.getElementById('gateSuccess').style.display='flex';
@@ -1545,7 +1547,7 @@ function maybeSendPropUpdate(){
     const r = calcProp(p);
     let userName='', userMail='';
     try{const s=JSON.parse(localStorage.getItem('office_session')||'null'); if(s){userName=s.name||'';userMail=s.mail||'';}}catch(e){}
-    sendToSheet({ sheet: 'נכסים', name: userName, mail: userMail, propName: trimmed, sqm: p.sqm, rent: p.rent, totalMonthly: r.totalMonthly, months: p.months, grace: p.grace });
+    sendToSheet({ sheet: 'נכסים', name: userName, mail: userMail, propName: trimmed, address: p.address||'', desc: p.desc||'', sqm: p.sqm, rent: p.rent, totalMonthly: r.totalMonthly, months: p.months, grace: p.grace, device: getDevice() });
   }, 2500);
 }
 
