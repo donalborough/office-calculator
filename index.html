@@ -845,6 +845,9 @@ body { background-image: linear-gradient(rgba(32,32,32,0.04) 1px, transparent 1p
 // ══ API CONNECTION ══
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyivyw8rHoib5Rhz-NUsbqYf_7O1bmINHZfhPQR3sFk2P5QTiec4lKuyWQYXnZPhMWJ_A/exec';
 
+/** Web3Forms — הדבק כאן את ה-Access Key מ-https://web3forms.com (אם ריק, לא נשלח מייל דרך השירות) */
+const WEB3FORMS_ACCESS_KEY = '7d7ea014-403c-42ba-8629-7fd075f2818d';
+
 /** Reliable mobile/tablet vs desktop for sheet analytics */
 function getDevice(){
   try{
@@ -888,6 +891,24 @@ function sendToSheet(data) {
       body: JSON.stringify(payload)
     });
   } catch(e) {}
+}
+
+/** התראת מייל דרך Web3Forms (כניסה למערכת) — רץ ברקע, לא חוסם את הממשק */
+function notifyWeb3FormsLead(name, mail){
+  const key = (typeof WEB3FORMS_ACCESS_KEY === 'string' && WEB3FORMS_ACCESS_KEY.trim());
+  if(!key) return;
+  const body = {
+    access_key: key.trim(),
+    subject: 'השורה התחתונה — כניסה חדשה למחשבון',
+    name: name || '',
+    email: mail || '',
+    message: 'משתמש נכנס למחשבון עלויות משרד.\nמכשיר: ' + getDevice()
+  };
+  fetch('https://api.web3forms.com/submit', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: JSON.stringify(body)
+  }).catch(function(){});
 }
 
 const defaultProp = () => ({
@@ -1566,6 +1587,7 @@ function gateSubmit(){
   }catch(e){}
   
   sendToSheet({ action: 'login', name: nameVal, mail: mailVal });
+  notifyWeb3FormsLead(nameVal, mailVal);
 
   document.querySelectorAll('.gate-card > *:not(#gateSuccess)').forEach(el=>el.style.display='none');
   document.getElementById('gateSuccess').style.display='flex';
