@@ -88,9 +88,14 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .prop-tab.active{background:var(--navy);color:var(--lime);border-color:var(--navy);font-weight:800;box-shadow:0 4px 12px rgba(32,32,32,.15);}
 .prop-tab .tab-name{display:block;font-size:.65rem;font-weight:500;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .prop-tab.active .tab-name{color:#f8fafc; opacity:.8;}
-.prop-tab-add{width:42px;height:42px;border-radius:12px;border:2px dashed var(--border2);background:transparent;color:var(--ink3);font-size:1.4rem;font-weight:400;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
+.prop-tab-add{width:42px;height:42px;border-radius:12px;border:2px dashed var(--border2);background:transparent;color:var(--ink3);font-size:1.4rem;font-weight:400;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .2s,color .2s,background .2s;position:relative;}
 .prop-tab-add:hover{border-color:var(--ink2);color:var(--ink2);background:#fff;}
 .prop-tab-add:active{transform:scale(0.92);}
+.prop-tab-add.nudge{border-color:var(--lime);color:var(--navy);background:var(--lime);animation:nudgePulse 2s ease-in-out 3;}
+@keyframes nudgePulse{0%,100%{box-shadow:0 0 0 0 rgba(197,224,133,0.6);}50%{box-shadow:0 0 0 8px rgba(197,224,133,0);}}
+.nudge-tooltip{position:absolute;top:calc(100% + 8px);right:0;background:var(--navy);color:#fff;font-size:.7rem;font-weight:700;white-space:nowrap;padding:6px 10px;border-radius:8px;pointer-events:none;opacity:0;transition:opacity .2s;z-index:50;}
+.nudge-tooltip::before{content:'';position:absolute;bottom:100%;right:12px;border:5px solid transparent;border-bottom-color:var(--navy);}
+.prop-tab-add.nudge .nudge-tooltip{opacity:1;}
 .tab-del-btn {position:absolute; left:6px; top:8px; width:24px; height:24px; border-radius:6px; background:transparent; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--ink3); transition:all 0.2s;}
 .prop-tab.active .tab-del-btn {color:rgba(255,255,255,0.5);}
 .tab-del-btn:hover {background:var(--rose-l); color:var(--rose);}
@@ -982,9 +987,10 @@ function renderTabs(){
   });
   if(props.length < 10){
     const add = document.createElement('button');
-    add.className = 'prop-tab-add';
-    add.innerHTML = '+';
-    add.onclick = addProperty;
+    add.className = 'prop-tab-add' + (window._showAddNudge ? ' nudge' : '');
+    add.setAttribute('aria-label', 'הוסף נכס להשוואה');
+    add.innerHTML = '+<span class="nudge-tooltip">הוסיפו נכס שני להשוואה</span>';
+    add.onclick = () => { window._showAddNudge = false; add.classList.remove('nudge'); addProperty(); };
     wrap.appendChild(add);
   }
   const multi = props.length > 1;
@@ -1293,6 +1299,14 @@ function calc(){
   if(rMainEl.textContent !== fmt(r.totalMonthly)+' ₪'){
     rMainEl.style.transition='none'; rMainEl.style.opacity='0'; rMainEl.style.transform='translateY(4px)';
     requestAnimationFrame(()=>{ rMainEl.textContent=fmt(r.totalMonthly)+' ₪'; rMainEl.style.transition='opacity .25s,transform .25s'; rMainEl.style.opacity='1'; rMainEl.style.transform='translateY(0)'; });
+    // הצג nudge פעם אחת אחרי תוצאה ראשונה
+    if(!window._nudgeShown && props.length === 1 && r.totalMonthly > 0){
+      window._nudgeShown = true;
+      window._showAddNudge = true;
+      setTimeout(()=>{ renderTabs(); }, 800);
+      // הסר nudge אחרי 12 שניות
+      setTimeout(()=>{ window._showAddNudge = false; renderTabs(); }, 12000);
+    }
   } else { rMainEl.textContent=fmt(r.totalMonthly)+' ₪'; }
   document.getElementById('rSub').textContent=fmt(r.bruto)+' מ"ר ברוטו';
   document.getElementById('rPerSqm').textContent=fmt(r.totalMonthly)+' ₪';
