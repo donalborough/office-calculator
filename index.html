@@ -65,7 +65,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .gate-google-btn:focus-visible{outline:2px solid var(--lime);outline-offset:2px;}
 .gate-divider{display:flex;align-items:center;gap:10px;margin:14px 0;color:#94a3b8;font-size:.72rem;}
 .gate-divider::before,.gate-divider::after{content:'';flex:1;height:1px;background:#e2e8f0;}
-#googleSignInBtn { display:flex; justify-content:center; margin-bottom:4px; }
+#googleSignInBtn { display:flex; justify-content:center; margin-bottom:4px; width:100%; overflow:hidden; }
 #gateSuccess {display:none;text-align:center;padding:40px 20px;flex-direction:column;align-items:center;justify-content:center;background:#fff;border-radius:20px;}
 .hdr{background:var(--navy);padding:12px 20px;padding-top:max(12px,env(safe-area-inset-top));position:sticky;top:0;z-index:100;}
 .hdr-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;}
@@ -1940,8 +1940,10 @@ document.addEventListener('DOMContentLoaded',function(){
   const GOOGLE_CLIENT_ID = '526522886225-nqtq6iftgjdn1mcvb7mv0ecdg6dci7d1.apps.googleusercontent.com';
   if(GOOGLE_CLIENT_ID !== 'YOUR_GOOGLE_CLIENT_ID' && typeof google !== 'undefined') {
     google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleGoogleCredential });
-    google.accounts.id.renderButton(document.getElementById('googleSignInBtn'), {
-      theme: 'outline', size: 'large', locale: 'iw', width: 348, text: 'signin_with'
+    const btnContainer = document.getElementById('googleSignInBtn');
+    const btnWidth = Math.min(btnContainer.offsetWidth || 348, 348);
+    google.accounts.id.renderButton(btnContainer, {
+      theme: 'outline', size: 'large', locale: 'iw', width: btnWidth, text: 'signin_with'
     });
   } else {
     document.getElementById('googleSignInBtn').style.display = 'none';
