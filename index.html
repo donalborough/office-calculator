@@ -1950,18 +1950,22 @@ function loadIrrelevantRows(){
 }
 document.addEventListener('DOMContentLoaded',function(){
   loadState(); renderTabs(); loadPropToUI(); if(checkSession()){ loadSharedStateIfAny(); } loadIrrelevantRows(); calc(); initStickyBar();
-  // Google Sign-In — להחליף YOUR_GOOGLE_CLIENT_ID ב-Client ID מ-console.cloud.google.com
+  // Google Sign-In
   const GOOGLE_CLIENT_ID = '526522886225-nqtq6iftgjdn1mcvb7mv0ecdg6dci7d1.apps.googleusercontent.com';
-  if(GOOGLE_CLIENT_ID !== 'YOUR_GOOGLE_CLIENT_ID' && typeof google !== 'undefined') {
-    google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleGoogleCredential });
+  function initGoogleSignIn() {
     const btnContainer = document.getElementById('googleSignInBtn');
-    const btnWidth = Math.min(btnContainer.offsetWidth || 348, 348);
+    if(!btnContainer) return;
+    const btnWidth = Math.min(btnContainer.offsetWidth || 320, 348);
+    google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleGoogleCredential });
     google.accounts.id.renderButton(btnContainer, {
       theme: 'outline', size: 'large', locale: 'iw', width: btnWidth, text: 'signin_with'
     });
+  }
+  if(typeof google !== 'undefined') {
+    initGoogleSignIn();
   } else {
-    document.getElementById('googleSignInBtn').style.display = 'none';
-    document.querySelector('.gate-divider').style.display = 'none';
+    // GSI עדיין טוען — ממתינים
+    window.onGoogleLibraryLoad = initGoogleSignIn;
   }
 });
 
