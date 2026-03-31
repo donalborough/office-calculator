@@ -81,7 +81,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .page-container { max-width: 1400px; margin: 0 auto; padding: 20px 16px 120px; }
 .main-layout-grid { display: flex; flex-direction: column; gap: 20px; }
 @media(min-width: 992px) { .page-container { padding: 32px 24px 120px; } .main-layout-grid { flex-direction: row; gap: 32px; align-items: start; } .layout-right { flex: 1.6; min-width: 0; } .layout-left { flex: 1; min-width: 320px; position: sticky; top: 90px; } }
-.prop-tabs-wrap{margin-bottom:20px; width: 100%;}
+.prop-tabs-wrap{margin-bottom:20px; width: 100%; position:sticky; top:66px; z-index:90; background:var(--bg); padding-top:8px; padding-bottom:4px;}
 .prop-tabs{display:flex;gap:10px;align-items:center;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;padding-bottom:4px;}
 .prop-tabs::-webkit-scrollbar { display: none; }
 .prop-tab{flex:0 0 auto;padding:10px 16px;border-radius:12px;border:1px solid var(--border);background:#fff;color:var(--ink3);font-family:'Heebo',sans-serif;font-size:.75rem;font-weight:600;cursor:pointer;text-align:right;transition:all .2s;position:relative;min-width:130px;padding-left:36px;}
@@ -91,7 +91,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .prop-tab-add{width:42px;height:42px;border-radius:12px;border:2px dashed var(--border2);background:transparent;color:var(--ink3);font-size:1.4rem;font-weight:400;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .2s,color .2s,background .2s;position:relative;}
 .prop-tab-add:hover{border-color:var(--ink2);color:var(--ink2);background:#fff;}
 .prop-tab-add:active{transform:scale(0.92);}
-.prop-tab-add.nudge{border-color:var(--lime);color:var(--navy);background:var(--lime);animation:nudgePulse 2s ease-in-out 3;}
+.prop-tab-add.nudge{border-color:var(--lime);color:var(--navy);background:var(--lime);animation:nudgePulse 2s ease-in-out infinite;}
 @keyframes nudgePulse{0%,100%{box-shadow:0 0 0 0 rgba(197,224,133,0.6);}50%{box-shadow:0 0 0 8px rgba(197,224,133,0);}}
 .nudge-tooltip{position:absolute;top:calc(100% + 8px);right:0;background:var(--navy);color:#fff;font-size:.7rem;font-weight:700;white-space:nowrap;padding:6px 10px;border-radius:8px;pointer-events:none;opacity:0;transition:opacity .2s;z-index:50;}
 .nudge-tooltip::before{content:'';position:absolute;bottom:100%;right:12px;border:5px solid transparent;border-bottom-color:var(--navy);}
@@ -1305,7 +1305,7 @@ function calc(){
       window._showAddNudge = true;
       setTimeout(()=>{ renderTabs(); }, 800);
       // הסר nudge אחרי 12 שניות
-      setTimeout(()=>{ window._showAddNudge = false; renderTabs(); }, 12000);
+      setTimeout(()=>{ window._showAddNudge = false; renderTabs(); }, 30000);
     }
   } else { rMainEl.textContent=fmt(r.totalMonthly)+' ₪'; }
   document.getElementById('rSub').textContent=fmt(r.bruto)+' מ"ר ברוטו';
