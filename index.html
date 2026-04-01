@@ -84,7 +84,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .prop-tabs-wrap{margin-bottom:20px; width: 100%; position:sticky; top:66px; z-index:90; background:var(--bg); padding-top:8px; padding-bottom:4px;}
 .prop-tabs{display:flex;gap:10px;align-items:center;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;padding-bottom:4px;}
 .prop-tabs::-webkit-scrollbar { display: none; }
-.prop-tab{flex:0 0 auto;padding:10px 16px;border-radius:12px;border:1px solid var(--border);background:#fff;color:var(--ink3);font-family:'Heebo',sans-serif;font-size:.75rem;font-weight:600;cursor:pointer;text-align:right;transition:all .2s;position:relative;min-width:130px;padding-left:36px;}
+.prop-tab{flex:0 0 auto;padding:10px 16px;border-radius:12px;border:1px solid var(--border);background:#fff;color:var(--ink3);font-family:'Heebo',sans-serif;font-size:.75rem;font-weight:600;cursor:pointer;text-align:right;transition:background .2s,color .2s,border-color .2s,box-shadow .2s;position:relative;min-width:130px;padding-left:36px;}
 .prop-tab.active{background:var(--navy);color:var(--lime);border-color:var(--navy);font-weight:800;box-shadow:0 4px 12px rgba(32,32,32,.15);}
 .prop-tab .tab-name{display:block;font-size:.65rem;font-weight:500;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .prop-tab.active .tab-name{color:#f8fafc; opacity:.8;}
@@ -93,9 +93,6 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .prop-tab-add:active{transform:scale(0.92);}
 .prop-tab-add.nudge{border-color:var(--lime);color:var(--navy);background:var(--lime);animation:nudgePulse 2s ease-in-out infinite;}
 @keyframes nudgePulse{0%,100%{box-shadow:0 0 0 0 rgba(197,224,133,0.6);}50%{box-shadow:0 0 0 8px rgba(197,224,133,0);}}
-.nudge-tooltip{position:absolute;top:calc(100% + 8px);right:0;background:var(--navy);color:#fff;font-size:.7rem;font-weight:700;white-space:nowrap;padding:6px 10px;border-radius:8px;pointer-events:none;opacity:0;transition:opacity .2s;z-index:50;}
-.nudge-tooltip::before{content:'';position:absolute;bottom:100%;right:12px;border:5px solid transparent;border-bottom-color:var(--navy);}
-.prop-tab-add.nudge .nudge-tooltip{opacity:1;}
 .tab-del-btn {position:absolute; left:6px; top:8px; width:24px; height:24px; border-radius:6px; background:transparent; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--ink3); transition:all 0.2s;}
 .prop-tab.active .tab-del-btn {color:rgba(255,255,255,0.5);}
 .tab-del-btn:hover {background:var(--rose-l); color:var(--rose);}
@@ -147,7 +144,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 .tog.on::after{right:auto;left:3px;background:var(--navy);}
 .tog-lbl{font-size:.78rem;color:var(--ink);font-weight:600;}
 .mode-btns{display:flex;border:1px solid var(--border);border-radius:10px;overflow:hidden;}
-.mode-btn{padding:8px 14px;border:none;cursor:pointer;font-family:'Heebo',sans-serif;font-size:.72rem;font-weight:700;background:#fff;color:var(--ink3);transition:all .15s;}
+.mode-btn{padding:8px 14px;border:none;cursor:pointer;font-family:'Heebo',sans-serif;font-size:.72rem;font-weight:700;background:#fff;color:var(--ink3);transition:background .15s,color .15s;}
 .mode-btn.active{background:var(--navy);color:var(--lime);}
 .notice{display:flex;gap:10px;align-items:flex-start;border-radius:12px;padding:14px 16px;font-size:.78rem;line-height:1.7;margin-bottom:10px;border:1px solid transparent;}
 .notice.ok{background:#f0fdf4;color:#16a34a;border-color:#bbf7d0;}
@@ -376,7 +373,7 @@ body { background-image: linear-gradient(rgba(32,32,32,0.04) 1px, transparent 1p
       <div style="display:flex;flex-direction:column;gap:8px;">
         <div style="display:flex;align-items:center;gap:10px;font-size:0.78rem;color:#334155;font-weight:500;">
           <span style="flex-shrink:0;color:var(--lime);background:var(--deep-black);border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:0.6rem;">✓</span>
-          <span>הכנסת הצעת שכירות — פירוט עלויות מלא</span>
+          <span>מזינים נתוני עסקה — מקבלים תמונה ברורה</span>
         </div>
         <div style="display:flex;align-items:center;gap:10px;font-size:0.78rem;color:#334155;font-weight:500;">
           <span style="flex-shrink:0;color:var(--lime);background:var(--deep-black);border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:0.6rem;">✓</span>
@@ -714,20 +711,19 @@ body { background-image: linear-gradient(rgba(32,32,32,0.04) 1px, transparent 1p
           </div>
           <div class="row" id="row-grace">
             <div class="row-l">
-              <div class="row-label" id="lbl-grace">חודשי גרייס</div>
+              <div class="row-label" id="lbl-grace">גרייס</div>
               <div class="row-sub" id="sub-grace">הזן רק אם סוכם במו"מ</div>
-              <button class="row-irrel-btn" onclick="toggleIrrelevant('row-grace')" id="irrel-row-grace">הוצא מחישוב</button>
             </div>
             <div class="row-r">
               <div class="spin">
-                <button class="spin-btn" onclick="adjGrace(-0.5)">−</button>
-                <input class="spin-inp" id="graceInp" type="number" value="0" min="0" max="24" step="0.5" inputmode="decimal" oninput="onInputGrace(this)">
-                <span class="spin-unit" id="unit-grace">חודש</span>
-                <button class="spin-btn" onclick="adjGrace(+0.5)">+</button>
+                <button class="spin-btn" onclick="adjGrace(-1)">−</button>
+                <input class="spin-inp" id="graceInp" type="number" value="0" min="0" max="52" step="1" inputmode="numeric" oninput="onInputGrace(this)">
+                <span class="spin-unit" id="unit-grace">שבועות</span>
+                <button class="spin-btn" onclick="adjGrace(+1)">+</button>
               </div>
             </div>
           </div>
-          <div class="card-note" id="grace-note-txt">גרייס (ללא שכירות) בתחילת ההסכם יוצג כעלות אפקטיבית בסיכום.</div>
+          <div class="card-note" id="grace-note-txt">גרייס = שבועות ללא תשלום שכירות בתחילת ההסכם. 4 שבועות ≈ חודש אחד.</div>
         </div>
       </div>
 
@@ -738,7 +734,7 @@ body { background-image: linear-gradient(rgba(32,32,32,0.04) 1px, transparent 1p
           <span style="font-size:1.8rem;">📍</span>
           <span>הזן שם נכס / כתובת לצפייה במפה</span>
         </div>
-        <iframe id="propMap" class="prop-map" frameborder="0" allowfullscreen loading="lazy" style="display:none;"></iframe>
+        <iframe id="propMap" class="prop-map" title="מפה" frameborder="0" allowfullscreen loading="lazy" style="display:none;"></iframe>
       </div>
 
       <div class="sec">
@@ -989,7 +985,7 @@ function renderTabs(){
     const add = document.createElement('button');
     add.className = 'prop-tab-add' + (window._showAddNudge ? ' nudge' : '');
     add.setAttribute('aria-label', 'הוסף נכס להשוואה');
-    add.innerHTML = '+<span class="nudge-tooltip">הוסיפו נכס שני להשוואה</span>';
+    add.textContent = '+';
     add.onclick = () => { window._showAddNudge = false; add.classList.remove('nudge'); addProperty(); };
     wrap.appendChild(add);
   }
@@ -1142,8 +1138,8 @@ function onInputRent(el){
     calc(); schedulePropSave();
   }
 }
-function adjGrace(d){ S().grace = Math.max(0, Math.min(24, Math.round((S().grace + d) * 2) / 2)); document.getElementById('graceInp').value = S().grace; calc(); saveState(); schedulePropSave(); }
-function onInputGrace(el){ const v = parseFloat(el.value); if(!isNaN(v) && v >= 0) { S().grace = v; calc(); saveState(); schedulePropSave(); } }
+function adjGrace(d){ S().grace = Math.max(0, Math.min(52, Math.round(S().grace + d))); document.getElementById('graceInp').value = S().grace; calc(); saveState(); schedulePropSave(); }
+function onInputGrace(el){ const v = parseInt(el.value); if(!isNaN(v) && v >= 0) { S().grace = v; calc(); saveState(); schedulePropSave(); } }
 function syncRentAfterSqmChange() {
   if (S().rentMode === 'total') S().rent = Math.round(S().rentTotal / S().sqm);
   else S().rentTotal = Math.round(S().rent * S().sqm);
@@ -1160,7 +1156,7 @@ function onInput(key,el){
 }
 function adj(key,d){
   hideExampleHint();
-  const lim={sqm:[50,9999],emp:[1,2000],mgmt:[0,100],clean:[0,60],utils:[0,60],customPct:[5,50],parkingSpots:[0,200],parkingPrice:[0,99999],grace:[0,24]};
+  const lim={sqm:[50,9999],emp:[1,2000],mgmt:[0,100],clean:[0,60],utils:[0,60],customPct:[5,50],parkingSpots:[0,200],parkingPrice:[0,99999],grace:[0,52]};
   S()[key]=clamp(S()[key]+d,lim[key][0],lim[key][1]);
   document.getElementById(key+'Inp').value=S()[key];
   if(key==='sqm') syncRentAfterSqmChange();
@@ -1214,14 +1210,15 @@ function calcProp(p){
   const renovationPerSqmMonth = p.renovation > 0 ? p.renovation / bruto / p.months : 0;
   const renovationMonthly = p.renovation > 0 ? Math.round(p.renovation / p.months) : 0;
   const totalMonthly=monthly+furnitureMonthly+parkingMonthly+renovationMonthly;
-  const grace = _ir.has('row-grace') ? 0 : p.grace;
+  const graceWeeks = _ir.has('row-grace') ? 0 : p.grace;
+  const grace = graceWeeks / 4.333; // המרה: שבועות → חודשים
   const effectiveMonthly = grace>0 ? Math.round(totalMonthly*(p.months-grace)/p.months) : totalMonthly;
   const gracePct = grace>0 ? (grace/p.months*100).toFixed(1) : 0;
   const graceSaving = totalMonthly - effectiveMonthly;
   return {bruto,net,effectiveRatio,rows,perSqm,monthly,yearly:monthly*12,perEmp:Math.round(monthly/p.emp),sqmPerEmp:bruto/p.emp,pct:Math.round((effectiveRatio-1)*100),furniturePerSqmMonth,furnitureMonthly,renovationPerSqmMonth,renovationMonthly,parkingMonthly,parkingPerSqm,totalMonthly,effectiveMonthly,gracePct,graceSaving};
 }
 
-const CHART_COLORS = ['#C5E085','#86efac','#67e8f9','#93c5fd','#c4b5fd','#fda4af','#fde68a'];
+const CHART_COLORS = ['#C5E085','#fb923c','#67e8f9','#c4b5fd','#f472b6','#fde68a','#93c5fd'];
 
 function renderDonutChart(r, p) {
   const segEl = document.getElementById('donutSegments');
@@ -1279,12 +1276,16 @@ function calc(){
   document.getElementById('sqmPerEmpInline').textContent=r.sqmPerEmp.toFixed(1)+' מ"ר לעמדה';
   
   const graceRow = document.getElementById('graceEffectiveRow');
-  if(p.grace > 0){ 
-    graceRow.style.display='block'; 
+  const graceMonthsApprox = (p.grace / 4.333).toFixed(1);
+  document.getElementById('sub-grace').textContent = p.grace > 0
+    ? p.grace + ' שבועות ≈ ' + graceMonthsApprox + ' חודשים'
+    : 'הזן רק אם סוכם במו"מ';
+  if(p.grace > 0){
+    graceRow.style.display='block';
     document.getElementById('rEffective').textContent = fmt(r.effectiveMonthly) + ' ₪';
     document.getElementById('rEffectiveSub').textContent = 'חיסכון ' + fmt(r.graceSaving) + ' ₪/חודש · הנחה ' + r.gracePct + '% · חיסכון לתקופה: ' + fmt(r.graceSaving * p.months) + ' ₪';
-  } else { 
-    graceRow.style.display='none'; 
+  } else {
+    graceRow.style.display='none';
   }
 
   const parkingRow = r.parkingMonthly > 0 ? `<div class="brow"><span class="brow-lbl">חניות (${p.parkingSpots} × ${p.parkingPrice} ₪)</span><span class="brow-val">${r.parkingPerSqm.toFixed(1)} ₪/מ"ר · ${fmt(r.parkingMonthly)} ₪</span></div>` : '';
