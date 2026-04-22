@@ -896,9 +896,7 @@ a { text-decoration: none; }
 <div class="modal-ov" id="settingsModal">
   <div class="modal">
     <div class="modal-title">הגדרות מערכת</div>
-    <div class="modal-sub">מפתח Claude API נשמר ב-localStorage בלבד — לא מועבר לשרת.</div>
-    <label class="modal-lbl">Claude API Key</label>
-    <input class="modal-inp" id="apiKeyInput" type="password" placeholder="sk-ant-api03-..." autocomplete="off">
+    <div class="modal-sub">הגדרות תצוגה וחישובים.</div>
     <label class="modal-lbl">מדד CPI אחרון (%)</label>
     <input class="modal-inp" id="cpiSetting" type="number" step="0.1" placeholder="3.5">
     <div class="modal-actions">
@@ -1418,6 +1416,11 @@ a { text-decoration: none; }
 /* ═══════════════════════════════════════════
    STATE & DEFAULTS
 ═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   CLAUDE PROXY — replace with your Worker URL after deploying worker.js
+═══════════════════════════════════════════ */
+const CLAUDE_PROXY = 'https://dealiq-claude.YOURSUBDOMAIN.workers.dev/messages';
+
 const RATIOS = { tower:.75, boutique:.82, indie:.88 };
 const DEF = () => ({ name:'', addr:'', btype:'tower', gross:500, net:375, ws:40, rent:90, arnona:55, arnonaDisc:false, mgmt:25, clean:8, elec:12, parkN:8, parkP:450, furn:0, renov:0, dur:36, grace:4, slOn:false, slPct:30, slPrice:80 });
 let S = { props:[DEF(), DEF()], active:0 };
@@ -1793,13 +1796,12 @@ function renderSl(){
    AI
 ═══════════════════════════════════════════ */
 function checkKey(){
-  const has = !!localStorage.getItem('claude_api_key');
-  document.getElementById('aiKeyWarn').style.display = has ? 'none' : '';
-  // contract card: if key is now set, collapse the warning and show green badge
+  // API key is now managed server-side via Cloudflare Worker — no client key needed
+  document.getElementById('aiKeyWarn').style.display = 'none';
   const warn = document.getElementById('contractKeyWarn');
   const ok   = document.getElementById('contractKeyOk');
-  if(warn) warn.style.display = has ? 'none' : warn.style.display; // keep visible only if was shown
-  if(ok)   ok.style.display   = has ? 'flex' : 'none';
+  if(warn) warn.style.display = 'none';
+  if(ok)   ok.style.display   = 'flex';
 }
 
 /* ═══════════════════════════════════════════
@@ -1916,16 +1918,6 @@ function handleContractFile(event){
 }
 
 async function analyzeContract(){
-  const key = localStorage.getItem('claude_api_key');
-  if(!key){
-    document.getElementById('contractKeyWarn').style.display='flex';
-    document.getElementById('contractKeyOk').style.display='none';
-    return;
-  }
-
-  // key exists — hide warning, show connected badge
-  document.getElementById('contractKeyWarn').style.display='none';
-  document.getElementById('contractKeyOk').style.display='flex';
 
   const pasteText = document.getElementById('contractPasteArea').value.trim();
   const status = document.getElementById('contractStatus');
@@ -1988,9 +1980,9 @@ async function analyzeContract(){
       messages = [{ role: 'user', content: `${EXTRACT_PROMPT}\n\n---\nחוזה:\n${text}` }];
     }
 
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch(CLAUDE_PROXY, {
       method: 'POST',
-      headers: { 'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true' },
+      headers: { 'Content-Type':'application/json' },
       body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1024, messages })
     });
 
@@ -2074,11 +2066,9 @@ const PROMPTS={
 async function aiDo(t){ callAI(PROMPTS[t]); }
 async function aiAsk(){ const q=document.getElementById('aiQ').value.trim(); if(!q) return; document.getElementById('aiQ').value=''; callAI(q); }
 async function callAI(msg){
-  const key=localStorage.getItem('claude_api_key');
-  if(!key){ showResp('⚠️ הגדר מפתח API בהגדרות.'); return; }
   showLoad();
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1024,system:`אתה יועץ נדל"ן מסחרי ישראלי בכיר, מתמחה בשוק משרדים. ענה בעברית, קצר וממוקד, לרמת CFO/COO. נתוני עסקה:\n${ctx()}`,messages:[{role:'user',content:msg}]})});
+    const res=await fetch(CLAUDE_PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1024,system:`אתה יועץ נדל"ן מסחרי ישראלי בכיר, מתמחה בשוק משרדים. ענה בעברית, קצר וממוקד, לרמת CFO/COO. נתוני עסקה:\n${ctx()}`,messages:[{role:'user',content:msg}]})});
     if(!res.ok){ const e=await res.json(); throw new Error(e.error?.message||'API Error'); }
     const d=await res.json(); showResp(d.content[0].text);
   }catch(e){ showResp('❌ '+e.message); }
@@ -2094,14 +2084,11 @@ function refreshMktIndicators(){
    SETTINGS
 ═══════════════════════════════════════════ */
 function openSettings(){
-  document.getElementById('apiKeyInput').value=localStorage.getItem('claude_api_key')||'';
   document.getElementById('cpiSetting').value=localStorage.getItem('cpi_rate')||'3.5';
   document.getElementById('settingsModal').classList.add('open');
 }
 function closeSettings(){ document.getElementById('settingsModal').classList.remove('open'); }
 function saveSettings(){
-  const k=document.getElementById('apiKeyInput').value.trim();
-  if(k) localStorage.setItem('claude_api_key',k);
   const c=document.getElementById('cpiSetting').value;
   if(c){
     localStorage.setItem('cpi_rate',c);
