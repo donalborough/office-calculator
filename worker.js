@@ -1,11 +1,8 @@
 /**
- * Cloudflare Worker — Claude API Proxy for dealiq
+ * Cloudflare Worker — Gemini API Proxy for dealiq
  *
- * Deploy to: https://dash.cloudflare.com → Workers → Create → Paste this code
- * Set environment variable: ANTHROPIC_API_KEY = sk-ant-api03-...
- *
- * The Worker receives POST /messages from the dashboard,
- * injects the API key, forwards to Anthropic, and returns the response.
+ * Set environment variable: GEMINI_API_KEY = your Google AI Studio key
+ * Free tier: 15 req/min, 1M tokens/day — no credit card needed
  */
 
 const ALLOWED_ORIGINS = [
@@ -29,49 +26,87 @@ export default {
   async fetch(request, env) {
     const origin = request.headers.get('Origin') || '';
 
-    // Handle CORS preflight
     if (request.method === 'OPTIONS') {
       return new Response(null, { status: 204, headers: corsHeaders(origin) });
     }
-
-    // Only allow POST
     if (request.method !== 'POST') {
       return new Response('Method Not Allowed', { status: 405 });
     }
 
-    // Only accept /messages path
     const url = new URL(request.url);
     if (url.pathname !== '/messages') {
       return new Response('Not Found', { status: 404 });
     }
 
-    // Forward to Anthropic
     let body;
-    try {
-      body = await request.json();
-    } catch {
-      return new Response('Bad Request', { status: 400 });
+    try { body = await request.json(); }
+    catch { return new Response('Bad Request', { status: 400 }); }
+
+    // Convert Anthropic-style request → Gemini format
+    const parts = [];
+
+    // System prompt
+    if (body.system) {
+      parts.push({ text: body.system + '\n\n' });
     }
 
-    const anthropicRes = await fetch('https://api.anthropic.com/v1/messages', {
+    // Messages
+    for (const msg of (body.messages || [])) {
+      if (Array.isArray(msg.content)) {
+        for (const block of msg.content) {
+          if (block.type === 'text') {
+            parts.push({ text: block.text });
+          } else if (block.type === 'document' && block.source?.type === 'base64') {
+            parts.push({
+              inlineData: {
+                mimeType: block.source.media_type || 'application/pdf',
+                data: block.source.data,
+              }
+            });
+          }
+        }
+      } else {
+        parts.push({ text: msg.content });
+      }
+    }
+
+    const geminiBody = {
+      contents: [{ role: 'user', parts }],
+      generationConfig: {
+        maxOutputTokens: body.max_tokens || 1024,
+        temperature: 0.3,
+      }
+    };
+
+    const model = 'gemini-1.5-flash';
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${env.GEMINI_API_KEY}`;
+
+    const geminiRes = await fetch(geminiUrl, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
-        'anthropic-beta': 'pdfs-2024-09-25',
-      },
-      body: JSON.stringify(body),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(geminiBody),
     });
 
-    const data = await anthropicRes.text();
+    const geminiData = await geminiRes.json();
 
-    return new Response(data, {
-      status: anthropicRes.status,
-      headers: {
-        'Content-Type': 'application/json',
-        ...corsHeaders(origin),
-      },
+    if (!geminiRes.ok) {
+      const errMsg = geminiData?.error?.message || 'Gemini API Error';
+      return new Response(JSON.stringify({ error: { message: errMsg } }), {
+        status: geminiRes.status,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) },
+      });
+    }
+
+    // Convert Gemini response → Anthropic-style format (so dashboard code works unchanged)
+    const text = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    const anthropicStyle = {
+      content: [{ type: 'text', text }],
+      usage: { input_tokens: 0, output_tokens: 0 },
+    };
+
+    return new Response(JSON.stringify(anthropicStyle), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) },
     });
   },
 };
