@@ -1234,10 +1234,28 @@ a { text-decoration: none; }
           </div>
         </div>
         <div class="card col-full">
-          <div class="card-hd"><div class="card-title">לוח חיסכון חודשי מפורט</div></div>
+          <div class="card-hd">
+            <div class="card-title">לוח עלויות מצטבר — עם ובלי סבליס</div>
+            <span class="chip gray" style="font-size:11px;">כמה שילמת בסה"כ עד לכל חודש</span>
+          </div>
           <div class="card-body flush">
+            <div style="padding:10px 18px 0; font-size:12px; color:var(--ink-3); border-bottom:1px solid var(--border-s); display:flex; gap:20px; flex-wrap:wrap;">
+              <span>📌 <strong style="color:var(--ink-2)">עמודות חודשיות</strong> — קבועות (שכ"ד לא משתנה מחודש לחודש)</span>
+              <span>📈 <strong style="color:var(--ink-2)">עמודות מצטברות</strong> — גדלות עם הזמן, מראות את הפער הנצבר</span>
+            </div>
             <table class="tbl">
-              <thead><tr><th>חודש</th><th>עלות ברוטו</th><th>הכנסת סבליס</th><th>עלות נטו</th><th>חיסכון מצטבר</th><th>סטטוס</th></tr></thead>
+              <thead>
+                <tr>
+                  <th>חודש</th>
+                  <th style="background:#FFF5F5; color:#7f1d1d;">עלות חודשית</th>
+                  <th style="background:#ECFDF5; color:#064e3b;">הכנסת סבליס/חודש</th>
+                  <th style="background:#ECFDF5; color:#064e3b;">עלות נטו/חודש</th>
+                  <th style="background:#FFF5F5; color:#7f1d1d; border-right:2px solid #DC2626;">שילמת ללא סבליס</th>
+                  <th style="background:#ECFDF5; color:#064e3b; border-right:2px solid #059669;">שילמת עם סבליס</th>
+                  <th style="background:#EFF6FF; color:#1e3a8a;">חסכת עד כה</th>
+                  <th>סטטוס</th>
+                </tr>
+              </thead>
               <tbody id="slBody"></tbody>
             </table>
           </div>
@@ -1661,21 +1679,28 @@ function renderSl(){
   document.getElementById('slNet').textContent=fmt(r.netEff);
   document.getElementById('slBE').textContent='חודש '+Math.min(Math.ceil(((p.furn||0)+(p.renov||0)||r.total)/r.slInc)||1, p.dur);
   document.getElementById('slSave').textContent=fmt(r.slInc*p.dur,true);
-  // Table (every 3 months)
-  const rows=[]; let cum=0;
+  // Table — show cumulative paid WITH vs WITHOUT sublease so user sees the growing gap
+  const rows=[]; let cumBase=0, cumNet=0;
   for(let m=1;m<=p.dur;m++){
-    const g=m<=r.graceM; const cost=g?0:r.total; const inc=g?0:r.slInc;
-    cum+=inc;
-    if(m<=6||m%3===0||m===p.dur) rows.push({m,cost,inc,net:cost-inc,cum,g});
+    const g=m<=r.graceM;
+    const monthlyCost = g ? 0 : r.total;      // what you'd pay each month
+    const monthlyInc  = g ? 0 : r.slInc;       // sublease income each month
+    const monthlyNet  = monthlyCost - monthlyInc; // what you actually pay
+    cumBase += monthlyCost;   // total paid WITHOUT sublease
+    cumNet  += monthlyNet;    // total paid WITH sublease
+    const saved = cumBase - cumNet; // total saved so far
+    if(m<=6||m%3===0||m===p.dur) rows.push({m,monthlyCost,monthlyInc,monthlyNet,cumBase,cumNet,saved,g});
   }
   document.getElementById('slBody').innerHTML=rows.map(row=>`
     <tr class="${row.g?'hl-green':''}">
-      <td>${row.g?'<span class="chip green">גרייס</span> ':''}חודש ${row.m}</td>
-      <td class="num">${fmt(row.cost)}</td>
-      <td class="num green">${row.inc>0?fmt(row.inc):'—'}</td>
-      <td class="num">${fmt(row.net)}</td>
-      <td class="num green">${fmt(row.cum)}</td>
-      <td>${row.cum>row.cost*3?'<span class="chip green">משתלם</span>':row.inc>0?'<span class="chip blue">פעיל</span>':'<span class="chip gray">גרייס</span>'}</td>
+      <td style="font-weight:700;">${row.g?'<span class="chip green">גרייס</span> ':''}חודש ${row.m}</td>
+      <td class="num" style="color:var(--red);">${fmt(row.monthlyCost)}</td>
+      <td class="num" style="color:var(--green);">${row.monthlyInc>0?fmt(row.monthlyInc):'—'}</td>
+      <td class="num">${fmt(row.monthlyNet)}</td>
+      <td class="num" style="color:var(--red); border-right:2px solid #FCA5A5;">${fmt(row.cumBase)}</td>
+      <td class="num" style="color:var(--green); border-right:2px solid #6EE7B7;">${fmt(row.cumNet)}</td>
+      <td class="num" style="color:var(--blue); font-weight:800;">${fmt(row.saved)}</td>
+      <td>${row.saved>row.monthlyCost*6?'<span class="chip green">משתלם מאוד</span>':row.monthlyInc>0?'<span class="chip blue">פעיל</span>':'<span class="chip gray">גרייס</span>'}</td>
     </tr>`).join('');
   // Cumul chart
   dk('cumul');
