@@ -3,260 +3,891 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Office Intelligence | השורה התחתונה</title>
+<title>Office Intelligence | dealiq</title>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
+/* ═══════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════ */
 :root {
-  --bg:#f5f6f8; --card:#fff; --border:#e6e9ef; --border2:#dde1e9;
-  --ink:#323338; --ink2:#676879; --ink3:#afb0bd;
-  --sidebar:#1b2437; --sidebar-h:#243553; --sidebar-act:#2d5be3;
-  --blue:#0073ea; --blue-l:#cce5ff; --blue-s:#e8f3ff;
-  --green:#00c875; --green-l:#d7f5e5; --green-s:#f0fdf7;
-  --red:#e2445c; --red-l:#fcd9de; --red-s:#fff1f3;
-  --yellow:#ffcb00; --yellow-l:#fff4c2; --orange:#ff642e;
-  --purple:#6c5fc7; --purple-l:#e2dff9;
-  --r:8px; --shadow:0 1px 4px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.05);
+  /* Backgrounds */
+  --bg:       #EEF0F5;
+  --card:     #FFFFFF;
+  --card-alt: #F8F9FB;
+
+  /* Borders */
+  --border:   #DDE2EA;
+  --border-s: #EAECF0;
+
+  /* Sidebar */
+  --sb:       #0C1828;
+  --sb-h:     #152238;
+  --sb-act:   rgba(59,130,246,.18);
+  --sb-act-t: #60A5FA;
+  --sb-sep:   rgba(255,255,255,.07);
+
+  /* Brand */
+  --blue:     #1D4ED8;
+  --blue-m:   #3B82F6;
+  --blue-l:   #DBEAFE;
+  --blue-xl:  #EFF6FF;
+  --green:    #059669;
+  --green-l:  #D1FAE5;
+  --green-xl: #ECFDF5;
+  --red:      #DC2626;
+  --red-l:    #FEE2E2;
+  --red-xl:   #FFF5F5;
+  --amber:    #D97706;
+  --amber-l:  #FEF3C7;
+  --amber-xl: #FFFBEB;
+  --purple:   #7C3AED;
+  --purple-l: #EDE9FE;
+
+  /* Text */
+  --ink:      #0F172A;
+  --ink-2:    #334155;
+  --ink-3:    #64748B;
+  --ink-4:    #94A3B8;
+
+  /* Shadows */
+  --sh-s:  0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --sh-m:  0 4px 6px -1px rgba(0,0,0,.07), 0 2px 4px -2px rgba(0,0,0,.05);
+  --sh-l:  0 10px 15px -3px rgba(0,0,0,.08), 0 4px 6px -4px rgba(0,0,0,.05);
+
+  /* Radius */
+  --r:    10px;
+  --r-sm: 6px;
+  --r-lg: 14px;
+
+  /* Sidebar width */
+  --sb-w: 252px;
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{font-size:14px;-webkit-text-size-adjust:100%;}
-body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased;display:flex;overflow:hidden;height:100vh;}
 
-/* ── Sidebar ── */
-.sidebar{width:220px;min-width:220px;background:var(--sidebar);display:flex;flex-direction:column;height:100vh;flex-shrink:0;z-index:100;}
-.sb-logo{padding:20px 18px 16px;border-bottom:1px solid rgba(255,255,255,.06);}
-.sb-logo-title{font-size:.7rem;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:.8px;text-transform:uppercase;}
-.sb-logo-name{font-size:1.05rem;font-weight:900;color:#fff;margin-top:2px;letter-spacing:-.2px;}
-.sb-logo-badge{display:inline-block;background:#2d5be3;color:#fff;font-size:.5rem;font-weight:800;padding:2px 6px;border-radius:4px;letter-spacing:.5px;text-transform:uppercase;margin-top:6px;}
-.sb-section{padding:8px 10px;flex:1;overflow-y:auto;scrollbar-width:none;}
-.sb-section::-webkit-scrollbar{display:none;}
-.sb-label{font-size:.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.3);padding:10px 8px 4px;}
-.sb-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;cursor:pointer;color:rgba(255,255,255,.65);font-size:.8rem;font-weight:600;transition:all .15s;margin-bottom:1px;text-decoration:none;}
-.sb-item:hover{background:var(--sidebar-h);color:#fff;}
-.sb-item.active{background:var(--sidebar-act);color:#fff;}
-.sb-item svg{width:16px;height:16px;flex-shrink:0;opacity:.8;}
-.sb-item.active svg{opacity:1;}
-.sb-badge{margin-right:auto;background:rgba(255,255,255,.12);font-size:.55rem;font-weight:800;padding:2px 6px;border-radius:10px;color:rgba(255,255,255,.7);}
-.sb-bottom{padding:10px;border-top:1px solid rgba(255,255,255,.06);}
-.sb-prop-select{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:8px 10px;color:#fff;font-family:'Heebo',sans-serif;font-size:.75rem;font-weight:600;cursor:pointer;transition:all .15s;}
-.sb-prop-select:hover{background:rgba(255,255,255,.12);}
-.live-badge{display:flex;align-items:center;gap:5px;padding:5px 10px;font-size:.6rem;font-weight:700;color:rgba(255,255,255,.4);margin-top:6px;}
-.live-dot{width:5px;height:5px;border-radius:50%;background:#00c875;animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
-
-/* ── Main Shell ── */
-.main-shell{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden;min-width:0;}
-
-/* ── Top Bar ── */
-.topbar{height:52px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:16px;flex-shrink:0;z-index:50;}
-.topbar-title{font-size:.95rem;font-weight:800;color:var(--ink);letter-spacing:-.2px;}
-.topbar-sep{color:var(--border2);font-size:1rem;margin:0 2px;}
-.topbar-sub{font-size:.8rem;font-weight:500;color:var(--ink2);}
-.topbar-right{margin-right:auto;display:flex;align-items:center;gap:8px;}
-.topbar-pill{display:flex;align-items:center;gap:5px;border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:.65rem;font-weight:700;color:var(--ink2);background:#fff;cursor:default;}
-.topbar-pill span{color:var(--ink);font-weight:800;}
-.topbar-btn{height:30px;padding:0 12px;border:1px solid var(--border);border-radius:6px;background:#fff;color:var(--ink2);font-family:'Heebo',sans-serif;font-size:.72rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .15s;text-decoration:none;white-space:nowrap;}
-.topbar-btn:hover{background:var(--bg);border-color:var(--border2);color:var(--ink);}
-.topbar-btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;}
-.topbar-btn.primary:hover{background:#005dc7;}
-.topbar-btn svg{width:13px;height:13px;}
-
-/* ── Content ── */
-.content{flex:1;overflow-y:auto;padding:24px 28px 40px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
-.page{display:none;}
-.page.active{display:block;}
-
-/* ── Page Headers ── */
-.page-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:12px;}
-.page-hd-left{}
-.page-title{font-size:1.15rem;font-weight:800;color:var(--ink);letter-spacing:-.3px;}
-.page-desc{font-size:.72rem;color:var(--ink2);margin-top:3px;}
-.page-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
-
-/* ── KPI Row ── */
-.kpi-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:24px;}
-.kpi{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;position:relative;overflow:hidden;}
-.kpi-label{font-size:.62rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;display:flex;align-items:center;gap:6px;}
-.kpi-val{font-size:1.5rem;font-weight:900;color:var(--ink);letter-spacing:-.5px;line-height:1;}
-.kpi-sub{font-size:.65rem;color:var(--ink3);margin-top:5px;font-weight:500;}
-.kpi-trend{font-size:.62rem;font-weight:700;padding:2px 7px;border-radius:10px;display:inline-flex;align-items:center;gap:3px;margin-top:6px;}
-.kpi-trend.up{background:var(--red-l);color:var(--red);}
-.kpi-trend.down{background:var(--green-l);color:var(--green);}
-.kpi-trend.neutral{background:var(--yellow-l);color:#92700a;}
-.kpi.accent{background:var(--sidebar);border-color:var(--sidebar);}
-.kpi.accent .kpi-label{color:rgba(255,255,255,.4);}
-.kpi.accent .kpi-val{color:#fff;}
-.kpi.accent .kpi-sub{color:rgba(255,255,255,.4);}
-.kpi.blue{border-right:3px solid var(--blue);}
-.kpi.green{border-right:3px solid var(--green);}
-.kpi.red{border-right:3px solid var(--red);}
-
-/* ── Cards & Grids ── */
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
-.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;}
-.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
-.card.full{grid-column:1/-1;}
-.card-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);}
-.card-title{font-size:.75rem;font-weight:800;color:var(--ink);letter-spacing:-.1px;}
-.card-actions{display:flex;align-items:center;gap:6px;}
-.card-body{padding:18px;}
-.card-body.no-pad{padding:0;}
-
-/* ── Tables ── */
-.tbl{width:100%;border-collapse:collapse;font-size:.78rem;}
-.tbl th{background:#f8f9fb;font-size:.62rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--ink2);padding:9px 14px;border-bottom:2px solid var(--border);text-align:right;white-space:nowrap;}
-.tbl td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--ink);font-weight:500;vertical-align:middle;}
-.tbl tr:last-child td{border-bottom:none;}
-.tbl tr:hover td{background:#fafbfc;}
-.tbl td.num{font-weight:700;font-variant-numeric:tabular-nums;text-align:left;direction:ltr;}
-.tbl td.num.red{color:var(--red);}
-.tbl td.num.green{color:var(--green);}
-.tbl tr.total td{background:#f5f6f8;font-weight:800;border-top:2px solid var(--border2);}
-.tbl tr.highlight td{background:#e8f3ff;}
-.tbl tr.warn td{background:var(--yellow-l);}
-.tbl tr.danger td{background:var(--red-l);}
-
-/* ── Status Chips ── */
-.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:12px;font-size:.62rem;font-weight:700;white-space:nowrap;}
-.chip.blue{background:var(--blue-l);color:#003e80;}
-.chip.green{background:var(--green-l);color:#007a46;}
-.chip.red{background:var(--red-l);color:#9e1530;}
-.chip.yellow{background:var(--yellow-l);color:#7a5c00;}
-.chip.gray{background:#f0f1f3;color:var(--ink2);}
-.chip.purple{background:var(--purple-l);color:#3d337a;}
-
-/* ── Inputs ── */
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;}
-.form-row{display:flex;align-items:center;padding:11px 16px;border-bottom:1px solid var(--border);gap:12px;}
-.form-row:last-child{border-bottom:none;}
-.form-row.section-hd{background:#f8f9fb;padding:8px 16px;}
-.form-row.section-hd span{font-size:.6rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--ink2);}
-.form-lbl{flex:1;font-size:.78rem;font-weight:600;color:var(--ink2);}
-.form-lbl small{display:block;font-size:.62rem;color:var(--ink3);font-weight:400;margin-top:1px;}
-.form-inp{width:110px;border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-family:'Heebo',sans-serif;font-size:.82rem;font-weight:700;color:var(--ink);text-align:left;direction:ltr;transition:border-color .15s;-moz-appearance:textfield;background:#fff;}
-.form-inp:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,115,234,.12);}
-.form-inp::-webkit-outer-spin-button,.form-inp::-webkit-inner-spin-button{-webkit-appearance:none;}
-.form-inp.full{width:100%;}
-.form-sel{border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-family:'Heebo',sans-serif;font-size:.78rem;font-weight:600;color:var(--ink);background:#fff;cursor:pointer;}
-.form-sel:focus{outline:none;border-color:var(--blue);}
-.tog{width:36px;height:20px;border-radius:999px;background:var(--border2);cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;border:none;}
-.tog.on{background:var(--green);}
-.tog::after{content:'';position:absolute;top:2px;right:2px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:right .2s,left .2s;}
-.tog.on::after{right:auto;left:2px;}
-
-/* ── Scenario Selector ── */
-.scenario-tabs{display:flex;gap:0;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--bg);}
-.stab{padding:7px 16px;border:none;background:transparent;font-family:'Heebo',sans-serif;font-size:.72rem;font-weight:700;color:var(--ink2);cursor:pointer;transition:all .15s;border-left:1px solid var(--border);}
-.stab:first-child{border-left:none;}
-.stab.active{background:#fff;color:var(--blue);box-shadow:0 1px 4px rgba(0,0,0,.06);}
-
-/* ── AI Panel ── */
-.ai-wrap{background:var(--sidebar);border-radius:var(--r);overflow:hidden;}
-.ai-hd{padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:10px;}
-.ai-hd-icon{width:32px;height:32px;border-radius:8px;background:rgba(45,91,227,.5);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
-.ai-hd-title{font-size:.82rem;font-weight:800;color:#fff;}
-.ai-hd-sub{font-size:.62rem;color:rgba(255,255,255,.4);margin-top:1px;}
-.ai-actions{padding:12px 16px;display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,.06);}
-.ai-btn{padding:7px 14px;border-radius:6px;border:none;font-family:'Heebo',sans-serif;font-size:.72rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .15s;}
-.ai-btn.prim{background:#2d5be3;color:#fff;}
-.ai-btn.prim:hover{background:#2450c7;}
-.ai-btn.sec{background:rgba(255,255,255,.08);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.1);}
-.ai-btn.sec:hover{background:rgba(255,255,255,.14);}
-.ai-chat{padding:14px 16px;}
-.ai-inp-row{display:flex;gap:8px;}
-.ai-inp{flex:1;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:8px 12px;font-family:'Heebo',sans-serif;font-size:.78rem;color:#fff;transition:border-color .15s;}
-.ai-inp::placeholder{color:rgba(255,255,255,.3);}
-.ai-inp:focus{outline:none;border-color:#2d5be3;background:rgba(255,255,255,.1);}
-.ai-send{padding:8px 16px;background:#2d5be3;color:#fff;border:none;border-radius:6px;font-family:'Heebo',sans-serif;font-size:.72rem;font-weight:700;cursor:pointer;transition:background .15s;}
-.ai-send:hover{background:#2450c7;}
-.ai-resp{margin-top:12px;background:rgba(255,255,255,.06);border-radius:6px;padding:12px 14px;font-size:.78rem;line-height:1.75;color:rgba(255,255,255,.8);display:none;border:1px solid rgba(255,255,255,.08);}
-.ai-resp.vis{display:block;}
-.ai-loading{display:flex;align-items:center;gap:6px;color:rgba(255,255,255,.5);font-size:.72rem;}
-.ai-dot{width:5px;height:5px;border-radius:50%;background:#2d5be3;animation:bounce .8s infinite;}
-.ai-dot:nth-child(2){animation-delay:.12s;}
-.ai-dot:nth-child(3){animation-delay:.24s;}
-@keyframes bounce{0%,80%,100%{transform:translateY(0);}40%{transform:translateY(-5px);}}
-.ai-key-warn{margin:10px 16px;padding:9px 12px;background:rgba(255,203,0,.1);border:1px solid rgba(255,203,0,.25);border-radius:6px;font-size:.7rem;color:rgba(255,203,0,.9);display:none;}
-.ai-key-warn a{color:#ffcb00;font-weight:700;cursor:pointer;}
-
-/* ── Chart ── */
-.chart-wrap{position:relative;}
-
-/* ── Modal ── */
-.modal-ov{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.4);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:20px;}
-.modal-ov.open{display:flex;}
-.modal{background:#fff;border-radius:12px;padding:28px 24px;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.2);}
-.modal-title{font-size:1rem;font-weight:800;color:var(--ink);margin-bottom:4px;}
-.modal-sub{font-size:.72rem;color:var(--ink2);margin-bottom:20px;line-height:1.6;}
-.modal-lbl{font-size:.68rem;font-weight:700;color:var(--ink2);display:block;margin-bottom:5px;}
-.modal-inp{width:100%;border:1px solid var(--border2);border-radius:6px;padding:9px 12px;font-family:'Heebo',sans-serif;font-size:.85rem;color:var(--ink);margin-bottom:12px;}
-.modal-inp:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,115,234,.12);}
-.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;}
-.modal-btn{padding:8px 20px;border-radius:6px;font-family:'Heebo',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;border:none;transition:all .15s;}
-.modal-btn.save{background:var(--blue);color:#fff;}
-.modal-btn.cancel{background:var(--bg);color:var(--ink2);border:1px solid var(--border);}
-
-/* ── Insight Banner ── */
-.insight{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border-radius:var(--r);font-size:.78rem;line-height:1.7;margin-bottom:16px;border:1px solid transparent;}
-.insight.blue{background:var(--blue-s);border-color:var(--blue-l);color:#003e80;}
-.insight.green{background:var(--green-s);border-color:var(--green-l);color:#005e35;}
-.insight.red{background:var(--red-s);border-color:var(--red-l);color:#8a0f23;}
-.insight.yellow{background:var(--yellow-l);border-color:#f0d900;color:#5c4200;}
-.insight-icon{font-size:1rem;flex-shrink:0;margin-top:1px;}
-.insight strong{font-weight:800;}
-
-/* ── Property Tabs (within Properties page) ── */
-.ptabs{display:flex;gap:6px;margin-bottom:16px;}
-.ptab{padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:#fff;color:var(--ink2);font-size:.72rem;font-weight:700;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px;}
-.ptab.active{background:var(--blue);border-color:var(--blue);color:#fff;}
-.ptab-del{width:14px;height:14px;border-radius:3px;border:none;background:transparent;cursor:pointer;color:inherit;display:flex;align-items:center;justify-content:center;font-size:.65rem;transition:background .15s;padding:0;}
-.ptab-del:hover{background:rgba(0,0,0,.15);}
-.ptab-add{padding:6px 10px;border:1px dashed var(--border2);border-radius:6px;background:transparent;color:var(--ink3);font-size:.8rem;cursor:pointer;transition:all .15s;}
-.ptab-add:hover{border-color:var(--blue);color:var(--blue);}
-
-/* ── Projection Table ── */
-.proj-controls{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;}
-.proj-ctrl{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;}
-.proj-ctrl-lbl{font-size:.6rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;}
-.proj-ctrl-inp{width:100%;border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:800;color:var(--ink);text-align:center;-moz-appearance:textfield;}
-.proj-ctrl-inp:focus{outline:none;border-color:var(--blue);}
-.proj-ctrl-inp::-webkit-outer-spin-button,.proj-ctrl-inp::-webkit-inner-spin-button{-webkit-appearance:none;}
-.proj-ctrl-hint{font-size:.6rem;color:var(--ink3);margin-top:4px;text-align:center;}
-
-/* ── Sublease Viz ── */
-.sl-summary{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-bottom:16px;}
-.sl-stat{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;}
-.sl-stat-lbl{font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--ink3);margin-bottom:4px;}
-.sl-stat-val{font-size:1.2rem;font-weight:900;color:var(--ink);}
-.sl-stat-val.good{color:var(--green);}
-.sl-stat-val.warn{color:var(--orange);}
-
-/* ── Market Page ── */
-.market-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-.news-list{display:flex;flex-direction:column;gap:0;}
-.news-item{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:12px;cursor:pointer;transition:background .15s;}
-.news-item:last-child{border-bottom:none;}
-.news-item:hover{background:#fafbfc;}
-.news-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px;}
-.news-dot.red{background:var(--red);}
-.news-dot.green{background:var(--green);}
-.news-dot.yellow{background:var(--yellow);}
-.news-dot.gray{background:var(--ink3);}
-.news-title{font-size:.78rem;font-weight:700;color:var(--ink);line-height:1.4;}
-.news-meta{font-size:.62rem;color:var(--ink3);margin-top:3px;}
-
-/* ── Responsive ── */
-@media(max-width:1100px){.grid-2,.grid-3{grid-template-columns:1fr;} .proj-controls{grid-template-columns:1fr 1fr;} .sl-summary{grid-template-columns:1fr 1fr;} .market-grid{grid-template-columns:1fr;}}
-@media(max-width:800px){
-  .sidebar{width:52px;min-width:52px;}
-  .sb-logo-name,.sb-logo-badge,.sb-label,.sb-item span,.sb-badge,.sb-prop-select,.live-badge{display:none;}
-  .sb-item{justify-content:center;padding:10px;}
-  .sb-section{padding:4px;}
-  .content{padding:16px 14px;}
-  .kpi-row{grid-template-columns:repeat(2,1fr);}
-  .proj-controls{grid-template-columns:1fr;}
-  .sl-summary{grid-template-columns:1fr 1fr;}
+/* ═══════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 15px; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: 'Heebo', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  direction: rtl;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
 }
+input[type=number] { -moz-appearance: textfield; }
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
+button { font-family: 'Heebo', sans-serif; }
+a { text-decoration: none; }
+
+/* ═══════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════ */
+.sb {
+  width: var(--sb-w);
+  min-width: var(--sb-w);
+  background: var(--sb);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  flex-shrink: 0;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.sb-brand {
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid var(--sb-sep);
+  flex-shrink: 0;
+}
+.sb-brand-eyebrow {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.35);
+  margin-bottom: 6px;
+}
+.sb-brand-name {
+  font-size: 18px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -.3px;
+  line-height: 1;
+}
+.sb-brand-tag {
+  display: inline-block;
+  margin-top: 8px;
+  background: rgba(59,130,246,.25);
+  border: 1px solid rgba(59,130,246,.4);
+  color: #93C5FD;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.sb-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 10px;
+  scrollbar-width: none;
+}
+.sb-nav::-webkit-scrollbar { display: none; }
+
+.sb-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.3);
+  padding: 14px 10px 6px;
+}
+
+.sb-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 12px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  color: rgba(255,255,255,.6);
+  font-size: 14px;
+  font-weight: 600;
+  transition: all .15s;
+  margin-bottom: 2px;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: right;
+}
+.sb-item:hover { background: var(--sb-h); color: rgba(255,255,255,.9); }
+.sb-item.active {
+  background: var(--sb-act);
+  color: var(--sb-act-t);
+  border: 1px solid rgba(59,130,246,.25);
+}
+.sb-item svg { width: 17px; height: 17px; flex-shrink: 0; opacity: .75; }
+.sb-item.active svg { opacity: 1; }
+.sb-item-badge {
+  margin-right: auto;
+  background: rgba(59,130,246,.25);
+  color: #93C5FD;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 10px;
+}
+
+.sb-footer {
+  padding: 14px 12px 16px;
+  border-top: 1px solid var(--sb-sep);
+  flex-shrink: 0;
+}
+.sb-usd {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,.4);
+  margin-bottom: 10px;
+}
+.sb-usd-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #10B981;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.3;} }
+
+.sb-back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border-radius: var(--r-sm);
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.08);
+  color: rgba(255,255,255,.55);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+  width: 100%;
+  text-align: right;
+}
+.sb-back:hover { background: rgba(255,255,255,.1); color: rgba(255,255,255,.8); }
+
+/* ═══════════════════════════════════════
+   MAIN SHELL
+═══════════════════════════════════════ */
+.shell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  min-width: 0;
+}
+
+/* ═══════════════════════════════════════
+   TOPBAR
+═══════════════════════════════════════ */
+.topbar {
+  height: 60px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 28px;
+  gap: 14px;
+  flex-shrink: 0;
+  z-index: 50;
+}
+.topbar-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+}
+.topbar-page { font-weight: 800; color: var(--ink); }
+.topbar-sep { color: var(--border); }
+.topbar-sub { color: var(--ink-3); font-weight: 500; font-size: 14px; }
+.topbar-end {
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.data-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-3);
+  background: var(--card);
+}
+.data-pill strong { color: var(--ink); font-weight: 700; }
+.tb-btn {
+  height: 34px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--card);
+  color: var(--ink-2);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all .15s;
+  white-space: nowrap;
+}
+.tb-btn:hover { background: var(--bg); border-color: var(--border); color: var(--ink); }
+.tb-btn svg { width: 14px; height: 14px; }
+.tb-btn.primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+.tb-btn.primary:hover { background: #1a44c2; }
+
+/* ═══════════════════════════════════════
+   CONTENT AREA
+═══════════════════════════════════════ */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 28px 32px 48px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.page { display: none; }
+.page.active { display: block; }
+
+/* ═══════════════════════════════════════
+   PAGE HEADER
+═══════════════════════════════════════ */
+.page-hd {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.page-title { font-size: 22px; font-weight: 900; color: var(--ink); letter-spacing: -.4px; }
+.page-desc { font-size: 13px; color: var(--ink-3); margin-top: 4px; font-weight: 500; }
+.page-actions { display: flex; align-items: center; gap: 8px; }
+
+/* ═══════════════════════════════════════
+   PROPERTY TABS
+═══════════════════════════════════════ */
+.ptabs { display: flex; gap: 6px; align-items: center; }
+.ptab {
+  padding: 7px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--card);
+  color: var(--ink-3);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .15s;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.ptab.active { background: var(--ink); border-color: var(--ink); color: #fff; }
+.ptab-x {
+  width: 16px; height: 16px;
+  border-radius: 3px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: inherit;
+  opacity: .6;
+  font-size: 11px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0;
+}
+.ptab-x:hover { opacity: 1; background: rgba(0,0,0,.12); }
+.ptab-add {
+  padding: 7px 12px;
+  border: 1px dashed var(--border);
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--ink-4);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all .15s;
+  line-height: 1;
+}
+.ptab-add:hover { border-color: var(--blue-m); color: var(--blue-m); }
+
+/* ═══════════════════════════════════════
+   KPI CARDS
+═══════════════════════════════════════ */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+  width: 100%;
+}
+@media (max-width: 1400px) { .kpi-row { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 900px)  { .kpi-row { grid-template-columns: repeat(2, 1fr); } }
+
+.kpi {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 20px 22px;
+  box-shadow: var(--sh-s);
+  position: relative;
+  overflow: hidden;
+}
+.kpi.hero {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+.kpi-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 10px;
+}
+.kpi.hero .kpi-label { color: rgba(255,255,255,.45); }
+.kpi-value {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--ink);
+  letter-spacing: -1px;
+  line-height: 1;
+}
+.kpi.hero .kpi-value { color: #fff; }
+.kpi-sub {
+  font-size: 12px;
+  color: var(--ink-4);
+  margin-top: 7px;
+  font-weight: 500;
+}
+.kpi.hero .kpi-sub { color: rgba(255,255,255,.35); }
+.kpi-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-top: 8px;
+  padding: 3px 9px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.kpi-badge.up   { background: var(--red-l);   color: var(--red); }
+.kpi-badge.down { background: var(--green-l); color: var(--green); }
+.kpi-badge.neu  { background: var(--amber-l); color: var(--amber); }
+.kpi-bar {
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 4px;
+  border-radius: 0 var(--r) var(--r) 0;
+}
+.kpi-bar.blue   { background: var(--blue-m); }
+.kpi-bar.green  { background: var(--green); }
+.kpi-bar.red    { background: var(--red); }
+.kpi-bar.amber  { background: var(--amber); }
+
+/* ═══════════════════════════════════════
+   CARDS & GRIDS
+═══════════════════════════════════════ */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.col-full { grid-column: 1 / -1; }
+@media (max-width: 1100px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  box-shadow: var(--sh-s);
+  overflow: hidden;
+}
+.card-hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-s);
+}
+.card-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -.1px;
+}
+.card-actions { display: flex; align-items: center; gap: 7px; }
+.card-body { padding: 20px; }
+.card-body.flush { padding: 0; }
+.card-body.sm { padding: 16px; }
+
+/* ═══════════════════════════════════════
+   TABLES
+═══════════════════════════════════════ */
+.tbl { width: 100%; border-collapse: collapse; }
+.tbl thead th {
+  background: var(--card-alt);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding: 11px 18px;
+  border-bottom: 1px solid var(--border);
+  text-align: right;
+  white-space: nowrap;
+}
+.tbl tbody td {
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--border-s);
+  color: var(--ink-2);
+  font-size: 14px;
+  font-weight: 500;
+  vertical-align: middle;
+}
+.tbl tbody tr:last-child td { border-bottom: none; }
+.tbl tbody tr:hover td { background: #FAFBFD; }
+.tbl td.num {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  text-align: left;
+  direction: ltr;
+}
+.tbl td.red   { color: var(--red) !important; font-weight: 700; }
+.tbl td.green { color: var(--green) !important; font-weight: 700; }
+.tbl tr.total td {
+  background: var(--card-alt);
+  font-weight: 800;
+  border-top: 2px solid var(--border);
+  color: var(--ink);
+  font-size: 15px;
+}
+.tbl tr.hl-blue  td { background: var(--blue-xl); }
+.tbl tr.hl-amber td { background: var(--amber-xl); }
+.tbl tr.hl-red   td { background: var(--red-xl); }
+.tbl tr.hl-green td { background: var(--green-xl); }
+
+/* ═══════════════════════════════════════
+   BADGES / CHIPS
+═══════════════════════════════════════ */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.chip.blue   { background: var(--blue-l);   color: #1e3a8a; }
+.chip.green  { background: var(--green-l);  color: #064e3b; }
+.chip.red    { background: var(--red-l);    color: #7f1d1d; }
+.chip.amber  { background: var(--amber-l);  color: #78350f; }
+.chip.gray   { background: #F1F5F9;         color: var(--ink-3); }
+.chip.purple { background: var(--purple-l); color: #4c1d95; }
+.chip.dark   { background: var(--ink);      color: #fff; }
+
+/* ═══════════════════════════════════════
+   INSIGHT BANNERS
+═══════════════════════════════════════ */
+.banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: var(--r);
+  font-size: 14px;
+  line-height: 1.65;
+  margin-bottom: 18px;
+  border: 1px solid transparent;
+}
+.banner-icon { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
+.banner strong { font-weight: 800; }
+.banner.blue   { background: var(--blue-xl);   border-color: var(--blue-l);   color: #1e3a8a; }
+.banner.green  { background: var(--green-xl);  border-color: var(--green-l);  color: #064e3b; }
+.banner.red    { background: var(--red-xl);    border-color: var(--red-l);    color: #7f1d1d; }
+.banner.amber  { background: var(--amber-xl);  border-color: var(--amber-l);  color: #78350f; }
+
+/* ═══════════════════════════════════════
+   FORM — PROPERTIES PAGE
+═══════════════════════════════════════ */
+.form-section-hd {
+  background: var(--card-alt);
+  padding: 9px 20px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  border-bottom: 1px solid var(--border-s);
+}
+.form-row {
+  display: flex;
+  align-items: center;
+  padding: 13px 20px;
+  border-bottom: 1px solid var(--border-s);
+  gap: 16px;
+  min-height: 52px;
+}
+.form-row:last-child { border-bottom: none; }
+.form-label {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+.form-label small {
+  display: block;
+  font-size: 11px;
+  color: var(--ink-4);
+  font-weight: 400;
+  margin-top: 2px;
+}
+.form-inp {
+  width: 120px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 8px 12px;
+  font-family: 'Heebo', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  text-align: left;
+  direction: ltr;
+  background: var(--card);
+  transition: border-color .15s, box-shadow .15s;
+}
+.form-inp:focus {
+  outline: none;
+  border-color: var(--blue-m);
+  box-shadow: 0 0 0 3px rgba(59,130,246,.15);
+}
+.form-inp.wide { width: 100%; text-align: right; direction: rtl; }
+.form-inp.full { width: 100%; text-align: right; direction: rtl; }
+.form-sel {
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 8px 12px;
+  font-family: 'Heebo', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--card);
+  cursor: pointer;
+}
+.form-sel:focus { outline: none; border-color: var(--blue-m); }
+
+/* Toggle */
+.tog {
+  width: 40px; height: 22px;
+  border-radius: 999px;
+  background: var(--border);
+  cursor: pointer;
+  position: relative;
+  transition: background .2s;
+  flex-shrink: 0;
+  border: none;
+}
+.tog.on { background: var(--green); }
+.tog::after {
+  content: '';
+  position: absolute;
+  top: 3px; right: 3px;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,.2);
+  transition: right .2s, left .2s;
+}
+.tog.on::after { right: auto; left: 3px; }
+
+/* ═══════════════════════════════════════
+   PROJECTION CONTROLS
+═══════════════════════════════════════ */
+.proj-controls {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 22px;
+}
+.proj-ctrl {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px 18px;
+  box-shadow: var(--sh-s);
+}
+.proj-ctrl-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 10px;
+}
+.proj-ctrl-inp {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 10px 14px;
+  font-family: 'Heebo', sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--ink);
+  text-align: center;
+  background: var(--card-alt);
+  transition: border-color .15s;
+}
+.proj-ctrl-inp:focus { outline: none; border-color: var(--blue-m); box-shadow: 0 0 0 3px rgba(59,130,246,.12); }
+.proj-ctrl-hint { font-size: 11px; color: var(--ink-4); margin-top: 7px; text-align: center; }
+
+/* ═══════════════════════════════════════
+   SUBLEASE STATS
+═══════════════════════════════════════ */
+.sl-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.sl-stat {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 18px 20px;
+  box-shadow: var(--sh-s);
+}
+.sl-stat-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; color: var(--ink-3); margin-bottom: 8px; }
+.sl-stat-val   { font-size: 26px; font-weight: 900; color: var(--ink); letter-spacing: -.5px; }
+.sl-stat-val.good { color: var(--green); }
+.sl-stat-val.warn { color: var(--amber); }
+@media (max-width: 1100px) { .sl-stats, .proj-controls { grid-template-columns: 1fr 1fr; } }
+
+/* ═══════════════════════════════════════
+   AI PANEL
+═══════════════════════════════════════ */
+.ai-wrap {
+  background: var(--sb);
+  border-radius: var(--r);
+  overflow: hidden;
+  box-shadow: var(--sh-m);
+}
+.ai-hd {
+  padding: 18px 22px;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.ai-hd-icon {
+  width: 36px; height: 36px;
+  border-radius: 9px;
+  background: rgba(59,130,246,.25);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.ai-hd-name { font-size: 15px; font-weight: 800; color: #fff; }
+.ai-hd-model { font-size: 12px; color: rgba(255,255,255,.4); margin-top: 2px; }
+.ai-key-warn {
+  margin: 14px 18px;
+  padding: 11px 14px;
+  background: rgba(245,158,11,.1);
+  border: 1px solid rgba(245,158,11,.25);
+  border-radius: var(--r-sm);
+  font-size: 13px;
+  color: rgba(245,158,11,.9);
+  display: none;
+}
+.ai-key-warn a { color: #FCD34D; font-weight: 700; cursor: pointer; }
+.ai-actions {
+  padding: 14px 18px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.ai-btn {
+  padding: 9px 16px;
+  border-radius: var(--r-sm);
+  border: none;
+  font-family: 'Heebo', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all .15s;
+}
+.ai-btn.prim { background: var(--blue); color: #fff; }
+.ai-btn.prim:hover { background: #1a44c2; }
+.ai-btn.sec  { background: rgba(255,255,255,.08); color: rgba(255,255,255,.8); border: 1px solid rgba(255,255,255,.1); }
+.ai-btn.sec:hover { background: rgba(255,255,255,.15); }
+.ai-chat { padding: 16px 18px; }
+.ai-input-row { display: flex; gap: 8px; }
+.ai-inp {
+  flex: 1;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: var(--r-sm);
+  padding: 10px 14px;
+  font-family: 'Heebo', sans-serif;
+  font-size: 14px;
+  color: #fff;
+  transition: border-color .15s;
+}
+.ai-inp::placeholder { color: rgba(255,255,255,.3); }
+.ai-inp:focus { outline: none; border-color: var(--blue-m); background: rgba(255,255,255,.1); }
+.ai-send {
+  padding: 10px 18px;
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-sm);
+  font-family: 'Heebo', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .15s;
+  white-space: nowrap;
+}
+.ai-send:hover { background: #1a44c2; }
+.ai-resp {
+  margin-top: 14px;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: var(--r-sm);
+  padding: 14px 16px;
+  font-size: 14px;
+  line-height: 1.75;
+  color: rgba(255,255,255,.82);
+  display: none;
+}
+.ai-resp.vis { display: block; }
+.ai-loading { display: flex; align-items: center; gap: 7px; color: rgba(255,255,255,.45); font-size: 13px; }
+.ai-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue-m); animation: bounce .85s infinite; }
+.ai-dot:nth-child(2) { animation-delay: .14s; }
+.ai-dot:nth-child(3) { animation-delay: .28s; }
+@keyframes bounce { 0%,80%,100%{transform:translateY(0);} 40%{transform:translateY(-6px);} }
+
+/* ═══════════════════════════════════════
+   MARKET PAGE
+═══════════════════════════════════════ */
+.market-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+@media (max-width: 1100px) { .market-grid { grid-template-columns: 1fr; } }
+
+/* ═══════════════════════════════════════
+   SETTINGS MODAL
+═══════════════════════════════════════ */
+.modal-ov {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(0,0,0,.45);
+  backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-ov.open { display: flex; }
+.modal {
+  background: var(--card);
+  border-radius: var(--r-lg);
+  padding: 32px 28px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: var(--sh-l);
+}
+.modal-title { font-size: 18px; font-weight: 900; color: var(--ink); margin-bottom: 5px; }
+.modal-sub { font-size: 13px; color: var(--ink-3); margin-bottom: 22px; line-height: 1.6; }
+.modal-lbl { font-size: 12px; font-weight: 700; color: var(--ink-2); display: block; margin-bottom: 6px; }
+.modal-inp {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 10px 13px;
+  font-family: 'Heebo', sans-serif;
+  font-size: 14px;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+.modal-inp:focus { outline: none; border-color: var(--blue-m); box-shadow: 0 0 0 3px rgba(59,130,246,.12); }
+.modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+.modal-btn {
+  padding: 9px 20px;
+  border-radius: var(--r-sm);
+  font-family: 'Heebo', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all .15s;
+}
+.modal-btn.save   { background: var(--blue); color: #fff; }
+.modal-btn.save:hover { background: #1a44c2; }
+.modal-btn.cancel { background: var(--bg); color: var(--ink-2); border: 1px solid var(--border); }
 </style>
 </head>
 <body>
@@ -265,433 +896,423 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
 <div class="modal-ov" id="settingsModal">
   <div class="modal">
     <div class="modal-title">הגדרות מערכת</div>
-    <div class="modal-sub">מפתח Claude API נשמר ב-localStorage בלבד — לא מועבר לשום שרת.</div>
+    <div class="modal-sub">מפתח Claude API נשמר ב-localStorage בלבד — לא מועבר לשרת.</div>
     <label class="modal-lbl">Claude API Key</label>
-    <input class="modal-inp" id="apiKeyInput" type="password" placeholder="sk-ant-..." autocomplete="off">
+    <input class="modal-inp" id="apiKeyInput" type="password" placeholder="sk-ant-api03-..." autocomplete="off">
     <label class="modal-lbl">מדד CPI אחרון (%)</label>
-    <input class="modal-inp" id="cpiModalInput" type="number" step="0.1" placeholder="3.5">
+    <input class="modal-inp" id="cpiSetting" type="number" step="0.1" placeholder="3.5">
     <div class="modal-actions">
       <button class="modal-btn cancel" onclick="closeSettings()">ביטול</button>
-      <button class="modal-btn save" onclick="saveSettings()">שמור</button>
+      <button class="modal-btn save" onclick="saveSettings()">שמור הגדרות</button>
     </div>
   </div>
 </div>
 
-<!-- Sidebar -->
-<nav class="sidebar">
-  <div class="sb-logo">
-    <div class="sb-logo-title">Don Alborou</div>
-    <div class="sb-logo-name">Office Intelligence</div>
-    <span class="sb-logo-badge">C-SUITE</span>
+<!-- ════ SIDEBAR ════ -->
+<nav class="sb">
+  <div class="sb-brand">
+    <div class="sb-brand-eyebrow">Don Alborou</div>
+    <div class="sb-brand-name">Office Intelligence</div>
+    <span class="sb-brand-tag">C-Suite Edition</span>
   </div>
-  <div class="sb-section">
-    <div class="sb-label">ניהול</div>
-    <a class="sb-item active" onclick="nav('overview')">
+
+  <div class="sb-nav">
+    <div class="sb-section-label">ניהול</div>
+    <button class="sb-item active" onclick="nav('overview')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-      <span>סקירה כללית</span>
-    </a>
-    <a class="sb-item" onclick="nav('properties')">
+      סקירה כללית
+    </button>
+    <button class="sb-item" onclick="nav('properties')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <span>נכסים ונתונים</span>
-    </a>
-    <div class="sb-label">ניתוח</div>
-    <a class="sb-item" onclick="nav('projection')">
+      נכסים ונתוני עסקה
+    </button>
+
+    <div class="sb-section-label">ניתוח פיננסי</div>
+    <button class="sb-item" onclick="nav('projection')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-      <span>תחזיות עלות</span>
-      <span class="sb-badge">CPI+אופציה</span>
-    </a>
-    <a class="sb-item" onclick="nav('sublease')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
-      <span>ניתוח סבליס</span>
-    </a>
-    <a class="sb-item" onclick="nav('market')">
+      תחזית עלויות
+      <span class="sb-item-badge">CPI + אופציה</span>
+    </button>
+    <button class="sb-item" onclick="nav('sublease')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+      ניתוח סבליס
+    </button>
+    <button class="sb-item" onclick="nav('market')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-      <span>מודיעין שוק</span>
-    </a>
+      מודיעין שוק
+    </button>
   </div>
-  <div class="sb-bottom">
-    <button class="sb-prop-select" onclick="nav('properties')">⚙ נהל נכסים</button>
-    <div class="live-badge"><span class="live-dot"></span><span id="usdSb">טוען נתונים...</span></div>
+
+  <div class="sb-footer">
+    <div class="sb-usd"><span class="sb-usd-dot"></span><span id="sbUsd">טוען...</span></div>
+    <a href="index.html" class="sb-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      חזרה למחשבון
+    </a>
   </div>
 </nav>
 
-<!-- Main Shell -->
-<div class="main-shell">
+<!-- ════ MAIN SHELL ════ -->
+<div class="shell">
 
-  <!-- Top Bar -->
+  <!-- Topbar -->
   <header class="topbar">
-    <div class="topbar-title" id="topbarTitle">סקירה כללית</div>
-    <span class="topbar-sep">/</span>
-    <span class="topbar-sub" id="topbarSub">עלויות שכירות ותפעול</span>
-    <div class="topbar-right">
-      <div class="topbar-pill">📊 מדד CPI: <span id="cpiDisplay">3.5%</span></div>
-      <div class="topbar-pill">💵 USD/ILS: <span id="usdDisplay">—</span></div>
-      <button class="topbar-btn" onclick="openSettings()">
+    <div class="topbar-breadcrumb">
+      <span class="topbar-page" id="tbPage">סקירה כללית</span>
+      <span class="topbar-sep">/</span>
+      <span class="topbar-sub" id="tbSub">עלויות שכירות ותפעול</span>
+    </div>
+    <div class="topbar-end">
+      <div class="data-pill">📊 CPI <strong id="tbCpi">3.5%</strong></div>
+      <div class="data-pill">💵 <strong id="tbUsd">—</strong></div>
+      <button class="tb-btn" onclick="openSettings()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
         הגדרות
       </button>
-      <a href="index.html" class="topbar-btn">← מחשבון</a>
     </div>
   </header>
 
   <!-- Content -->
   <div class="content">
 
-    <!-- ══ PAGE: OVERVIEW ══ -->
+    <!-- ════ OVERVIEW ════ -->
     <div class="page active" id="page-overview">
       <div class="page-hd">
-        <div class="page-hd-left">
-          <div class="page-title" id="overviewPropName">נכס —</div>
+        <div>
+          <div class="page-title" id="ovTitle">—</div>
           <div class="page-desc">סיכום עלויות שכירות, אחזקה ותפעול · עדכון בזמן אמת</div>
         </div>
         <div class="page-actions">
-          <div class="ptabs" id="overviewPropTabs"></div>
+          <div class="ptabs" id="ovTabs"></div>
         </div>
       </div>
 
-      <!-- KPI Row -->
+      <!-- KPI Row - full width 6 cols -->
       <div class="kpi-row">
-        <div class="kpi accent">
+        <div class="kpi hero">
           <div class="kpi-label">עלות חודשית כוללת</div>
-          <div class="kpi-val" id="ovKpiTotal">—</div>
+          <div class="kpi-value" id="ovTotal">—</div>
           <div class="kpi-sub">שכ"ד + ארנונה + תפעול</div>
         </div>
-        <div class="kpi blue">
-          <div class="kpi-label">עלות/מ"ר</div>
-          <div class="kpi-val" id="ovKpiSqm">—</div>
-          <div class="kpi-sub">₪ למ"ר ברוטו/חודש</div>
-          <div class="kpi-trend neutral" id="ovKpiSqmBench">— שוק</div>
-        </div>
-        <div class="kpi blue">
-          <div class="kpi-label">עלות/תחנת עבודה</div>
-          <div class="kpi-val" id="ovKpiWs">—</div>
-          <div class="kpi-sub">₪ לתחנה/חודש</div>
-        </div>
-        <div class="kpi green">
-          <div class="kpi-label">אפקטיבי אחרי גרייס</div>
-          <div class="kpi-val" id="ovKpiEff">—</div>
-          <div class="kpi-sub" id="ovKpiEffSub">מוצמד לחוזה</div>
+        <div class="kpi">
+          <div class="kpi-bar blue"></div>
+          <div class="kpi-label">עלות למ"ר ברוטו</div>
+          <div class="kpi-value" id="ovSqm">—</div>
+          <div class="kpi-badge neu" id="ovSqmBadge">— שוק</div>
         </div>
         <div class="kpi">
+          <div class="kpi-bar blue"></div>
+          <div class="kpi-label">עלות לתחנת עבודה</div>
+          <div class="kpi-value" id="ovWs">—</div>
+          <div class="kpi-sub">₪/תחנה/חודש</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-bar green"></div>
+          <div class="kpi-label">אפקטיבי אחרי גרייס</div>
+          <div class="kpi-value" id="ovEff">—</div>
+          <div class="kpi-sub" id="ovEffSub">—</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-bar amber"></div>
           <div class="kpi-label">סה"כ שנתי</div>
-          <div class="kpi-val" id="ovKpiAnnual">—</div>
+          <div class="kpi-value" id="ovAnnual">—</div>
           <div class="kpi-sub">₪ לשנה</div>
         </div>
-        <div class="kpi" id="ovKpiSlCard" style="display:none;">
+        <div class="kpi" id="ovSlKpi" style="display:none;">
+          <div class="kpi-bar green"></div>
           <div class="kpi-label">הכנסת סבליס</div>
-          <div class="kpi-val" id="ovKpiSl" style="color:var(--green);">—</div>
-          <div class="kpi-sub">₪/חודש הכנסה</div>
+          <div class="kpi-value" id="ovSlVal" style="color:var(--green)">—</div>
+          <div class="kpi-sub">₪/חודש הכנסה נטו</div>
         </div>
       </div>
 
-      <!-- Insight -->
-      <div class="insight blue" id="ovInsight" style="display:none;">
-        <span class="insight-icon">💡</span>
-        <span id="ovInsightText"></span>
-      </div>
+      <!-- Banner -->
+      <div id="ovBanner" style="display:none;"></div>
 
       <div class="grid-2">
-        <!-- Cost Breakdown Table -->
         <div class="card">
           <div class="card-hd">
             <div class="card-title">פירוט עלויות חודשיות</div>
-            <span class="chip blue" id="ovPropChip">—</span>
+            <span class="chip dark" id="ovPropChip">—</span>
           </div>
-          <div class="card-body no-pad">
-            <table class="tbl" id="breakdownTable">
-              <thead><tr><th>רכיב</th><th>בסיס</th><th>%</th><th>חודשי</th></tr></thead>
+          <div class="card-body flush">
+            <table class="tbl" id="breakdownTbl">
+              <thead><tr><th>רכיב</th><th>בסיס חישוב</th><th style="text-align:center">%</th><th>חודשי</th></tr></thead>
               <tbody id="breakdownBody"></tbody>
             </table>
           </div>
         </div>
 
-        <!-- Donut Chart -->
         <div class="card">
           <div class="card-hd"><div class="card-title">התפלגות עלויות</div></div>
           <div class="card-body">
-            <div class="chart-wrap" style="height:230px;"><canvas id="donutChart"></canvas></div>
+            <div style="height:240px; position:relative;"><canvas id="donutChart"></canvas></div>
           </div>
         </div>
 
-        <!-- Timeline Bar Chart -->
-        <div class="card full">
+        <div class="card col-full">
           <div class="card-hd">
             <div class="card-title">עלות חודשית לאורך תקופת החכירה</div>
             <div class="card-actions">
-              <span class="chip gray" id="graceChip"></span>
+              <span class="chip green" id="graceChip">—</span>
+              <span class="chip gray" id="durChip">—</span>
             </div>
           </div>
           <div class="card-body">
-            <div class="chart-wrap" style="height:180px;"><canvas id="timelineChart"></canvas></div>
+            <div style="height:190px; position:relative;"><canvas id="timelineChart"></canvas></div>
           </div>
         </div>
 
-        <!-- Compare Bar Chart -->
-        <div class="card full" id="compareCardWrapper" style="display:none;">
-          <div class="card-hd"><div class="card-title">השוואת נכסים — עלות/מ"ר</div></div>
+        <div class="card col-full" id="compareCard" style="display:none;">
+          <div class="card-hd"><div class="card-title">השוואה בין נכסים — עלות/מ"ר</div></div>
           <div class="card-body">
-            <div class="chart-wrap" style="height:160px;"><canvas id="compareChart"></canvas></div>
+            <div style="height:150px; position:relative;"><canvas id="compareChart"></canvas></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ══ PAGE: PROPERTIES ══ -->
+    <!-- ════ PROPERTIES ════ -->
     <div class="page" id="page-properties">
       <div class="page-hd">
-        <div class="page-hd-left">
+        <div>
           <div class="page-title">נכסים ונתוני עסקה</div>
-          <div class="page-desc">הגדר עד 3 נכסים לניתוח ומעקב</div>
+          <div class="page-desc">הגדר עד 3 נכסים — כל הנתונים נשמרים אוטומטית</div>
         </div>
         <div class="page-actions">
-          <div class="ptabs" id="propPageTabs"></div>
+          <div class="ptabs" id="propTabs"></div>
         </div>
       </div>
+
       <div class="grid-2">
-        <!-- Identity + Building -->
         <div class="card">
           <div class="card-hd"><div class="card-title">זהות הנכס ושטח</div></div>
-          <div class="card-body no-pad">
-            <div class="form-row"><div class="form-lbl">שם הנכס</div><input class="form-inp" id="fName" oninput="propField('name')" placeholder="מגדל X" autocomplete="off"></div>
-            <div class="form-row"><div class="form-lbl">כתובת</div><input class="form-inp" id="fAddr" oninput="propField('addr')" placeholder="רחוב, עיר" autocomplete="off"></div>
+          <div class="card-body flush">
+            <div class="form-row"><div class="form-label">שם הנכס</div><input class="form-inp wide" id="fName" oninput="propField('name')" placeholder="מגדל X, קומה Y" autocomplete="off" style="width:200px;"></div>
+            <div class="form-row"><div class="form-label">כתובת</div><input class="form-inp wide" id="fAddr" oninput="propField('addr')" placeholder="רחוב, עיר" autocomplete="off" style="width:200px;"></div>
             <div class="form-row">
-              <div class="form-lbl">סוג בניין<small>משפיע על יחס ברוטו/נטו</small></div>
+              <div class="form-label">סוג בניין<small>קובע יחס ברוטו/נטו אוטומטי</small></div>
               <select class="form-sel" id="fBtype" onchange="setBtype()">
                 <option value="tower">מגדל A — 75%</option>
                 <option value="boutique">בוטיק B — 82%</option>
                 <option value="indie">עצמאי — 88%</option>
               </select>
             </div>
-            <div class="form-row"><div class="form-lbl">שטח ברוטו (מ"ר)</div><input class="form-inp" id="fGross" type="number" oninput="onGrossChange()"></div>
-            <div class="form-row"><div class="form-lbl">שטח נטו (מ"ר)<small>ניתן לעקיפה ידנית</small></div><input class="form-inp" id="fNet" type="number" oninput="calc()"></div>
-            <div class="form-row"><div class="form-lbl">תחנות עבודה</div><input class="form-inp" id="fWs" type="number" oninput="calc()"></div>
+            <div class="form-section-hd">שטח</div>
+            <div class="form-row"><div class="form-label">שטח ברוטו (מ"ר)</div><input class="form-inp" id="fGross" type="number" oninput="onGross()"></div>
+            <div class="form-row"><div class="form-label">שטח נטו (מ"ר)<small>עדכן ידנית לדיוק</small></div><input class="form-inp" id="fNet" type="number" oninput="calc()"></div>
+            <div class="form-row"><div class="form-label">תחנות עבודה</div><input class="form-inp" id="fWs" type="number" oninput="calc()"></div>
           </div>
         </div>
 
-        <!-- Rent & Costs -->
         <div class="card">
-          <div class="card-hd"><div class="card-title">שכירות ועלויות תפעול</div></div>
-          <div class="card-body no-pad">
-            <div class="form-row section-hd"><span>עלויות חודשיות (₪/מ"ר)</span></div>
-            <div class="form-row"><div class="form-lbl">שכ"ד בסיס</div><input class="form-inp" id="fRent" type="number" oninput="calc()"></div>
+          <div class="card-hd"><div class="card-title">עלויות חודשיות (₪/מ"ר)</div></div>
+          <div class="card-body flush">
+            <div class="form-row"><div class="form-label">שכ"ד בסיס</div><input class="form-inp" id="fRent" type="number" oninput="calc()"></div>
             <div class="form-row">
-              <div class="form-lbl">ארנונה<small id="fArnonaHint">הנחת תוכנה 17₪ — כבוי</small></div>
-              <div style="display:flex;align-items:center;gap:8px;">
-                <button class="tog" id="fArnonaTog" onclick="toggleArnona()" title="הנחת תוכנה"></button>
+              <div class="form-label">ארנונה<small id="fArnonaHint">הנחת תוכנה 17₪ — כבוי</small></div>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <button class="tog" id="fArnonaTog" onclick="toggleArnona()" title="הנחת תוכנה 17₪/מ&quot;ר"></button>
                 <input class="form-inp" id="fArnona" type="number" oninput="calc()">
               </div>
             </div>
-            <div class="form-row"><div class="form-lbl">דמי ניהול</div><input class="form-inp" id="fMgmt" type="number" oninput="calc()"></div>
-            <div class="form-row"><div class="form-lbl">ניקיון</div><input class="form-inp" id="fClean" type="number" oninput="calc()"></div>
-            <div class="form-row"><div class="form-lbl">חשמל</div><input class="form-inp" id="fElec" type="number" oninput="calc()"></div>
-            <div class="form-row section-hd"><span>חניה</span></div>
-            <div class="form-row"><div class="form-lbl">מקומות חניה</div><input class="form-inp" id="fParkN" type="number" oninput="calc()"></div>
-            <div class="form-row"><div class="form-lbl">₪/חנייה/חודש</div><input class="form-inp" id="fParkP" type="number" oninput="calc()"></div>
+            <div class="form-row"><div class="form-label">דמי ניהול</div><input class="form-inp" id="fMgmt" type="number" oninput="calc()"></div>
+            <div class="form-row"><div class="form-label">ניקיון</div><input class="form-inp" id="fClean" type="number" oninput="calc()"></div>
+            <div class="form-row"><div class="form-label">חשמל</div><input class="form-inp" id="fElec" type="number" oninput="calc()"></div>
+            <div class="form-section-hd">חניה</div>
+            <div class="form-row"><div class="form-label">מקומות חניה</div><input class="form-inp" id="fParkN" type="number" oninput="calc()"></div>
+            <div class="form-row"><div class="form-label">₪ לחנייה / חודש</div><input class="form-inp" id="fParkP" type="number" oninput="calc()"></div>
           </div>
         </div>
 
-        <!-- One-time + Lease -->
         <div class="card">
           <div class="card-hd"><div class="card-title">עלויות חד-פעמיות ותנאי חוזה</div></div>
-          <div class="card-body no-pad">
-            <div class="form-row"><div class="form-lbl">ריהוט (₪ חד-פעמי)</div><input class="form-inp" id="fFurn" type="number" oninput="calc()"></div>
-            <div class="form-row"><div class="form-lbl">שיפוץ (₪ חד-פעמי)</div><input class="form-inp" id="fRenov" type="number" oninput="calc()"></div>
-            <div class="form-row"><div class="form-lbl">משך חכירה (חודשים)</div><input class="form-inp" id="fDur" type="number" oninput="calc()"></div>
-            <div class="form-row"><div class="form-lbl">גרייס (שבועות)</div><input class="form-inp" id="fGrace" type="number" oninput="calc()"></div>
-            <div class="form-row section-hd"><span>השכרת משנה (סבליס)</span></div>
-            <div class="form-row">
-              <div class="form-lbl">הפעל סבליס</div>
-              <button class="tog" id="fSlTog" onclick="toggleSublease()"></button>
-            </div>
+          <div class="card-body flush">
+            <div class="form-section-hd">השקעה ראשונית (מופחתת לאורך החוזה)</div>
+            <div class="form-row"><div class="form-label">ריהוט (₪)</div><input class="form-inp" id="fFurn" type="number" oninput="calc()"></div>
+            <div class="form-row"><div class="form-label">שיפוץ (₪)</div><input class="form-inp" id="fRenov" type="number" oninput="calc()"></div>
+            <div class="form-section-hd">תנאי חוזה</div>
+            <div class="form-row"><div class="form-label">משך חכירה (חודשים)</div><input class="form-inp" id="fDur" type="number" oninput="calc()"></div>
+            <div class="form-row"><div class="form-label">גרייס (שבועות)</div><input class="form-inp" id="fGrace" type="number" oninput="calc()"></div>
+            <div class="form-section-hd">השכרת משנה</div>
+            <div class="form-row"><div class="form-label">הפעל סבליס</div><button class="tog" id="fSlTog" onclick="toggleSl()"></button></div>
             <div id="fSlFields">
-              <div class="form-row"><div class="form-lbl">% שטח להשכרה</div><input class="form-inp" id="fSlPct" type="number" oninput="calc()"></div>
-              <div class="form-row"><div class="form-lbl">מחיר שוק ₪/מ"ר</div><input class="form-inp" id="fSlPrice" type="number" oninput="calc()"></div>
+              <div class="form-row"><div class="form-label">% שטח להשכרה</div><input class="form-inp" id="fSlPct" type="number" oninput="calc()"></div>
+              <div class="form-row"><div class="form-label">מחיר שוק ₪/מ"ר</div><input class="form-inp" id="fSlPrice" type="number" oninput="calc()"></div>
             </div>
           </div>
         </div>
 
-        <!-- Lease summary -->
         <div class="card">
           <div class="card-hd"><div class="card-title">סיכום עסקה</div></div>
-          <div class="card-body no-pad">
-            <table class="tbl" id="leaseSummaryTable">
-              <tbody id="leaseSummaryBody"></tbody>
-            </table>
+          <div class="card-body flush">
+            <table class="tbl"><tbody id="summaryBody"></tbody></table>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ══ PAGE: PROJECTION ══ -->
+    <!-- ════ PROJECTION ════ -->
     <div class="page" id="page-projection">
       <div class="page-hd">
-        <div class="page-hd-left">
+        <div>
           <div class="page-title">תחזית עלויות — CPI + אופציה</div>
-          <div class="page-desc">מה תשלמו בעוד שנה? ניתוח תרחישים למנהלי כספים ותפעול</div>
+          <div class="page-desc">כמה תשלמו בעוד שנה? מה קורה ביום הפעלת האופציה?</div>
         </div>
-        <div class="page-actions">
-          <div class="ptabs" id="projPropTabs"></div>
-        </div>
+        <div class="page-actions"><div class="ptabs" id="projTabs"></div></div>
       </div>
 
       <div class="proj-controls">
         <div class="proj-ctrl">
-          <div class="proj-ctrl-lbl">עליית מדד CPI (%)</div>
-          <input class="proj-ctrl-inp" id="projCpi" type="number" step="0.1" value="3.5" oninput="renderProjection()">
-          <div class="proj-ctrl-hint">מדד ידוע אחרון</div>
+          <div class="proj-ctrl-label">עליית מדד CPI (%)</div>
+          <input class="proj-ctrl-inp" id="pCpi" type="number" step="0.1" value="3.5" oninput="renderProj()">
+          <div class="proj-ctrl-hint">מדד שנתי צפוי</div>
         </div>
         <div class="proj-ctrl">
-          <div class="proj-ctrl-lbl">אחוז עליית אופציה (%)</div>
-          <input class="proj-ctrl-inp" id="projOpt" type="number" step="0.5" value="5" oninput="renderProjection()">
+          <div class="proj-ctrl-label">עליית אופציה (%)</div>
+          <input class="proj-ctrl-inp" id="pOpt" type="number" step="0.5" value="5" oninput="renderProj()">
           <div class="proj-ctrl-hint">% עלייה ביום הפעלת האופציה</div>
         </div>
         <div class="proj-ctrl">
-          <div class="proj-ctrl-lbl">חודש הפעלת אופציה</div>
-          <input class="proj-ctrl-inp" id="projOptMonth" type="number" min="1" value="37" oninput="renderProjection()">
+          <div class="proj-ctrl-label">חודש הפעלת אופציה</div>
+          <input class="proj-ctrl-inp" id="pOptM" type="number" min="1" value="37" oninput="renderProj()">
           <div class="proj-ctrl-hint">חודש מתחילת החוזה</div>
         </div>
       </div>
 
-      <div id="projInsights" style="margin-bottom:16px;"></div>
+      <div id="projBanners"></div>
 
       <div class="grid-2">
-        <div class="card full">
+        <div class="card col-full">
           <div class="card-hd">
-            <div class="card-title">ציר עלויות שנתי — תחזית</div>
+            <div class="card-title">עלות חודשית שנה-אחר-שנה</div>
             <div class="card-actions">
               <span class="chip blue">CPI מחושב</span>
-              <span class="chip yellow">אופציה</span>
+              <span class="chip amber">הפעלת אופציה</span>
             </div>
           </div>
           <div class="card-body">
-            <div class="chart-wrap" style="height:200px;"><canvas id="projChart"></canvas></div>
+            <div style="height:210px; position:relative;"><canvas id="projChart"></canvas></div>
           </div>
         </div>
-        <div class="card full">
-          <div class="card-hd"><div class="card-title">לוח עלויות שנה-אחר-שנה</div></div>
-          <div class="card-body no-pad">
+        <div class="card col-full">
+          <div class="card-hd"><div class="card-title">לוח עלויות מפורט — שנה אחר שנה</div></div>
+          <div class="card-body flush">
             <table class="tbl">
-              <thead><tr><th>שנה</th><th>חודשים</th><th>שכ"ד בסיס</th><th>CPI מצטבר</th><th>שכ"ד עם CPI</th><th>אופציה</th><th>עלות כוללת/חודש</th><th>עלייה מהיום</th></tr></thead>
-              <tbody id="projTableBody"></tbody>
+              <thead><tr><th>שנה</th><th>חודשים</th><th>שכ"ד בסיס</th><th>CPI מצטבר</th><th>שכ"ד + CPI</th><th>אופציה</th><th>עלות כוללת/חודש</th><th>עלייה מהיום</th></tr></thead>
+              <tbody id="projBody"></tbody>
             </table>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ══ PAGE: SUBLEASE ══ -->
+    <!-- ════ SUBLEASE ════ -->
     <div class="page" id="page-sublease">
       <div class="page-hd">
-        <div class="page-hd-left">
-          <div class="page-title">ניתוח השכרת משנה (סבליס)</div>
-          <div class="page-desc">כמה תחסכו? מתי תחזרו על ההשקעה? האם כדאי?</div>
+        <div>
+          <div class="page-title">ניתוח השכרת משנה</div>
+          <div class="page-desc">כמה תחסכו? מתי נשבר העלות? האם כדאי מבחינה פיננסית?</div>
         </div>
-        <div class="page-actions">
-          <div class="ptabs" id="slPropTabs"></div>
-        </div>
+        <div class="page-actions"><div class="ptabs" id="slTabs"></div></div>
       </div>
 
-      <div class="insight blue" id="slInsight"><span class="insight-icon">💡</span><span id="slInsightText">הפעל סבליס בעמוד הנכסים לניתוח.</span></div>
+      <div id="slBanner"></div>
 
-      <div class="sl-summary">
-        <div class="sl-stat"><div class="sl-stat-lbl">הכנסה חודשית</div><div class="sl-stat-val good" id="slIncome">—</div></div>
-        <div class="sl-stat"><div class="sl-stat-lbl">עלות נטו חודשית</div><div class="sl-stat-val" id="slNet">—</div></div>
-        <div class="sl-stat"><div class="sl-stat-lbl">חודש שבירת עלות</div><div class="sl-stat-val warn" id="slBreakEven">—</div></div>
-        <div class="sl-stat"><div class="sl-stat-lbl">חיסכון לאורך החוזה</div><div class="sl-stat-val good" id="slTotalSave">—</div></div>
+      <div class="sl-stats">
+        <div class="sl-stat"><div class="sl-stat-label">הכנסה חודשית</div><div class="sl-stat-val good" id="slInc">—</div></div>
+        <div class="sl-stat"><div class="sl-stat-label">עלות נטו חודשית</div><div class="sl-stat-val" id="slNet">—</div></div>
+        <div class="sl-stat"><div class="sl-stat-label">חודש שבירת עלות</div><div class="sl-stat-val warn" id="slBE">—</div></div>
+        <div class="sl-stat"><div class="sl-stat-label">חיסכון כולל בחוזה</div><div class="sl-stat-val good" id="slSave">—</div></div>
       </div>
 
       <div class="grid-2">
-        <div class="card full">
-          <div class="card-hd"><div class="card-title">עלות מצטברת — עם ובלי סבליס</div></div>
+        <div class="card col-full">
+          <div class="card-hd"><div class="card-title">עלות מצטברת — עם ובלי השכרת משנה</div></div>
           <div class="card-body">
-            <div class="chart-wrap" style="height:200px;"><canvas id="cumulChart"></canvas></div>
+            <div style="height:210px; position:relative;"><canvas id="cumulChart"></canvas></div>
           </div>
         </div>
-        <div class="card full">
-          <div class="card-hd"><div class="card-title">לוח חיסכון חודשי</div></div>
-          <div class="card-body no-pad">
+        <div class="card col-full">
+          <div class="card-hd"><div class="card-title">לוח חיסכון חודשי מפורט</div></div>
+          <div class="card-body flush">
             <table class="tbl">
               <thead><tr><th>חודש</th><th>עלות ברוטו</th><th>הכנסת סבליס</th><th>עלות נטו</th><th>חיסכון מצטבר</th><th>סטטוס</th></tr></thead>
-              <tbody id="slTableBody"></tbody>
+              <tbody id="slBody"></tbody>
             </table>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ══ PAGE: MARKET ══ -->
+    <!-- ════ MARKET ════ -->
     <div class="page" id="page-market">
       <div class="page-hd">
-        <div class="page-hd-left">
+        <div>
           <div class="page-title">מודיעין שוק</div>
-          <div class="page-desc">ניתוח AI של שוק המשרדים · כלי משא ומתן</div>
+          <div class="page-desc">AI ניתוח שוק משרדים · כלים למשא ומתן</div>
         </div>
         <div class="page-actions">
-          <button class="topbar-btn primary" onclick="fetchMarketBrief()">🔄 עדכן ניתוח שוק</button>
+          <button class="tb-btn primary" onclick="aiDo('market')">🔄 עדכן סקירת שוק</button>
+        </div>
+      </div>
+
+      <div class="ai-wrap" style="margin-bottom:16px;">
+        <div class="ai-hd">
+          <div class="ai-hd-icon">🤖</div>
+          <div>
+            <div class="ai-hd-name">Claude AI — יועץ נדל"ן מסחרי</div>
+            <div class="ai-hd-model">claude-sonnet-4-20250514 · ניתוח עסקאות, שוק ומו"מ</div>
+          </div>
+        </div>
+        <div class="ai-key-warn" id="aiKeyWarn">⚠️ לא הוגדר מפתח API. <a onclick="openSettings()">הגדר כאן</a></div>
+        <div class="ai-actions">
+          <button class="ai-btn prim" onclick="aiDo('analyze')">🔍 נתח את העסקה שלי</button>
+          <button class="ai-btn sec"  onclick="aiDo('negotiate')">🤝 טיפים למו"מ</button>
+          <button class="ai-btn sec"  onclick="aiDo('risk')">⚠️ ניתוח סיכונים</button>
+          <button class="ai-btn sec"  onclick="aiDo('market')">📰 סקירת שוק</button>
+        </div>
+        <div class="ai-chat">
+          <div class="ai-input-row">
+            <input class="ai-inp" id="aiQ" placeholder="שאל שאלה חופשית על העסקה בעברית..." onkeydown="if(event.key==='Enter')aiAsk()">
+            <button class="ai-send" onclick="aiAsk()">שלח →</button>
+          </div>
+          <div class="ai-resp" id="aiResp"></div>
         </div>
       </div>
 
       <div class="market-grid">
-        <!-- AI Panel -->
-        <div style="grid-column:1/-1;">
-          <div class="ai-wrap">
-            <div class="ai-hd">
-              <div class="ai-hd-icon">🤖</div>
-              <div>
-                <div class="ai-hd-title">Claude AI — יועץ נדל"ן מסחרי</div>
-                <div class="ai-hd-sub">claude-sonnet-4-20250514 · מנתח עסקאות, שוק וניהול מו"מ</div>
-              </div>
-            </div>
-            <div class="ai-key-warn" id="aiKeyWarn">⚠️ לא הוגדר מפתח API. <a onclick="openSettings()">הגדר כאן</a></div>
-            <div class="ai-actions">
-              <button class="ai-btn prim" onclick="aiDo('analyze')">🔍 נתח את העסקה שלי</button>
-              <button class="ai-btn sec" onclick="aiDo('negotiate')">🤝 טיפים למו"מ</button>
-              <button class="ai-btn sec" onclick="aiDo('risk')">⚠️ ניתוח סיכונים</button>
-              <button class="ai-btn sec" onclick="aiDo('market')">📰 סקירת שוק</button>
-            </div>
-            <div class="ai-chat">
-              <div class="ai-inp-row">
-                <input class="ai-inp" id="aiQ" placeholder="שאל שאלה חופשית על העסקה..." onkeydown="if(event.key==='Enter')aiAsk()">
-                <button class="ai-send" onclick="aiAsk()">שלח →</button>
-              </div>
-              <div class="ai-resp" id="aiResp"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Market indicators -->
         <div class="card">
-          <div class="card-hd"><div class="card-title">אינדיקטורים — שוק משרדים ישראל</div></div>
-          <div class="card-body no-pad">
+          <div class="card-hd"><div class="card-title">אינדיקטורי שוק — משרדים ישראל</div></div>
+          <div class="card-body flush">
             <table class="tbl">
               <thead><tr><th>מדד</th><th>ערך</th><th>מגמה</th></tr></thead>
               <tbody>
-                <tr><td>שכ"ד ממוצע ת"א CBD</td><td class="num">₪110–140/מ"ר</td><td><span class="chip yellow">יציב</span></td></tr>
+                <tr><td>שכ"ד ממוצע ת"א CBD</td><td class="num">₪110–140/מ"ר</td><td><span class="chip amber">יציב</span></td></tr>
                 <tr><td>שכ"ד ממוצע פריפריה</td><td class="num">₪65–90/מ"ר</td><td><span class="chip green">יורד קל</span></td></tr>
-                <tr><td>שיעור תפוסה ת"א</td><td class="num">~82%</td><td><span class="chip yellow">יציב</span></td></tr>
-                <tr><td>גרייס ממוצע בשוק</td><td class="num">4–8 שבועות</td><td><span class="chip blue">ניתן למשא ומתן</span></td></tr>
-                <tr><td>USD/ILS</td><td class="num" id="mktUsd">—</td><td><span class="chip gray">עדכון שוטף</span></td></tr>
-                <tr><td>מדד CPI שנתי</td><td class="num" id="mktCpi">—</td><td><span class="chip yellow">עדכן ידנית</span></td></tr>
+                <tr><td>שיעור תפוסה ת"א</td><td class="num">~82%</td><td><span class="chip amber">יציב</span></td></tr>
+                <tr><td>גרייס ממוצע בשוק</td><td class="num">4–8 שבועות</td><td><span class="chip blue">לניהול מו"מ</span></td></tr>
+                <tr><td>USD / ILS</td><td class="num" id="mktUsd">—</td><td><span class="chip gray">שוטף</span></td></tr>
+                <tr><td>CPI שנתי</td><td class="num" id="mktCpi">—</td><td><span class="chip amber">עדכן ידנית</span></td></tr>
               </tbody>
             </table>
           </div>
         </div>
 
-        <!-- Negotiation checklist -->
         <div class="card">
           <div class="card-hd"><div class="card-title">רשימת בדיקה — לפני חתימה</div></div>
-          <div class="card-body no-pad">
+          <div class="card-body flush">
             <table class="tbl">
-              <thead><tr><th>נושא</th><th>מה לבדוק</th></tr></thead>
+              <thead><tr><th>עדיפות</th><th>נושא לבדיקה</th></tr></thead>
               <tbody>
-                <tr><td><span class="chip red">קריטי</span></td><td>הצמדה למדד — מלאה / חלקית / תקרה</td></tr>
+                <tr><td><span class="chip red">קריטי</span></td><td>הצמדה למדד — מלאה/חלקית/תקרה</td></tr>
                 <tr><td><span class="chip red">קריטי</span></td><td>תנאי יציאה מוקדמת ועלות</td></tr>
-                <tr><td><span class="chip yellow">חשוב</span></td><td>אפשרות סבליס — מפורשת בחוזה</td></tr>
-                <tr><td><span class="chip yellow">חשוב</span></td><td>מי משלם שיפוץ חלל? מסגרת תקציב</td></tr>
-                <tr><td><span class="chip blue">מומלץ</span></td><td>אופציה הדדית — לא חד-צדדית</td></tr>
+                <tr><td><span class="chip amber">חשוב</span></td><td>אפשרות סבליס — מפורשת בחוזה</td></tr>
+                <tr><td><span class="chip amber">חשוב</span></td><td>מי משלם שיפוץ ומה תקציב הפיט-אאוט</td></tr>
+                <tr><td><span class="chip blue">מומלץ</span></td><td>אופציה הדדית, לא חד-צדדית</td></tr>
                 <tr><td><span class="chip blue">מומלץ</span></td><td>גרייס: מינימום 4 שבועות, שאפו ל-8</td></tr>
-                <tr><td><span class="chip blue">מומלץ</span></td><td>חניה: נסה לכלול במחיר</td></tr>
-                <tr><td><span class="chip gray">לבדוק</span></td><td>ניהול בניין — דמי ניהול שקופים</td></tr>
+                <tr><td><span class="chip blue">מומלץ</span></td><td>חניה — נסה לכלול במחיר הבסיס</td></tr>
+                <tr><td><span class="chip gray">לבדוק</span></td><td>ניהול בניין — פרוט שקוף</td></tr>
               </tbody>
             </table>
           </div>
@@ -700,430 +1321,465 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);direct
     </div>
 
   </div><!-- /content -->
-</div><!-- /main-shell -->
+</div><!-- /shell -->
 
 <script>
-// ══════════════════════════════════════════════
-//  STATE
-// ══════════════════════════════════════════════
-const BTYPE_RATIO = {tower:.75,boutique:.82,indie:.88};
-const DEF = () => ({name:'',addr:'',btype:'tower',gross:500,net:375,ws:40,rent:90,arnona:55,arnonaDisc:false,mgmt:25,clean:8,elec:12,parkN:8,parkP:450,furn:0,renov:0,dur:36,grace:4,slOn:false,slPct:30,slPrice:80});
-let S = { props:[DEF(),DEF()], active:0 };
-let CHARTS = {};
+/* ═══════════════════════════════════════════
+   STATE & DEFAULTS
+═══════════════════════════════════════════ */
+const RATIOS = { tower:.75, boutique:.82, indie:.88 };
+const DEF = () => ({ name:'', addr:'', btype:'tower', gross:500, net:375, ws:40, rent:90, arnona:55, arnonaDisc:false, mgmt:25, clean:8, elec:12, parkN:8, parkP:450, furn:0, renov:0, dur:36, grace:4, slOn:false, slPct:30, slPrice:80 });
+let S = { props:[DEF(), DEF()], active:0 };
+let CH = {};
 
-function save(){ try{localStorage.setItem('oi_state',JSON.stringify(S));}catch(e){} }
-function load(){ try{const d=localStorage.getItem('oi_state');if(d){const p=JSON.parse(d);if(p&&Array.isArray(p.props)&&p.props.length){S=p;}}}catch(e){} }
+function persist(){ try{ localStorage.setItem('oi2_s', JSON.stringify(S)); }catch(e){} }
+function hydrate(){ try{ const d=localStorage.getItem('oi2_s'); if(d){ const p=JSON.parse(d); if(p?.props?.length) S=p; } }catch(e){} }
 
-// ══════════════════════════════════════════════
-//  NAVIGATION
-// ══════════════════════════════════════════════
-const PAGE_META = {
-  overview:['סקירה כללית','עלויות שכירות ותפעול'],
-  properties:['נכסים ונתוני עסקה','הגדר פרטי נכס'],
-  projection:['תחזית עלויות','CPI + אופציה'],
-  sublease:['ניתוח סבליס','חיסכון וכדאיות'],
-  market:['מודיעין שוק','ניתוח AI + מו"מ']
+/* ═══════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════ */
+const META = {
+  overview:   ['סקירה כללית',      'עלויות שכירות ותפעול'],
+  properties: ['נכסים ונתוני עסקה','הגדר פרטי נכס'],
+  projection: ['תחזית עלויות',     'CPI + אופציה'],
+  sublease:   ['ניתוח סבליס',      'חיסכון וכדאיות'],
+  market:     ['מודיעין שוק',      'ניתוח AI + מו"מ'],
 };
-function nav(page){
+function nav(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
-  document.getElementById('page-'+page)?.classList.add('active');
-  document.querySelector(`.sb-item[onclick="nav('${page}')"]`)?.classList.add('active');
-  const m=PAGE_META[page]||['',''];
-  document.getElementById('topbarTitle').textContent=m[0];
-  document.getElementById('topbarSub').textContent=m[1];
-  if(page==='properties'){renderPropForm();}
-  if(page==='overview'){renderOverview();}
-  if(page==='projection'){renderProjection();}
-  if(page==='sublease'){renderSublease();}
-  if(page==='market'){checkApiKey();document.getElementById('mktCpi').textContent=(localStorage.getItem('cpi_rate')||'3.5')+'%';}
+  document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id)?.classList.add('active');
+  document.querySelector(`.sb-item[onclick="nav('${id}')"]`)?.classList.add('active');
+  const [t,s]=META[id]||['',''];
+  document.getElementById('tbPage').textContent=t;
+  document.getElementById('tbSub').textContent=s;
+  if(id==='overview')   renderOverview();
+  if(id==='properties') renderProps();
+  if(id==='projection') renderProj();
+  if(id==='sublease')   renderSl();
+  if(id==='market')     { checkKey(); refreshMktIndicators(); }
 }
 
-// ══════════════════════════════════════════════
-//  PROP TABS HELPER
-// ══════════════════════════════════════════════
-function renderPropTabsInto(containerId, switchFn){
-  const bar=document.getElementById(containerId);
-  if(!bar)return;
+/* ═══════════════════════════════════════════
+   PROP TABS HELPER
+═══════════════════════════════════════════ */
+function tabs(containerId, onSwitch){
+  const bar=document.getElementById(containerId); if(!bar) return;
   bar.innerHTML='';
   S.props.forEach((p,i)=>{
-    const btn=document.createElement('button');
-    btn.className='ptab'+(i===S.active?' active':'');
-    btn.onclick=()=>switchFn(i);
-    const del=document.createElement('button');
-    del.className='ptab-del';del.textContent='✕';
-    del.onclick=e=>{e.stopPropagation();deleteProp(i,containerId,switchFn);};
-    btn.appendChild(del);
-    btn.appendChild(document.createTextNode(p.name||'נכס '+(i+1)));
-    bar.appendChild(btn);
+    const b=document.createElement('button');
+    b.className='ptab'+(i===S.active?' active':'');
+    b.onclick=()=>{ S.active=i; persist(); onSwitch(); };
+    const x=document.createElement('button');
+    x.className='ptab-x'; x.textContent='✕';
+    x.onclick=e=>{ e.stopPropagation(); delProp(i, containerId, onSwitch); };
+    b.appendChild(x);
+    b.appendChild(document.createTextNode(' '+(p.name||'נכס '+(i+1))));
+    bar.appendChild(b);
   });
   if(S.props.length<3){
-    const add=document.createElement('button');
-    add.className='ptab-add';add.textContent='+';
-    add.onclick=()=>{S.props.push(DEF());S.active=S.props.length-1;save();nav(document.querySelector('.page.active')?.id.replace('page-',''));};
-    bar.appendChild(add);
+    const a=document.createElement('button');
+    a.className='ptab-add'; a.textContent='+';
+    a.onclick=()=>{ S.props.push(DEF()); S.active=S.props.length-1; persist(); onSwitch(); };
+    bar.appendChild(a);
   }
 }
-function switchActive(i,switchFn){S.active=i;switchFn();}
-function deleteProp(i,containerId,switchFn){
-  if(S.props.length<=1)return;
+function delProp(i, cId, fn){
+  if(S.props.length<=1) return;
   S.props.splice(i,1);
-  if(S.active>=S.props.length)S.active=S.props.length-1;
-  save();switchFn();
+  if(S.active>=S.props.length) S.active=S.props.length-1;
+  persist(); fn();
 }
 
-// ══════════════════════════════════════════════
-//  FORM → STATE
-// ══════════════════════════════════════════════
-const NUM_FIELDS=[['fGross','gross'],['fNet','net'],['fWs','ws'],['fRent','rent'],['fArnona','arnona'],['fMgmt','mgmt'],['fClean','clean'],['fElec','elec'],['fParkN','parkN'],['fParkP','parkP'],['fFurn','furn'],['fRenov','renov'],['fDur','dur'],['fGrace','grace'],['fSlPct','slPct'],['fSlPrice','slPrice']];
-function gv(id){return parseFloat(document.getElementById(id)?.value)||0;}
+/* ═══════════════════════════════════════════
+   FORM ↔ STATE
+═══════════════════════════════════════════ */
+const NF=[['fGross','gross'],['fNet','net'],['fWs','ws'],['fRent','rent'],['fArnona','arnona'],['fMgmt','mgmt'],['fClean','clean'],['fElec','elec'],['fParkN','parkN'],['fParkP','parkP'],['fFurn','furn'],['fRenov','renov'],['fDur','dur'],['fGrace','grace'],['fSlPct','slPct'],['fSlPrice','slPrice']];
+const gv = id => parseFloat(document.getElementById(id)?.value)||0;
 function readForm(){
   const p=S.props[S.active];
   p.name=document.getElementById('fName')?.value||'';
   p.addr=document.getElementById('fAddr')?.value||'';
-  NUM_FIELDS.forEach(([id,key])=>{p[key]=gv(id);});
+  NF.forEach(([id,k])=>{ p[k]=gv(id); });
 }
 function loadForm(){
   const p=S.props[S.active];
   document.getElementById('fName').value=p.name||'';
   document.getElementById('fAddr').value=p.addr||'';
-  NUM_FIELDS.forEach(([id,key])=>{const el=document.getElementById(id);if(el)el.value=p[key]??'';});
+  NF.forEach(([id,k])=>{ const el=document.getElementById(id); if(el) el.value=p[k]??''; });
   document.getElementById('fBtype').value=p.btype||'tower';
-  document.getElementById('fArnonaTog').classList.toggle('on',!!p.arnonaDisc);
+  const at=document.getElementById('fArnonaTog');
+  at.classList.toggle('on',!!p.arnonaDisc);
   document.getElementById('fArnonaHint').textContent=p.arnonaDisc?'הנחת תוכנה 17₪ — פעיל':'הנחת תוכנה 17₪ — כבוי';
   document.getElementById('fSlTog').classList.toggle('on',!!p.slOn);
   document.getElementById('fSlFields').style.display=p.slOn?'':'none';
 }
-function propField(key){
-  if(key==='name'){S.props[S.active].name=document.getElementById('fName').value;}
-  if(key==='addr'){S.props[S.active].addr=document.getElementById('fAddr').value;}
-  save();
-  renderPropTabsInto('propPageTabs',()=>{S.active=S.active;renderPropForm();});
+function propField(k){
+  if(k==='name') S.props[S.active].name=document.getElementById('fName').value;
+  if(k==='addr') S.props[S.active].addr=document.getElementById('fAddr').value;
+  persist(); tabs('propTabs',()=>{ loadForm(); renderProps(); });
 }
 function setBtype(){
-  const bt=document.getElementById('fBtype').value;
-  const p=S.props[S.active];p.btype=bt;
-  p.net=Math.round((gv('fGross')||p.gross)*BTYPE_RATIO[bt]);
+  const p=S.props[S.active];
+  p.btype=document.getElementById('fBtype').value;
+  p.net=Math.round(gv('fGross')*RATIOS[p.btype]);
   document.getElementById('fNet').value=p.net;
   calc();
 }
-function onGrossChange(){
+function onGross(){
   const p=S.props[S.active];
-  const ratio=BTYPE_RATIO[p.btype]||.75;
-  document.getElementById('fNet').value=Math.round(gv('fGross')*ratio);
+  document.getElementById('fNet').value=Math.round(gv('fGross')*(RATIOS[p.btype]||.75));
   calc();
 }
 function toggleArnona(){
-  const p=S.props[S.active];p.arnonaDisc=!p.arnonaDisc;
-  const tog=document.getElementById('fArnonaTog');tog.classList.toggle('on',p.arnonaDisc);
-  if(p.arnonaDisc){p.arnona=Math.max(0,gv('fArnona')-17);}else{p.arnona=gv('fArnona')+17;}
+  const p=S.props[S.active];
+  p.arnonaDisc=!p.arnonaDisc;
+  document.getElementById('fArnonaTog').classList.toggle('on',p.arnonaDisc);
+  if(p.arnonaDisc) p.arnona=Math.max(0,gv('fArnona')-17);
+  else             p.arnona=gv('fArnona')+17;
   document.getElementById('fArnona').value=p.arnona;
   document.getElementById('fArnonaHint').textContent=p.arnonaDisc?'הנחת תוכנה 17₪ — פעיל':'הנחת תוכנה 17₪ — כבוי';
   calc();
 }
-function toggleSublease(){
-  const p=S.props[S.active];p.slOn=!p.slOn;
+function toggleSl(){
+  const p=S.props[S.active];
+  p.slOn=!p.slOn;
   document.getElementById('fSlTog').classList.toggle('on',p.slOn);
   document.getElementById('fSlFields').style.display=p.slOn?'':'none';
   calc();
 }
-function calc(){readForm();save();renderLeaseSummary();calcAndRender();}
+function calc(){ readForm(); persist(); renderSummary(); refreshActive(); }
 
-// ══════════════════════════════════════════════
-//  CORE CALC
-// ══════════════════════════════════════════════
-function calcProp(p){
-  const gross=p.gross||0,net=p.net||Math.round(gross*(BTYPE_RATIO[p.btype]||.75));
-  const months=p.dur||1,graceM=(p.grace||0)/4.33;
-  const rentM=p.rent*gross,arnonaM=p.arnona*gross,mgmtM=p.mgmt*gross,cleanM=p.clean*gross,elecM=p.elec*gross,parkM=p.parkN*p.parkP;
-  const oneTime=((p.furn||0)+(p.renov||0))/months;
-  const total=rentM+arnonaM+mgmtM+cleanM+elecM+parkM+oneTime;
+/* ═══════════════════════════════════════════
+   CORE MATH
+═══════════════════════════════════════════ */
+function cprop(p){
+  const gross=p.gross||0, net=p.net||Math.round(gross*(RATIOS[p.btype]||.75));
+  const months=p.dur||1, graceM=(p.grace||0)/4.33;
+  const rentM=p.rent*gross, arnM=p.arnona*gross, mgmtM=p.mgmt*gross;
+  const cleanM=p.clean*gross, elecM=p.elec*gross, parkM=p.parkN*p.parkP;
+  const ot=((p.furn||0)+(p.renov||0))/months;
+  const total=rentM+arnM+mgmtM+cleanM+elecM+parkM+ot;
   const graceSave=graceM*total;
-  const effective=total-(graceSave/months);
-  let slIncome=0;
-  if(p.slOn){slIncome=(net*(p.slPct/100))*(p.slPrice||0);}
-  const netEff=effective-slIncome;
-  const breakdown=[
-    {label:"שכ\"ד",val:rentM,color:'#2d5be3'},
-    {label:'ארנונה',val:arnonaM,color:'#00c875'},
-    {label:'ניהול',val:mgmtM,color:'#0073ea'},
-    {label:'חניה',val:parkM,color:'#ff642e'},
-    {label:'ריהוט/שיפוץ',val:oneTime,color:'#ffcb00'},
-    {label:'ניקיון+חשמל',val:cleanM+elecM,color:'#a78bfa'},
-  ].filter(b=>b.val>0);
-  const timeline=[];
+  const eff=total-(graceSave/months);
+  const slInc=p.slOn ? (net*(p.slPct/100)*(p.slPrice||0)) : 0;
+  const netEff=eff-slInc;
+  const bd=[
+    {l:'שכ"ד',  v:rentM, c:'#1D4ED8'},
+    {l:'ארנונה', v:arnM,  c:'#059669'},
+    {l:'ניהול',  v:mgmtM, c:'#0EA5E9'},
+    {l:'חניה',   v:parkM, c:'#F59E0B'},
+    {l:'חד-פעמי',v:ot,    c:'#7C3AED'},
+    {l:'שירותים',v:cleanM+elecM, c:'#64748B'},
+  ].filter(b=>b.v>0);
+  const tl=[];
   for(let m=1;m<=months;m++){
-    const grace=m<=graceM;
-    timeline.push({m,cost:grace?0:total,net:grace?0:total-slIncome,grace});
+    const g=m<=graceM;
+    tl.push({m,cost:g?0:total,net:g?0:total-slInc,g});
   }
-  return{total,perSqm:gross>0?total/gross:0,perWs:p.ws>0?total/p.ws:0,effective,netEff,annual:total*12,slIncome,breakdown,timeline,graceSave,months,graceM,net,gross};
-}
-function fmt(n,compact=false){
-  if(compact&&n>=1000000)return'₪'+(n/1000000).toFixed(1)+'M';
-  if(compact&&n>=1000)return'₪'+Math.round(n/1000)+'k';
-  return'₪'+Math.round(n).toLocaleString('he-IL');
-}
-function calcAndRender(){
-  const pg=document.querySelector('.page.active')?.id?.replace('page-','');
-  if(pg==='overview'||pg==='properties')renderOverview();
-  if(pg==='projection')renderProjection();
-  if(pg==='sublease')renderSublease();
+  return{total,sqm:gross>0?total/gross:0,ws:p.ws>0?total/p.ws:0,eff,netEff,annual:total*12,slInc,bd,tl,graceSave,months,graceM,net,gross,p};
 }
 
-// ══════════════════════════════════════════════
-//  RENDER PROP FORM
-// ══════════════════════════════════════════════
-function renderPropForm(){
-  renderPropTabsInto('propPageTabs',()=>{loadForm();renderPropForm();});
-  loadForm();
-  renderLeaseSummary();
-}
-function renderLeaseSummary(){
-  const p=S.props[S.active];const r=calcProp(p);
-  const rows=[
-    ['שטח ברוטו',p.gross+'מ"ר'],['שטח נטו',p.net+'מ"ר'],['תחנות עבודה',p.ws],
-    ['עלות ₪/מ"ר',fmt(r.perSqm)],['עלות/תחנה',fmt(r.perWs)],
-    ['עלות חודשית',fmt(r.total)],['עלות שנתית',fmt(r.annual)],
-    ['גרייס',p.grace+' שבועות → ₪'+Math.round(r.graceSave).toLocaleString('he-IL')+' חיסכון'],
-    ['עלות אפקטיבית',fmt(r.effective)],
-    ...(p.slOn?[['סבליס הכנסה',fmt(r.slIncome)+'/חודש'],['עלות נטו',fmt(r.netEff)]]:[]),
-  ];
-  document.getElementById('leaseSummaryBody').innerHTML=rows.map(([l,v])=>`<tr><td>${l}</td><td class="num">${v}</td></tr>`).join('');
-}
+const fmt=(n,c=false)=>{
+  if(c&&n>=1e6) return '₪'+(n/1e6).toFixed(1)+'M';
+  if(c&&n>=1e3) return '₪'+Math.round(n/1e3)+'k';
+  return '₪'+Math.round(n).toLocaleString('he-IL');
+};
 
-// ══════════════════════════════════════════════
-//  RENDER OVERVIEW
-// ══════════════════════════════════════════════
+/* ═══════════════════════════════════════════
+   CHART HELPERS
+═══════════════════════════════════════════ */
+const TICK = { font:{ family:'Heebo', size:11 }, color:'#94A3B8' };
+const GRID = { color:'#F1F5F9' };
+function dk(k){ if(CH[k]){ CH[k].destroy(); delete CH[k]; } }
+
+/* ═══════════════════════════════════════════
+   RENDER OVERVIEW
+═══════════════════════════════════════════ */
 function renderOverview(){
-  renderPropTabsInto('overviewPropTabs',()=>{S.active=S.active;renderOverview();});
-  const p=S.props[S.active];const r=calcProp(p);
-  document.getElementById('overviewPropName').textContent=p.name||(p.addr?p.addr:'נכס '+(S.active+1));
+  tabs('ovTabs',()=>{ S.active=S.active; renderOverview(); });
+  const p=S.props[S.active]; const r=cprop(p);
+  document.getElementById('ovTitle').textContent=p.name||(p.addr||('נכס '+(S.active+1)));
   document.getElementById('ovPropChip').textContent=p.name||'נכס '+(S.active+1);
-  document.getElementById('ovKpiTotal').textContent=fmt(r.total);
-  document.getElementById('ovKpiSqm').textContent=fmt(r.perSqm);
-  document.getElementById('ovKpiWs').textContent=fmt(r.perWs);
-  document.getElementById('ovKpiEff').textContent=fmt(r.effective);
-  document.getElementById('ovKpiEffSub').textContent='מוצמד ל-'+p.dur+' חודשים';
-  document.getElementById('ovKpiAnnual').textContent=fmt(r.annual,true);
-  const bench=document.getElementById('ovKpiSqmBench');
-  if(r.perSqm<90){bench.className='kpi-trend down';bench.textContent='↓ מתחת לשוק';}
-  else if(r.perSqm>140){bench.className='kpi-trend up';bench.textContent='↑ מעל לשוק';}
-  else{bench.className='kpi-trend neutral';bench.textContent='~ בשוק';}
-  const slCard=document.getElementById('ovKpiSlCard');
-  if(p.slOn&&r.slIncome>0){slCard.style.display='';document.getElementById('ovKpiSl').textContent=fmt(r.slIncome);}
-  else slCard.style.display='none';
-  // Insight
-  const ins=document.getElementById('ovInsight'),insTxt=document.getElementById('ovInsightText');
-  if(r.perSqm>120){ins.style.display='';ins.className='insight red';insTxt.innerHTML=`<strong>תשומת לב:</strong> עלות של ${fmt(r.perSqm)}/מ"ר גבוהה יחסית לשוק. שקול לנהל מו"מ על תנאים.`;}
-  else if(r.slIncome>0){ins.style.display='';ins.className='insight green';insTxt.innerHTML=`<strong>סבליס פעיל:</strong> הכנסה חודשית של ${fmt(r.slIncome)} מורידה עלות נטו ל-${fmt(r.netEff)}/חודש.`;}
-  else{ins.style.display='none';}
+  document.getElementById('ovTotal').textContent=fmt(r.total);
+  document.getElementById('ovSqm').textContent=fmt(r.sqm);
+  document.getElementById('ovWs').textContent=fmt(r.ws);
+  document.getElementById('ovEff').textContent=fmt(r.eff);
+  document.getElementById('ovEffSub').textContent='מוצמד ל-'+p.dur+' חודשים';
+  document.getElementById('ovAnnual').textContent=fmt(r.annual,true);
+  document.getElementById('graceChip').textContent='גרייס '+p.grace+' שבועות';
+  document.getElementById('durChip').textContent=p.dur+' חודשים';
+
+  // SQM badge
+  const badge=document.getElementById('ovSqmBadge');
+  if(r.sqm<90){ badge.className='kpi-badge down'; badge.textContent='↓ מתחת לשוק'; }
+  else if(r.sqm>140){ badge.className='kpi-badge up'; badge.textContent='↑ גבוה מהשוק'; }
+  else{ badge.className='kpi-badge neu'; badge.textContent='~ בשוק'; }
+
+  // Sublease KPI
+  const slK=document.getElementById('ovSlKpi');
+  if(p.slOn&&r.slInc>0){ slK.style.display=''; document.getElementById('ovSlVal').textContent=fmt(r.slInc); }
+  else slK.style.display='none';
+
+  // Banner
+  const bEl=document.getElementById('ovBanner');
+  if(r.sqm>120){ bEl.style.display=''; bEl.innerHTML=`<div class="banner red"><span class="banner-icon">⚠️</span><div><strong>עלות גבוהה מהשוק:</strong> ${fmt(r.sqm)}/מ"ר מעל ממוצע שוק. שקול מו"מ על הפחתת שכ"ד, גרייס מורחב, או שיפוץ על חשבון המשכיר.</div></div>`; }
+  else if(p.slOn&&r.slInc>0){ bEl.style.display=''; bEl.innerHTML=`<div class="banner green"><span class="banner-icon">✅</span><div><strong>סבליס פעיל:</strong> הכנסה חודשית ${fmt(r.slInc)} מורידה עלות נטו ל-${fmt(r.netEff)}/חודש — חיסכון של ${fmt(r.slInc*p.dur,true)} לאורך החוזה.</div></div>`; }
+  else bEl.style.display='none';
+
   // Breakdown table
-  const total=r.total||1;
-  document.getElementById('breakdownBody').innerHTML=r.breakdown.map(b=>`<tr><td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${b.color};margin-left:6px;"></span>${b.label}</td><td>${b.label==="שכ\"ד"?p.rent+'₪/מ"ר':''}</td><td class="num">${Math.round(b.val/total*100)}%</td><td class="num">${fmt(b.val)}</td></tr>`).join('')+
+  const tot=r.total||1;
+  document.getElementById('breakdownBody').innerHTML=
+    r.bd.map(b=>`<tr><td><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${b.c};margin-left:7px;vertical-align:middle;"></span>${b.l}</td><td style="color:var(--ink-3);font-size:13px">${b.l==='שכ"ד'?p.rent+'₪/מ"ר gross':''}</td><td style="text-align:center;" class="num">${Math.round(b.v/tot*100)}%</td><td class="num">${fmt(b.v)}</td></tr>`).join('')+
     `<tr class="total"><td colspan="3">סה"כ חודשי</td><td class="num">${fmt(r.total)}</td></tr>`;
-  document.getElementById('graceChip').textContent=`גרייס: ${p.grace} שבועות`;
-  renderDonut(r.breakdown);
-  renderTimeline(r.timeline,p);
-  if(S.props.length>1){document.getElementById('compareCardWrapper').style.display='';renderCompare();}
-  else document.getElementById('compareCardWrapper').style.display='none';
+
+  // Donut
+  dk('donut');
+  CH.donut=new Chart(document.getElementById('donutChart'),{
+    type:'doughnut',
+    data:{labels:r.bd.map(b=>b.l),datasets:[{data:r.bd.map(b=>b.v),backgroundColor:r.bd.map(b=>b.c),borderWidth:2,borderColor:'#fff',hoverOffset:5}]},
+    options:{cutout:'68%',animation:{duration:250},plugins:{legend:{display:true,position:'left',labels:{font:{family:'Heebo',size:12},boxWidth:11,padding:9,color:'#334155'}},tooltip:{callbacks:{label:c=>` ${c.label}: ${fmt(c.raw)}`}}}}
+  });
+
+  // Timeline
+  dk('timeline');
+  const bgs=r.tl.map(t=>t.g?'rgba(16,185,129,.4)':'#1D4ED8');
+  const ds=[{label:'עלות חודשית',data:r.tl.map(t=>t.cost),backgroundColor:bgs,borderRadius:2,borderSkipped:false}];
+  if(p.slOn) ds.push({label:'נטו',data:r.tl.map(t=>t.net),type:'line',borderColor:'#059669',backgroundColor:'rgba(5,150,105,.08)',fill:true,tension:.4,pointRadius:0,borderWidth:2});
+  CH.timeline=new Chart(document.getElementById('timelineChart'),{
+    type:'bar',
+    data:{labels:r.tl.map(t=>`ח${t.m}`),datasets:ds},
+    options:{animation:{duration:250},scales:{x:{ticks:{...TICK,maxTicksLimit:12},grid:{display:false}},y:{ticks:{...TICK,callback:v=>'₪'+Math.round(v/1000)+'k'},grid:GRID}},plugins:{legend:{display:p.slOn,labels:{font:{family:'Heebo',size:12}}},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${fmt(c.raw)}`}}}}
+  });
+
+  // Compare
+  const cc=document.getElementById('compareCard');
+  if(S.props.length>1){
+    cc.style.display='';
+    dk('compare');
+    const rs=S.props.map(p=>cprop(p));
+    const colors=['#1D4ED8','#059669','#D97706'];
+    CH.compare=new Chart(document.getElementById('compareChart'),{
+      type:'bar',
+      data:{labels:S.props.map((p,i)=>p.name||'נכס '+(i+1)),datasets:[{data:rs.map(r=>Math.round(r.sqm)),backgroundColor:colors.slice(0,S.props.length),borderRadius:4}]},
+      options:{indexAxis:'y',animation:{duration:250},scales:{x:{ticks:{...TICK,callback:v=>'₪'+v},grid:GRID},y:{ticks:{...TICK},grid:{display:false}}},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` עלות/מ"ר: ₪${c.raw}`}}}}
+    });
+  } else cc.style.display='none';
 }
 
-// ══════════════════════════════════════════════
-//  CHARTS
-// ══════════════════════════════════════════════
-const CC={plugins:{legend:{display:false}},animation:{duration:250}};
-function destroyChart(k){if(CHARTS[k]){CHARTS[k].destroy();delete CHARTS[k];}}
-
-function renderDonut(breakdown){
-  destroyChart('donut');
-  CHARTS.donut=new Chart(document.getElementById('donutChart'),{type:'doughnut',data:{labels:breakdown.map(b=>b.label),datasets:[{data:breakdown.map(b=>b.val),backgroundColor:breakdown.map(b=>b.color),borderWidth:2,borderColor:'#fff',hoverOffset:4}]},options:{cutout:'70%',plugins:{legend:{display:true,position:'left',labels:{font:{family:'Heebo',size:11},boxWidth:10,padding:7}},tooltip:{callbacks:{label:c=>` ${c.label}: ${fmt(c.raw)}`}}},animation:{duration:250}}});
+/* ═══════════════════════════════════════════
+   RENDER PROPERTIES
+═══════════════════════════════════════════ */
+function renderProps(){
+  tabs('propTabs',()=>{ loadForm(); renderProps(); });
+  loadForm();
+  renderSummary();
 }
-function renderTimeline(timeline,p){
-  destroyChart('timeline');
-  const labels=timeline.map(t=>`ח${t.m}`);
-  const bgs=timeline.map(t=>t.grace?'rgba(197,224,133,0.6)':'#2d5be3');
-  const ds=[{label:'עלות חודשית',data:timeline.map(t=>t.cost),backgroundColor:bgs,borderRadius:2,borderSkipped:false}];
-  if(p.slOn)ds.push({label:'עלות נטו',data:timeline.map(t=>t.net),type:'line',borderColor:'#00c875',backgroundColor:'rgba(0,200,117,.08)',fill:true,tension:.4,pointRadius:0,borderWidth:2});
-  CHARTS.timeline=new Chart(document.getElementById('timelineChart'),{type:'bar',data:{labels,datasets:ds},options:{...CC,scales:{x:{ticks:{font:{family:'Heebo',size:9},maxTicksLimit:12},grid:{display:false}},y:{ticks:{font:{family:'Heebo',size:9},callback:v=>'₪'+Math.round(v/1000)+'k'},grid:{color:'#f0f1f3'}}},plugins:{legend:{display:p.slOn,labels:{font:{family:'Heebo',size:10}}},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${fmt(c.raw)}`}}}}});
-}
-function renderCompare(){
-  destroyChart('compare');
-  const results=S.props.map(p=>calcProp(p));
-  const colors=['#2d5be3','#00c875','#ff642e'];
-  CHARTS.compare=new Chart(document.getElementById('compareChart'),{type:'bar',data:{labels:S.props.map((p,i)=>p.name||'נכס '+(i+1)),datasets:[{data:results.map(r=>Math.round(r.perSqm)),backgroundColor:colors.slice(0,S.props.length),borderRadius:4}]},options:{indexAxis:'y',...CC,scales:{x:{ticks:{font:{family:'Heebo',size:10},callback:v=>'₪'+v},grid:{color:'#f0f1f3'}},y:{ticks:{font:{family:'Heebo',size:11}},grid:{display:false}}},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` עלות/מ"ר: ₪${c.raw}`}}}}});
+function renderSummary(){
+  const p=S.props[S.active]; const r=cprop(p);
+  const rows=[
+    ['שטח ברוטו',`${p.gross} מ"ר`],['שטח נטו',`${p.net} מ"ר`],['תחנות עבודה',p.ws],
+    ['עלות ₪/מ"ר',fmt(r.sqm)],['עלות/תחנה',fmt(r.ws)],
+    ['עלות חודשית',fmt(r.total)],['עלות שנתית',fmt(r.annual)],
+    ['גרייס',`${p.grace} שבועות → חיסכון ${fmt(r.graceSave)}`],
+    ['עלות אפקטיבית',fmt(r.eff)],
+    ...(p.slOn?[['הכנסת סבליס',fmt(r.slInc)+'/חודש'],['עלות נטו',fmt(r.netEff)]]:[[]])
+  ].filter(r=>r.length===2);
+  document.getElementById('summaryBody').innerHTML=rows.map(([l,v])=>`<tr><td style="color:var(--ink-3)">${l}</td><td class="num">${v}</td></tr>`).join('');
 }
 
-// ══════════════════════════════════════════════
-//  PROJECTION
-// ══════════════════════════════════════════════
-function renderProjection(){
-  renderPropTabsInto('projPropTabs',()=>{S.active=S.active;renderProjection();});
-  const p=S.props[S.active];const r=calcProp(p);
-  const cpi=parseFloat(document.getElementById('projCpi')?.value)||3.5;
-  const optPct=parseFloat(document.getElementById('projOpt')?.value)||5;
-  const optMonth=parseInt(document.getElementById('projOptMonth')?.value)||37;
-  const totalYears=Math.ceil((p.dur||36)/12)+2;
+/* ═══════════════════════════════════════════
+   RENDER PROJECTION
+═══════════════════════════════════════════ */
+function renderProj(){
+  tabs('projTabs',()=>{ S.active=S.active; renderProj(); });
+  const p=S.props[S.active]; const r=cprop(p);
+  const cpi=parseFloat(document.getElementById('pCpi')?.value)||3.5;
+  const opt=parseFloat(document.getElementById('pOpt')?.value)||5;
+  const optM=parseInt(document.getElementById('pOptM')?.value)||37;
+  const years=Math.ceil(Math.max(p.dur||36,optM+12)/12)+1;
   const rows=[];
-  for(let yr=1;yr<=totalYears;yr++){
-    const startM=(yr-1)*12+1,endM=Math.min(yr*12,Math.max(p.dur||36,optMonth+12));
-    const cpiMult=Math.pow(1+(cpi/100),yr-1);
-    const optMult=(endM>=optMonth)?1+(optPct/100):1;
-    const adjustedRent=p.rent*cpiMult*optMult;
-    const otherCosts=r.total-p.rent*p.gross;
-    const monthly=(adjustedRent*p.gross)+otherCosts;
+  for(let yr=1;yr<=years;yr++){
+    const s=(yr-1)*12+1, e=yr*12;
+    const cpiMult=Math.pow(1+cpi/100,yr-1);
+    const hasOpt=e>=optM;
+    const optMult=hasOpt?1+opt/100:1;
+    const adjRent=p.rent*cpiMult*optMult*p.gross;
+    const others=r.total-p.rent*p.gross;
+    const monthly=adjRent+others;
     const delta=monthly-r.total;
-    const deltaPct=r.total>0?Math.round((delta/r.total)*100):0;
-    const hasOpt=endM>=optMonth;
-    rows.push({yr,startM,endM,baseRent:p.rent*p.gross,cpiMult,adjustedRent:adjustedRent*p.gross,hasOpt,monthly,delta,deltaPct});
+    const dpct=r.total>0?Math.round(delta/r.total*100):0;
+    rows.push({yr,s,e,baseRent:p.rent*p.gross,cpiMult,adjRent,hasOpt,monthly,delta,dpct});
   }
-  // Insights
-  const ins=document.getElementById('projInsights');
-  const lastRow=rows[rows.length-1];
-  const y1Cost=rows[0]?.monthly||r.total;
-  const lastCost=lastRow?.monthly||r.total;
-  ins.innerHTML='';
-  if(lastCost>y1Cost*1.15){
-    ins.innerHTML=`<div class="insight red"><span class="insight-icon">⚠️</span><strong>תשומת לב:</strong> עד שנה ${rows.length}, העלות הצפויה תגיע ל-${fmt(lastCost)}/חודש — עלייה של ${Math.round((lastCost-y1Cost)/y1Cost*100)}% מהיום. שקול לנהל מו"מ על הצמדה חלקית.</div>`;
-  }
-  if(rows.find(r=>r.hasOpt)){
-    const optRow=rows.find(r=>r.hasOpt);
-    ins.innerHTML+=`<div class="insight yellow"><span class="insight-icon">📅</span><strong>הפעלת אופציה בחודש ${optMonth}:</strong> עלות חודשית תעלה ב-${fmt(optRow.monthly-rows[0].monthly)} (${optRow.deltaPct}% מהיום). תכנן תזרים בהתאם.</div>`;
-  }
+  // Banners
+  const bEl=document.getElementById('projBanners'); bEl.innerHTML='';
+  const last=rows[rows.length-1];
+  if(last.dpct>15) bEl.innerHTML+=`<div class="banner red"><span class="banner-icon">⚠️</span><div><strong>עלייה משמעותית צפויה:</strong> עד שנה ${last.yr}, העלות תגיע ל-${fmt(last.monthly)}/חודש — עלייה של ${last.dpct}%. מומלץ לנהל מו"מ על תקרת הצמדה.</div></div>`;
+  const optRow=rows.find(r=>r.hasOpt);
+  if(optRow) bEl.innerHTML+=`<div class="banner amber"><span class="banner-icon">📅</span><div><strong>הפעלת אופציה בחודש ${optM}:</strong> עלות חודשית תקפוץ ב-${fmt(optRow.delta)} (${optRow.dpct}% מהיום). תכנן תזרים בהתאם.</div></div>`;
   // Table
-  document.getElementById('projTableBody').innerHTML=rows.map(row=>`
-    <tr class="${row.hasOpt?'warn':''}${row.deltaPct>20?'danger':''}">
+  document.getElementById('projBody').innerHTML=rows.map(row=>`
+    <tr class="${row.hasOpt?'hl-amber':''}${row.dpct>20?' hl-red':''}">
       <td><strong>שנה ${row.yr}</strong></td>
-      <td>${row.startM}–${row.endM}</td>
+      <td style="color:var(--ink-3);font-size:13px">${row.s}–${row.e}</td>
       <td class="num">${fmt(row.baseRent)}</td>
       <td class="num">${((row.cpiMult-1)*100).toFixed(1)}%</td>
-      <td class="num">${fmt(row.adjustedRent)}</td>
-      <td>${row.hasOpt?`<span class="chip yellow">+${optPct}%</span>`:'<span class="chip gray">—</span>'}</td>
-      <td class="num ${row.deltaPct>15?'red':row.deltaPct>0?'':'green'}">${fmt(row.monthly)}</td>
-      <td class="num ${row.delta>0?'red':'green'}">${row.delta>0?'+':''}${fmt(row.delta)} (${row.deltaPct>0?'+':''}${row.deltaPct}%)</td>
+      <td class="num">${fmt(row.adjRent)}</td>
+      <td>${row.hasOpt?`<span class="chip amber">+${opt}%</span>`:'<span class="chip gray">—</span>'}</td>
+      <td class="num ${row.dpct>15?'red':''}">${fmt(row.monthly)}</td>
+      <td class="num ${row.delta>0?'red':'green'}">${row.delta>0?'+':''}${fmt(row.delta)} (${row.dpct>0?'+':''}${row.dpct}%)</td>
     </tr>`).join('');
   // Chart
-  destroyChart('proj');
-  CHARTS.proj=new Chart(document.getElementById('projChart'),{type:'line',data:{labels:rows.map(r=>'שנה '+r.yr),datasets:[{label:'עלות חודשית צפויה',data:rows.map(r=>r.monthly),borderColor:'#2d5be3',backgroundColor:'rgba(45,91,227,.08)',fill:true,tension:.4,pointRadius:4,borderWidth:2},{label:'עלות בסיס (היום)',data:rows.map(()=>r.total),borderColor:'#00c875',borderDash:[6,3],fill:false,tension:0,pointRadius:0,borderWidth:1.5}]},options:{...CC,scales:{x:{ticks:{font:{family:'Heebo',size:10}},grid:{display:false}},y:{ticks:{font:{family:'Heebo',size:10},callback:v=>'₪'+Math.round(v/1000)+'k'},grid:{color:'#f0f1f3'}}},plugins:{legend:{display:true,labels:{font:{family:'Heebo',size:11}}},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${fmt(c.raw)}`}}}}});
+  dk('proj');
+  CH.proj=new Chart(document.getElementById('projChart'),{
+    type:'line',
+    data:{
+      labels:rows.map(r=>'שנה '+r.yr),
+      datasets:[
+        {label:'עלות חודשית צפויה',data:rows.map(r=>r.monthly),borderColor:'#1D4ED8',backgroundColor:'rgba(29,78,216,.07)',fill:true,tension:.4,pointRadius:5,pointBackgroundColor:'#1D4ED8',borderWidth:2.5},
+        {label:'עלות בסיס (היום)',data:rows.map(()=>r.total),borderColor:'#059669',borderDash:[6,4],fill:false,tension:0,pointRadius:0,borderWidth:1.5}
+      ]
+    },
+    options:{animation:{duration:250},scales:{x:{ticks:TICK,grid:{display:false}},y:{ticks:{...TICK,callback:v=>'₪'+Math.round(v/1000)+'k'},grid:GRID}},plugins:{legend:{display:true,labels:{font:{family:'Heebo',size:12},color:'#334155'}},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${fmt(c.raw)}`}}}}
+  });
 }
 
-// ══════════════════════════════════════════════
-//  SUBLEASE
-// ══════════════════════════════════════════════
-function renderSublease(){
-  renderPropTabsInto('slPropTabs',()=>{S.active=S.active;renderSublease();});
-  const p=S.props[S.active];const r=calcProp(p);
-  const ins=document.getElementById('slInsight'),insTxt=document.getElementById('slInsightText');
+/* ═══════════════════════════════════════════
+   RENDER SUBLEASE
+═══════════════════════════════════════════ */
+function renderSl(){
+  tabs('slTabs',()=>{ S.active=S.active; renderSl(); });
+  const p=S.props[S.active]; const r=cprop(p);
+  const bEl=document.getElementById('slBanner');
   if(!p.slOn){
-    ins.className='insight yellow';insTxt.textContent='הפעל סבליס בעמוד "נכסים ונתוני עסקה" לניתוח מלא.';
-    document.getElementById('slIncome').textContent='—';document.getElementById('slNet').textContent='—';
-    document.getElementById('slBreakEven').textContent='—';document.getElementById('slTotalSave').textContent='—';
+    bEl.innerHTML='<div class="banner blue"><span class="banner-icon">💡</span><div>הפעל <strong>השכרת משנה</strong> בעמוד "נכסים ונתוני עסקה" לניתוח מלא.</div></div>';
+    ['slInc','slNet','slBE','slSave'].forEach(id=>document.getElementById(id).textContent='—');
     return;
   }
-  const slInc=r.slIncome,netM=r.netEff,saving=slInc;
-  const totalSave=saving*(p.dur-(r.graceM||0));
-  const breakEven=r.total>0?Math.ceil((p.furn+p.renov||1)/saving)||1:1;
-  document.getElementById('slIncome').textContent=fmt(slInc);
-  document.getElementById('slNet').textContent=fmt(netM);
-  document.getElementById('slBreakEven').textContent='חודש '+Math.min(breakEven,p.dur);
-  document.getElementById('slTotalSave').textContent=fmt(totalSave);
-  ins.className='insight green';insTxt.innerHTML=`<strong>כדאי להשכיר בחזרה:</strong> חיסכון של ${fmt(slInc)}/חודש · עלות נטו: ${fmt(netM)}/חודש · חיסכון כולל על פני החוזה: ${fmt(totalSave)}.`;
-  // Table (show every 3 months for readability)
-  const tbl=[];
-  let cumSave=0;
+  bEl.innerHTML=`<div class="banner green"><span class="banner-icon">✅</span><div><strong>כדאי להשכיר בחזרה:</strong> חיסכון חודשי ${fmt(r.slInc)} · עלות נטו ${fmt(r.netEff)}/חודש · חיסכון כולל בחוזה: ${fmt(r.slInc*p.dur,true)}.</div></div>`;
+  document.getElementById('slInc').textContent=fmt(r.slInc);
+  document.getElementById('slNet').textContent=fmt(r.netEff);
+  document.getElementById('slBE').textContent='חודש '+Math.min(Math.ceil(((p.furn||0)+(p.renov||0)||r.total)/r.slInc)||1, p.dur);
+  document.getElementById('slSave').textContent=fmt(r.slInc*p.dur,true);
+  // Table (every 3 months)
+  const rows=[]; let cum=0;
   for(let m=1;m<=p.dur;m++){
-    const g=m<=r.graceM;const cost=g?0:r.total;const inc=g?0:slInc;cumSave+=inc;
-    if(m<=6||m%3===0||m===p.dur)tbl.push({m,cost,inc,net:cost-inc,cumSave,g});
+    const g=m<=r.graceM; const cost=g?0:r.total; const inc=g?0:r.slInc;
+    cum+=inc;
+    if(m<=6||m%3===0||m===p.dur) rows.push({m,cost,inc,net:cost-inc,cum,g});
   }
-  document.getElementById('slTableBody').innerHTML=tbl.map(row=>`
-    <tr class="${row.g?'highlight':''}">
+  document.getElementById('slBody').innerHTML=rows.map(row=>`
+    <tr class="${row.g?'hl-green':''}">
       <td>${row.g?'<span class="chip green">גרייס</span> ':''}חודש ${row.m}</td>
       <td class="num">${fmt(row.cost)}</td>
       <td class="num green">${row.inc>0?fmt(row.inc):'—'}</td>
       <td class="num">${fmt(row.net)}</td>
-      <td class="num green">${fmt(row.cumSave)}</td>
-      <td>${row.cumSave>row.cost*3?'<span class="chip green">משתלם</span>':row.inc>0?'<span class="chip blue">פעיל</span>':'<span class="chip gray">גרייס</span>'}</td>
+      <td class="num green">${fmt(row.cum)}</td>
+      <td>${row.cum>row.cost*3?'<span class="chip green">משתלם</span>':row.inc>0?'<span class="chip blue">פעיל</span>':'<span class="chip gray">גרייס</span>'}</td>
     </tr>`).join('');
-  // Cumulative chart
-  destroyChart('cumul');
-  const labels=[],base=[],withSl=[];
-  let cb=0,cs=0;
-  for(let m=1;m<=p.dur;m++){const g=m<=r.graceM;cb+=g?0:r.total;cs+=g?0:r.netEff;labels.push(`ח${m}`);base.push(cb);withSl.push(cs);}
-  CHARTS.cumul=new Chart(document.getElementById('cumulChart'),{type:'line',data:{labels,datasets:[{label:'ללא סבליס',data:base,borderColor:'#e2445c',backgroundColor:'rgba(226,68,92,.06)',fill:true,tension:.4,pointRadius:0,borderWidth:2},{label:'עם סבליס',data:withSl,borderColor:'#00c875',backgroundColor:'rgba(0,200,117,.08)',fill:true,tension:.4,pointRadius:0,borderWidth:2}]},options:{...CC,scales:{x:{ticks:{font:{family:'Heebo',size:9},maxTicksLimit:12},grid:{display:false}},y:{ticks:{font:{family:'Heebo',size:9},callback:v=>'₪'+Math.round(v/1000)+'k'},grid:{color:'#f0f1f3'}}},plugins:{legend:{display:true,labels:{font:{family:'Heebo',size:11}}},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${fmt(c.raw)}`}}}}});
+  // Cumul chart
+  dk('cumul');
+  let cb=0,cs=0; const lbls=[],base=[],wSl=[];
+  for(let m=1;m<=p.dur;m++){ const g=m<=r.graceM; cb+=g?0:r.total; cs+=g?0:r.netEff; lbls.push(`ח${m}`); base.push(cb); wSl.push(cs); }
+  CH.cumul=new Chart(document.getElementById('cumulChart'),{
+    type:'line',
+    data:{labels:lbls,datasets:[
+      {label:'ללא סבליס',data:base,borderColor:'#DC2626',backgroundColor:'rgba(220,38,38,.06)',fill:true,tension:.4,pointRadius:0,borderWidth:2.5},
+      {label:'עם סבליס', data:wSl, borderColor:'#059669',backgroundColor:'rgba(5,150,105,.07)',fill:true,tension:.4,pointRadius:0,borderWidth:2.5}
+    ]},
+    options:{animation:{duration:250},scales:{x:{ticks:{...TICK,maxTicksLimit:12},grid:{display:false}},y:{ticks:{...TICK,callback:v=>'₪'+Math.round(v/1000)+'k'},grid:GRID}},plugins:{legend:{display:true,labels:{font:{family:'Heebo',size:12},color:'#334155'}},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${fmt(c.raw)}`}}}}
+  });
 }
 
-// ══════════════════════════════════════════════
-//  AI
-// ══════════════════════════════════════════════
-function checkApiKey(){
-  const has=!!localStorage.getItem('claude_api_key');
-  document.getElementById('aiKeyWarn').style.display=has?'none':'';
-}
-function buildCtx(){
+/* ═══════════════════════════════════════════
+   AI
+═══════════════════════════════════════════ */
+function checkKey(){ document.getElementById('aiKeyWarn').style.display=localStorage.getItem('claude_api_key')?'none':''; }
+function ctx(){
   return S.props.map((p,i)=>{
-    const r=calcProp(p);
-    return `נכס ${i+1}: ${p.name||'ללא שם'} | ${p.gross}מ"ר | שכ"ד ${p.rent}₪/מ"ר | ארנונה ${p.arnona}₪/מ"ר | ניהול ${p.mgmt}₪/מ"ר | עלות חודשית ${fmt(r.total)} | אפקטיבי ${fmt(r.effective)} | ${p.dur} חודשים | גרייס ${p.grace} שב'${p.slOn?` | סבליס ${p.slPct}% ב-${p.slPrice}₪/מ"ר`:''}`
+    const r=cprop(p);
+    return `נכס ${i+1}: ${p.name||'ללא שם'} | ${p.gross}מ"ר | שכ"ד ${p.rent}₪ | ארנונה ${p.arnona}₪ | ניהול ${p.mgmt}₪ | חניה ${p.parkN}×${p.parkP}₪ | ${p.dur}חודשים | גרייס ${p.grace}שב' | עלות ${fmt(r.total)}/חודש | אפקטיבי ${fmt(r.eff)}${p.slOn?` | סבליס ${p.slPct}%@${p.slPrice}₪`:''}`;
   }).join('\n');
 }
 const PROMPTS={
-  analyze:'נתח את העסקה הזו מול שוק המשרדים הישראלי. האם המחיר הוגן? מה הסיכונים? ציין המלצות קונקרטיות ל-CFO.',
-  negotiate:'בהתבסס על נתוני העסקה, תן 5 טיפים ספציפיים למשא ומתן מול בעל הנכס. ציין מה ניתן לבקש ומה הסיכוי להצליח.',
-  risk:'ניתח סיכונים: מה קורה אם הארנונה עולה? אם CPI גבוה? אם השוכר המשנה עוזב? תן ניתוח תרחישים.',
-  market:'תסכם בפסקה אחת את מצב שוק המשרדים הישראלי כרגע: מחירים, תפוסה, מגמות. מה זה אומר לנהל מו"מ?'
+  analyze:'נתח את העסקה הזו לעומת שוק המשרדים הישראלי. האם המחיר הוגן? מה הסיכונים? תן המלצות קונקרטיות ל-CFO.',
+  negotiate:'תן 5 טיפים ספציפיים למשא ומתן מול בעל הנכס, מה לבקש ומה הסיכוי להצליח. להיות ישיר ומעשי.',
+  risk:'נתח 3 תרחישי סיכון: ארנונה עולה 10%, CPI גבוה מהצפוי, שוכר המשנה עוזב. מה ההשפעה הכספית?',
+  market:'סכם בפסקה אחת מצב שוק המשרדים הישראלי עכשיו. מחירים, תפוסה, מגמות. מה המשמעות לניהול מו"מ?'
 };
-async function aiDo(type){callClaude(PROMPTS[type]);}
-async function aiAsk(){const q=document.getElementById('aiQ').value.trim();if(!q)return;document.getElementById('aiQ').value='';callClaude(q);}
-async function callClaude(msg){
+async function aiDo(t){ callAI(PROMPTS[t]); }
+async function aiAsk(){ const q=document.getElementById('aiQ').value.trim(); if(!q) return; document.getElementById('aiQ').value=''; callAI(q); }
+async function callAI(msg){
   const key=localStorage.getItem('claude_api_key');
-  if(!key){showResp('⚠️ הגדר מפתח API בהגדרות.');return;}
-  showLoading();
+  if(!key){ showResp('⚠️ הגדר מפתח API בהגדרות.'); return; }
+  showLoad();
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1024,system:`אתה יועץ נדל"ן מסחרי ישראלי מומחה, מתמחה בשוק משרדים. ענה בעברית, קצר וממוקד, בסגנון מקצועי ל-CFO/COO. נתוני עסקה:\n${buildCtx()}`,messages:[{role:'user',content:msg}]})});
-    if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'API Error');}
-    const d=await res.json();showResp(d.content[0].text);
-  }catch(e){showResp('❌ '+e.message);}
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1024,system:`אתה יועץ נדל"ן מסחרי ישראלי בכיר, מתמחה בשוק משרדים. ענה בעברית, קצר וממוקד, לרמת CFO/COO. נתוני עסקה:\n${ctx()}`,messages:[{role:'user',content:msg}]})});
+    if(!res.ok){ const e=await res.json(); throw new Error(e.error?.message||'API Error'); }
+    const d=await res.json(); showResp(d.content[0].text);
+  }catch(e){ showResp('❌ '+e.message); }
 }
-function showLoading(){const el=document.getElementById('aiResp');el.className='ai-resp vis';el.innerHTML='<div class="ai-loading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span style="color:rgba(255,255,255,.5);font-size:.72rem;">Claude מנתח...</span></div>';}
-function showResp(t){const el=document.getElementById('aiResp');el.className='ai-resp vis';el.innerHTML=t.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');}
-async function fetchMarketBrief(){callClaude(PROMPTS.market);}
+function showLoad(){ const el=document.getElementById('aiResp'); el.className='ai-resp vis'; el.innerHTML='<div class="ai-loading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>Claude מנתח...</span></div>'; }
+function showResp(t){ const el=document.getElementById('aiResp'); el.className='ai-resp vis'; el.innerHTML=t.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>'); }
 
-// ══════════════════════════════════════════════
-//  SETTINGS & LIVE DATA
-// ══════════════════════════════════════════════
+function refreshMktIndicators(){
+  document.getElementById('mktCpi').textContent=(localStorage.getItem('cpi_rate')||'3.5')+'%';
+}
+
+/* ═══════════════════════════════════════════
+   SETTINGS
+═══════════════════════════════════════════ */
 function openSettings(){
   document.getElementById('apiKeyInput').value=localStorage.getItem('claude_api_key')||'';
-  document.getElementById('cpiModalInput').value=localStorage.getItem('cpi_rate')||'3.5';
+  document.getElementById('cpiSetting').value=localStorage.getItem('cpi_rate')||'3.5';
   document.getElementById('settingsModal').classList.add('open');
 }
-function closeSettings(){document.getElementById('settingsModal').classList.remove('open');}
+function closeSettings(){ document.getElementById('settingsModal').classList.remove('open'); }
 function saveSettings(){
   const k=document.getElementById('apiKeyInput').value.trim();
-  if(k)localStorage.setItem('claude_api_key',k);
-  const c=document.getElementById('cpiModalInput').value;
-  if(c){localStorage.setItem('cpi_rate',c);document.getElementById('cpiDisplay').textContent=c+'%';document.getElementById('projCpi').value=c;document.getElementById('mktCpi').textContent=c+'%';}
-  closeSettings();checkApiKey();
+  if(k) localStorage.setItem('claude_api_key',k);
+  const c=document.getElementById('cpiSetting').value;
+  if(c){
+    localStorage.setItem('cpi_rate',c);
+    document.getElementById('tbCpi').textContent=c+'%';
+    document.getElementById('pCpi').value=c;
+    if(document.getElementById('mktCpi')) document.getElementById('mktCpi').textContent=c+'%';
+  }
+  closeSettings(); checkKey();
 }
-document.getElementById('settingsModal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeSettings();});
+document.getElementById('settingsModal').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeSettings(); });
 
+/* ═══════════════════════════════════════════
+   LIVE DATA
+═══════════════════════════════════════════ */
 async function fetchUSD(){
   try{
     const r=await fetch('https://api.exchangerate-api.com/v4/latest/USD');
-    const d=await r.json();const rate=d.rates?.ILS;
+    const d=await r.json(); const rate=d.rates?.ILS;
     if(rate){
-      const s='$1 = ₪'+rate.toFixed(2);
-      document.getElementById('usdDisplay').textContent='₪'+rate.toFixed(3);
-      document.getElementById('usdSb').textContent=s;
-      document.getElementById('mktUsd').textContent='₪'+rate.toFixed(3);
+      const s='₪'+rate.toFixed(3);
+      document.getElementById('sbUsd').textContent='$1 = ₪'+rate.toFixed(2);
+      document.getElementById('tbUsd').textContent=s;
+      if(document.getElementById('mktUsd')) document.getElementById('mktUsd').textContent=s;
     }
-  }catch(e){document.getElementById('usdSb').textContent='—';}
+  }catch(e){ document.getElementById('sbUsd').textContent='—'; }
 }
 
-// ══════════════════════════════════════════════
-//  INIT
-// ══════════════════════════════════════════════
-load();
-const savedCpi=localStorage.getItem('cpi_rate')||'3.5';
-document.getElementById('cpiDisplay').textContent=savedCpi+'%';
-document.getElementById('projCpi').value=savedCpi;
+function refreshActive(){
+  const pg=document.querySelector('.page.active')?.id?.replace('page-','');
+  if(pg==='overview')   renderOverview();
+  if(pg==='properties') renderSummary();
+  if(pg==='projection') renderProj();
+  if(pg==='sublease')   renderSl();
+}
+
+/* ═══════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════ */
+hydrate();
+const cpi0=localStorage.getItem('cpi_rate')||'3.5';
+document.getElementById('tbCpi').textContent=cpi0+'%';
+document.getElementById('pCpi').value=cpi0;
 nav('overview');
 fetchUSD();
 </script>
