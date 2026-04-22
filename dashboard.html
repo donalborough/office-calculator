@@ -1084,6 +1084,36 @@ a { text-decoration: none; }
         </div>
       </div>
 
+      <!-- CONTRACT AI PARSER -->
+      <div class="card" style="margin-bottom:20px; border:1.5px solid var(--blue-l);">
+        <div class="card-hd" style="background:var(--blue-xl);">
+          <div class="card-title" style="color:var(--blue);">🤖 ניתוח חוזה שכירות — מילוי אוטומטי</div>
+          <span class="chip blue">Claude AI</span>
+        </div>
+        <div class="card-body">
+          <p style="font-size:13px;color:var(--ink-3);margin-bottom:14px;line-height:1.6;">
+            העלה חוזה שכירות (PDF) או הדבק את טקסט החוזה — Claude יחלץ את כל הפרמטרים וימלא את הטופס אוטומטית.
+          </p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
+            <label style="cursor:pointer;">
+              <input type="file" id="contractFile" accept=".pdf,.txt" style="display:none;" onchange="handleContractFile(event)">
+              <span class="tb-btn primary" style="display:inline-flex;align-items:center;gap:6px;padding:9px 16px;font-size:13px;cursor:pointer;">
+                📎 העלה PDF / TXT
+              </span>
+            </label>
+            <button class="tb-btn" onclick="document.getElementById('contractPasteArea').style.display=document.getElementById('contractPasteArea').style.display==='none'?'block':'none'">
+              📋 הדבק טקסט
+            </button>
+            <button class="tb-btn primary" onclick="analyzeContract()" id="analyzeBtn" style="display:none;">
+              🔍 נתח חוזה ומלא אוטומטית
+            </button>
+          </div>
+          <textarea id="contractPasteArea" placeholder="הדבק כאן טקסט מחוזה השכירות..." style="display:none;width:100%;height:140px;border:1px solid var(--border);border-radius:8px;padding:12px;font-family:Heebo,sans-serif;font-size:13px;color:var(--ink);resize:vertical;line-height:1.6;" oninput="document.getElementById('analyzeBtn').style.display=this.value.trim()?'inline-flex':'none'"></textarea>
+          <div id="contractStatus" style="display:none;"></div>
+          <div id="contractPreview" style="display:none;margin-top:14px;"></div>
+        </div>
+      </div>
+
       <div class="grid-2">
         <div class="card">
           <div class="card-hd"><div class="card-title">זהות הנכס ושטח</div></div>
@@ -1160,6 +1190,44 @@ a { text-decoration: none; }
           <div class="page-desc">כמה תשלמו בעוד שנה? מה קורה ביום הפעלת האופציה?</div>
         </div>
         <div class="page-actions"><div class="ptabs" id="projTabs"></div></div>
+      </div>
+
+      <!-- CPI REALITY CHECK -->
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-hd">
+          <div class="card-title">🔢 בדיקת מדד אמיתי — לפי נתוני החוזה</div>
+          <span class="chip blue">חישוב מדויק לפי לוח"ז</span>
+        </div>
+        <div class="card-body">
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-bottom:16px;">
+            <div>
+              <div style="font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px;">מדד בסיס בחוזה</div>
+              <input class="proj-ctrl-inp" id="cpiBase" type="number" step="0.1" placeholder="100.0" oninput="calcCpiReal()">
+              <div style="font-size:11px;color:var(--ink-4);margin-top:5px;text-align:center;">ערך המדד ביום החתימה</div>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px;">מדד ידוע היום</div>
+              <input class="proj-ctrl-inp" id="cpiCurrent" type="number" step="0.1" placeholder="103.5" oninput="calcCpiReal()">
+              <div style="font-size:11px;color:var(--ink-4);margin-top:5px;text-align:center;">מדד המחירים לצרכן נוכחי</div>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px;">% הצמדה בחוזה</div>
+              <input class="proj-ctrl-inp" id="cpiLinkage" type="number" step="5" value="100" oninput="calcCpiReal()">
+              <div style="font-size:11px;color:var(--ink-4);margin-top:5px;text-align:center;">100% = הצמדה מלאה</div>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px;">תאריך תחילת ספירה</div>
+              <input type="date" id="cpiStartDate" style="width:100%;border:1px solid var(--border);border-radius:6px;padding:9px 10px;font-family:Heebo,sans-serif;font-size:14px;font-weight:700;color:var(--ink);background:var(--card-alt);" oninput="calcCpiReal()">
+              <div style="font-size:11px;color:var(--ink-4);margin-top:5px;text-align:center;">מתי התחיל לספור בהסכם</div>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px;">תקרת הצמדה (%)</div>
+              <input class="proj-ctrl-inp" id="cpiCap" type="number" step="0.5" placeholder="ללא תקרה" oninput="calcCpiReal()">
+              <div style="font-size:11px;color:var(--ink-4);margin-top:5px;text-align:center;">השאר ריק אם אין תקרה</div>
+            </div>
+          </div>
+          <div id="cpiRealResult" style="display:none;"></div>
+        </div>
       </div>
 
       <div class="proj-controls">
@@ -1720,6 +1788,256 @@ function renderSl(){
    AI
 ═══════════════════════════════════════════ */
 function checkKey(){ document.getElementById('aiKeyWarn').style.display=localStorage.getItem('claude_api_key')?'none':''; }
+
+/* ═══════════════════════════════════════════
+   CPI REALITY CALCULATOR
+═══════════════════════════════════════════ */
+function calcCpiReal(){
+  const baseIdx    = parseFloat(document.getElementById('cpiBase')?.value);
+  const currIdx    = parseFloat(document.getElementById('cpiCurrent')?.value);
+  const linkage    = parseFloat(document.getElementById('cpiLinkage')?.value) || 100;
+  const cap        = parseFloat(document.getElementById('cpiCap')?.value) || Infinity;
+  const startDate  = document.getElementById('cpiStartDate')?.value;
+  const res        = document.getElementById('cpiRealResult');
+  if(!baseIdx || !currIdx || baseIdx<=0){ res.style.display='none'; return; }
+
+  const rawChange    = (currIdx - baseIdx) / baseIdx;         // e.g. 0.042 = 4.2%
+  const linkedChange = rawChange * (linkage / 100);           // apply linkage %
+  const cappedChange = Math.min(linkedChange, cap / 100);     // apply cap if any
+  const p            = S.props[S.active];
+  const baseRent     = p.rent || 0;
+  const newRent      = baseRent * (1 + cappedChange);
+  const rentDelta    = newRent - baseRent;
+  const monthlyDelta = rentDelta * (p.gross || 0);
+  const annualDelta  = monthlyDelta * 12;
+
+  // Months since CPI start date
+  let monthsNote = '';
+  if(startDate){
+    const start = new Date(startDate);
+    const now   = new Date();
+    const months = Math.round((now - start) / (1000*60*60*24*30.44));
+    monthsNote = `<span style="color:var(--ink-3);">· ${months} חודשים מתחילת הספירה (${startDate})</span>`;
+  }
+
+  // Update main projection CPI field
+  const annualCpiPct = (Math.pow(1 + cappedChange, 12 / Math.max(1, (() => {
+    if(!startDate) return 12;
+    const months = Math.round((new Date() - new Date(startDate)) / (1000*60*60*24*30.44));
+    return months || 12;
+  })())) - 1) * 100;
+  document.getElementById('pCpi').value = annualCpiPct.toFixed(2);
+
+  const isIncrease = cappedChange > 0;
+  const pctDisplay = (cappedChange * 100).toFixed(2);
+  const capNote    = isFinite(cap) ? `<span class="chip amber">תקרה ${cap}%</span>` : '';
+
+  res.style.display = '';
+  res.innerHTML = `
+    <div style="background:${isIncrease?'var(--red-xl)':'var(--green-xl)'};border:1px solid ${isIncrease?'var(--red-l)':'var(--green-l)'};border-radius:8px;padding:14px 18px;">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
+        <span style="font-size:22px;font-weight:900;color:${isIncrease?'var(--red)':'var(--green)'};">${isIncrease?'▲':'▼'} ${pctDisplay}% עלייה בשכ"ד</span>
+        ${capNote}
+        <span class="chip gray">${linkage}% הצמדה</span>
+        ${monthsNote}
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;">
+        <div style="background:#fff;border-radius:6px;padding:10px 13px;border:1px solid var(--border);">
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--ink-3);margin-bottom:4px;">שכ"ד בסיס</div>
+          <div style="font-size:18px;font-weight:900;color:var(--ink);">${fmt(baseRent)} /מ"ר</div>
+        </div>
+        <div style="background:#fff;border-radius:6px;padding:10px 13px;border:1px solid var(--border);">
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--ink-3);margin-bottom:4px;">שכ"ד מעודכן</div>
+          <div style="font-size:18px;font-weight:900;color:${isIncrease?'var(--red)':'var(--green)'};">${fmt(newRent)} /מ"ר</div>
+        </div>
+        <div style="background:#fff;border-radius:6px;padding:10px 13px;border:1px solid var(--border);">
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--ink-3);margin-bottom:4px;">עלייה חודשית</div>
+          <div style="font-size:18px;font-weight:900;color:${isIncrease?'var(--red)':'var(--green)'};">${isIncrease?'+':''}${fmt(monthlyDelta)}</div>
+        </div>
+        <div style="background:#fff;border-radius:6px;padding:10px 13px;border:1px solid var(--border);">
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--ink-3);margin-bottom:4px;">עלייה שנתית</div>
+          <div style="font-size:18px;font-weight:900;color:${isIncrease?'var(--red)':'var(--green)'};">${isIncrease?'+':''}${fmt(annualDelta,true)}</div>
+        </div>
+      </div>
+      <div style="margin-top:10px;font-size:12px;color:var(--ink-3);">
+        💡 שדה CPI% בתחזית עודכן אוטומטית ל-<strong>${annualCpiPct.toFixed(2)}%</strong> שנתי.
+        חישוב: מדד ${currIdx} ÷ מדד בסיס ${baseIdx} = ${(currIdx/baseIdx).toFixed(4)} × הצמדה ${linkage}%
+      </div>
+    </div>`;
+  renderProj();
+}
+
+/* ═══════════════════════════════════════════
+   CONTRACT AI PARSER
+═══════════════════════════════════════════ */
+let contractText = '';
+
+function handleContractFile(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  const status = document.getElementById('contractStatus');
+  const analyzeBtn = document.getElementById('analyzeBtn');
+  status.style.display = '';
+  status.innerHTML = `<div class="banner blue"><span class="banner-icon">⏳</span><div>קורא קובץ <strong>${file.name}</strong>...</div></div>`;
+
+  const reader = new FileReader();
+
+  if(file.type === 'application/pdf' || file.name.endsWith('.pdf')){
+    // Read as base64 for Claude's document API
+    reader.onload = e => {
+      contractText = e.target.result; // data URL with base64
+      status.innerHTML = `<div class="banner green"><span class="banner-icon">✅</span><div>PDF נטען: <strong>${file.name}</strong> (${Math.round(file.size/1024)}KB) · לחץ "נתח חוזה"</div></div>`;
+      analyzeBtn.style.display = 'inline-flex';
+    };
+    reader.readAsDataURL(file);
+  } else {
+    // Plain text
+    reader.onload = e => {
+      contractText = e.target.result;
+      document.getElementById('contractPasteArea').value = contractText.slice(0, 2000) + (contractText.length > 2000 ? '\n...' : '');
+      status.innerHTML = `<div class="banner green"><span class="banner-icon">✅</span><div>קובץ נטען: <strong>${file.name}</strong> · לחץ "נתח חוזה"</div></div>`;
+      analyzeBtn.style.display = 'inline-flex';
+    };
+    reader.readAsText(file, 'utf-8');
+  }
+}
+
+async function analyzeContract(){
+  const key = localStorage.getItem('claude_api_key');
+  if(!key){ alert('יש להגדיר מפתח Claude API בהגדרות'); openSettings(); return; }
+
+  const pasteText = document.getElementById('contractPasteArea').value.trim();
+  const status = document.getElementById('contractStatus');
+  const preview = document.getElementById('contractPreview');
+
+  status.style.display = '';
+  status.innerHTML = `<div class="banner blue"><span class="banner-icon">🤖</span><div>Claude מנתח את החוזה — עשוי לקחת 15–30 שניות...</div></div>`;
+  preview.style.display = 'none';
+
+  const EXTRACT_PROMPT = `אתה מומחה לחוזי שכירות ישראלים.
+נתח את חוזה השכירות המצורף וחלץ את הפרמטרים הבאים.
+החזר JSON בלבד (ללא טקסט נוסף, ללא markdown):
+{
+  "name": "שם הנכס / הבניין",
+  "addr": "כתובת מלאה",
+  "gross": 0,
+  "net": 0,
+  "ws": 0,
+  "rent": 0,
+  "arnona": 0,
+  "mgmt": 0,
+  "clean": 0,
+  "elec": 0,
+  "parkN": 0,
+  "parkP": 0,
+  "furn": 0,
+  "renov": 0,
+  "dur": 0,
+  "grace": 0,
+  "cpiLinkage": 100,
+  "cpiBaseIndex": null,
+  "cpiStartDate": null,
+  "optionPct": 5,
+  "optionMonth": 37,
+  "notes": "הערות חשובות — סעיפים מיוחדים, התחייבויות, סיכונים"
+}
+הערות:
+- rent, arnona, mgmt, clean, elec = ₪ למ"ר לחודש
+- dur = חודשים, grace = שבועות
+- cpiLinkage = % הצמדה (100 = מלאה, 50 = חלקית)
+- cpiBaseIndex = ערך המדד לפי החוזה אם צוין
+- cpiStartDate = תאריך תחילת ספירת המדד בפורמט YYYY-MM-DD
+- אם פרמטר לא מצוין בחוזה — השתמש ב-null`;
+
+  try {
+    let messages;
+    if(contractText && contractText.startsWith('data:application/pdf')){
+      // PDF via base64 document API
+      const base64 = contractText.split(',')[1];
+      messages = [{
+        role: 'user',
+        content: [
+          { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: base64 } },
+          { type: 'text', text: EXTRACT_PROMPT }
+        ]
+      }];
+    } else {
+      // Plain text
+      const text = pasteText || contractText;
+      messages = [{ role: 'user', content: `${EXTRACT_PROMPT}\n\n---\nחוזה:\n${text}` }];
+    }
+
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true' },
+      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1024, messages })
+    });
+
+    if(!res.ok){ const e=await res.json(); throw new Error(e.error?.message||'API Error'); }
+    const data = await res.json();
+    const raw = data.content[0].text.trim();
+
+    // Parse JSON — handle possible markdown code block
+    const jsonStr = raw.replace(/^```[a-z]*\n?/,'').replace(/\n?```$/,'').trim();
+    const extracted = JSON.parse(jsonStr);
+
+    showContractPreview(extracted);
+    status.innerHTML = `<div class="banner green"><span class="banner-icon">✅</span><div><strong>הניתוח הושלם!</strong> Claude זיהה ${Object.values(extracted).filter(v=>v!==null&&v!==0&&v!=='').length} פרמטרים. סקור ואשר מילוי.</div></div>`;
+  } catch(e) {
+    status.innerHTML = `<div class="banner red"><span class="banner-icon">❌</span><div><strong>שגיאה:</strong> ${e.message}</div></div>`;
+  }
+}
+
+function showContractPreview(d){
+  const preview = document.getElementById('contractPreview');
+  const fields = [
+    ['שם הנכס', d.name], ['כתובת', d.addr],
+    ['שטח ברוטו (מ"ר)', d.gross], ['שטח נטו (מ"ר)', d.net], ['תחנות עבודה', d.ws],
+    ['שכ"ד ₪/מ"ר', d.rent], ['ארנונה ₪/מ"ר', d.arnona], ['ניהול ₪/מ"ר', d.mgmt],
+    ['ניקיון ₪/מ"ר', d.clean], ['חשמל ₪/מ"ר', d.elec],
+    ['חניות', d.parkN], ['₪/חניה', d.parkP],
+    ['משך חוזה (חודשים)', d.dur], ['גרייס (שבועות)', d.grace],
+    ['% הצמדה למדד', d.cpiLinkage], ['מדד בסיס', d.cpiBaseIndex], ['תחילת ספירה', d.cpiStartDate],
+    ['עלייה אופציה %', d.optionPct], ['חודש אופציה', d.optionMonth],
+  ].filter(([,v]) => v !== null && v !== undefined && v !== '' && v !== 0);
+
+  preview.style.display = '';
+  preview.innerHTML = `
+    <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+      <div style="background:var(--card-alt);padding:10px 16px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--ink-3);display:flex;justify-content:space-between;align-items:center;">
+        <span>פרמטרים שזוהו</span>
+        <button onclick="applyExtracted(${JSON.stringify(d).replace(/"/g,'&quot;')})" class="tb-btn primary" style="font-size:12px;">✅ מלא טופס אוטומטית</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));">
+        ${fields.map(([l,v])=>`<div style="padding:10px 14px;border-bottom:1px solid var(--border-s);border-left:1px solid var(--border-s);"><div style="font-size:10px;color:var(--ink-3);font-weight:700;margin-bottom:3px;">${l}</div><div style="font-size:14px;font-weight:700;color:var(--ink);">${v}</div></div>`).join('')}
+      </div>
+      ${d.notes ? `<div style="padding:12px 16px;background:var(--amber-xl);border-top:1px solid var(--amber-l);font-size:12px;color:var(--amber);line-height:1.7;"><strong>📌 הערות Claude:</strong> ${d.notes}</div>` : ''}
+    </div>`;
+}
+
+function applyExtracted(d){
+  const p = S.props[S.active];
+  const MAP = {name:'fName',addr:'fAddr',gross:'fGross',net:'fNet',ws:'fWs',rent:'fRent',arnona:'fArnona',mgmt:'fMgmt',clean:'fClean',elec:'fElec',parkN:'fParkN',parkP:'fParkP',furn:'fFurn',renov:'fRenov',dur:'fDur',grace:'fGrace'};
+  Object.entries(MAP).forEach(([dk,fid])=>{
+    if(d[dk]!==null && d[dk]!==undefined && d[dk]!==''){
+      const el=document.getElementById(fid);
+      if(el){ el.value=d[dk]; p[dk.replace('fName','name').replace('fAddr','addr')]=typeof d[dk]==='number'?d[dk]:d[dk]; }
+    }
+  });
+  // Apply string fields manually
+  if(d.name){ p.name=d.name; document.getElementById('fName').value=d.name; }
+  if(d.addr){ p.addr=d.addr; document.getElementById('fAddr').value=d.addr; }
+  // CPI fields → projection page
+  if(d.cpiBaseIndex){ document.getElementById('cpiBase').value=d.cpiBaseIndex; }
+  if(d.cpiStartDate){ document.getElementById('cpiStartDate').value=d.cpiStartDate; }
+  if(d.cpiLinkage)  { document.getElementById('cpiLinkage').value=d.cpiLinkage; }
+  if(d.optionPct)   { document.getElementById('pOpt').value=d.optionPct; }
+  if(d.optionMonth) { document.getElementById('pOptM').value=d.optionMonth; }
+  calc();
+  document.getElementById('contractStatus').innerHTML='<div class="banner green"><span class="banner-icon">✅</span><div><strong>הטופס מולא!</strong> בדוק את הנתונים ועדכן ידנית אם נדרש.</div></div>';
+  renderProps();
+  tabs('propTabs',()=>{ loadForm(); renderProps(); });
+}
 function ctx(){
   return S.props.map((p,i)=>{
     const r=cprop(p);
