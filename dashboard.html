@@ -1094,7 +1094,12 @@ a { text-decoration: none; }
           <p style="font-size:13px;color:var(--ink-3);margin-bottom:14px;line-height:1.6;">
             העלה חוזה שכירות (PDF) או הדבק את טקסט החוזה — Claude יחלץ את כל הפרמטרים וימלא את הטופס אוטומטית.
           </p>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
+          <div id="contractKeyWarn" style="display:none;background:var(--amber-l);border:1px solid #FCD34D;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:13px;color:#92400E;display:flex;align-items:center;gap:10px;">
+            <span>⚠️ נדרש מפתח Claude API כדי לנתח חוזה.</span>
+            <button onclick="openSettings()" style="margin-right:auto;background:var(--amber);color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:12px;font-family:Heebo,sans-serif;cursor:pointer;font-weight:600;">הגדר מפתח API</button>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;">
+            <div id="contractKeyOk" style="display:none;font-size:12px;color:var(--green);background:var(--green-l);border-radius:6px;padding:4px 10px;font-weight:600;">✓ Claude API מחובר</div>
             <label style="cursor:pointer;">
               <input type="file" id="contractFile" accept=".pdf,.txt" style="display:none;" onchange="handleContractFile(event)">
               <span class="tb-btn primary" style="display:inline-flex;align-items:center;gap:6px;padding:9px 16px;font-size:13px;cursor:pointer;">
@@ -1787,7 +1792,15 @@ function renderSl(){
 /* ═══════════════════════════════════════════
    AI
 ═══════════════════════════════════════════ */
-function checkKey(){ document.getElementById('aiKeyWarn').style.display=localStorage.getItem('claude_api_key')?'none':''; }
+function checkKey(){
+  const has = !!localStorage.getItem('claude_api_key');
+  document.getElementById('aiKeyWarn').style.display = has ? 'none' : '';
+  // contract card: if key is now set, collapse the warning and show green badge
+  const warn = document.getElementById('contractKeyWarn');
+  const ok   = document.getElementById('contractKeyOk');
+  if(warn) warn.style.display = has ? 'none' : warn.style.display; // keep visible only if was shown
+  if(ok)   ok.style.display   = has ? 'flex' : 'none';
+}
 
 /* ═══════════════════════════════════════════
    CPI REALITY CALCULATOR
@@ -1904,7 +1917,15 @@ function handleContractFile(event){
 
 async function analyzeContract(){
   const key = localStorage.getItem('claude_api_key');
-  if(!key){ alert('יש להגדיר מפתח Claude API בהגדרות'); openSettings(); return; }
+  if(!key){
+    document.getElementById('contractKeyWarn').style.display='flex';
+    document.getElementById('contractKeyOk').style.display='none';
+    return;
+  }
+
+  // key exists — hide warning, show connected badge
+  document.getElementById('contractKeyWarn').style.display='none';
+  document.getElementById('contractKeyOk').style.display='flex';
 
   const pasteText = document.getElementById('contractPasteArea').value.trim();
   const status = document.getElementById('contractStatus');
