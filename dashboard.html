@@ -1986,7 +1986,7 @@ async function analyzeContract(){
       body: JSON.stringify({ model:'claude-3-haiku-20240307', max_tokens:1024, messages })
     });
 
-    if(!res.ok){ const e=await res.json(); throw new Error(e.error?.message||'API Error'); }
+    if(!res.ok){ const e=await res.json(); throw new Error(JSON.stringify(e.error||e)); }
     const data = await res.json();
     const raw = data.content[0].text.trim();
 
