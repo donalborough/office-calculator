@@ -1351,7 +1351,7 @@ a { text-decoration: none; }
           <div class="ai-hd-icon">🤖</div>
           <div>
             <div class="ai-hd-name">Claude AI — יועץ נדל"ן מסחרי</div>
-            <div class="ai-hd-model">claude-sonnet-4-20250514 · ניתוח עסקאות, שוק ומו"מ</div>
+            <div class="ai-hd-model">claude-3-5-sonnet-20241022 · ניתוח עסקאות, שוק ומו"מ</div>
           </div>
         </div>
         <div class="ai-key-warn" id="aiKeyWarn">⚠️ לא הוגדר מפתח API. <a onclick="openSettings()">הגדר כאן</a></div>
@@ -1983,7 +1983,7 @@ async function analyzeContract(){
     const res = await fetch(CLAUDE_PROXY, {
       method: 'POST',
       headers: { 'Content-Type':'application/json' },
-      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1024, messages })
+      body: JSON.stringify({ model:'claude-3-5-sonnet-20241022', max_tokens:1024, messages })
     });
 
     if(!res.ok){ const e=await res.json(); throw new Error(e.error?.message||'API Error'); }
@@ -2068,7 +2068,7 @@ async function aiAsk(){ const q=document.getElementById('aiQ').value.trim(); if(
 async function callAI(msg){
   showLoad();
   try{
-    const res=await fetch(CLAUDE_PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1024,system:`אתה יועץ נדל"ן מסחרי ישראלי בכיר, מתמחה בשוק משרדים. ענה בעברית, קצר וממוקד, לרמת CFO/COO. נתוני עסקה:\n${ctx()}`,messages:[{role:'user',content:msg}]})});
+    const res=await fetch(CLAUDE_PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-3-5-sonnet-20241022',max_tokens:1024,system:`אתה יועץ נדל"ן מסחרי ישראלי בכיר, מתמחה בשוק משרדים. ענה בעברית, קצר וממוקד, לרמת CFO/COO. נתוני עסקה:\n${ctx()}`,messages:[{role:'user',content:msg}]})});
     if(!res.ok){ const e=await res.json(); throw new Error(e.error?.message||'API Error'); }
     const d=await res.json(); showResp(d.content[0].text);
   }catch(e){ showResp('❌ '+e.message); }
