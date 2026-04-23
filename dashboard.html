@@ -1897,26 +1897,33 @@ async function handleContractFile(event){
   status.innerHTML = `<div class="banner blue"><span class="banner-icon">⏳</span><div>קורא קובץ <strong>${file.name}</strong>...</div></div>`;
 
   if(file.type === 'application/pdf' || file.name.endsWith('.pdf')){
-    // Extract text from PDF using PDF.js
     try {
-      const pdfjsLib = window['pdfjs-dist/build/pdf'];
-      if(pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      // PDF.js global is pdfjsLib when loaded from cdnjs
+      const pdfjs = window.pdfjsLib;
+      if(!pdfjs) throw new Error('PDF.js לא נטען');
+      pdfjs.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
       const arrayBuffer = await file.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise;
       let fullText = '';
       for(let i = 1; i <= pdf.numPages; i++){
         const page = await pdf.getPage(i);
         const content = await page.getTextContent();
         fullText += content.items.map(item => item.str).join(' ') + '\n';
       }
+
+      if(!fullText.trim()){
+        throw new Error('ה-PDF סרוק (תמונה) — לא ניתן לחלץ טקסט. הדבק את הטקסט ידנית.');
+      }
+
       contractText = fullText;
-      document.getElementById('contractPasteArea').value = fullText.slice(0, 3000) + (fullText.length > 3000 ? '\n...' : '');
+      document.getElementById('contractPasteArea').value = fullText.slice(0, 4000) + (fullText.length > 4000 ? '\n...' : '');
       document.getElementById('contractPasteArea').style.display = 'block';
-      status.innerHTML = `<div class="banner green"><span class="banner-icon">✅</span><div>PDF נקרא: <strong>${file.name}</strong> — ${pdf.numPages} עמודים, ${fullText.length} תווים · לחץ "נתח חוזה"</div></div>`;
+      status.innerHTML = `<div class="banner green"><span class="banner-icon">✅</span><div>PDF נקרא: <strong>${file.name}</strong> — ${pdf.numPages} עמודים · לחץ "נתח חוזה"</div></div>`;
       analyzeBtn.style.display = 'inline-flex';
     } catch(err) {
-      status.innerHTML = `<div class="banner red"><span class="banner-icon">❌</span><div>שגיאה בקריאת PDF: ${err.message}. נסה להדביק את הטקסט ידנית.</div></div>`;
+      status.innerHTML = `<div class="banner red" style="background:var(--red-l);border:1px solid #FCA5A5;border-radius:8px;padding:10px 14px;color:#991B1B;"><span>❌ ${err.message}</span></div>`;
+      document.getElementById('contractPasteArea').style.display = 'block';
     }
   } else {
     // Plain text
