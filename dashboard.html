@@ -6,6 +6,7 @@
 <title>Office Intelligence | dealiq</title>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
 /* ═══════════════════════════════════════
    DESIGN TOKENS
@@ -1887,7 +1888,7 @@ function calcCpiReal(){
 ═══════════════════════════════════════════ */
 let contractText = '';
 
-function handleContractFile(event){
+async function handleContractFile(event){
   const file = event.target.files[0];
   if(!file) return;
   const status = document.getElementById('contractStatus');
@@ -1895,21 +1896,35 @@ function handleContractFile(event){
   status.style.display = '';
   status.innerHTML = `<div class="banner blue"><span class="banner-icon">⏳</span><div>קורא קובץ <strong>${file.name}</strong>...</div></div>`;
 
-  const reader = new FileReader();
-
   if(file.type === 'application/pdf' || file.name.endsWith('.pdf')){
-    // Read as base64 for Claude's document API
-    reader.onload = e => {
-      contractText = e.target.result; // data URL with base64
-      status.innerHTML = `<div class="banner green"><span class="banner-icon">✅</span><div>PDF נטען: <strong>${file.name}</strong> (${Math.round(file.size/1024)}KB) · לחץ "נתח חוזה"</div></div>`;
+    // Extract text from PDF using PDF.js
+    try {
+      const pdfjsLib = window['pdfjs-dist/build/pdf'];
+      if(pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+      const arrayBuffer = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      let fullText = '';
+      for(let i = 1; i <= pdf.numPages; i++){
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        fullText += content.items.map(item => item.str).join(' ') + '\n';
+      }
+      contractText = fullText;
+      document.getElementById('contractPasteArea').value = fullText.slice(0, 3000) + (fullText.length > 3000 ? '\n...' : '');
+      document.getElementById('contractPasteArea').style.display = 'block';
+      status.innerHTML = `<div class="banner green"><span class="banner-icon">✅</span><div>PDF נקרא: <strong>${file.name}</strong> — ${pdf.numPages} עמודים, ${fullText.length} תווים · לחץ "נתח חוזה"</div></div>`;
       analyzeBtn.style.display = 'inline-flex';
-    };
-    reader.readAsDataURL(file);
+    } catch(err) {
+      status.innerHTML = `<div class="banner red"><span class="banner-icon">❌</span><div>שגיאה בקריאת PDF: ${err.message}. נסה להדביק את הטקסט ידנית.</div></div>`;
+    }
   } else {
     // Plain text
+    const reader = new FileReader();
     reader.onload = e => {
       contractText = e.target.result;
-      document.getElementById('contractPasteArea').value = contractText.slice(0, 2000) + (contractText.length > 2000 ? '\n...' : '');
+      document.getElementById('contractPasteArea').value = contractText.slice(0, 3000) + (contractText.length > 3000 ? '\n...' : '');
+      document.getElementById('contractPasteArea').style.display = 'block';
       status.innerHTML = `<div class="banner green"><span class="banner-icon">✅</span><div>קובץ נטען: <strong>${file.name}</strong> · לחץ "נתח חוזה"</div></div>`;
       analyzeBtn.style.display = 'inline-flex';
     };
