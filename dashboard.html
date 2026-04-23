@@ -67,6 +67,49 @@
 }
 
 /* ═══════════════════════════════════════
+   DARK THEME
+═══════════════════════════════════════ */
+body.dark {
+  --bg:       #0B1628;
+  --card:     #112240;
+  --card-alt: #0D1B35;
+
+  --border:   rgba(255,255,255,.08);
+  --border-s: rgba(255,255,255,.05);
+
+  --sb:       #060E1C;
+  --sb-h:     #0D1B35;
+  --sb-act:   rgba(59,130,246,.22);
+  --sb-act-t: #60A5FA;
+  --sb-sep:   rgba(255,255,255,.06);
+
+  --blue:     #3B82F6;
+  --blue-m:   #60A5FA;
+  --blue-l:   rgba(59,130,246,.18);
+  --blue-xl:  rgba(59,130,246,.08);
+  --green:    #10B981;
+  --green-l:  rgba(16,185,129,.18);
+  --green-xl: rgba(16,185,129,.08);
+  --red:      #F87171;
+  --red-l:    rgba(248,113,113,.18);
+  --red-xl:   rgba(248,113,113,.08);
+  --amber:    #FBBF24;
+  --amber-l:  rgba(251,191,36,.18);
+  --amber-xl: rgba(251,191,36,.08);
+  --purple:   #A78BFA;
+  --purple-l: rgba(167,139,250,.18);
+
+  --ink:      #F1F5F9;
+  --ink-2:    #CBD5E1;
+  --ink-3:    #94A3B8;
+  --ink-4:    #64748B;
+
+  --sh-s:  0 1px 3px rgba(0,0,0,.3);
+  --sh-m:  0 4px 6px -1px rgba(0,0,0,.4);
+  --sh-l:  0 10px 15px -3px rgba(0,0,0,.5);
+}
+
+/* ═══════════════════════════════════════
    RESET & BASE
 ═══════════════════════════════════════ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -965,6 +1008,7 @@ a { text-decoration: none; }
     <div class="topbar-end">
       <div class="data-pill">📊 CPI <strong id="tbCpi">3.5%</strong></div>
       <div class="data-pill">💵 <strong id="tbUsd">—</strong></div>
+      <button class="tb-btn" onclick="toggleTheme()" id="themeBtn" title="החלף ערכת נושא">🌙</button>
       <button class="tb-btn" onclick="openSettings()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
         הגדרות
@@ -1092,14 +1136,14 @@ a { text-decoration: none; }
         </div>
         <div class="card-body">
           <p style="font-size:13px;color:var(--ink-3);margin-bottom:14px;line-height:1.6;">
-            העלה חוזה שכירות (PDF) או הדבק את טקסט החוזה — Claude יחלץ את כל הפרמטרים וימלא את הטופס אוטומטית.
+            העלה חוזה שכירות (PDF) או הדבק את טקסט החוזה — הבינה המלאכותית תחלץ את כל הפרמטרים ותמלא את הטופס אוטומטית.
           </p>
           <div id="contractKeyWarn" style="display:none;background:var(--amber-l);border:1px solid #FCD34D;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:13px;color:#92400E;align-items:center;gap:10px;">
-            <span>⚠️ נדרש מפתח Claude API כדי לנתח חוזה.</span>
+            <span>⚠️ שירות הניתוח אינו זמין כרגע.</span>
             <button onclick="openSettings()" style="margin-right:auto;background:var(--amber);color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:12px;font-family:Heebo,sans-serif;cursor:pointer;font-weight:600;">הגדר מפתח API</button>
           </div>
           <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;">
-            <div id="contractKeyOk" style="display:none;font-size:12px;color:var(--green);background:var(--green-l);border-radius:6px;padding:4px 10px;font-weight:600;">✓ Claude API מחובר</div>
+            <div id="contractKeyOk" style="display:none;font-size:12px;color:var(--green);background:var(--green-l);border-radius:6px;padding:4px 10px;font-weight:600;">✓ AI מחובר</div>
             <label style="cursor:pointer;">
               <input type="file" id="contractFile" accept=".pdf,.txt" style="display:none;" onchange="handleContractFile(event)">
               <span class="tb-btn primary" style="display:inline-flex;align-items:center;gap:6px;padding:9px 16px;font-size:13px;cursor:pointer;">
@@ -1797,6 +1841,22 @@ function renderSl(){
 /* ═══════════════════════════════════════════
    AI
 ═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   THEME
+═══════════════════════════════════════════ */
+function toggleTheme(){
+  const dark = document.body.classList.toggle('dark');
+  localStorage.setItem('theme', dark ? 'dark' : 'light');
+  document.getElementById('themeBtn').textContent = dark ? '☀️' : '🌙';
+}
+function initTheme(){
+  if(localStorage.getItem('theme') === 'dark'){
+    document.body.classList.add('dark');
+    const btn = document.getElementById('themeBtn');
+    if(btn) btn.textContent = '☀️';
+  }
+}
+
 function checkKey(){
   // API key is now managed server-side via Cloudflare Worker — no client key needed
   document.getElementById('aiKeyWarn').style.display = 'none';
@@ -1970,7 +2030,7 @@ async function analyzeContract(){
   }
 
   status.style.display = '';
-  status.innerHTML = `<div class="banner blue"><span class="banner-icon">🤖</span><div>Claude מנתח את החוזה — עשוי לקחת 15–30 שניות...</div></div>`;
+  status.innerHTML = `<div class="banner blue"><span class="banner-icon">🤖</span><div>AI מנתח את החוזה — עשוי לקחת 15–30 שניות...</div></div>`;
   preview.style.display = 'none';
 
   const EXTRACT_PROMPT = `אתה מומחה לחוזי שכירות ישראלים.
@@ -2074,7 +2134,7 @@ function showContractPreview(d){
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));">
         ${fields.map(([l,v])=>`<div style="padding:10px 14px;border-bottom:1px solid var(--border-s);border-left:1px solid var(--border-s);"><div style="font-size:10px;color:var(--ink-3);font-weight:700;margin-bottom:3px;">${l}</div><div style="font-size:14px;font-weight:700;color:var(--ink);">${v}</div></div>`).join('')}
       </div>
-      ${d.notes ? `<div style="padding:12px 16px;background:var(--amber-xl);border-top:1px solid var(--amber-l);font-size:12px;color:var(--amber);line-height:1.7;"><strong>📌 הערות Claude:</strong> ${d.notes}</div>` : ''}
+      ${d.notes ? `<div style="padding:12px 16px;background:var(--amber-xl);border-top:1px solid var(--amber-l);font-size:12px;color:var(--amber);line-height:1.7;"><strong>📌 הערות AI:</strong> ${d.notes}</div>` : ''}
     </div>`;
 }
 
@@ -2124,7 +2184,7 @@ async function callAI(msg){
     showResp(d.content[0].text);
   }catch(e){ showResp('❌ '+e.message); }
 }
-function showLoad(){ const el=document.getElementById('aiResp'); el.className='ai-resp vis'; el.innerHTML='<div class="ai-loading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>Claude מנתח...</span></div>'; }
+function showLoad(){ const el=document.getElementById('aiResp'); el.className='ai-resp vis'; el.innerHTML='<div class="ai-loading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>AI מנתח...</span></div>'; }
 function showResp(t){ const el=document.getElementById('aiResp'); el.className='ai-resp vis'; el.innerHTML=t.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>'); }
 
 function refreshMktIndicators(){
@@ -2178,6 +2238,7 @@ function refreshActive(){
 /* ═══════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════ */
+initTheme();
 hydrate();
 const cpi0=localStorage.getItem('cpi_rate')||'3.5';
 document.getElementById('tbCpi').textContent=cpi0+'%';
