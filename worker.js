@@ -1,8 +1,6 @@
 /**
- * Cloudflare Worker — Gemini API Proxy for dealiq
- *
- * Set environment variable: GEMINI_API_KEY = your Google AI Studio key
- * Free tier: 15 req/min, 1M tokens/day — no credit card needed
+ * Cloudflare Worker — Groq API Proxy for dealiq
+ * Set environment variable: GROQ_API_KEY
  */
 
 const ALLOWED_ORIGINS = [
@@ -22,91 +20,82 @@ function corsHeaders(origin) {
   };
 }
 
+function jsonResp(data, status, origin) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) },
+  });
+}
+
 export default {
   async fetch(request, env) {
     const origin = request.headers.get('Origin') || '';
 
-    if (request.method === 'OPTIONS') {
-      return new Response(null, { status: 204, headers: corsHeaders(origin) });
-    }
-    if (request.method !== 'POST') {
-      return new Response('Method Not Allowed', { status: 405 });
-    }
+    try {
+      if (request.method === 'OPTIONS') {
+        return new Response(null, { status: 204, headers: corsHeaders(origin) });
+      }
+      if (request.method !== 'POST') {
+        return jsonResp({ error: { message: 'Method Not Allowed' } }, 405, origin);
+      }
 
-    const url = new URL(request.url);
-    if (url.pathname !== '/messages') {
-      return new Response('Not Found', { status: 404 });
-    }
+      const url = new URL(request.url);
+      if (url.pathname !== '/messages') {
+        return jsonResp({ error: { message: 'Not Found' } }, 404, origin);
+      }
 
-    let body;
-    try { body = await request.json(); }
-    catch { return new Response('Bad Request', { status: 400 }); }
+      let body;
+      try { body = await request.json(); }
+      catch { return jsonResp({ error: { message: 'Invalid JSON body' } }, 400, origin); }
 
-    // Convert Anthropic-style request → Gemini format
-    const parts = [];
+      // Build Groq messages
+      const messages = [];
 
-    // System prompt
-    if (body.system) {
-      parts.push({ text: body.system + '\n\n' });
-    }
+      if (body.system) {
+        messages.push({ role: 'system', content: body.system });
+      }
 
-    // Messages
-    for (const msg of (body.messages || [])) {
-      if (Array.isArray(msg.content)) {
-        for (const block of msg.content) {
-          if (block.type === 'text') {
-            parts.push({ text: block.text });
-          } else if (block.type === 'document' && block.source?.type === 'base64') {
-            parts.push({
-              inlineData: {
-                mimeType: block.source.media_type || 'application/pdf',
-                data: block.source.data,
-              }
-            });
+      for (const msg of (body.messages || [])) {
+        let content = '';
+        if (Array.isArray(msg.content)) {
+          for (const block of msg.content) {
+            if (block.type === 'text') content += block.text + '\n';
+            else if (block.type === 'document') content += '[PDF מצורף]\n';
           }
+        } else {
+          content = String(msg.content || '');
         }
-      } else {
-        parts.push({ text: msg.content });
+        messages.push({ role: msg.role || 'user', content });
       }
-    }
 
-    const geminiBody = {
-      contents: [{ role: 'user', parts }],
-      generationConfig: {
-        maxOutputTokens: body.max_tokens || 1024,
-        temperature: 0.3,
-      }
-    };
-
-    const model = 'gemini-1.5-flash';
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${env.GEMINI_API_KEY}`;
-
-    const geminiRes = await fetch(geminiUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(geminiBody),
-    });
-
-    const geminiData = await geminiRes.json();
-
-    if (!geminiRes.ok) {
-      const errMsg = geminiData?.error?.message || 'Gemini API Error';
-      return new Response(JSON.stringify({ error: { message: errMsg } }), {
-        status: geminiRes.status,
-        headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) },
+      const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${env.GROQ_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: 'llama-3.3-70b-versatile',
+          messages,
+          max_tokens: body.max_tokens || 1024,
+          temperature: 0.3,
+        }),
       });
+
+      const groqData = await groqRes.json();
+
+      if (!groqRes.ok) {
+        return jsonResp(
+          { error: { message: groqData?.error?.message || `Groq error ${groqRes.status}` } },
+          groqRes.status, origin
+        );
+      }
+
+      const text = groqData?.choices?.[0]?.message?.content || '';
+      return jsonResp({ content: [{ type: 'text', text }] }, 200, origin);
+
+    } catch (err) {
+      return jsonResp({ error: { message: err.message || 'Worker error' } }, 500, origin);
     }
-
-    // Convert Gemini response → Anthropic-style format (so dashboard code works unchanged)
-    const text = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    const anthropicStyle = {
-      content: [{ type: 'text', text }],
-      usage: { input_tokens: 0, output_tokens: 0 },
-    };
-
-    return new Response(JSON.stringify(anthropicStyle), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) },
-    });
   },
 };
