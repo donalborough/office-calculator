@@ -2001,8 +2001,12 @@ async function analyzeContract(){
       body: JSON.stringify({ model:'claude-3-haiku-20240307', max_tokens:1024, messages })
     });
 
-    if(!res.ok){ const e=await res.json(); throw new Error(JSON.stringify(e.error||e)); }
-    const data = await res.json();
+    const rawText = await res.text();
+    let data;
+    try { data = JSON.parse(rawText); } catch {
+      throw new Error(`תגובת שרת לא תקינה: ${rawText.slice(0,120)}`);
+    }
+    if(!res.ok){ throw new Error(data?.error?.message || `שגיאת שרת ${res.status}`); }
     const raw = data.content[0].text.trim();
 
     // Parse JSON — handle possible markdown code block
@@ -2084,8 +2088,9 @@ async function callAI(msg){
   showLoad();
   try{
     const res=await fetch(CLAUDE_PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-3-haiku-20240307',max_tokens:1024,system:`אתה יועץ נדל"ן מסחרי ישראלי בכיר, מתמחה בשוק משרדים. ענה בעברית, קצר וממוקד, לרמת CFO/COO. נתוני עסקה:\n${ctx()}`,messages:[{role:'user',content:msg}]})});
-    if(!res.ok){ const e=await res.json(); throw new Error(e.error?.message||'API Error'); }
-    const d=await res.json(); showResp(d.content[0].text);
+    const rt=await res.text(); let d; try{d=JSON.parse(rt);}catch{throw new Error('תגובה לא תקינה: '+rt.slice(0,80));}
+    if(!res.ok){ throw new Error(d?.error?.message||'API Error'); }
+    showResp(d.content[0].text);
   }catch(e){ showResp('❌ '+e.message); }
 }
 function showLoad(){ const el=document.getElementById('aiResp'); el.className='ai-resp vis'; el.innerHTML='<div class="ai-loading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>Claude מנתח...</span></div>'; }
