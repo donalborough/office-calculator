@@ -1,6 +1,7 @@
 /**
- * Cloudflare Worker — Groq API Proxy for dealiq
- * Set environment variable: GROQ_API_KEY
+ * dealiq Hybrid Worker
+ * PDF → Anthropic Claude (native PDF support, ~$0.01/contract)
+ * Text → Groq Llama (free)
  */
 
 const ALLOWED_ORIGINS = [
@@ -27,6 +28,13 @@ function jsonResp(data, status, origin) {
   });
 }
 
+function hasPdf(messages) {
+  return (messages || []).some(m =>
+    Array.isArray(m.content) &&
+    m.content.some(b => b.type === 'document')
+  );
+}
+
 export default {
   async fetch(request, env) {
     const origin = request.headers.get('Origin') || '';
@@ -38,7 +46,6 @@ export default {
       if (request.method !== 'POST') {
         return jsonResp({ error: { message: 'Method Not Allowed' } }, 405, origin);
       }
-
       const url = new URL(request.url);
       if (url.pathname !== '/messages') {
         return jsonResp({ error: { message: 'Not Found' } }, 404, origin);
@@ -46,21 +53,42 @@ export default {
 
       let body;
       try { body = await request.json(); }
-      catch { return jsonResp({ error: { message: 'Invalid JSON body' } }, 400, origin); }
+      catch { return jsonResp({ error: { message: 'Invalid JSON' } }, 400, origin); }
 
-      // Build Groq messages
-      const messages = [];
+      // ── Route: PDF → Anthropic ──────────────────────────────────────
+      if (hasPdf(body.messages)) {
+        const res = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': env.ANTHROPIC_API_KEY,
+            'anthropic-version': '2023-06-01',
+            'anthropic-beta': 'pdfs-2024-09-25',
+          },
+          body: JSON.stringify({
+            model: 'claude-3-5-haiku-20241022',
+            max_tokens: body.max_tokens || 1024,
+            system: body.system,
+            messages: body.messages,
+          }),
+        });
 
-      if (body.system) {
-        messages.push({ role: 'system', content: body.system });
+        const data = await res.json();
+        if (!res.ok) {
+          return jsonResp({ error: { message: data?.error?.message || 'Anthropic error' } }, res.status, origin);
+        }
+        return jsonResp(data, 200, origin);
       }
+
+      // ── Route: Text → Groq (free) ───────────────────────────────────
+      const messages = [];
+      if (body.system) messages.push({ role: 'system', content: body.system });
 
       for (const msg of (body.messages || [])) {
         let content = '';
         if (Array.isArray(msg.content)) {
           for (const block of msg.content) {
             if (block.type === 'text') content += block.text + '\n';
-            else if (block.type === 'document') content += '[PDF מצורף]\n';
           }
         } else {
           content = String(msg.content || '');
@@ -83,12 +111,8 @@ export default {
       });
 
       const groqData = await groqRes.json();
-
       if (!groqRes.ok) {
-        return jsonResp(
-          { error: { message: groqData?.error?.message || `Groq error ${groqRes.status}` } },
-          groqRes.status, origin
-        );
+        return jsonResp({ error: { message: groqData?.error?.message || 'Groq error' } }, groqRes.status, origin);
       }
 
       const text = groqData?.choices?.[0]?.message?.content || '';

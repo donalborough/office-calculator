@@ -1897,34 +1897,15 @@ async function handleContractFile(event){
   status.innerHTML = `<div class="banner blue"><span class="banner-icon">⏳</span><div>קורא קובץ <strong>${file.name}</strong>...</div></div>`;
 
   if(file.type === 'application/pdf' || file.name.endsWith('.pdf')){
-    try {
-      // PDF.js global is pdfjsLib when loaded from cdnjs
-      const pdfjs = window.pdfjsLib;
-      if(!pdfjs) throw new Error('PDF.js לא נטען');
-      pdfjs.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-
-      const arrayBuffer = await file.arrayBuffer();
-      const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise;
-      let fullText = '';
-      for(let i = 1; i <= pdf.numPages; i++){
-        const page = await pdf.getPage(i);
-        const content = await page.getTextContent();
-        fullText += content.items.map(item => item.str).join(' ') + '\n';
-      }
-
-      if(!fullText.trim()){
-        throw new Error('ה-PDF סרוק (תמונה) — לא ניתן לחלץ טקסט. הדבק את הטקסט ידנית.');
-      }
-
-      contractText = fullText;
-      document.getElementById('contractPasteArea').value = fullText.slice(0, 4000) + (fullText.length > 4000 ? '\n...' : '');
-      document.getElementById('contractPasteArea').style.display = 'block';
-      status.innerHTML = `<div class="banner green"><span class="banner-icon">✅</span><div>PDF נקרא: <strong>${file.name}</strong> — ${pdf.numPages} עמודים · לחץ "נתח חוזה"</div></div>`;
+    // Send PDF as base64 to Anthropic (supports scanned PDFs too)
+    const reader = new FileReader();
+    reader.onload = e => {
+      contractText = e.target.result; // data URL → base64
+      const kb = Math.round(file.size / 1024);
+      status.innerHTML = `<div class="banner green"><span class="banner-icon">✅</span><div>PDF נטען: <strong>${file.name}</strong> (${kb}KB) — נשלח ל-AI לניתוח (כולל PDFs סרוקים) · לחץ "נתח חוזה"</div></div>`;
       analyzeBtn.style.display = 'inline-flex';
-    } catch(err) {
-      status.innerHTML = `<div class="banner red" style="background:var(--red-l);border:1px solid #FCA5A5;border-radius:8px;padding:10px 14px;color:#991B1B;"><span>❌ ${err.message}</span></div>`;
-      document.getElementById('contractPasteArea').style.display = 'block';
-    }
+    };
+    reader.readAsDataURL(file);
   } else {
     // Plain text
     const reader = new FileReader();
